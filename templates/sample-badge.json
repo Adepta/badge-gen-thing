@@ -1,0 +1,43 @@
+{
+  "documentType": "badge",
+  "version": "1.0",
+  "branding": {
+    "companyName": "TechConf 2026",
+    "logoUrl": "https://via.placeholder.com/200x60?text=TechConf+2026",
+    "primaryColour": "#6C3CE1",
+    "secondaryColour": "#F3F0FF",
+    "headingFont": "Segoe UI, Arial, sans-serif",
+    "bodyFont": "Segoe UI, Arial, sans-serif",
+    "custom": {
+      "eventDate": "12–14 March 2026",
+      "eventVenue": "ExCeL London",
+      "accentColour": "#FF5A5F"
+    }
+  },
+  "template": {
+    "html": "<!DOCTYPE html><html><head><meta charset='utf-8'></head><body><div class='badge'><!-- Top colour band --><div class='band'><img class='logo' src='{{branding.logoUrl}}' alt='{{branding.companyName}}' /><div class='event-meta'><span class='event-date'>{{branding.custom.eventDate}}</span><span class='event-venue'>{{branding.custom.eventVenue}}</span></div></div><!-- Attendee details --><div class='attendee'>{{#if variables.avatarUrl}}<img class='avatar' src='{{variables.avatarUrl}}' alt='{{variables.firstName}} {{variables.lastName}}' />{{/if}}<div class='name'><span class='first-name'>{{upper variables.firstName}}</span><span class='last-name'>{{upper variables.lastName}}</span></div><div class='role'>{{variables.jobTitle}}</div><div class='company'>{{variables.company}}</div></div><!-- Ticket type ribbon --><div class='ticket-type ticket-type--{{lower variables.ticketType}}'>{{variables.ticketType}}</div><!-- QR / barcode area --><div class='qr-area'><div class='attendee-id'>ID: {{variables.attendeeId}}</div><div class='session'>{{variables.sessionName}}</div></div></div></body></html>",
+    "css": "* { margin: 0; padding: 0; box-sizing: border-box; } body { width: 85.6mm; height: 54mm; font-family: {{branding.bodyFont}}; background: #fff; overflow: hidden; } .badge { width: 100%; height: 100%; display: flex; flex-direction: column; border: 1px solid #ddd; border-radius: 3mm; overflow: hidden; } .band { background: {{branding.primaryColour}}; padding: 4mm 4mm 3mm; display: flex; align-items: center; gap: 3mm; } .logo { height: 8mm; object-fit: contain; filter: brightness(0) invert(1); } .event-meta { display: flex; flex-direction: column; margin-left: auto; text-align: right; } .event-date, .event-venue { font-size: 6pt; color: rgba(255,255,255,0.9); line-height: 1.3; } .attendee { flex: 1; padding: 3mm 4mm 2mm; display: flex; align-items: center; gap: 3mm; } .avatar { width: 12mm; height: 12mm; border-radius: 50%; object-fit: cover; border: 0.5mm solid {{branding.primaryColour}}; } .name { display: flex; flex-direction: column; } .first-name { font-size: 14pt; font-weight: 700; color: {{branding.primaryColour}}; line-height: 1.1; } .last-name { font-size: 11pt; font-weight: 600; color: #333; line-height: 1.1; } .role { font-size: 7pt; color: #555; margin-top: 1mm; } .company { font-size: 7pt; color: #777; } .ticket-type { text-align: center; font-size: 7pt; font-weight: 700; letter-spacing: 1px; padding: 1mm 0; text-transform: uppercase; color: #fff; } .ticket-type--speaker { background: {{branding.custom.accentColour}}; } .ticket-type--attendee { background: #34A853; } .ticket-type--sponsor { background: #FBBC04; color: #333; } .ticket-type--staff { background: #4285F4; } .ticket-type--vip { background: #9333EA; } .qr-area { background: {{branding.secondaryColour}}; padding: 2mm 4mm; display: flex; justify-content: space-between; align-items: center; border-top: 0.3mm solid #e0d9ff; } .attendee-id { font-size: 6pt; font-family: monospace; color: #666; } .session { font-size: 6pt; color: {{branding.primaryColour}}; font-weight: 600; }",
+    "partials": {}
+  },
+  "variables": {
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "jobTitle": "Senior Engineer",
+    "company": "Acme Corp",
+    "ticketType": "Speaker",
+    "attendeeId": "TC2026-00842",
+    "sessionName": "Hall A — Keynote",
+    "avatarUrl": null
+  },
+  "pdf": {
+    "format": "A4",
+    "landscape": false,
+    "printBackground": true,
+    "margins": {
+      "top": "0mm",
+      "bottom": "0mm",
+      "left": "0mm",
+      "right": "0mm"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <!-- Generate XML documentation for all projects — consumed by DocFX -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Suppress missing XML doc warnings on internal/private members -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+</Project>
