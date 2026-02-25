@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [ "src/**/*.csproj" ],
-          "exclude": [ "**/obj/**", "**/bin/**" ]
+          "exclude": [ "**/obj/**", "**/bin/**", "tools/**", "tests/**" ]
         }
       ],
       "dest": "docs/api",
@@ -14,7 +14,8 @@
       "noRestore": false,
       "namespaceLayout": "nested",
       "memberLayout": "samePage",
-      "EnumSortOrder": "declaringOrder"
+      "EnumSortOrder": "declaringOrder",
+      "allowCompilationErrors": false
     }
   ],
   "build": {
@@ -28,6 +29,11 @@
         "files": [ "api/**/*.yml", "api/index.md" ],
         "src": "docs",
         "dest": "."
+      },
+      {
+        "files": [ "toc.yml", "index.md" ],
+        "src": "docs",
+        "dest": "."
       }
     ],
     "resource": [
@@ -38,20 +44,20 @@
       }
     ],
     "output": "docs/_site",
-    "globalMetadataFiles": [],
-    "fileMetadataFiles": [],
     "template": [ "default", "modern" ],
-    "postProcessors": [],
     "globalMetadata": {
       "_appTitle": "DocumentGenerator",
       "_appName": "DocumentGenerator",
-      "_appFooter": "DocumentGenerator — Badge &amp; Document Rendering Service",
+      "_appFooter": "DocumentGenerator — Badge &amp; Document Rendering Service · .NET 10",
       "_enableSearch": true,
-      "_appLogoPath": "",
-      "_disableContribution": true
+      "_disableContribution": true,
+      "_appLogoPath": ""
     },
     "sitemap": {
-      "baseUrl": "http://localhost:8081"
+      "baseUrl": "http://localhost:8080"
     }
+  },
+  "serve": {
+    "port": 8080
   }
 }

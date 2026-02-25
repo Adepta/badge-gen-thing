@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="badge">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="header-left">
+      <div class="event-name">{{branding.companyName}}</div>
+      <div class="event-date">{{variables.eventDate}}</div>
+      <div class="event-venue">{{variables.eventVenue}}</div>
+    </div>
+    <div class="ticket-pill ticket-pill--{{lower variables.ticketType}}">{{upper variables.ticketType}}</div>
+  </div>
+
+  <!-- ── Diagonal accent stripe ── -->
+  <div class="stripe-wrap">
+    <div class="stripe"></div>
+  </div>
+
+  <!-- ── Main body ── -->
+  <div class="body">
+    <div class="name-block">
+      <div class="first-name">{{upper variables.firstName}}</div>
+      <div class="last-name">{{upper variables.lastName}}</div>
+    </div>
+    <div class="meta-block">
+      <div class="job-title">{{variables.jobTitle}}</div>
+      <div class="company">{{variables.company}}</div>
+    </div>
+  </div>
+
+  <!-- ── Footer bar ── -->
+  <div class="footer">
+    <div class="footer-col">
+      <div class="footer-label">Attendee ID</div>
+      <div class="footer-value mono">{{variables.attendeeId}}</div>
+      <div class="footer-label" style="margin-top:1.5mm">Session</div>
+      <div class="footer-value">{{variables.sessionName}}</div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-qr">
+      {{{qrCode variables.attendeeId "#ffffff" "transparent"}}}
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "documentType": "badge",
+  "version": "1.0",
+  "branding": {
+    "companyName": "GameJam '26",
+    "primaryColour": "#18181B",
+    "secondaryColour": "#F4F4F5",
+    "bodyFont": "Segoe UI, Arial, sans-serif",
+    "custom": {
+      "accentColour": "#A3E635"
+    }
+  },
+  "template": {
+    "htmlPath": "badge-carbon-a6.html",
+    "cssPath":  "badge-carbon-a6.css",
+    "partials": {}
+  },
+  "variables": {
+    "firstName":   "Alex",
+    "lastName":    "Chen",
+    "jobTitle":    "Lead Developer",
+    "company":     "Team Voltage",
+    "ticketType":  "Hacker",
+    "attendeeId":  "GJ26-0391",
+    "sessionName": "Main Stage — Finals",
+    "eventDate":   "14–16 Feb 2026",
+    "eventVenue":  "Tobacco Dock, London"
+  },
+  "pdf": {
+    "width": "105mm",
+    "height": "148mm",
+    "printBackground": true,
+    "margins": { "top": "0mm", "bottom": "0mm", "left": "0mm", "right": "0mm" }
+  }
+}

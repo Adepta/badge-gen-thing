@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="badge">
+
+  <!-- ── Gold top rule ── -->
+  <div class="top-rule"></div>
+
+  <!-- ── Content ── -->
+  <div class="content">
+    <div class="left">
+      <div class="event-name">{{branding.companyName}}</div>
+      <div class="name">{{variables.firstName}} {{variables.lastName}}</div>
+      <div class="role-company">
+        <span class="role">{{variables.role}}</span>
+        <span class="sep">&nbsp;·&nbsp;</span>
+        <span class="company">{{variables.team}}</span>
+      </div>
+    </div>
+    <div class="right">
+      <div class="ticket-badge ticket-badge--{{lower variables.ticketType}}">{{variables.ticketType}}</div>
+      <div class="qr-code">
+        {{{qrCode variables.attendeeId "#D4AF37" "transparent"}}}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Bottom rule ── -->
+  <div class="bottom-rule"></div>
+  <div class="footer-meta">{{variables.eventDate}} &nbsp;·&nbsp; {{variables.eventVenue}}</div>
+
+</div>
+</body>
+</html>

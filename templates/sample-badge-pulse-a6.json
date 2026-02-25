@@ -1,0 +1,35 @@
+{
+  "documentType": "badge",
+  "version": "1.0",
+  "branding": {
+    "companyName": "TechConf 2026",
+    "primaryColour": "#6C3CE1",
+    "secondaryColour": "#F3F0FF",
+    "bodyFont": "Segoe UI, Arial, sans-serif",
+    "custom": {
+      "accentColour": "#FF5A5F"
+    }
+  },
+  "template": {
+    "htmlPath": "badge-pulse-a6.html",
+    "cssPath":  "badge-pulse-a6.css",
+    "partials": {}
+  },
+  "variables": {
+    "firstName":   "Jane",
+    "lastName":    "Smith",
+    "jobTitle":    "Senior Engineer",
+    "company":     "Acme Corp",
+    "ticketType":  "Speaker",
+    "attendeeId":  "TC2026-00842",
+    "sessionName": "Hall A — Keynote",
+    "eventDate":   "12–14 March 2026",
+    "eventVenue":  "ExCeL London"
+  },
+  "pdf": {
+    "width": "105mm",
+    "height": "148mm",
+    "printBackground": true,
+    "margins": { "top": "0mm", "bottom": "0mm", "left": "0mm", "right": "0mm" }
+  }
+}

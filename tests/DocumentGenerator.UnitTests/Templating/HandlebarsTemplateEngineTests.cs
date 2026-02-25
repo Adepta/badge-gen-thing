@@ -286,6 +286,137 @@ public sealed class HandlebarsTemplateEngineTests
     }
 
     // -----------------------------------------------------------------------
+    // QR code helper
+    // -----------------------------------------------------------------------
+
+    [Fact]
+    public async Task Helper_QrCode_EmitsSvgElement()
+    {
+        var template = BuildTemplate("{{{qrCode variables.id}}}",
+            variables: new() { ["id"] = "TC2026-00842" });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().Contain("<svg");
+        result.Should().Contain("</svg>");
+    }
+
+    [Fact]
+    public async Task Helper_QrCode_EmptyValue_EmitsNothing()
+    {
+        var template = BuildTemplate("{{{qrCode variables.id}}}",
+            variables: new() { ["id"] = "" });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().NotContain("<svg");
+    }
+
+    [Fact]
+    public async Task Helper_QrCode_NullValue_EmitsNothing()
+    {
+        var template = BuildTemplate("{{{qrCode variables.id}}}",
+            variables: new() { ["id"] = null });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().NotContain("<svg");
+    }
+
+    [Fact]
+    public async Task Helper_QrCode_CustomDarkColour_AppearsInSvg()
+    {
+        var template = BuildTemplate(
+            "{{{qrCode variables.id \"#D4AF37\" \"transparent\"}}}",
+            variables: new() { ["id"] = "EXEC-001" });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().Contain("#D4AF37");
+    }
+
+    [Fact]
+    public async Task Helper_QrCode_TransparentLight_NoWhiteFill()
+    {
+        var template = BuildTemplate(
+            "{{{qrCode variables.id \"#000000\" \"transparent\"}}}",
+            variables: new() { ["id"] = "BADGE-XYZ" });
+
+        var result = await _sut.RenderAsync(template);
+
+        // Background rect should be transparent (none), not white
+        result.Should().NotMatchRegex("fill=\"#ffffff\"", "white fill should have been replaced");
+        result.Should().NotMatchRegex("fill=\"white\"",   "white fill should have been replaced");
+    }
+
+    // -----------------------------------------------------------------------
+    // Barcode helper
+    // -----------------------------------------------------------------------
+
+    [Fact]
+    public async Task Helper_BarCode_EmitsSvgElement()
+    {
+        var template = BuildTemplate("{{{barCode variables.id}}}",
+            variables: new() { ["id"] = "TC2026-00842" });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().Contain("<svg");
+        result.Should().Contain("</svg>");
+    }
+
+    [Fact]
+    public async Task Helper_BarCode_EmptyValue_EmitsNothing()
+    {
+        var template = BuildTemplate("{{{barCode variables.id}}}",
+            variables: new() { ["id"] = "" });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().NotContain("<svg");
+    }
+
+    [Fact]
+    public async Task Helper_BarCode_NullValue_EmitsNothing()
+    {
+        var template = BuildTemplate("{{{barCode variables.id}}}",
+            variables: new() { ["id"] = null });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().NotContain("<svg");
+    }
+
+    [Fact]
+    public async Task Helper_BarCode_CustomColour_AppearsInSvg()
+    {
+        var template = BuildTemplate(
+            "{{{barCode variables.id \"40\" \"false\" \"#A3E635\"}}}",
+            variables: new() { ["id"] = "GJ26-0391" });
+
+        var result = await _sut.RenderAsync(template);
+
+        result.Should().Contain("<svg");
+        result.Should().Contain("#A3E635");
+    }
+
+    [Fact]
+    public async Task Helper_BarCode_DifferentFromQrCode()
+    {
+        var id = "COMPARE-001";
+        var qrTemplate  = BuildTemplate("{{{qrCode variables.id}}}",  variables: new() { ["id"] = id });
+        var barTemplate = BuildTemplate("{{{barCode variables.id}}}", variables: new() { ["id"] = id });
+
+        var qrResult  = await _sut.RenderAsync(qrTemplate);
+        var barResult = await _sut.RenderAsync(barTemplate);
+
+        // Both produce SVG but the content must differ (different symbologies)
+        qrResult.Should().Contain("<svg");
+        barResult.Should().Contain("<svg");
+        qrResult.Should().NotBe(barResult);
+    }
+
+    // -----------------------------------------------------------------------
     // Cancellation
     // -----------------------------------------------------------------------
 

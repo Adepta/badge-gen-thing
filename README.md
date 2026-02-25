@@ -62,9 +62,9 @@ In a second terminal:
 dotnet run --project tools/DocumentGenerator.TestProducer
 ```
 
-A menu lists six document variants. Select one; the producer sends a
-`DocumentRenderRequest` to Kafka, waits for the reply, and saves the PDF to
-`tools/DocumentGenerator.TestProducer/Generated/`.
+A menu lists seven document variants (six badge designs + invoice). Select one;
+the producer sends a `DocumentRenderRequest` to Kafka, waits for the reply, and
+saves the PDF to `tools/DocumentGenerator.TestProducer/Generated/`.
 
 ---
 
@@ -106,7 +106,7 @@ src/
 tools/
   DocumentGenerator.TestProducer  Interactive test client
 
-templates/                        Sample badge + invoice templates
+templates/                        Badge + invoice templates (HTML/CSS + JSON)
 ```
 
 ---
@@ -126,8 +126,12 @@ Templates are JSON files with this shape:
     "custom": { "accentColour": "#FF5A5F" }   // brand-level extras
   },
   "template": {
-    "html": "... Handlebars ...",
-    "css":  "... Handlebars + CSS ...",
+    // Option A — external files (recommended)
+    "htmlPath": "badge.html",                  // path relative to this JSON file
+    "cssPath":  "badge.css",
+    // Option B — inline content (still supported; takes precedence if both set)
+    // "html": "... Handlebars ...",
+    // "css":  "... Handlebars + CSS ...",
     "partials": {}
   },
   "variables": {                               // per-document data
@@ -142,9 +146,25 @@ Templates are JSON files with this shape:
 }
 ```
 
+`htmlPath` and `cssPath` are resolved relative to the directory that contains
+the JSON file.  Absolute paths are also accepted.  Inline `html`/`css` strings
+remain supported for backwards compatibility (e.g. Kafka payloads).
+
 The Handlebars context exposes `{{branding.*}}`, `{{variables.*}}`, and
 `{{meta.generatedAt}}`. Built-in helpers: `upper`, `lower`, `formatDate`,
 `currency`, `ifEquals`.
+
+### Included badge designs
+
+| File prefix | Size | Design |
+|---|---|---|
+| `badge` | Credit-card (85.6×54mm) | Original purple gradient |
+| `badge-pulse-a6` | A6 (105×148mm) | Deep navy, diagonal accent stripe |
+| `badge-pulse-cc` | Credit-card | Same Pulse design, compact |
+| `badge-carbon-a6` | A6 | Near-black + neon-lime, terminal aesthetic |
+| `badge-carbon-cc` | Credit-card | Same Carbon design, compact |
+| `badge-executive-a6` | A6 | Charcoal + gold, serif luxury |
+| `badge-executive-cc` | Credit-card | Same Executive design, compact |
 
 ---
 
@@ -166,4 +186,4 @@ docker compose -f docker-compose.kafka.yml down -v
 ## TODO
 
 - [x] Add unit and integration tests (`tests/` — xUnit, Moq, FluentAssertions)
-- [ ] Update templates to use standalone HTML and CSS files instead of inlining them in the JSON payload
+- [x] Update templates to use standalone HTML and CSS files instead of inlining them in the JSON payload

@@ -11,15 +11,22 @@ namespace DocumentGenerator.Console;
 /// Hosted worker that scans the configured templates directory, renders each
 /// template to PDF, and writes the output to the configured output directory.
 ///
+/// Template files are JSON files whose <c>template.htmlPath</c> and
+/// <c>template.cssPath</c> properties may reference external <c>.html</c> and
+/// <c>.css</c> files (resolved relative to the JSON file's own directory).
+/// Inline <c>template.html</c> / <c>template.css</c> content is also supported
+/// for backwards compatibility and for Kafka-delivered payloads.
+///
 /// In future this same worker pattern is trivially replaced/supplemented by:
 ///   - An ASP.NET Core controller that accepts HTTP POST payloads
 ///   - A RabbitMQ IQueueConsumer implementation
 /// </summary>
 public sealed class DocumentGeneratorWorker : BackgroundService
 {
-    private readonly IDocumentPipeline _pipeline;
+    private readonly IDocumentPipeline           _pipeline;
+    private readonly ITemplateContentResolver    _resolver;
     private readonly ILogger<DocumentGeneratorWorker> _logger;
-    private readonly DocumentGeneratorOptions _options;
+    private readonly DocumentGeneratorOptions    _options;
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -29,10 +36,12 @@ public sealed class DocumentGeneratorWorker : BackgroundService
 
     public DocumentGeneratorWorker(
         IDocumentPipeline pipeline,
+        ITemplateContentResolver resolver,
         IOptions<DocumentGeneratorOptions> options,
         ILogger<DocumentGeneratorWorker> logger)
     {
         _pipeline = pipeline;
+        _resolver = resolver;
         _options  = options.Value;
         _logger   = logger;
     }
@@ -81,6 +90,10 @@ public sealed class DocumentGeneratorWorker : BackgroundService
             await using var stream = File.OpenRead(templatePath);
             var template = await JsonSerializer.DeserializeAsync<DocumentTemplate>(stream, JsonOptions, ct)
                 ?? throw new InvalidOperationException($"Failed to deserialise template: {templatePath}");
+
+            // Resolve any external HTML / CSS file references relative to the JSON file's directory
+            var templateDir = Path.GetDirectoryName(templatePath)!;
+            template = await _resolver.ResolveAsync(template, templateDir, ct);
 
             var request = new RenderRequest { Template = template };
             var result  = await _pipeline.ExecuteAsync(request, ct);

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="badge">
+  <div class="neon-rule"></div>
+  <div class="content">
+    <div class="left">
+      <div class="top-row">
+        <div class="event-label">{{branding.companyName}}</div>
+        <div class="ticket-chip ticket-chip--{{lower variables.ticketType}}">
+          <span class="chip-dot"></span>{{upper variables.ticketType}}
+        </div>
+      </div>
+      <div class="name">{{upper variables.firstName}} {{upper variables.lastName}}</div>
+      <div class="bottom-row">
+        <div class="role">{{variables.role}}</div>
+        <div class="team">{{variables.team}}</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="id-label">ID</div>
+      <div class="id-value">{{variables.attendeeId}}</div>
+    </div>
+  </div>
+  <div class="footer-strip">
+    <span class="prompt">$></span>
+    <div class="barcode-wrap">
+      {{{barCode variables.attendeeId "14" "false" "#A3E635"}}}
+    </div>
+    <span class="attendee-id">{{variables.attendeeId}}</span>
+  </div>
+</div>
+</body>
+</html>

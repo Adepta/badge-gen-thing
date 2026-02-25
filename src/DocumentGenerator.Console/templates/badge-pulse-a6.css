@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 105mm;
+  height: 148mm;
+  font-family: 'Inter', {{branding.bodyFont}}, sans-serif;
+  background: #0D0D1A;
+  overflow: hidden;
+}
+
+/* ── Badge shell ── */
+.badge {
+  width: 105mm;
+  height: 148mm;
+  background: linear-gradient(160deg, #0D0D1A 0%, #1A1040 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Header ── */
+.header {
+  padding: 7mm 6mm 5mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+  border-bottom: 0.3mm solid rgba(255,255,255,0.08);
+}
+
+.event-name {
+  font-size: 12pt;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+  line-height: 1.1;
+}
+
+.event-date {
+  font-size: 7pt;
+  color: {{branding.custom.accentColour}};
+  margin-top: 1.5mm;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.event-venue {
+  font-size: 6.5pt;
+  color: rgba(255,255,255,0.45);
+  margin-top: 0.5mm;
+}
+
+/* ── Ticket pill ── */
+.ticket-pill {
+  font-size: 6pt;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 1.5mm 3mm;
+  border-radius: 20mm;
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 0.5mm;
+  border: 0.4mm solid transparent;
+}
+
+.ticket-pill--speaker  { background: {{branding.custom.accentColour}}; color: #0D0D1A; }
+.ticket-pill--vip      { background: transparent; border-color: #D4AF37; color: #D4AF37; }
+.ticket-pill--attendee { background: transparent; border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.7); }
+.ticket-pill--sponsor  { background: #D4AF37; color: #0D0D1A; }
+.ticket-pill--staff    { background: #3B82F6; color: #fff; }
+.ticket-pill--hacker   { background: #A3E635; color: #0D0D1A; }
+
+/* ── Diagonal stripe ── */
+.stripe-wrap {
+  position: relative;
+  height: 4mm;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.stripe {
+  position: absolute;
+  top: 0; left: -10%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    {{branding.custom.accentColour}} 0%,
+    {{branding.primaryColour}} 60%,
+    transparent 100%);
+  transform: skewX(-8deg);
+  transform-origin: left center;
+}
+
+/* ── Body ── */
+.body {
+  flex: 1;
+  padding: 9mm 6mm 5mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5mm;
+}
+
+.first-name {
+  font-size: 32pt;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 0.95;
+  letter-spacing: -1px;
+}
+
+.last-name {
+  font-size: 22pt;
+  font-weight: 700;
+  color: {{branding.custom.accentColour}};
+  line-height: 1;
+  letter-spacing: -0.5px;
+  margin-top: 1.5mm;
+}
+
+.meta-block {
+  padding-left: 3.5mm;
+  border-left: 1mm solid {{branding.primaryColour}};
+  margin-top: 1mm;
+}
+
+.job-title {
+  font-size: 9pt;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.1px;
+}
+
+.company {
+  font-size: 8pt;
+  color: rgba(255,255,255,0.45);
+  margin-top: 1mm;
+}
+
+/* ── Footer ── */
+.footer {
+  background: rgba(255,255,255,0.04);
+  border-top: 0.3mm solid rgba(255,255,255,0.1);
+  padding: 3.5mm 6mm;
+  display: flex;
+  align-items: stretch;
+  gap: 4mm;
+  flex-shrink: 0;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.footer-col--right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.footer-qr {
+  flex-shrink: 0;
+  width: 14mm;
+  height: 14mm;
+}
+
+.footer-qr svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.footer-divider {
+  width: 0.3mm;
+  background: rgba(255,255,255,0.12);
+  align-self: stretch;
+}
+
+.footer-label {
+  font-size: 5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: {{branding.custom.accentColour}};
+  margin-bottom: 0.8mm;
+}
+
+.footer-value {
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.25;
+}
+
+.mono {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+  font-size: 7pt;
+}

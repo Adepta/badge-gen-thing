@@ -1,0 +1,34 @@
+{
+  "documentType": "badge",
+  "version": "1.0",
+  "branding": {
+    "companyName": "Global Leaders Summit",
+    "primaryColour": "#1C2333",
+    "secondaryColour": "#F8FAFC",
+    "bodyFont": "Segoe UI, Arial, sans-serif",
+    "custom": {
+      "accentColour": "#D4AF37"
+    }
+  },
+  "template": {
+    "htmlPath": "badge-executive-cc.html",
+    "cssPath":  "badge-executive-cc.css",
+    "partials": {}
+  },
+  "variables": {
+    "firstName":   "Sarah",
+    "lastName":    "Okafor",
+    "role":        "Delegate",
+    "team":        "Strategy & Innovation",
+    "ticketType":  "Delegate",
+    "attendeeId":  "GLS26-1142",
+    "eventDate":   "3 September 2026",
+    "eventVenue":  "Canary Wharf, London"
+  },
+  "pdf": {
+    "width": "85.6mm",
+    "height": "54mm",
+    "printBackground": true,
+    "margins": { "top": "0mm", "bottom": "0mm", "left": "0mm", "right": "0mm" }
+  }
+}

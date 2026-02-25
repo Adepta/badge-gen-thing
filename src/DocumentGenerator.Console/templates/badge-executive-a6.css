@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 105mm;
+  height: 148mm;
+  font-family: 'Inter', {{branding.bodyFont}}, sans-serif;
+  background: {{branding.primaryColour}};
+  overflow: hidden;
+}
+
+.badge {
+  width: 105mm;
+  height: 148mm;
+  background: {{branding.primaryColour}};
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.header {
+  padding: 7mm 8mm 0;
+  flex-shrink: 0;
+}
+
+.gold-rule {
+  height: 0.6mm;
+  background: linear-gradient(90deg, {{branding.custom.accentColour}} 0%, transparent 100%);
+  margin-bottom: 4mm;
+}
+
+.gold-rule--thin {
+  height: 0.3mm;
+  margin-top: 4mm;
+  margin-bottom: 0;
+  opacity: 0.4;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.event-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: {{branding.custom.accentColour}};
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.event-meta {
+  font-size: 6.5pt;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.3px;
+}
+
+/* ── Name block ── */
+.name-block {
+  padding: 9mm 8mm 6mm;
+  flex-shrink: 0;
+}
+
+.first-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 34pt;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 0.92;
+  letter-spacing: -0.5px;
+}
+
+.last-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 28pt;
+  font-weight: 900;
+  color: {{branding.custom.accentColour}};
+  line-height: 1;
+  letter-spacing: -0.3px;
+  margin-top: 1mm;
+}
+
+.title-line {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  margin-top: 4mm;
+}
+
+.job-title {
+  font-size: 8.5pt;
+  font-weight: 500;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.2px;
+}
+
+.dot-sep {
+  color: {{branding.custom.accentColour}};
+  opacity: 0.6;
+}
+
+.company {
+  font-size: 8.5pt;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── Spacer ── */
+.spacer {
+  flex: 1;
+  border-left: 0.3mm solid rgba(255,255,255,0.06);
+  margin: 0 8mm;
+}
+
+/* ── Details ── */
+.details {
+  padding: 6mm 8mm 5mm;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5mm;
+  flex-shrink: 0;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 0.3mm solid rgba(255,255,255,0.06);
+  padding-bottom: 2mm;
+}
+
+.detail-label {
+  font-size: 6pt;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: {{branding.custom.accentColour}};
+  opacity: 0.8;
+}
+
+.detail-value {
+  font-size: 7.5pt;
+  font-weight: 400;
+  color: rgba(255,255,255,0.75);
+  text-align: right;
+  max-width: 60mm;
+}
+
+.mono {
+  font-family: 'Courier New', monospace;
+  font-size: 7pt;
+  color: rgba(255,255,255,0.55);
+}
+
+.detail-qr-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.3mm solid rgba(255,255,255,0.06);
+  padding-bottom: 2mm;
+}
+
+.detail-id-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8mm;
+}
+
+.qr-code {
+  flex-shrink: 0;
+  width: 13mm;
+  height: 13mm;
+}
+
+.qr-code svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Footer ── */
+.footer {
+  padding: 0 8mm 6mm;
+  display: flex;
+  align-items: center;
+  gap: 4mm;
+  flex-shrink: 0;
+}
+
+.ticket-badge {
+  font-size: 6pt;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 1.5mm 3.5mm;
+  border: 0.4mm solid {{branding.custom.accentColour}};
+  color: {{branding.custom.accentColour}};
+  border-radius: 0.5mm;
+  white-space: nowrap;
+}
+
+/* Override for high-contrast ticket types */
+.ticket-badge--vip      { background: {{branding.custom.accentColour}}; color: {{branding.primaryColour}}; }
+.ticket-badge--delegate { background: {{branding.custom.accentColour}}; color: {{branding.primaryColour}}; }
+
+.footer-rule {
+  flex: 1;
+  height: 0.3mm;
+  background: linear-gradient(90deg, rgba(255,255,255,0.12), transparent);
+}

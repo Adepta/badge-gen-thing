@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Invoice {{variables.invoiceNumber}}</title>
+</head>
+<body>
+
+<header>
+  <div class='logo-area'>
+    <img src='{{branding.logoUrl}}' alt='{{branding.companyName}}' />
+    <div class='company-name'>{{branding.companyName}}</div>
+    <div class='tagline'>{{branding.custom.tagline}}</div>
+  </div>
+  <div class='invoice-meta'>
+    <h1>INVOICE</h1>
+    <p><strong>Invoice #:</strong> {{variables.invoiceNumber}}</p>
+    <p><strong>Date:</strong> {{formatDate variables.issueDate 'dd MMM yyyy'}}</p>
+    <p><strong>Due:</strong> {{formatDate variables.dueDate 'dd MMM yyyy'}}</p>
+  </div>
+</header>
+
+<section class='bill-to'>
+  <h2>Bill To</h2>
+  <p>{{variables.customer.name}}</p>
+  <p>{{variables.customer.address}}</p>
+  <p>{{variables.customer.email}}</p>
+</section>
+
+<table class='line-items'>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Qty</th>
+      <th>Unit Price</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each variables.lineItems}}
+    <tr>
+      <td>{{this.description}}</td>
+      <td>{{this.quantity}}</td>
+      <td>{{currency this.unitPrice 'en-GB'}}</td>
+      <td>{{currency this.total 'en-GB'}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan='3'><strong>Total</strong></td>
+      <td><strong>{{currency variables.totalAmount 'en-GB'}}</strong></td>
+    </tr>
+  </tfoot>
+</table>
+
+<footer>
+  <p>{{branding.companyName}} &mdash; {{branding.custom.tagline}}</p>
+  <p>Generated: {{meta.generatedAt}}</p>
+</footer>
+
+</body>
+</html>

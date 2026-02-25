@@ -9,13 +9,14 @@ namespace DocumentGenerator.Templating.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers the Handlebars template engine as a singleton <see cref="ITemplateEngine"/>.
+    /// Registers the Handlebars template engine and file-based content resolver.
     /// </summary>
     /// <param name="services">The service collection to register into.</param>
     /// <returns>The same <paramref name="services"/> for chaining.</returns>
     public static IServiceCollection AddTemplating(this IServiceCollection services)
     {
         services.AddSingleton<ITemplateEngine, HandlebarsTemplateEngine>();
+        services.AddSingleton<ITemplateContentResolver, FileTemplateContentResolver>();
         return services;
     }
 }

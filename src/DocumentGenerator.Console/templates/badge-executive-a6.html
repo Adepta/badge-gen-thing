@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="badge">
+
+  <!-- ── Ruled header ── -->
+  <div class="header">
+    <div class="gold-rule"></div>
+    <div class="header-content">
+      <div class="event-name">{{branding.companyName}}</div>
+      <div class="event-meta">{{variables.eventDate}} &nbsp;·&nbsp; {{variables.eventVenue}}</div>
+    </div>
+    <div class="gold-rule gold-rule--thin"></div>
+  </div>
+
+  <!-- ── Name block ── -->
+  <div class="name-block">
+    <div class="first-name">{{variables.firstName}}</div>
+    <div class="last-name">{{variables.lastName}}</div>
+    <div class="title-line">
+      <span class="job-title">{{variables.jobTitle}}</span>
+      <span class="dot-sep">·</span>
+      <span class="company">{{variables.company}}</span>
+    </div>
+  </div>
+
+  <!-- ── Spacer ── -->
+  <div class="spacer"></div>
+
+  <!-- ── Details ── -->
+  <div class="details">
+    <div class="detail-row">
+      <div class="detail-label">Session</div>
+      <div class="detail-value">{{variables.sessionName}}</div>
+    </div>
+    <div class="detail-qr-row">
+      <div class="detail-id-block">
+        <div class="detail-label">Attendee ID</div>
+        <div class="detail-value mono">{{variables.attendeeId}}</div>
+      </div>
+      <div class="qr-code">
+        {{{qrCode variables.attendeeId "#D4AF37" "transparent"}}}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="footer">
+    <div class="ticket-badge ticket-badge--{{lower variables.ticketType}}">{{variables.ticketType}}</div>
+    <div class="footer-rule"></div>
+  </div>
+
+</div>
+</body>
+</html>

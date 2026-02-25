@@ -3,6 +3,10 @@ using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
+using QRCoder;
+using ZXing;
+using ZXing.Common;
+using ZXing.Rendering;
 
 namespace DocumentGenerator.Templating;
 
@@ -27,7 +31,8 @@ public sealed class HandlebarsTemplateEngine : ITemplateEngine
 
     /// <summary>
     /// Initialises the engine, creates a scoped Handlebars environment, and registers
-    /// the built-in helpers (<c>upper</c>, <c>lower</c>, <c>formatDate</c>, <c>currency</c>, <c>ifEquals</c>).
+    /// the built-in helpers (<c>upper</c>, <c>lower</c>, <c>formatDate</c>, <c>currency</c>,
+    /// <c>ifEquals</c>, <c>qrCode</c>, <c>barCode</c>).
     /// </summary>
     /// <param name="logger">Logger for template rendering events.</param>
     public HandlebarsTemplateEngine(ILogger<HandlebarsTemplateEngine> logger)
@@ -213,6 +218,78 @@ public sealed class HandlebarsTemplateEngine : ITemplateEngine
                 options.Template(output, context);
             else
                 options.Inverse(output, context);
+        });
+
+        // {{qrCode value [darkColour] [lightColour]}}
+        // Emits an inline SVG QR code sized via viewBox — use CSS width/height to control display size.
+        //   darkColour  – fill colour for dark modules, e.g. "#ffffff" (default "#000000")
+        //   lightColour – fill colour for light modules, "transparent" supported (default "transparent")
+        hbs.RegisterHelper("qrCode", (output, _, args) =>
+        {
+            var data = args.Length >= 1 ? args[0]?.ToString() : null;
+            if (string.IsNullOrWhiteSpace(data))
+                return;
+
+            var darkColour  = args.Length >= 2 ? args[1]?.ToString() ?? "#000000" : "#000000";
+            var lightColour = args.Length >= 3 ? args[2]?.ToString() ?? "transparent" : "transparent";
+            var lightHex    = lightColour == "transparent" ? "#ffffff" : lightColour;
+
+            using var generator = new QRCodeGenerator();
+            var qrData = generator.CreateQrCode(data, QRCodeGenerator.ECCLevel.M);
+            using var svgCode = new SvgQRCode(qrData);
+            var svg = svgCode.GetGraphic(
+                pixelsPerModule : 10,
+                darkColorHex    : darkColour,
+                lightColorHex   : lightHex,
+                drawQuietZones  : false,
+                sizingMode      : SvgQRCode.SizingMode.ViewBoxAttribute);
+
+            // Replace the white background rect with transparent when requested
+            if (lightColour == "transparent")
+                svg = svg.Replace("fill=\"#ffffff\"", "fill=\"none\"", StringComparison.OrdinalIgnoreCase)
+                         .Replace("fill=\"white\"",   "fill=\"none\"", StringComparison.OrdinalIgnoreCase);
+
+            output.WriteSafeString(svg);
+        });
+
+        // {{barCode value [height] [showText] [darkColour]}}
+        // Emits an inline SVG Code-128 barcode.
+        //   height     – bar height in pixels (default 60)
+        //   showText   – "true" | "false" whether to render the human-readable text (default "false")
+        //   darkColour – bar fill colour, e.g. "#ffffff" (default "#000000")
+        hbs.RegisterHelper("barCode", (output, _, args) =>
+        {
+            var data = args.Length >= 1 ? args[0]?.ToString() : null;
+            if (string.IsNullOrWhiteSpace(data))
+                return;
+
+            var height     = args.Length >= 2 && int.TryParse(args[1]?.ToString(), out var h) ? h : 60;
+            var showText   = args.Length >= 3 && string.Equals(args[2]?.ToString(), "true", StringComparison.OrdinalIgnoreCase);
+            var darkColour = args.Length >= 4 ? args[3]?.ToString() ?? "#000000" : "#000000";
+
+            var writer  = new BarcodeWriterSvg
+            {
+                Format  = BarcodeFormat.CODE_128,
+                Options = new EncodingOptions
+                {
+                    Height  = height,
+                    Width   = 0,        // auto-width based on content
+                    Margin  = 0,
+                    PureBarcode = !showText
+                }
+            };
+
+            var svgImage = writer.Write(data);
+            var svg = svgImage.Content;
+
+            // Recolour bars — ZXing.Net emits fill="rgb(0,0,0)" on the <svg> root attribute
+            // and individual <rect> elements inherit it. Replace all common black representations.
+            if (!string.Equals(darkColour, "#000000", StringComparison.OrdinalIgnoreCase))
+                svg = svg.Replace("fill=\"rgb(0,0,0)\"", $"fill=\"{darkColour}\"", StringComparison.OrdinalIgnoreCase)
+                         .Replace("fill=\"black\"",      $"fill=\"{darkColour}\"", StringComparison.OrdinalIgnoreCase)
+                         .Replace("fill=\"#000000\"",    $"fill=\"{darkColour}\"", StringComparison.OrdinalIgnoreCase);
+
+            output.WriteSafeString(svg);
         });
     }
 }

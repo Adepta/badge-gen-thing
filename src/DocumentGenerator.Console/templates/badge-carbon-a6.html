@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="badge">
+
+  <!-- ── Neon top rule ── -->
+  <div class="neon-rule"></div>
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="event-name">{{branding.companyName}}</div>
+    <div class="ticket-chip ticket-chip--{{lower variables.ticketType}}">
+      <span class="chip-dot"></span>{{upper variables.ticketType}}
+    </div>
+  </div>
+
+  <!-- ── Name section ── -->
+  <div class="name-section">
+    <div class="first-name">{{upper variables.firstName}}</div>
+    <div class="last-name">{{upper variables.lastName}}</div>
+  </div>
+
+  <!-- ── Info grid ── -->
+  <div class="info-grid">
+    <div class="info-cell">
+      <div class="info-label">// role</div>
+      <div class="info-value">{{variables.jobTitle}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">// org</div>
+      <div class="info-value">{{variables.company}}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">// session</div>
+      <div class="info-value">{{variables.sessionName}}</div>
+    </div>
+  </div>
+
+  <!-- ── Barcode footer ── -->
+  <div class="barcode-footer">
+    <div class="barcode-wrap">
+      {{{barCode variables.attendeeId "28" "false" "#A3E635"}}}
+    </div>
+    <div class="barcode-meta">
+      <span class="prompt">$></span>
+      <span class="attendee-id">{{variables.attendeeId}}</span>
+    </div>
+  </div>
+
+  <!-- ── Event meta strip ── -->
+  <div class="meta-strip">
+    <span>{{variables.eventDate}}</span>
+    <span class="sep">·</span>
+    <span>{{variables.eventVenue}}</span>
+  </div>
+
+  <!-- ── Event meta strip ── -->
+  <div class="meta-strip">
+    <span>{{variables.eventDate}}</span>
+    <span class="sep">·</span>
+    <span>{{variables.eventVenue}}</span>
+  </div>
+
+</div>
+</body>
+</html>

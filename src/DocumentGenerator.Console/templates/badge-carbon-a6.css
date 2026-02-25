@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 105mm;
+  height: 148mm;
+  font-family: 'Inter', sans-serif;
+  background: #0a0a0a;
+  overflow: hidden;
+}
+
+.badge {
+  width: 105mm;
+  height: 148mm;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Subtle grid texture overlay ── */
+.badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 8mm 8mm;
+  pointer-events: none;
+}
+
+/* ── Neon rule ── */
+.neon-rule {
+  height: 0.8mm;
+  background: {{branding.custom.accentColour}};
+  box-shadow: 0 0 6px {{branding.custom.accentColour}};
+  flex-shrink: 0;
+}
+
+/* ── Header ── */
+.header {
+  padding: 5mm 6mm 4mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.event-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8pt;
+  font-weight: 800;
+  color: {{branding.custom.accentColour}};
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* ── Ticket chip ── */
+.ticket-chip {
+  display: flex;
+  align-items: center;
+  gap: 1.5mm;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 1mm 2.5mm;
+  border-radius: 1mm;
+}
+
+.chip-dot {
+  display: inline-block;
+  width: 1.5mm;
+  height: 1.5mm;
+  border-radius: 50%;
+}
+
+.ticket-chip--speaker  { background: rgba(163,230,53,0.12); color: #A3E635; border: 0.3mm solid #A3E635; }
+.ticket-chip--speaker .chip-dot  { background: #A3E635; box-shadow: 0 0 3px #A3E635; }
+.ticket-chip--hacker   { background: rgba(163,230,53,0.12); color: #A3E635; border: 0.3mm solid #A3E635; }
+.ticket-chip--hacker .chip-dot   { background: #A3E635; box-shadow: 0 0 3px #A3E635; }
+.ticket-chip--attendee { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 0.3mm solid rgba(255,255,255,0.15); }
+.ticket-chip--attendee .chip-dot { background: rgba(255,255,255,0.4); }
+.ticket-chip--vip      { background: rgba(212,175,55,0.12); color: #D4AF37; border: 0.3mm solid #D4AF37; }
+.ticket-chip--vip .chip-dot      { background: #D4AF37; box-shadow: 0 0 3px #D4AF37; }
+.ticket-chip--staff    { background: rgba(59,130,246,0.12); color: #60A5FA; border: 0.3mm solid #60A5FA; }
+.ticket-chip--staff .chip-dot    { background: #60A5FA; }
+
+/* ── Name section ── */
+.name-section {
+  padding: 6mm 6mm 5mm;
+  flex-shrink: 0;
+  border-bottom: 0.3mm solid rgba(255,255,255,0.06);
+}
+
+.first-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 36pt;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 0.9;
+  letter-spacing: -1.5px;
+}
+
+.last-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 24pt;
+  font-weight: 700;
+  color: {{branding.custom.accentColour}};
+  line-height: 1;
+  letter-spacing: -0.5px;
+  margin-top: 1mm;
+}
+
+/* ── Info grid ── */
+.info-grid {
+  flex: 1;
+  padding: 5mm 6mm 4mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 3.5mm;
+}
+
+.info-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6mm;
+}
+
+.info-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6pt;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.3px;
+}
+
+.info-value {
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.1px;
+}
+
+/* ── Barcode footer ── */
+.barcode-footer {
+  padding: 2.5mm 6mm 2mm;
+  background: rgba(255,255,255,0.03);
+  border-top: 0.3mm solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+
+.barcode-wrap {
+  width: 100%;
+  height: 8mm;
+  overflow: hidden;
+}
+
+.barcode-wrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.barcode-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5mm;
+  margin-top: 1mm;
+}
+
+.prompt     { font-family: 'JetBrains Mono', monospace; font-size: 6pt; font-weight: 800; color: {{branding.custom.accentColour}}; }
+.attendee-id { font-family: 'JetBrains Mono', monospace; font-size: 6pt; color: rgba(255,255,255,0.5); letter-spacing: 0.3px; }
+
+/* ── Meta strip ── */
+.meta-strip {
+  padding: 2mm 6mm;
+  font-size: 6pt;
+  color: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+
+.sep { color: {{branding.custom.accentColour}}; }
