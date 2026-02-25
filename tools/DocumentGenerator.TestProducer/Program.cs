@@ -165,17 +165,29 @@ while (true)
     static string Resolve(string path, string baseDir) =>
         Path.IsPathRooted(path) ? path : Path.Combine(baseDir, path);
 
+    // ── Choose delivery mode ────────────────────────────────────────────────
+    var deliveryMode = AnsiConsole.Prompt(
+        new SelectionPrompt<string>()
+            .Title("[grey]Delivery mode[/]")
+            .HighlightStyle(Style.Parse("purple bold"))
+            .AddChoices(
+                "Inline  — PDF returned as Base64 in the Kafka reply",
+                "Path    — PDF saved to server disk, path returned in reply"));
+
+    var returnPdfInline = deliveryMode.StartsWith("Inline");
+
     // ── Build and send the Kafka message ────────────────────────────────────
     var correlationId = Guid.NewGuid();
     var deviceId      = $"test-ipad-{Environment.MachineName}";
 
     var request = new DocumentRenderRequest
     {
-        CorrelationId = correlationId,
-        DeviceId      = deviceId,
-        SessionId     = sessionId.ToString(),
-        Template      = template,
-        RequestedAt   = DateTimeOffset.UtcNow
+        CorrelationId  = correlationId,
+        DeviceId       = deviceId,
+        SessionId      = sessionId.ToString(),
+        Template       = template,
+        RequestedAt    = DateTimeOffset.UtcNow,
+        ReturnPdfInline = returnPdfInline
     };
 
     var tcs = new TaskCompletionSource<DocumentRenderResult>();
@@ -242,14 +254,27 @@ while (true)
 
     if (result.Success && result.PdfBase64 is not null)
     {
+        // Inline mode — decode Base64 and save locally
         var pdfBytes  = Convert.FromBase64String(result.PdfBase64);
         var outputDir = Path.GetFullPath("Generated");
         Directory.CreateDirectory(outputDir);
         var outputPath = Path.Combine(outputDir, $"{documentType}_{result.DocumentType}_{correlationId:N}.pdf");
         await File.WriteAllBytesAsync(outputPath, pdfBytes);
 
+        resultGrid.AddRow("[grey]Mode[/]",      "[white]Inline (Base64)[/]");
         resultGrid.AddRow("[grey]PDF size[/]",  $"[white]{pdfBytes.Length:N0} bytes[/]");
         resultGrid.AddRow("[grey]Saved to[/]",  $"[green]{outputPath}[/]");
+
+        AnsiConsole.Write(
+            new Panel(resultGrid)
+                .Header("[green] Success [/]")
+                .BorderColor(Color.Green));
+    }
+    else if (result.Success && result.PdfPath is not null)
+    {
+        // Path mode — PDF already on disk at the reported path
+        resultGrid.AddRow("[grey]Mode[/]",      "[white]Path (server disk)[/]");
+        resultGrid.AddRow("[grey]PDF path[/]",  $"[green]{result.PdfPath}[/]");
 
         AnsiConsole.Write(
             new Panel(resultGrid)
