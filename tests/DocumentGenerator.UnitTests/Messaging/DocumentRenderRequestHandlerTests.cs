@@ -1,9 +1,11 @@
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
+using DocumentGenerator.Messaging.Configuration;
 using DocumentGenerator.Messaging.Handlers;
 using DocumentGenerator.Messaging.Messages;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Moq;
 using Rebus.Bus;
 using Xunit;
@@ -14,26 +16,41 @@ namespace DocumentGenerator.UnitTests.Messaging;
 /// Unit tests for <see cref="DocumentRenderRequestHandler"/>.
 /// The pipeline, bus, and metrics are all mocked.
 /// </summary>
-public sealed class DocumentRenderRequestHandlerTests
+public sealed class DocumentRenderRequestHandlerTests : IDisposable
 {
     private readonly Mock<IDocumentPipeline> _pipelineMock = new();
     private readonly Mock<IBus>              _busMock      = new();
     private readonly Mock<IRenderMetrics>    _metricsMock  = new();
     private readonly DocumentRenderRequestHandler _sut;
 
+    // Temp directory used by tests that exercise ReturnPdfInline=false
+    private readonly string _tempOutputDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
     private static readonly byte[] FakePdfBytes = [0x25, 0x50, 0x44, 0x46]; // %PDF
 
     public DocumentRenderRequestHandlerTests()
     {
+        var kafkaOptions = Options.Create(new KafkaOptions
+        {
+            PdfOutputPath = _tempOutputDir
+        });
+
         _sut = new DocumentRenderRequestHandler(
             _pipelineMock.Object,
             _busMock.Object,
             _metricsMock.Object,
+            kafkaOptions,
             NullLogger<DocumentRenderRequestHandler>.Instance);
     }
 
+    public void Dispose()
+    {
+        if (Directory.Exists(_tempOutputDir))
+            Directory.Delete(_tempOutputDir, recursive: true);
+    }
+
     // -----------------------------------------------------------------------
-    // Success path
+    // Success path — ReturnPdfInline = true (default)
     // -----------------------------------------------------------------------
 
     [Fact]
@@ -52,7 +69,7 @@ public sealed class DocumentRenderRequestHandlerTests
     [Fact]
     public async Task Handle_SuccessfulRender_ResultContainsBase64Pdf()
     {
-        var message = BuildRequest();
+        var message = BuildRequest(returnPdfInline: true);
         ArrangeSuccess(FakePdfBytes);
 
         DocumentRenderResult? captured = null;
@@ -65,6 +82,23 @@ public sealed class DocumentRenderRequestHandlerTests
 
         captured.Should().NotBeNull();
         captured!.PdfBase64.Should().Be(Convert.ToBase64String(FakePdfBytes));
+    }
+
+    [Fact]
+    public async Task Handle_SuccessfulRender_InlineTrue_PdfPathIsNull()
+    {
+        var message = BuildRequest(returnPdfInline: true);
+        ArrangeSuccess(FakePdfBytes);
+
+        DocumentRenderResult? captured = null;
+        _busMock
+            .Setup(b => b.Reply(It.IsAny<object>(), It.IsAny<IDictionary<string, string>>()))
+            .Callback<object, IDictionary<string, string>>((msg, _) => captured = msg as DocumentRenderResult)
+            .Returns(Task.CompletedTask);
+
+        await _sut.Handle(message);
+
+        captured!.PdfPath.Should().BeNull();
     }
 
     [Fact]
@@ -145,6 +179,95 @@ public sealed class DocumentRenderRequestHandlerTests
         await _sut.Handle(message);
 
         captured!.JobId.Should().Be(message.CorrelationId);
+    }
+
+    // -----------------------------------------------------------------------
+    // Success path — ReturnPdfInline = false (save to disk, return path)
+    // -----------------------------------------------------------------------
+
+    [Fact]
+    public async Task Handle_ReturnPdfInlineFalse_PdfBase64IsNull()
+    {
+        var message = BuildRequest(returnPdfInline: false);
+        ArrangeSuccess(FakePdfBytes);
+
+        DocumentRenderResult? captured = null;
+        _busMock
+            .Setup(b => b.Reply(It.IsAny<object>(), It.IsAny<IDictionary<string, string>>()))
+            .Callback<object, IDictionary<string, string>>((msg, _) => captured = msg as DocumentRenderResult)
+            .Returns(Task.CompletedTask);
+
+        await _sut.Handle(message);
+
+        captured!.PdfBase64.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Handle_ReturnPdfInlineFalse_PdfPathIsPopulated()
+    {
+        var message = BuildRequest(returnPdfInline: false);
+        ArrangeSuccess(FakePdfBytes);
+
+        DocumentRenderResult? captured = null;
+        _busMock
+            .Setup(b => b.Reply(It.IsAny<object>(), It.IsAny<IDictionary<string, string>>()))
+            .Callback<object, IDictionary<string, string>>((msg, _) => captured = msg as DocumentRenderResult)
+            .Returns(Task.CompletedTask);
+
+        await _sut.Handle(message);
+
+        captured!.PdfPath.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public async Task Handle_ReturnPdfInlineFalse_PdfPathPointsToWrittenFile()
+    {
+        var message = BuildRequest(returnPdfInline: false);
+        ArrangeSuccess(FakePdfBytes);
+
+        DocumentRenderResult? captured = null;
+        _busMock
+            .Setup(b => b.Reply(It.IsAny<object>(), It.IsAny<IDictionary<string, string>>()))
+            .Callback<object, IDictionary<string, string>>((msg, _) => captured = msg as DocumentRenderResult)
+            .Returns(Task.CompletedTask);
+
+        await _sut.Handle(message);
+
+        File.Exists(captured!.PdfPath).Should().BeTrue();
+        (await File.ReadAllBytesAsync(captured.PdfPath!)).Should().Equal(FakePdfBytes);
+    }
+
+    [Fact]
+    public async Task Handle_ReturnPdfInlineFalse_OutputFilenameContainsDocumentTypeAndCorrelationId()
+    {
+        var message = BuildRequest(returnPdfInline: false, documentType: "badge");
+        ArrangeSuccess(FakePdfBytes);
+
+        DocumentRenderResult? captured = null;
+        _busMock
+            .Setup(b => b.Reply(It.IsAny<object>(), It.IsAny<IDictionary<string, string>>()))
+            .Callback<object, IDictionary<string, string>>((msg, _) => captured = msg as DocumentRenderResult)
+            .Returns(Task.CompletedTask);
+
+        await _sut.Handle(message);
+
+        var fileName = Path.GetFileName(captured!.PdfPath);
+        fileName.Should().StartWith("badge_");
+        fileName.Should().Contain(message.CorrelationId.ToString("N"));
+        fileName.Should().EndWith(".pdf");
+    }
+
+    [Fact]
+    public async Task Handle_ReturnPdfInlineFalse_StillRepliesSuccessTrue()
+    {
+        var message = BuildRequest(returnPdfInline: false);
+        ArrangeSuccess(FakePdfBytes);
+
+        await _sut.Handle(message);
+
+        _busMock.Verify(
+            b => b.Reply(It.Is<DocumentRenderResult>(r => r.Success == true), It.IsAny<IDictionary<string, string>>()),
+            Times.Once);
     }
 
     // -----------------------------------------------------------------------
@@ -244,14 +367,16 @@ public sealed class DocumentRenderRequestHandlerTests
     }
 
     private static DocumentRenderRequest BuildRequest(
-        string deviceId  = "device-1",
-        string? sessionId = "session-1",
-        string documentType = "test") =>
+        string deviceId       = "device-1",
+        string? sessionId     = "session-1",
+        string documentType   = "test",
+        bool returnPdfInline  = true) =>
         new()
         {
-            CorrelationId = Guid.NewGuid(),
-            DeviceId      = deviceId,
-            SessionId     = sessionId,
-            Template      = new DocumentTemplate { DocumentType = documentType }
+            CorrelationId    = Guid.NewGuid(),
+            DeviceId         = deviceId,
+            SessionId        = sessionId,
+            Template         = new DocumentTemplate { DocumentType = documentType },
+            ReturnPdfInline  = returnPdfInline
         };
 }

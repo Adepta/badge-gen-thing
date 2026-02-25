@@ -1,7 +1,9 @@
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
+using DocumentGenerator.Messaging.Configuration;
 using DocumentGenerator.Messaging.Messages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Rebus.Bus;
 using Rebus.Handlers;
 
@@ -10,49 +12,44 @@ namespace DocumentGenerator.Messaging.Handlers;
 /// <summary>
 /// Rebus message handler for <see cref="DocumentRenderRequest"/>.
 ///
-/// Rebus dispatches one instance per message on the <c>render.requests</c> topic.
-/// Concurrency is controlled by Rebus worker thread count, which is kept at or
+/// Rebus dispatches one instance per message on the render.requests topic.
+/// Concurrency is controlled by Rebus worker thread count, kept at or
 /// below the Chromium pool MaxSize to avoid starvation.
 ///
-/// On success  → replies <see cref="DocumentRenderResult"/> to the sender's return address
-/// On failure  → replies failure result (Rebus handles dead-lettering after MaxRetries)
+/// On success  → replies <see cref="DocumentRenderResult"/> to the sender's return address.
+///               When <see cref="DocumentRenderRequest.ReturnPdfInline"/> is <see langword="true"/>
+///               (the default) the PDF is Base64-encoded in the reply message.
+///               When <see langword="false"/>, the PDF is saved to
+///               <see cref="KafkaOptions.PdfOutputPath"/> and the path is returned instead,
+///               keeping the Kafka message small for devices that can reach shared storage.
+/// On failure  → replies failure result (Rebus handles dead-lettering after MaxRetries).
 /// </summary>
 public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRenderRequest>
 {
     private readonly IDocumentPipeline _pipeline;
     private readonly IBus              _bus;
     private readonly IRenderMetrics    _metrics;
+    private readonly KafkaOptions      _kafkaOptions;
     private readonly ILogger<DocumentRenderRequestHandler> _logger;
 
-    /// <summary>
-    /// Initialises the handler with its required dependencies.
-    /// </summary>
-    /// <param name="pipeline">The document rendering pipeline.</param>
-    /// <param name="bus">The Rebus bus used to reply to the sender.</param>
-    /// <param name="metrics">Render outcome metrics recorder.</param>
-    /// <param name="logger">Logger for this handler.</param>
     public DocumentRenderRequestHandler(
-        IDocumentPipeline pipeline,
-        IBus              bus,
-        IRenderMetrics    metrics,
+        IDocumentPipeline pipeline, IBus bus,
+        IRenderMetrics metrics,
+        IOptions<KafkaOptions> kafkaOptions,
         ILogger<DocumentRenderRequestHandler> logger)
     {
-        _pipeline = pipeline;
-        _bus      = bus;
-        _metrics  = metrics;
-        _logger   = logger;
+        _pipeline     = pipeline;
+        _bus          = bus;
+        _metrics      = metrics;
+        _kafkaOptions = kafkaOptions.Value;
+        _logger       = logger;
     }
 
-    /// <summary>
-    /// Handles a <see cref="DocumentRenderRequest"/> by executing the render pipeline
-    /// and replying with a <see cref="DocumentRenderResult"/> (success or failure).
-    /// </summary>
-    /// <param name="message">The incoming render request.</param>
     public async Task Handle(DocumentRenderRequest message)
     {
         _logger.LogInformation(
-            "Handling render request — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, DocumentType: {DocumentType}",
-            message.CorrelationId, message.DeviceId, message.Template.DocumentType);
+            "Handling render request — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, DocumentType: {DocumentType}, ReturnPdfInline: {ReturnPdfInline}",
+            message.CorrelationId, message.DeviceId, message.Template.DocumentType, message.ReturnPdfInline);
 
         var renderJob = new RenderRequest
         {
@@ -66,26 +63,33 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
         {
             var renderResult = await _pipeline.ExecuteAsync(renderJob);
 
+            string? pdfPath = null;
+
+            if (!message.ReturnPdfInline)
+            {
+                pdfPath = await SavePdfAsync(
+                    renderResult.PdfBytes,
+                    message.Template.DocumentType,
+                    message.CorrelationId);
+            }
+
             result = DocumentRenderResult.Succeeded(
-                message.CorrelationId,
-                message.DeviceId,
-                message.SessionId,
+                message.CorrelationId, message.DeviceId, message.SessionId,
                 message.Template.DocumentType,
-                renderResult.PdfBytes,
-                renderResult.ElapsedTime);
+                renderResult.PdfBytes, renderResult.ElapsedTime,
+                returnInline: message.ReturnPdfInline,
+                pdfPath: pdfPath);
 
             _metrics.RecordSuccess();
 
             _logger.LogInformation(
-                "Render succeeded — CorrelationId: {CorrelationId}, {Bytes:N0} bytes in {Elapsed}ms",
-                message.CorrelationId,
-                renderResult.PdfBytes.Length,
-                (int)renderResult.ElapsedTime.TotalMilliseconds);
+                "Render succeeded — CorrelationId: {CorrelationId}, {Bytes:N0} bytes in {Elapsed}ms{PathSuffix}",
+                message.CorrelationId, renderResult.PdfBytes.Length,
+                (int)renderResult.ElapsedTime.TotalMilliseconds,
+                pdfPath is null ? string.Empty : $", saved to {pdfPath}");
         }
         catch (Exception ex)
         {
-            // Let Rebus handle retries — it will rethrow after MaxDeliveryAttempts
-            // and route to the error queue automatically.
             _logger.LogError(ex,
                 "Render failed — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}",
                 message.CorrelationId, message.DeviceId);
@@ -93,14 +97,30 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
             _metrics.RecordFailure();
 
             result = DocumentRenderResult.Failed(
-                message.CorrelationId,
-                message.DeviceId,
-                message.SessionId,
-                message.Template.DocumentType,
-                ex.Message);
+                message.CorrelationId, message.DeviceId, message.SessionId,
+                message.Template.DocumentType, ex.Message);
         }
 
         // Reply routes the result back to the sender's return address automatically
         await _bus.Reply(result);
+    }
+
+    /// <summary>
+    /// Saves <paramref name="pdfBytes"/> to <see cref="KafkaOptions.PdfOutputPath"/> and
+    /// returns the absolute path of the written file.
+    /// </summary>
+    private async Task<string> SavePdfAsync(byte[] pdfBytes, string documentType, Guid correlationId)
+    {
+        var outputDir = Path.GetFullPath(_kafkaOptions.PdfOutputPath);
+        Directory.CreateDirectory(outputDir);
+
+        var fileName   = $"{documentType}_{correlationId:N}.pdf";
+        var outputPath = Path.Combine(outputDir, fileName);
+
+        await File.WriteAllBytesAsync(outputPath, pdfBytes);
+
+        _logger.LogDebug("PDF saved to {Path}", outputPath);
+
+        return outputPath;
     }
 }

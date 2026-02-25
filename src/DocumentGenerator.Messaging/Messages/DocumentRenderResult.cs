@@ -22,10 +22,18 @@ public sealed class DocumentRenderResult
     public bool Success { get; init; }
 
     /// <summary>
-    /// Base64-encoded PDF bytes. Null when <see cref="Success"/> is false.
+    /// Base64-encoded PDF bytes. Populated when <see cref="DocumentRenderRequest.ReturnPdfInline"/>
+    /// is <see langword="true"/> and the render succeeded. Null otherwise.
     /// The iPad decodes this and hands it to the AirPrint / printing stack.
     /// </summary>
     public string? PdfBase64 { get; init; }
+
+    /// <summary>
+    /// Absolute path to the saved PDF file on the shared network location.
+    /// Populated when <see cref="DocumentRenderRequest.ReturnPdfInline"/> is
+    /// <see langword="false"/> and the render succeeded. Null otherwise.
+    /// </summary>
+    public string? PdfPath { get; init; }
 
     /// <summary>Human-readable error description when <see cref="Success"/> is false.</summary>
     public string? ErrorMessage { get; init; }
@@ -41,29 +49,34 @@ public sealed class DocumentRenderResult
 
     /// <summary>
     /// Creates a successful <see cref="DocumentRenderResult"/> from rendered PDF bytes.
-    /// The bytes are automatically Base64-encoded for Kafka transport.
     /// </summary>
-    /// <param name="correlationId">Correlation ID echoed from the request.</param>
-    /// <param name="deviceId">Device ID echoed from the request.</param>
-    /// <param name="sessionId">Session ID echoed from the request.</param>
-    /// <param name="documentType">Document type label from the template.</param>
-    /// <param name="pdfBytes">Raw PDF bytes to encode and include in the result.</param>
-    /// <param name="elapsed">Time taken by the full render pipeline.</param>
-    /// <returns>A populated success result ready to publish.</returns>
+    /// <param name="correlationId">Matched from the originating request.</param>
+    /// <param name="deviceId">Echoed from the originating request.</param>
+    /// <param name="sessionId">Echoed from the originating request.</param>
+    /// <param name="documentType">Document type from the template.</param>
+    /// <param name="pdfBytes">Raw rendered PDF bytes.</param>
+    /// <param name="elapsed">Total pipeline duration.</param>
+    /// <param name="returnInline">
+    /// When <see langword="true"/>, <paramref name="pdfBytes"/> are Base64-encoded into
+    /// <see cref="PdfBase64"/>. When <see langword="false"/>, <see cref="PdfBase64"/> is
+    /// null and <see cref="PdfPath"/> must be set by the caller.
+    /// </param>
+    /// <param name="pdfPath">
+    /// Absolute path to the saved PDF file. Only used when <paramref name="returnInline"/>
+    /// is <see langword="false"/>; ignored otherwise.
+    /// </param>
     public static DocumentRenderResult Succeeded(
-        Guid correlationId,
-        string deviceId,
-        string? sessionId,
-        string documentType,
-        byte[] pdfBytes,
-        TimeSpan elapsed) => new()
+        Guid correlationId, string deviceId, string? sessionId,
+        string documentType, byte[] pdfBytes, TimeSpan elapsed,
+        bool returnInline = true, string? pdfPath = null) => new()
         {
             CorrelationId = correlationId,
             DeviceId      = deviceId,
             SessionId     = sessionId,
             DocumentType  = documentType,
             Success       = true,
-            PdfBase64     = Convert.ToBase64String(pdfBytes),
+            PdfBase64     = returnInline ? Convert.ToBase64String(pdfBytes) : null,
+            PdfPath       = returnInline ? null : pdfPath,
             ElapsedTime   = elapsed
         };
 

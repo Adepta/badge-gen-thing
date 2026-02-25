@@ -57,6 +57,19 @@ public sealed class KafkaOptions
     public int MaxConcurrentRenders { get; init; } = 4;
 
     // -------------------------------------------------------------------------
+    // PDF output
+    // -------------------------------------------------------------------------
+
+    /// <summary>
+    /// Directory where rendered PDFs are saved when
+    /// <see cref="Messages.DocumentRenderRequest.ReturnPdfInline"/> is <see langword="false"/>.
+    ///
+    /// Must be on a shared/network path that all consuming devices can read.
+    /// Defaults to <c>"output"</c> (relative to the working directory).
+    /// </summary>
+    public string PdfOutputPath { get; init; } = "output";
+
+    // -------------------------------------------------------------------------
     // Security (SASL/TLS for production Kafka clusters)
     // -------------------------------------------------------------------------
 

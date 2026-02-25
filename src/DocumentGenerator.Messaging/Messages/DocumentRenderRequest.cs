@@ -37,4 +37,14 @@ public sealed class DocumentRenderRequest
 
     /// <summary>UTC timestamp when the iPad sent the request.</summary>
     public DateTimeOffset RequestedAt { get; init; } = DateTimeOffset.UtcNow;
+
+    /// <summary>
+    /// When <see langword="true"/> (the default), the rendered PDF is Base64-encoded and
+    /// returned directly in <see cref="DocumentRenderResult.PdfBase64"/>.
+    ///
+    /// Set to <see langword="false"/> when the device can reach a shared network path —
+    /// the generator will instead save the PDF to disk and return its path in
+    /// <see cref="DocumentRenderResult.PdfPath"/>, keeping the Kafka message small.
+    /// </summary>
+    public bool ReturnPdfInline { get; init; } = true;
 }
