@@ -1,0 +1,138 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  commentId: T:DocumentGenerator.Core.Interfaces.IRenderMetrics
+  id: IRenderMetrics
+  parent: DocumentGenerator.Core.Interfaces
+  children:
+  - DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+  - DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+  langs:
+  - csharp
+  - vb
+  name: IRenderMetrics
+  nameWithType: IRenderMetrics
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  type: Interface
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IRenderMetrics.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: IRenderMetrics
+    path: src/DocumentGenerator.Core/Interfaces/IRenderMetrics.cs
+    startLine: 7
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: >-
+    Abstraction for recording render outcome metrics.
+
+    The Console project registers <code>RenderStats</code> as the implementation;
+
+    other hosts (tests, file-worker) can register a no-op or substitute.
+  example: []
+  syntax:
+    content: public interface IRenderMetrics
+    content.vb: Public Interface IRenderMetrics
+  derivedClasses:
+  - DocumentGenerator.Console.Logging.RenderStats
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+  commentId: M:DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+  id: RecordSuccess
+  parent: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  langs:
+  - csharp
+  - vb
+  name: RecordSuccess()
+  nameWithType: IRenderMetrics.RecordSuccess()
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess()
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IRenderMetrics.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RecordSuccess
+    path: src/DocumentGenerator.Core/Interfaces/IRenderMetrics.cs
+    startLine: 10
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: Records a successful render completion.
+  example: []
+  syntax:
+    content: void RecordSuccess()
+    content.vb: Sub RecordSuccess()
+  overload: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess*
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+  commentId: M:DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+  id: RecordFailure
+  parent: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  langs:
+  - csharp
+  - vb
+  name: RecordFailure()
+  nameWithType: IRenderMetrics.RecordFailure()
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure()
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IRenderMetrics.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RecordFailure
+    path: src/DocumentGenerator.Core/Interfaces/IRenderMetrics.cs
+    startLine: 13
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: Records a failed render attempt.
+  example: []
+  syntax:
+    content: void RecordFailure()
+    content.vb: Sub RecordFailure()
+  overload: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure*
+references:
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+  href: DocumentGenerator.Core.Interfaces.IRenderMetrics.html#DocumentGenerator_Core_Interfaces_IRenderMetrics_RecordSuccess
+  name: RecordSuccess
+  nameWithType: IRenderMetrics.RecordSuccess
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+  href: DocumentGenerator.Core.Interfaces.IRenderMetrics.html#DocumentGenerator_Core_Interfaces_IRenderMetrics_RecordFailure
+  name: RecordFailure
+  nameWithType: IRenderMetrics.RecordFailure
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure

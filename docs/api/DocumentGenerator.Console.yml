@@ -1,0 +1,62 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Console
+  commentId: N:DocumentGenerator.Console
+  id: Console
+  parent: DocumentGenerator
+  children:
+  - DocumentGenerator.Console.DocumentGeneratorOptions
+  - DocumentGenerator.Console.DocumentGeneratorWorker
+  - DocumentGenerator.Console.Logging
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Console
+  nameWithType: DocumentGenerator.Console
+  fullName: DocumentGenerator.Console
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Console
+references:
+- uid: DocumentGenerator.Console.Logging
+  commentId: N:DocumentGenerator.Console.Logging
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Console.Logging
+  nameWithType: DocumentGenerator.Console.Logging
+  fullName: DocumentGenerator.Console.Logging
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html
+- uid: DocumentGenerator.Console.DocumentGeneratorOptions
+  commentId: T:DocumentGenerator.Console.DocumentGeneratorOptions
+  href: DocumentGenerator.Console.DocumentGeneratorOptions.html
+  name: DocumentGeneratorOptions
+  nameWithType: DocumentGeneratorOptions
+  fullName: DocumentGenerator.Console.DocumentGeneratorOptions
+- uid: DocumentGenerator.Console.DocumentGeneratorWorker
+  commentId: T:DocumentGenerator.Console.DocumentGeneratorWorker
+  href: DocumentGenerator.Console.DocumentGeneratorWorker.html
+  name: DocumentGeneratorWorker
+  nameWithType: DocumentGeneratorWorker
+  fullName: DocumentGenerator.Console.DocumentGeneratorWorker

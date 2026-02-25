@@ -1,0 +1,94 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Console.Logging
+  commentId: N:DocumentGenerator.Console.Logging
+  id: Logging
+  parent: DocumentGenerator.Console
+  children:
+  - DocumentGenerator.Console.Logging.LogBuffer
+  - DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  - DocumentGenerator.Console.Logging.RenderStats
+  - DocumentGenerator.Console.Logging.TuiRenderer
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Console.Logging
+  nameWithType: DocumentGenerator.Console.Logging
+  fullName: DocumentGenerator.Console.Logging
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Console
+references:
+- uid: DocumentGenerator.Console.Logging.LogBuffer
+  commentId: T:DocumentGenerator.Console.Logging.LogBuffer
+  parent: DocumentGenerator.Console.Logging
+  href: DocumentGenerator.Console.Logging.LogBuffer.html
+  name: LogBuffer
+  nameWithType: LogBuffer
+  fullName: DocumentGenerator.Console.Logging.LogBuffer
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  commentId: T:DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  parent: DocumentGenerator.Console.Logging
+  href: DocumentGenerator.Console.Logging.LogBuffer.html
+  name: LogBuffer.LogEntry
+  nameWithType: LogBuffer.LogEntry
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  spec.csharp:
+  - uid: DocumentGenerator.Console.Logging.LogBuffer
+    name: LogBuffer
+    href: DocumentGenerator.Console.Logging.LogBuffer.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+    name: LogEntry
+    href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html
+  spec.vb:
+  - uid: DocumentGenerator.Console.Logging.LogBuffer
+    name: LogBuffer
+    href: DocumentGenerator.Console.Logging.LogBuffer.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+    name: LogEntry
+    href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html
+- uid: DocumentGenerator.Console.Logging.RenderStats
+  commentId: T:DocumentGenerator.Console.Logging.RenderStats
+  parent: DocumentGenerator.Console.Logging
+  href: DocumentGenerator.Console.Logging.RenderStats.html
+  name: RenderStats
+  nameWithType: RenderStats
+  fullName: DocumentGenerator.Console.Logging.RenderStats
+- uid: DocumentGenerator.Console.Logging.TuiRenderer
+  commentId: T:DocumentGenerator.Console.Logging.TuiRenderer
+  href: DocumentGenerator.Console.Logging.TuiRenderer.html
+  name: TuiRenderer
+  nameWithType: TuiRenderer
+  fullName: DocumentGenerator.Console.Logging.TuiRenderer
+- uid: DocumentGenerator.Console.Logging
+  commentId: N:DocumentGenerator.Console.Logging
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Console.Logging
+  nameWithType: DocumentGenerator.Console.Logging
+  fullName: DocumentGenerator.Console.Logging
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html

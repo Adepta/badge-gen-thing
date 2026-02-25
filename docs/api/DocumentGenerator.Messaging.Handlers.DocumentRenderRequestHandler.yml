@@ -1,0 +1,806 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  commentId: T:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  id: DocumentRenderRequestHandler
+  parent: DocumentGenerator.Messaging.Handlers
+  children:
+  - DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
+  - DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  langs:
+  - csharp
+  - vb
+  name: DocumentRenderRequestHandler
+  nameWithType: DocumentRenderRequestHandler
+  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentRenderRequestHandler
+    path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
+    startLine: 19
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Handlers
+  summary: >-
+    Rebus message handler for <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest" data-throw-if-not-resolved="false"></xref>.
+
+
+    Rebus dispatches one instance per message on the <code>render.requests</code> topic.
+
+    Concurrency is controlled by Rebus worker thread count, which is kept at or
+
+    below the Chromium pool MaxSize to avoid starvation.
+
+
+    On success  → replies <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> to the sender's return address
+
+    On failure  → replies failure result (Rebus handles dead-lettering after MaxRetries)
+  example: []
+  syntax:
+    content: 'public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRenderRequest>, IHandleMessages'
+    content.vb: Public NotInheritable Class DocumentRenderRequestHandler Implements IHandleMessages(Of DocumentRenderRequest), IHandleMessages
+  inheritance:
+  - System.Object
+  implements:
+  - Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}
+  - Rebus.Handlers.IHandleMessages
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
+  commentId: M:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
+  id: '#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})'
+  parent: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  langs:
+  - csharp
+  - vb
+  name: DocumentRenderRequestHandler(IDocumentPipeline, IBus, IRenderMetrics, ILogger<DocumentRenderRequestHandler>)
+  nameWithType: DocumentRenderRequestHandler.DocumentRenderRequestHandler(IDocumentPipeline, IBus, IRenderMetrics, ILogger<DocumentRenderRequestHandler>)
+  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.DocumentRenderRequestHandler(DocumentGenerator.Core.Interfaces.IDocumentPipeline, Rebus.Bus.IBus, DocumentGenerator.Core.Interfaces.IRenderMetrics, Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler>)
+  type: Constructor
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: .ctor
+    path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
+    startLine: 33
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Handlers
+  summary: Initialises the handler with its required dependencies.
+  example: []
+  syntax:
+    content: public DocumentRenderRequestHandler(IDocumentPipeline pipeline, IBus bus, IRenderMetrics metrics, ILogger<DocumentRenderRequestHandler> logger)
+    parameters:
+    - id: pipeline
+      type: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+      description: The document rendering pipeline.
+    - id: bus
+      type: Rebus.Bus.IBus
+      description: The Rebus bus used to reply to the sender.
+    - id: metrics
+      type: DocumentGenerator.Core.Interfaces.IRenderMetrics
+      description: Render outcome metrics recorder.
+    - id: logger
+      type: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler}
+      description: Logger for this handler.
+    content.vb: Public Sub New(pipeline As IDocumentPipeline, bus As IBus, metrics As IRenderMetrics, logger As ILogger(Of DocumentRenderRequestHandler))
+  overload: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor*
+  nameWithType.vb: DocumentRenderRequestHandler.New(IDocumentPipeline, IBus, IRenderMetrics, ILogger(Of DocumentRenderRequestHandler))
+  fullName.vb: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.New(DocumentGenerator.Core.Interfaces.IDocumentPipeline, Rebus.Bus.IBus, DocumentGenerator.Core.Interfaces.IRenderMetrics, Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler))
+  name.vb: New(IDocumentPipeline, IBus, IRenderMetrics, ILogger(Of DocumentRenderRequestHandler))
+- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  commentId: M:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  id: Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  parent: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  langs:
+  - csharp
+  - vb
+  name: Handle(DocumentRenderRequest)
+  nameWithType: DocumentRenderRequestHandler.Handle(DocumentRenderRequest)
+  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Handle
+    path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
+    startLine: 50
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Handlers
+  summary: >-
+    Handles a <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest" data-throw-if-not-resolved="false"></xref> by executing the render pipeline
+
+    and replying with a <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> (success or failure).
+  example: []
+  syntax:
+    content: public Task Handle(DocumentRenderRequest message)
+    parameters:
+    - id: message
+      type: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+      description: The incoming render request.
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Public Function Handle(message As DocumentRenderRequest) As Task
+  overload: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle*
+  implements:
+  - Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+references:
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  commentId: T:DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  parent: DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html
+  name: DocumentRenderRequest
+  nameWithType: DocumentRenderRequest
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  commentId: T:DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  parent: DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html
+  name: DocumentRenderResult
+  nameWithType: DocumentRenderResult
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+- uid: DocumentGenerator.Messaging.Handlers
+  commentId: N:DocumentGenerator.Messaging.Handlers
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Messaging.Handlers
+  nameWithType: DocumentGenerator.Messaging.Handlers
+  fullName: DocumentGenerator.Messaging.Handlers
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Handlers
+    name: Handlers
+    href: DocumentGenerator.Messaging.Handlers.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Handlers
+    name: Handlers
+    href: DocumentGenerator.Messaging.Handlers.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}
+  commentId: T:Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}
+  parent: Rebus.Handlers
+  definition: Rebus.Handlers.IHandleMessages`1
+  href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  name: IHandleMessages<DocumentRenderRequest>
+  nameWithType: IHandleMessages<DocumentRenderRequest>
+  fullName: Rebus.Handlers.IHandleMessages<DocumentGenerator.Messaging.Messages.DocumentRenderRequest>
+  nameWithType.vb: IHandleMessages(Of DocumentRenderRequest)
+  fullName.vb: Rebus.Handlers.IHandleMessages(Of DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  name.vb: IHandleMessages(Of DocumentRenderRequest)
+  spec.csharp:
+  - uid: Rebus.Handlers.IHandleMessages`1
+    name: IHandleMessages
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: <
+  - uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+    name: DocumentRenderRequest
+    href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html
+  - name: '>'
+  spec.vb:
+  - uid: Rebus.Handlers.IHandleMessages`1
+    name: IHandleMessages
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+    name: DocumentRenderRequest
+    href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html
+  - name: )
+- uid: Rebus.Handlers.IHandleMessages
+  commentId: T:Rebus.Handlers.IHandleMessages
+  parent: Rebus.Handlers
+  isExternal: true
+  href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  name: IHandleMessages
+  nameWithType: IHandleMessages
+  fullName: Rebus.Handlers.IHandleMessages
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: DocumentGenerator.Messaging.Messages
+  commentId: N:DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Messaging.Messages
+  nameWithType: DocumentGenerator.Messaging.Messages
+  fullName: DocumentGenerator.Messaging.Messages
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Rebus.Handlers.IHandleMessages`1
+  commentId: T:Rebus.Handlers.IHandleMessages`1
+  isExternal: true
+  href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  name: IHandleMessages<TMessage>
+  nameWithType: IHandleMessages<TMessage>
+  fullName: Rebus.Handlers.IHandleMessages<TMessage>
+  nameWithType.vb: IHandleMessages(Of TMessage)
+  fullName.vb: Rebus.Handlers.IHandleMessages(Of TMessage)
+  name.vb: IHandleMessages(Of TMessage)
+  spec.csharp:
+  - uid: Rebus.Handlers.IHandleMessages`1
+    name: IHandleMessages
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: <
+  - name: TMessage
+  - name: '>'
+  spec.vb:
+  - uid: Rebus.Handlers.IHandleMessages`1
+    name: IHandleMessages
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TMessage
+  - name: )
+- uid: Rebus.Handlers
+  commentId: N:Rebus.Handlers
+  isExternal: true
+  name: Rebus.Handlers
+  nameWithType: Rebus.Handlers
+  fullName: Rebus.Handlers
+  spec.csharp:
+  - uid: Rebus
+    name: Rebus
+    isExternal: true
+  - name: .
+  - uid: Rebus.Handlers
+    name: Handlers
+    isExternal: true
+  spec.vb:
+  - uid: Rebus
+    name: Rebus
+    isExternal: true
+  - name: .
+  - uid: Rebus.Handlers
+    name: Handlers
+    isExternal: true
+- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor*
+  commentId: Overload:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor
+  href: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.html#DocumentGenerator_Messaging_Handlers_DocumentRenderRequestHandler__ctor_DocumentGenerator_Core_Interfaces_IDocumentPipeline_Rebus_Bus_IBus_DocumentGenerator_Core_Interfaces_IRenderMetrics_Microsoft_Extensions_Logging_ILogger_DocumentGenerator_Messaging_Handlers_DocumentRenderRequestHandler__
+  name: DocumentRenderRequestHandler
+  nameWithType: DocumentRenderRequestHandler.DocumentRenderRequestHandler
+  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.DocumentRenderRequestHandler
+  nameWithType.vb: DocumentRenderRequestHandler.New
+  fullName.vb: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.New
+  name.vb: New
+- uid: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  commentId: T:DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.IDocumentPipeline.html
+  name: IDocumentPipeline
+  nameWithType: IDocumentPipeline
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+- uid: Rebus.Bus.IBus
+  commentId: T:Rebus.Bus.IBus
+  parent: Rebus.Bus
+  isExternal: true
+  href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Bus/IBus.cs
+  name: IBus
+  nameWithType: IBus
+  fullName: Rebus.Bus.IBus
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  commentId: T:DocumentGenerator.Core.Interfaces.IRenderMetrics
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.IRenderMetrics.html
+  name: IRenderMetrics
+  nameWithType: IRenderMetrics
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics
+- uid: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler}
+  commentId: T:Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler}
+  parent: Microsoft.Extensions.Logging
+  definition: Microsoft.Extensions.Logging.ILogger`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<DocumentRenderRequestHandler>
+  nameWithType: ILogger<DocumentRenderRequestHandler>
+  fullName: Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler>
+  nameWithType.vb: ILogger(Of DocumentRenderRequestHandler)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler)
+  name.vb: ILogger(Of DocumentRenderRequestHandler)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+    name: DocumentRenderRequestHandler
+    href: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+    name: DocumentRenderRequestHandler
+    href: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.html
+  - name: )
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: Rebus.Bus
+  commentId: N:Rebus.Bus
+  isExternal: true
+  name: Rebus.Bus
+  nameWithType: Rebus.Bus
+  fullName: Rebus.Bus
+  spec.csharp:
+  - uid: Rebus
+    name: Rebus
+    isExternal: true
+  - name: .
+  - uid: Rebus.Bus
+    name: Bus
+    isExternal: true
+  spec.vb:
+  - uid: Rebus
+    name: Rebus
+    isExternal: true
+  - name: .
+  - uid: Rebus.Bus
+    name: Bus
+    isExternal: true
+- uid: Microsoft.Extensions.Logging.ILogger`1
+  commentId: T:Microsoft.Extensions.Logging.ILogger`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<TCategoryName>
+  nameWithType: ILogger<TCategoryName>
+  fullName: Microsoft.Extensions.Logging.ILogger<TCategoryName>
+  nameWithType.vb: ILogger(Of TCategoryName)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of TCategoryName)
+  name.vb: ILogger(Of TCategoryName)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - name: TCategoryName
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TCategoryName
+  - name: )
+- uid: Microsoft.Extensions.Logging
+  commentId: N:Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Logging
+  nameWithType: Microsoft.Extensions.Logging
+  fullName: Microsoft.Extensions.Logging
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle*
+  commentId: Overload:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle
+  href: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.html#DocumentGenerator_Messaging_Handlers_DocumentRenderRequestHandler_Handle_DocumentGenerator_Messaging_Messages_DocumentRenderRequest_
+  name: Handle
+  nameWithType: DocumentRenderRequestHandler.Handle
+  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle
+- uid: Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  commentId: M:Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  parent: Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}
+  definition: Rebus.Handlers.IHandleMessages`1.Handle(`0)
+  href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  name: Handle(DocumentRenderRequest)
+  nameWithType: IHandleMessages<DocumentRenderRequest>.Handle(DocumentRenderRequest)
+  fullName: Rebus.Handlers.IHandleMessages<DocumentGenerator.Messaging.Messages.DocumentRenderRequest>.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  nameWithType.vb: IHandleMessages(Of DocumentRenderRequest).Handle(DocumentRenderRequest)
+  fullName.vb: Rebus.Handlers.IHandleMessages(Of DocumentGenerator.Messaging.Messages.DocumentRenderRequest).Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+  spec.csharp:
+  - uid: Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+    name: Handle
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: (
+  - uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+    name: DocumentRenderRequest
+    href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html
+  - name: )
+  spec.vb:
+  - uid: Rebus.Handlers.IHandleMessages{DocumentGenerator.Messaging.Messages.DocumentRenderRequest}.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
+    name: Handle
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: (
+  - uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+    name: DocumentRenderRequest
+    href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html
+  - name: )
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: Rebus.Handlers.IHandleMessages`1.Handle(`0)
+  commentId: M:Rebus.Handlers.IHandleMessages`1.Handle(`0)
+  isExternal: true
+  href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  name: Handle(TMessage)
+  nameWithType: IHandleMessages<TMessage>.Handle(TMessage)
+  fullName: Rebus.Handlers.IHandleMessages<TMessage>.Handle(TMessage)
+  nameWithType.vb: IHandleMessages(Of TMessage).Handle(TMessage)
+  fullName.vb: Rebus.Handlers.IHandleMessages(Of TMessage).Handle(TMessage)
+  spec.csharp:
+  - uid: Rebus.Handlers.IHandleMessages`1.Handle(`0)
+    name: Handle
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: (
+  - name: TMessage
+  - name: )
+  spec.vb:
+  - uid: Rebus.Handlers.IHandleMessages`1.Handle(`0)
+    name: Handle
+    isExternal: true
+    href: https://github.com/rebus-org/Rebus/blob/f7a463527ad07412f2ea7d28bd3ca1c403ff7cbb/Rebus/Handlers/IHandleMessages.cs
+  - name: (
+  - name: TMessage
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

@@ -1,0 +1,667 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Models.DocumentTemplate
+  commentId: T:DocumentGenerator.Core.Models.DocumentTemplate
+  id: DocumentTemplate
+  parent: DocumentGenerator.Core.Models
+  children:
+  - DocumentGenerator.Core.Models.DocumentTemplate.Branding
+  - DocumentGenerator.Core.Models.DocumentTemplate.DocumentType
+  - DocumentGenerator.Core.Models.DocumentTemplate.Pdf
+  - DocumentGenerator.Core.Models.DocumentTemplate.Template
+  - DocumentGenerator.Core.Models.DocumentTemplate.Variables
+  - DocumentGenerator.Core.Models.DocumentTemplate.Version
+  langs:
+  - csharp
+  - vb
+  name: DocumentTemplate
+  nameWithType: DocumentTemplate
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentTemplate
+    path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+    startLine: 5
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: The top-level template definition loaded from a JSON file or queue payload.
+  example: []
+  syntax:
+    content: public sealed class DocumentTemplate
+    content.vb: Public NotInheritable Class DocumentTemplate
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.DocumentType
+  commentId: P:DocumentGenerator.Core.Models.DocumentTemplate.DocumentType
+  id: DocumentType
+  parent: DocumentGenerator.Core.Models.DocumentTemplate
+  langs:
+  - csharp
+  - vb
+  name: DocumentType
+  nameWithType: DocumentTemplate.DocumentType
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.DocumentType
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentType
+    path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+    startLine: 11
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: >-
+    Logical document type identifier, e.g. "invoice", "report", "certificate".
+
+    Used for routing, logging, and future template selection.
+  example: []
+  syntax:
+    content: public string DocumentType { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DocumentType As String
+  overload: DocumentGenerator.Core.Models.DocumentTemplate.DocumentType*
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Version
+  commentId: P:DocumentGenerator.Core.Models.DocumentTemplate.Version
+  id: Version
+  parent: DocumentGenerator.Core.Models.DocumentTemplate
+  langs:
+  - csharp
+  - vb
+  name: Version
+  nameWithType: DocumentTemplate.Version
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Version
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Version
+    path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+    startLine: 14
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: Version tag for the template schema, e.g. "1.0".
+  example: []
+  syntax:
+    content: public string Version { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Version As String
+  overload: DocumentGenerator.Core.Models.DocumentTemplate.Version*
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Branding
+  commentId: P:DocumentGenerator.Core.Models.DocumentTemplate.Branding
+  id: Branding
+  parent: DocumentGenerator.Core.Models.DocumentTemplate
+  langs:
+  - csharp
+  - vb
+  name: Branding
+  nameWithType: DocumentTemplate.Branding
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Branding
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Branding
+    path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+    startLine: 17
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: Branding applied to this document.
+  example: []
+  syntax:
+    content: public Branding Branding { get; init; }
+    parameters: []
+    return:
+      type: DocumentGenerator.Core.Models.Branding
+    content.vb: Public Property Branding As Branding
+  overload: DocumentGenerator.Core.Models.DocumentTemplate.Branding*
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Template
+  commentId: P:DocumentGenerator.Core.Models.DocumentTemplate.Template
+  id: Template
+  parent: DocumentGenerator.Core.Models.DocumentTemplate
+  langs:
+  - csharp
+  - vb
+  name: Template
+  nameWithType: DocumentTemplate.Template
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Template
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Template
+    path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+    startLine: 20
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: The HTML/CSS template body.
+  example: []
+  syntax:
+    content: public TemplateContent Template { get; init; }
+    parameters: []
+    return:
+      type: DocumentGenerator.Core.Models.TemplateContent
+    content.vb: Public Property Template As TemplateContent
+  overload: DocumentGenerator.Core.Models.DocumentTemplate.Template*
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Variables
+  commentId: P:DocumentGenerator.Core.Models.DocumentTemplate.Variables
+  id: Variables
+  parent: DocumentGenerator.Core.Models.DocumentTemplate
+  langs:
+  - csharp
+  - vb
+  name: Variables
+  nameWithType: DocumentTemplate.Variables
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Variables
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Variables
+    path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+    startLine: 26
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: >-
+    Freeform variable bag injected into the Handlebars context at render time.
+
+    Supports nested objects — anything JSON-serialisable.
+  example: []
+  syntax:
+    content: public Dictionary<string, object?> Variables { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.Dictionary{System.String,System.Object}
+    content.vb: Public Property Variables As Dictionary(Of String, Object)
+  overload: DocumentGenerator.Core.Models.DocumentTemplate.Variables*
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Pdf
+  commentId: P:DocumentGenerator.Core.Models.DocumentTemplate.Pdf
+  id: Pdf
+  parent: DocumentGenerator.Core.Models.DocumentTemplate
+  langs:
+  - csharp
+  - vb
+  name: Pdf
+  nameWithType: DocumentTemplate.Pdf
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Pdf
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Pdf
+    path: src/DocumentGenerator.Core/Models/DocumentTemplate.cs
+    startLine: 29
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: Optional PDF output settings.
+  example: []
+  syntax:
+    content: public PdfOptions Pdf { get; init; }
+    parameters: []
+    return:
+      type: DocumentGenerator.Core.Models.PdfOptions
+    content.vb: Public Property Pdf As PdfOptions
+  overload: DocumentGenerator.Core.Models.DocumentTemplate.Pdf*
+references:
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.DocumentType*
+  commentId: Overload:DocumentGenerator.Core.Models.DocumentTemplate.DocumentType
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html#DocumentGenerator_Core_Models_DocumentTemplate_DocumentType
+  name: DocumentType
+  nameWithType: DocumentTemplate.DocumentType
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.DocumentType
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Version*
+  commentId: Overload:DocumentGenerator.Core.Models.DocumentTemplate.Version
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html#DocumentGenerator_Core_Models_DocumentTemplate_Version
+  name: Version
+  nameWithType: DocumentTemplate.Version
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Version
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Branding*
+  commentId: Overload:DocumentGenerator.Core.Models.DocumentTemplate.Branding
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html#DocumentGenerator_Core_Models_DocumentTemplate_Branding
+  name: Branding
+  nameWithType: DocumentTemplate.Branding
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Branding
+- uid: DocumentGenerator.Core.Models.Branding
+  commentId: T:DocumentGenerator.Core.Models.Branding
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.Branding.html
+  name: Branding
+  nameWithType: Branding
+  fullName: DocumentGenerator.Core.Models.Branding
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Template*
+  commentId: Overload:DocumentGenerator.Core.Models.DocumentTemplate.Template
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html#DocumentGenerator_Core_Models_DocumentTemplate_Template
+  name: Template
+  nameWithType: DocumentTemplate.Template
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Template
+- uid: DocumentGenerator.Core.Models.TemplateContent
+  commentId: T:DocumentGenerator.Core.Models.TemplateContent
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.TemplateContent.html
+  name: TemplateContent
+  nameWithType: TemplateContent
+  fullName: DocumentGenerator.Core.Models.TemplateContent
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Variables*
+  commentId: Overload:DocumentGenerator.Core.Models.DocumentTemplate.Variables
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html#DocumentGenerator_Core_Models_DocumentTemplate_Variables
+  name: Variables
+  nameWithType: DocumentTemplate.Variables
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Variables
+- uid: System.Collections.Generic.Dictionary{System.String,System.Object}
+  commentId: T:System.Collections.Generic.Dictionary{System.String,System.Object}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.Dictionary`2
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  name: Dictionary<string, object>
+  nameWithType: Dictionary<string, object>
+  fullName: System.Collections.Generic.Dictionary<string, object>
+  nameWithType.vb: Dictionary(Of String, Object)
+  fullName.vb: System.Collections.Generic.Dictionary(Of String, Object)
+  name.vb: Dictionary(Of String, Object)
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Collections.Generic.Dictionary`2
+  commentId: T:System.Collections.Generic.Dictionary`2
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  name: Dictionary<TKey, TValue>
+  nameWithType: Dictionary<TKey, TValue>
+  fullName: System.Collections.Generic.Dictionary<TKey, TValue>
+  nameWithType.vb: Dictionary(Of TKey, TValue)
+  fullName.vb: System.Collections.Generic.Dictionary(Of TKey, TValue)
+  name.vb: Dictionary(Of TKey, TValue)
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: <
+  - name: TKey
+  - name: ','
+  - name: " "
+  - name: TValue
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TKey
+  - name: ','
+  - name: " "
+  - name: TValue
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: DocumentGenerator.Core.Models.DocumentTemplate.Pdf*
+  commentId: Overload:DocumentGenerator.Core.Models.DocumentTemplate.Pdf
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html#DocumentGenerator_Core_Models_DocumentTemplate_Pdf
+  name: Pdf
+  nameWithType: DocumentTemplate.Pdf
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate.Pdf
+- uid: DocumentGenerator.Core.Models.PdfOptions
+  commentId: T:DocumentGenerator.Core.Models.PdfOptions
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.PdfOptions.html
+  name: PdfOptions
+  nameWithType: PdfOptions
+  fullName: DocumentGenerator.Core.Models.PdfOptions

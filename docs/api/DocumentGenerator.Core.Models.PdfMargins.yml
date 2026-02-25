@@ -1,0 +1,449 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Models.PdfMargins
+  commentId: T:DocumentGenerator.Core.Models.PdfMargins
+  id: PdfMargins
+  parent: DocumentGenerator.Core.Models
+  children:
+  - DocumentGenerator.Core.Models.PdfMargins.Bottom
+  - DocumentGenerator.Core.Models.PdfMargins.Left
+  - DocumentGenerator.Core.Models.PdfMargins.Right
+  - DocumentGenerator.Core.Models.PdfMargins.Top
+  langs:
+  - csharp
+  - vb
+  name: PdfMargins
+  nameWithType: PdfMargins
+  fullName: DocumentGenerator.Core.Models.PdfMargins
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PdfMargins
+    path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+    startLine: 40
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: >-
+    Page margin values in CSS units (e.g. <code>"10mm"</code>, <code>"0"</code>).
+
+    Any null dimension falls back to the Chromium default for that side.
+  example: []
+  syntax:
+    content: public sealed class PdfMargins
+    content.vb: Public NotInheritable Class PdfMargins
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Core.Models.PdfMargins.Top
+  commentId: P:DocumentGenerator.Core.Models.PdfMargins.Top
+  id: Top
+  parent: DocumentGenerator.Core.Models.PdfMargins
+  langs:
+  - csharp
+  - vb
+  name: Top
+  nameWithType: PdfMargins.Top
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Top
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Top
+    path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+    startLine: 43
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: Top margin, e.g. <code>"10mm"</code>.
+  example: []
+  syntax:
+    content: public string? Top { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Top As String
+  overload: DocumentGenerator.Core.Models.PdfMargins.Top*
+- uid: DocumentGenerator.Core.Models.PdfMargins.Bottom
+  commentId: P:DocumentGenerator.Core.Models.PdfMargins.Bottom
+  id: Bottom
+  parent: DocumentGenerator.Core.Models.PdfMargins
+  langs:
+  - csharp
+  - vb
+  name: Bottom
+  nameWithType: PdfMargins.Bottom
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Bottom
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Bottom
+    path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+    startLine: 46
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: Bottom margin, e.g. <code>"10mm"</code>.
+  example: []
+  syntax:
+    content: public string? Bottom { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Bottom As String
+  overload: DocumentGenerator.Core.Models.PdfMargins.Bottom*
+- uid: DocumentGenerator.Core.Models.PdfMargins.Left
+  commentId: P:DocumentGenerator.Core.Models.PdfMargins.Left
+  id: Left
+  parent: DocumentGenerator.Core.Models.PdfMargins
+  langs:
+  - csharp
+  - vb
+  name: Left
+  nameWithType: PdfMargins.Left
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Left
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Left
+    path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+    startLine: 49
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: Left margin, e.g. <code>"10mm"</code>.
+  example: []
+  syntax:
+    content: public string? Left { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Left As String
+  overload: DocumentGenerator.Core.Models.PdfMargins.Left*
+- uid: DocumentGenerator.Core.Models.PdfMargins.Right
+  commentId: P:DocumentGenerator.Core.Models.PdfMargins.Right
+  id: Right
+  parent: DocumentGenerator.Core.Models.PdfMargins
+  langs:
+  - csharp
+  - vb
+  name: Right
+  nameWithType: PdfMargins.Right
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Right
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Right
+    path: src/DocumentGenerator.Core/Models/PdfOptions.cs
+    startLine: 52
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Models
+  summary: Right margin, e.g. <code>"10mm"</code>.
+  example: []
+  syntax:
+    content: public string? Right { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Right As String
+  overload: DocumentGenerator.Core.Models.PdfMargins.Right*
+references:
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Models.PdfMargins.Top*
+  commentId: Overload:DocumentGenerator.Core.Models.PdfMargins.Top
+  href: DocumentGenerator.Core.Models.PdfMargins.html#DocumentGenerator_Core_Models_PdfMargins_Top
+  name: Top
+  nameWithType: PdfMargins.Top
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Top
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Core.Models.PdfMargins.Bottom*
+  commentId: Overload:DocumentGenerator.Core.Models.PdfMargins.Bottom
+  href: DocumentGenerator.Core.Models.PdfMargins.html#DocumentGenerator_Core_Models_PdfMargins_Bottom
+  name: Bottom
+  nameWithType: PdfMargins.Bottom
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Bottom
+- uid: DocumentGenerator.Core.Models.PdfMargins.Left*
+  commentId: Overload:DocumentGenerator.Core.Models.PdfMargins.Left
+  href: DocumentGenerator.Core.Models.PdfMargins.html#DocumentGenerator_Core_Models_PdfMargins_Left
+  name: Left
+  nameWithType: PdfMargins.Left
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Left
+- uid: DocumentGenerator.Core.Models.PdfMargins.Right*
+  commentId: Overload:DocumentGenerator.Core.Models.PdfMargins.Right
+  href: DocumentGenerator.Core.Models.PdfMargins.html#DocumentGenerator_Core_Models_PdfMargins_Right
+  name: Right
+  nameWithType: PdfMargins.Right
+  fullName: DocumentGenerator.Core.Models.PdfMargins.Right

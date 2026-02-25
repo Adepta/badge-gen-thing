@@ -1,0 +1,817 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  commentId: T:DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  id: PuppeteerDocumentRenderer
+  parent: DocumentGenerator.Pdf
+  children:
+  - DocumentGenerator.Pdf.PuppeteerDocumentRenderer.#ctor(DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.PuppeteerDocumentRenderer})
+  - DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: PuppeteerDocumentRenderer
+  nameWithType: PuppeteerDocumentRenderer
+  fullName: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PuppeteerDocumentRenderer
+    path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
+    startLine: 14
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf
+  summary: >-
+    Renders HTML to PDF using a leased Chromium instance from the pool.
+
+    Each render opens a new Page (tab) within the browser, which is cheap
+
+    compared to launching a full browser process.
+  example: []
+  syntax:
+    content: 'public sealed class PuppeteerDocumentRenderer : IDocumentRenderer'
+    content.vb: Public NotInheritable Class PuppeteerDocumentRenderer Implements IDocumentRenderer
+  inheritance:
+  - System.Object
+  implements:
+  - DocumentGenerator.Core.Interfaces.IDocumentRenderer
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.#ctor(DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.PuppeteerDocumentRenderer})
+  commentId: M:DocumentGenerator.Pdf.PuppeteerDocumentRenderer.#ctor(DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.PuppeteerDocumentRenderer})
+  id: '#ctor(DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.PuppeteerDocumentRenderer})'
+  parent: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  langs:
+  - csharp
+  - vb
+  name: PuppeteerDocumentRenderer(IBrowserPool<IBrowser>, ILogger<PuppeteerDocumentRenderer>)
+  nameWithType: PuppeteerDocumentRenderer.PuppeteerDocumentRenderer(IBrowserPool<IBrowser>, ILogger<PuppeteerDocumentRenderer>)
+  fullName: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.PuppeteerDocumentRenderer(DocumentGenerator.Core.Interfaces.IBrowserPool<PuppeteerSharp.IBrowser>, Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Pdf.PuppeteerDocumentRenderer>)
+  type: Constructor
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: .ctor
+    path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
+    startLine: 24
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf
+  summary: Initialises the renderer with its pool and logger.
+  example: []
+  syntax:
+    content: public PuppeteerDocumentRenderer(IBrowserPool<IBrowser> pool, ILogger<PuppeteerDocumentRenderer> logger)
+    parameters:
+    - id: pool
+      type: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+      description: The Chromium browser pool to lease instances from.
+    - id: logger
+      type: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.PuppeteerDocumentRenderer}
+      description: Logger for render lifecycle events.
+    content.vb: Public Sub New(pool As IBrowserPool(Of IBrowser), logger As ILogger(Of PuppeteerDocumentRenderer))
+  overload: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.#ctor*
+  nameWithType.vb: PuppeteerDocumentRenderer.New(IBrowserPool(Of IBrowser), ILogger(Of PuppeteerDocumentRenderer))
+  fullName.vb: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.New(DocumentGenerator.Core.Interfaces.IBrowserPool(Of PuppeteerSharp.IBrowser), Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Pdf.PuppeteerDocumentRenderer))
+  name.vb: New(IBrowserPool(Of IBrowser), ILogger(Of PuppeteerDocumentRenderer))
+- uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+  id: RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+  parent: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  langs:
+  - csharp
+  - vb
+  name: RenderPdfAsync(string, PdfOptions, CancellationToken)
+  nameWithType: PuppeteerDocumentRenderer.RenderPdfAsync(string, PdfOptions, CancellationToken)
+  fullName: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync(string, DocumentGenerator.Core.Models.PdfOptions, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RenderPdfAsync
+    path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
+    startLine: 40
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf
+  summary: >-
+    Renders the supplied HTML string to a PDF byte array using a leased Chromium instance.
+
+    A new browser tab (page) is opened for each render and closed when done.
+  example: []
+  syntax:
+    content: public Task<byte[]> RenderPdfAsync(string html, PdfOptions options, CancellationToken cancellationToken = default)
+    parameters:
+    - id: html
+      type: System.String
+      description: Fully rendered HTML document string.
+    - id: options
+      type: DocumentGenerator.Core.Models.PdfOptions
+      description: PDF output options (format, margins, orientation, etc.).
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the render.
+    return:
+      type: System.Threading.Tasks.Task{System.Byte[]}
+      description: Raw PDF bytes.
+    content.vb: Public Function RenderPdfAsync(html As String, options As PdfOptions, cancellationToken As CancellationToken = Nothing) As Task(Of Byte())
+  overload: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync*
+  implements:
+  - DocumentGenerator.Core.Interfaces.IDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+  nameWithType.vb: PuppeteerDocumentRenderer.RenderPdfAsync(String, PdfOptions, CancellationToken)
+  fullName.vb: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync(String, DocumentGenerator.Core.Models.PdfOptions, System.Threading.CancellationToken)
+  name.vb: RenderPdfAsync(String, PdfOptions, CancellationToken)
+references:
+- uid: DocumentGenerator.Pdf
+  commentId: N:DocumentGenerator.Pdf
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Pdf
+  nameWithType: DocumentGenerator.Pdf
+  fullName: DocumentGenerator.Pdf
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: DocumentGenerator.Core.Interfaces.IDocumentRenderer
+  commentId: T:DocumentGenerator.Core.Interfaces.IDocumentRenderer
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.IDocumentRenderer.html
+  name: IDocumentRenderer
+  nameWithType: IDocumentRenderer
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentRenderer
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.#ctor*
+  commentId: Overload:DocumentGenerator.Pdf.PuppeteerDocumentRenderer.#ctor
+  href: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.html#DocumentGenerator_Pdf_PuppeteerDocumentRenderer__ctor_DocumentGenerator_Core_Interfaces_IBrowserPool_PuppeteerSharp_IBrowser__Microsoft_Extensions_Logging_ILogger_DocumentGenerator_Pdf_PuppeteerDocumentRenderer__
+  name: PuppeteerDocumentRenderer
+  nameWithType: PuppeteerDocumentRenderer.PuppeteerDocumentRenderer
+  fullName: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.PuppeteerDocumentRenderer
+  nameWithType.vb: PuppeteerDocumentRenderer.New
+  fullName.vb: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.New
+  name.vb: New
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  parent: DocumentGenerator.Core.Interfaces
+  definition: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  name: IBrowserPool<IBrowser>
+  nameWithType: IBrowserPool<IBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<PuppeteerSharp.IBrowser>
+  nameWithType.vb: IBrowserPool(Of IBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of PuppeteerSharp.IBrowser)
+  name.vb: IBrowserPool(Of IBrowser)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: <
+  - uid: PuppeteerSharp.IBrowser
+    name: IBrowser
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: PuppeteerSharp.IBrowser
+    name: IBrowser
+    isExternal: true
+  - name: )
+- uid: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.PuppeteerDocumentRenderer}
+  commentId: T:Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.PuppeteerDocumentRenderer}
+  parent: Microsoft.Extensions.Logging
+  definition: Microsoft.Extensions.Logging.ILogger`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<PuppeteerDocumentRenderer>
+  nameWithType: ILogger<PuppeteerDocumentRenderer>
+  fullName: Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Pdf.PuppeteerDocumentRenderer>
+  nameWithType.vb: ILogger(Of PuppeteerDocumentRenderer)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Pdf.PuppeteerDocumentRenderer)
+  name.vb: ILogger(Of PuppeteerDocumentRenderer)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+    name: PuppeteerDocumentRenderer
+    href: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+    name: PuppeteerDocumentRenderer
+    href: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.html
+  - name: )
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  name: IBrowserPool<TBrowser>
+  nameWithType: IBrowserPool<TBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>
+  nameWithType.vb: IBrowserPool(Of TBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser)
+  name.vb: IBrowserPool(Of TBrowser)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: <
+  - name: TBrowser
+  - name: '>'
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TBrowser
+  - name: )
+- uid: Microsoft.Extensions.Logging.ILogger`1
+  commentId: T:Microsoft.Extensions.Logging.ILogger`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<TCategoryName>
+  nameWithType: ILogger<TCategoryName>
+  fullName: Microsoft.Extensions.Logging.ILogger<TCategoryName>
+  nameWithType.vb: ILogger(Of TCategoryName)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of TCategoryName)
+  name.vb: ILogger(Of TCategoryName)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - name: TCategoryName
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TCategoryName
+  - name: )
+- uid: Microsoft.Extensions.Logging
+  commentId: N:Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Logging
+  nameWithType: Microsoft.Extensions.Logging
+  fullName: Microsoft.Extensions.Logging
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+- uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync*
+  commentId: Overload:DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync
+  href: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.html#DocumentGenerator_Pdf_PuppeteerDocumentRenderer_RenderPdfAsync_System_String_DocumentGenerator_Core_Models_PdfOptions_System_Threading_CancellationToken_
+  name: RenderPdfAsync
+  nameWithType: PuppeteerDocumentRenderer.RenderPdfAsync
+  fullName: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.RenderPdfAsync
+- uid: DocumentGenerator.Core.Interfaces.IDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.IDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+  parent: DocumentGenerator.Core.Interfaces.IDocumentRenderer
+  isExternal: true
+  href: DocumentGenerator.Core.Interfaces.IDocumentRenderer.html#DocumentGenerator_Core_Interfaces_IDocumentRenderer_RenderPdfAsync_System_String_DocumentGenerator_Core_Models_PdfOptions_System_Threading_CancellationToken_
+  name: RenderPdfAsync(string, PdfOptions, CancellationToken)
+  nameWithType: IDocumentRenderer.RenderPdfAsync(string, PdfOptions, CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentRenderer.RenderPdfAsync(string, DocumentGenerator.Core.Models.PdfOptions, System.Threading.CancellationToken)
+  nameWithType.vb: IDocumentRenderer.RenderPdfAsync(String, PdfOptions, CancellationToken)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IDocumentRenderer.RenderPdfAsync(String, DocumentGenerator.Core.Models.PdfOptions, System.Threading.CancellationToken)
+  name.vb: RenderPdfAsync(String, PdfOptions, CancellationToken)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+    name: RenderPdfAsync
+    href: DocumentGenerator.Core.Interfaces.IDocumentRenderer.html#DocumentGenerator_Core_Interfaces_IDocumentRenderer_RenderPdfAsync_System_String_DocumentGenerator_Core_Models_PdfOptions_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: DocumentGenerator.Core.Models.PdfOptions
+    name: PdfOptions
+    href: DocumentGenerator.Core.Models.PdfOptions.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IDocumentRenderer.RenderPdfAsync(System.String,DocumentGenerator.Core.Models.PdfOptions,System.Threading.CancellationToken)
+    name: RenderPdfAsync
+    href: DocumentGenerator.Core.Interfaces.IDocumentRenderer.html#DocumentGenerator_Core_Interfaces_IDocumentRenderer_RenderPdfAsync_System_String_DocumentGenerator_Core_Models_PdfOptions_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: DocumentGenerator.Core.Models.PdfOptions
+    name: PdfOptions
+    href: DocumentGenerator.Core.Models.PdfOptions.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Core.Models.PdfOptions
+  commentId: T:DocumentGenerator.Core.Models.PdfOptions
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.PdfOptions.html
+  name: PdfOptions
+  nameWithType: PdfOptions
+  fullName: DocumentGenerator.Core.Models.PdfOptions
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{System.Byte[]}
+  commentId: T:System.Threading.Tasks.Task{System.Byte[]}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<byte[]>
+  nameWithType: Task<byte[]>
+  fullName: System.Threading.Tasks.Task<byte[]>
+  nameWithType.vb: Task(Of Byte())
+  fullName.vb: System.Threading.Tasks.Task(Of Byte())
+  name.vb: Task(Of Byte())
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Byte
+    name: byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: '['
+  - name: ']'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Byte
+    name: Byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: (
+  - name: )
+  - name: )
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

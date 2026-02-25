@@ -1,0 +1,173 @@
+### YamlMime:TableOfContent
+items:
+- uid: DocumentGenerator
+  name: DocumentGenerator
+  type: Namespace
+  items:
+  - uid: DocumentGenerator.Console
+    name: Console
+    type: Namespace
+    items:
+    - uid: DocumentGenerator.Console.Logging
+      name: Logging
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Console.Logging.LogBuffer
+        name: LogBuffer
+        type: Class
+      - uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+        name: LogBuffer.LogEntry
+        type: Class
+      - uid: DocumentGenerator.Console.Logging.RenderStats
+        name: RenderStats
+        type: Class
+      - uid: DocumentGenerator.Console.Logging.TuiRenderer
+        name: TuiRenderer
+        type: Class
+    - uid: DocumentGenerator.Console.DocumentGeneratorOptions
+      name: DocumentGeneratorOptions
+      type: Class
+    - uid: DocumentGenerator.Console.DocumentGeneratorWorker
+      name: DocumentGeneratorWorker
+      type: Class
+  - uid: DocumentGenerator.Core
+    name: Core
+    type: Namespace
+    items:
+    - uid: DocumentGenerator.Core.Configuration
+      name: Configuration
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions
+        name: BrowserPoolOptions
+        type: Class
+    - uid: DocumentGenerator.Core.Interfaces
+      name: Interfaces
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+        name: IBrowserLease<TBrowser>
+        type: Interface
+      - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+        name: IBrowserPool<TBrowser>
+        type: Interface
+      - uid: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+        name: IDocumentPipeline
+        type: Interface
+      - uid: DocumentGenerator.Core.Interfaces.IDocumentRenderer
+        name: IDocumentRenderer
+        type: Interface
+      - uid: DocumentGenerator.Core.Interfaces.IQueueConsumer
+        name: IQueueConsumer
+        type: Interface
+      - uid: DocumentGenerator.Core.Interfaces.IRenderMetrics
+        name: IRenderMetrics
+        type: Interface
+      - uid: DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+        name: ITemplateContentResolver
+        type: Interface
+      - uid: DocumentGenerator.Core.Interfaces.ITemplateEngine
+        name: ITemplateEngine
+        type: Interface
+    - uid: DocumentGenerator.Core.Models
+      name: Models
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Core.Models.Branding
+        name: Branding
+        type: Class
+      - uid: DocumentGenerator.Core.Models.DocumentTemplate
+        name: DocumentTemplate
+        type: Class
+      - uid: DocumentGenerator.Core.Models.PdfMargins
+        name: PdfMargins
+        type: Class
+      - uid: DocumentGenerator.Core.Models.PdfOptions
+        name: PdfOptions
+        type: Class
+      - uid: DocumentGenerator.Core.Models.RenderRequest
+        name: RenderRequest
+        type: Class
+      - uid: DocumentGenerator.Core.Models.RenderResult
+        name: RenderResult
+        type: Class
+      - uid: DocumentGenerator.Core.Models.TemplateContent
+        name: TemplateContent
+        type: Class
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    type: Namespace
+    items:
+    - uid: DocumentGenerator.Messaging.Configuration
+      name: Configuration
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Messaging.Configuration.KafkaOptions
+        name: KafkaOptions
+        type: Class
+    - uid: DocumentGenerator.Messaging.Extensions
+      name: Extensions
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Messaging.Extensions.ServiceCollectionExtensions
+        name: ServiceCollectionExtensions
+        type: Class
+    - uid: DocumentGenerator.Messaging.Handlers
+      name: Handlers
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+        name: DocumentRenderRequestHandler
+        type: Class
+    - uid: DocumentGenerator.Messaging.Messages
+      name: Messages
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+        name: DocumentRenderRequest
+        type: Class
+      - uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+        name: DocumentRenderResult
+        type: Class
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    type: Namespace
+    items:
+    - uid: DocumentGenerator.Pdf.Extensions
+      name: Extensions
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Pdf.Extensions.ServiceCollectionExtensions
+        name: ServiceCollectionExtensions
+        type: Class
+    - uid: DocumentGenerator.Pdf.Pool
+      name: Pool
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+        name: ChromiumBrowserPool
+        type: Class
+    - uid: DocumentGenerator.Pdf.DocumentPipeline
+      name: DocumentPipeline
+      type: Class
+    - uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+      name: PuppeteerDocumentRenderer
+      type: Class
+  - uid: DocumentGenerator.Templating
+    name: Templating
+    type: Namespace
+    items:
+    - uid: DocumentGenerator.Templating.Extensions
+      name: Extensions
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Templating.Extensions.ServiceCollectionExtensions
+        name: ServiceCollectionExtensions
+        type: Class
+    - uid: DocumentGenerator.Templating.FileTemplateContentResolver
+      name: FileTemplateContentResolver
+      type: Class
+    - uid: DocumentGenerator.Templating.HandlebarsTemplateEngine
+      name: HandlebarsTemplateEngine
+      type: Class
+memberLayout: SamePage

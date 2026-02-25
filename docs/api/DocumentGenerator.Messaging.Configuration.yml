@@ -1,0 +1,55 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Configuration
+  commentId: N:DocumentGenerator.Messaging.Configuration
+  id: Configuration
+  parent: DocumentGenerator.Messaging
+  children:
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Messaging.Configuration
+  nameWithType: DocumentGenerator.Messaging.Configuration
+  fullName: DocumentGenerator.Messaging.Configuration
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Messaging
+references:
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  commentId: T:DocumentGenerator.Messaging.Configuration.KafkaOptions
+  parent: DocumentGenerator.Messaging.Configuration
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html
+  name: KafkaOptions
+  nameWithType: KafkaOptions
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions
+- uid: DocumentGenerator.Messaging.Configuration
+  commentId: N:DocumentGenerator.Messaging.Configuration
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Messaging.Configuration
+  nameWithType: DocumentGenerator.Messaging.Configuration
+  fullName: DocumentGenerator.Messaging.Configuration
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Configuration
+    name: Configuration
+    href: DocumentGenerator.Messaging.Configuration.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Configuration
+    name: Configuration
+    href: DocumentGenerator.Messaging.Configuration.html

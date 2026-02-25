@@ -1,0 +1,146 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  id: Interfaces
+  parent: DocumentGenerator.Core
+  children:
+  - DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  - DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  - DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  - DocumentGenerator.Core.Interfaces.IDocumentRenderer
+  - DocumentGenerator.Core.Interfaces.IQueueConsumer
+  - DocumentGenerator.Core.Interfaces.IRenderMetrics
+  - DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+  - DocumentGenerator.Core.Interfaces.ITemplateEngine
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Core
+references:
+- uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  name: IBrowserLease<TBrowser>
+  nameWithType: IBrowserLease<TBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>
+  nameWithType.vb: IBrowserLease(Of TBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser)
+  name.vb: IBrowserLease(Of TBrowser)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: <
+  - name: TBrowser
+  - name: '>'
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TBrowser
+  - name: )
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  name: IBrowserPool<TBrowser>
+  nameWithType: IBrowserPool<TBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>
+  nameWithType.vb: IBrowserPool(Of TBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser)
+  name.vb: IBrowserPool(Of TBrowser)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: <
+  - name: TBrowser
+  - name: '>'
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TBrowser
+  - name: )
+- uid: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  commentId: T:DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.IDocumentPipeline.html
+  name: IDocumentPipeline
+  nameWithType: IDocumentPipeline
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+- uid: DocumentGenerator.Core.Interfaces.IDocumentRenderer
+  commentId: T:DocumentGenerator.Core.Interfaces.IDocumentRenderer
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.IDocumentRenderer.html
+  name: IDocumentRenderer
+  nameWithType: IDocumentRenderer
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentRenderer
+- uid: DocumentGenerator.Core.Interfaces.IQueueConsumer
+  commentId: T:DocumentGenerator.Core.Interfaces.IQueueConsumer
+  href: DocumentGenerator.Core.Interfaces.IQueueConsumer.html
+  name: IQueueConsumer
+  nameWithType: IQueueConsumer
+  fullName: DocumentGenerator.Core.Interfaces.IQueueConsumer
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  commentId: T:DocumentGenerator.Core.Interfaces.IRenderMetrics
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.IRenderMetrics.html
+  name: IRenderMetrics
+  nameWithType: IRenderMetrics
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics
+- uid: DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+  commentId: T:DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.ITemplateContentResolver.html
+  name: ITemplateContentResolver
+  nameWithType: ITemplateContentResolver
+  fullName: DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+- uid: DocumentGenerator.Core.Interfaces.ITemplateEngine
+  commentId: T:DocumentGenerator.Core.Interfaces.ITemplateEngine
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.ITemplateEngine.html
+  name: ITemplateEngine
+  nameWithType: ITemplateEngine
+  fullName: DocumentGenerator.Core.Interfaces.ITemplateEngine
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html

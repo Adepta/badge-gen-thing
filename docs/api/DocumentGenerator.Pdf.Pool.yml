@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Pdf.Pool
+  commentId: N:DocumentGenerator.Pdf.Pool
+  id: Pool
+  parent: DocumentGenerator.Pdf
+  children:
+  - DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Pdf.Pool
+  nameWithType: DocumentGenerator.Pdf.Pool
+  fullName: DocumentGenerator.Pdf.Pool
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Pdf
+references:
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  commentId: T:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html
+  name: ChromiumBrowserPool
+  nameWithType: ChromiumBrowserPool
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool

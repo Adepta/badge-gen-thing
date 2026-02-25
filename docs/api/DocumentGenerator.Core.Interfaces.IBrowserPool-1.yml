@@ -1,0 +1,452 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  id: IBrowserPool`1
+  parent: DocumentGenerator.Core.Interfaces
+  children:
+  - DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+  - DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount
+  - DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize
+  langs:
+  - csharp
+  - vb
+  name: IBrowserPool<TBrowser>
+  nameWithType: IBrowserPool<TBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>
+  type: Interface
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: IBrowserPool
+    path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+    startLine: 11
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: >-
+    Manages a pool of reusable Chromium browser instances.
+
+    Callers lease a browser, use it, then return it — similar to a
+
+    database connection pool.
+  example: []
+  syntax:
+    content: 'public interface IBrowserPool<TBrowser> : IAsyncDisposable'
+    typeParameters:
+    - id: TBrowser
+      description: >-
+        The concrete browser type (e.g. PuppeteerSharp.IBrowser).
+
+        Keeping it generic prevents Core from depending on PuppeteerSharp.
+    content.vb: Public Interface IBrowserPool(Of TBrowser) Inherits IAsyncDisposable
+  derivedClasses:
+  - DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  inheritedMembers:
+  - System.IAsyncDisposable.DisposeAsync
+  nameWithType.vb: IBrowserPool(Of TBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser)
+  name.vb: IBrowserPool(Of TBrowser)
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+  id: AcquireAsync(System.Threading.CancellationToken)
+  parent: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  langs:
+  - csharp
+  - vb
+  name: AcquireAsync(CancellationToken)
+  nameWithType: IBrowserPool<TBrowser>.AcquireAsync(CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.AcquireAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: AcquireAsync
+    path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+    startLine: 25
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: >-
+    Leases a browser from the pool. If all instances are busy and the
+
+    pool has not reached MaxSize, a new instance is launched.
+
+    Otherwise the caller waits until one is returned or the timeout elapses.
+  example: []
+  syntax:
+    content: Task<IBrowserLease<TBrowser>> AcquireAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the wait.
+    return:
+      type: System.Threading.Tasks.Task{DocumentGenerator.Core.Interfaces.IBrowserLease{{TBrowser}}}
+      description: >-
+        An <xref href="DocumentGenerator.Core.Interfaces.IBrowserLease%601" data-throw-if-not-resolved="false"></xref> that must be disposed after use
+
+        to return the browser to the pool.
+    content.vb: Function AcquireAsync(cancellationToken As CancellationToken = Nothing) As Task(Of IBrowserLease(Of TBrowser))
+  overload: DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync*
+  exceptions:
+  - type: System.TimeoutException
+    commentId: T:System.TimeoutException
+    description: Thrown when no browser becomes available within the configured acquire timeout.
+  - type: System.ObjectDisposedException
+    commentId: T:System.ObjectDisposedException
+    description: Thrown if the pool has already been disposed.
+  nameWithType.vb: IBrowserPool(Of TBrowser).AcquireAsync(CancellationToken)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).AcquireAsync(System.Threading.CancellationToken)
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize
+  commentId: P:DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize
+  id: PoolSize
+  parent: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  langs:
+  - csharp
+  - vb
+  name: PoolSize
+  nameWithType: IBrowserPool<TBrowser>.PoolSize
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.PoolSize
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PoolSize
+    path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+    startLine: 28
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: Current number of browser instances in the pool (idle + busy).
+  example: []
+  syntax:
+    content: int PoolSize { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: ReadOnly Property PoolSize As Integer
+  overload: DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize*
+  nameWithType.vb: IBrowserPool(Of TBrowser).PoolSize
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).PoolSize
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount
+  commentId: P:DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount
+  id: ActiveCount
+  parent: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  langs:
+  - csharp
+  - vb
+  name: ActiveCount
+  nameWithType: IBrowserPool<TBrowser>.ActiveCount
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.ActiveCount
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ActiveCount
+    path: src/DocumentGenerator.Core/Interfaces/IBrowserPool.cs
+    startLine: 31
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: Number of browser instances currently executing a render.
+  example: []
+  syntax:
+    content: int ActiveCount { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: ReadOnly Property ActiveCount As Integer
+  overload: DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount*
+  nameWithType.vb: IBrowserPool(Of TBrowser).ActiveCount
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).ActiveCount
+references:
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: System.IAsyncDisposable.DisposeAsync
+  commentId: M:System.IAsyncDisposable.DisposeAsync
+  parent: System.IAsyncDisposable
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  name: DisposeAsync()
+  nameWithType: IAsyncDisposable.DisposeAsync()
+  fullName: System.IAsyncDisposable.DisposeAsync()
+  spec.csharp:
+  - uid: System.IAsyncDisposable.DisposeAsync
+    name: DisposeAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.IAsyncDisposable.DisposeAsync
+    name: DisposeAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  - name: (
+  - name: )
+- uid: System.IAsyncDisposable
+  commentId: T:System.IAsyncDisposable
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable
+  name: IAsyncDisposable
+  nameWithType: IAsyncDisposable
+  fullName: System.IAsyncDisposable
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  name: IBrowserLease<TBrowser>
+  nameWithType: IBrowserLease<TBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>
+  nameWithType.vb: IBrowserLease(Of TBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser)
+  name.vb: IBrowserLease(Of TBrowser)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: <
+  - name: TBrowser
+  - name: '>'
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TBrowser
+  - name: )
+- uid: System.TimeoutException
+  commentId: T:System.TimeoutException
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timeoutexception
+  name: TimeoutException
+  nameWithType: TimeoutException
+  fullName: System.TimeoutException
+- uid: System.ObjectDisposedException
+  commentId: T:System.ObjectDisposedException
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.objectdisposedexception
+  name: ObjectDisposedException
+  nameWithType: ObjectDisposedException
+  fullName: System.ObjectDisposedException
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_AcquireAsync_System_Threading_CancellationToken_
+  name: AcquireAsync
+  nameWithType: IBrowserPool<TBrowser>.AcquireAsync
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.AcquireAsync
+  nameWithType.vb: IBrowserPool(Of TBrowser).AcquireAsync
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).AcquireAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{DocumentGenerator.Core.Interfaces.IBrowserLease{{TBrowser}}}
+  commentId: T:System.Threading.Tasks.Task{DocumentGenerator.Core.Interfaces.IBrowserLease{`0}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<IBrowserLease<TBrowser>>
+  nameWithType: Task<IBrowserLease<TBrowser>>
+  fullName: System.Threading.Tasks.Task<DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>>
+  nameWithType.vb: Task(Of IBrowserLease(Of TBrowser))
+  fullName.vb: System.Threading.Tasks.Task(Of DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser))
+  name.vb: Task(Of IBrowserLease(Of TBrowser))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: <
+  - name: TBrowser
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TBrowser
+  - name: )
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_PoolSize
+  name: PoolSize
+  nameWithType: IBrowserPool<TBrowser>.PoolSize
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.PoolSize
+  nameWithType.vb: IBrowserPool(Of TBrowser).PoolSize
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).PoolSize
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_ActiveCount
+  name: ActiveCount
+  nameWithType: IBrowserPool<TBrowser>.ActiveCount
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.ActiveCount
+  nameWithType.vb: IBrowserPool(Of TBrowser).ActiveCount
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).ActiveCount

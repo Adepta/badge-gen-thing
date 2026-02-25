@@ -1,0 +1,301 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  commentId: T:DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  id: IDocumentPipeline
+  parent: DocumentGenerator.Core.Interfaces
+  children:
+  - DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync(DocumentGenerator.Core.Models.RenderRequest,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IDocumentPipeline
+  nameWithType: IDocumentPipeline
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  type: Interface
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IDocumentPipeline.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: IDocumentPipeline
+    path: src/DocumentGenerator.Core/Interfaces/IDocumentPipeline.cs
+    startLine: 9
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: >-
+    Orchestrates the full document generation pipeline:
+
+    template rendering → PDF conversion.
+
+    This is the primary entry point for all callers (console, API, queue consumer).
+  example: []
+  syntax:
+    content: public interface IDocumentPipeline
+    content.vb: Public Interface IDocumentPipeline
+  derivedClasses:
+  - DocumentGenerator.Pdf.DocumentPipeline
+- uid: DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync(DocumentGenerator.Core.Models.RenderRequest,System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync(DocumentGenerator.Core.Models.RenderRequest,System.Threading.CancellationToken)
+  id: ExecuteAsync(DocumentGenerator.Core.Models.RenderRequest,System.Threading.CancellationToken)
+  parent: DocumentGenerator.Core.Interfaces.IDocumentPipeline
+  langs:
+  - csharp
+  - vb
+  name: ExecuteAsync(RenderRequest, CancellationToken)
+  nameWithType: IDocumentPipeline.ExecuteAsync(RenderRequest, CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync(DocumentGenerator.Core.Models.RenderRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IDocumentPipeline.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ExecuteAsync
+    path: src/DocumentGenerator.Core/Interfaces/IDocumentPipeline.cs
+    startLine: 18
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: Executes a full render job and returns the PDF result.
+  example: []
+  syntax:
+    content: Task<RenderResult> ExecuteAsync(RenderRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: DocumentGenerator.Core.Models.RenderRequest
+      description: The render job, including the template and job ID.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{DocumentGenerator.Core.Models.RenderResult}
+      description: A <xref href="DocumentGenerator.Core.Models.RenderResult" data-throw-if-not-resolved="false"></xref> containing the PDF bytes and timing metadata.
+    content.vb: Function ExecuteAsync(request As RenderRequest, cancellationToken As CancellationToken = Nothing) As Task(Of RenderResult)
+  overload: DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync*
+  exceptions:
+  - type: System.OperationCanceledException
+    commentId: T:System.OperationCanceledException
+    description: Thrown if <code class="paramref">cancellationToken</code> is cancelled.
+references:
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: DocumentGenerator.Core.Models.RenderResult
+  commentId: T:DocumentGenerator.Core.Models.RenderResult
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.RenderResult.html
+  name: RenderResult
+  nameWithType: RenderResult
+  fullName: DocumentGenerator.Core.Models.RenderResult
+- uid: System.OperationCanceledException
+  commentId: T:System.OperationCanceledException
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.operationcanceledexception
+  name: OperationCanceledException
+  nameWithType: OperationCanceledException
+  fullName: System.OperationCanceledException
+- uid: DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync
+  href: DocumentGenerator.Core.Interfaces.IDocumentPipeline.html#DocumentGenerator_Core_Interfaces_IDocumentPipeline_ExecuteAsync_DocumentGenerator_Core_Models_RenderRequest_System_Threading_CancellationToken_
+  name: ExecuteAsync
+  nameWithType: IDocumentPipeline.ExecuteAsync
+  fullName: DocumentGenerator.Core.Interfaces.IDocumentPipeline.ExecuteAsync
+- uid: DocumentGenerator.Core.Models.RenderRequest
+  commentId: T:DocumentGenerator.Core.Models.RenderRequest
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.RenderRequest.html
+  name: RenderRequest
+  nameWithType: RenderRequest
+  fullName: DocumentGenerator.Core.Models.RenderRequest
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{DocumentGenerator.Core.Models.RenderResult}
+  commentId: T:System.Threading.Tasks.Task{DocumentGenerator.Core.Models.RenderResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<RenderResult>
+  nameWithType: Task<RenderResult>
+  fullName: System.Threading.Tasks.Task<DocumentGenerator.Core.Models.RenderResult>
+  nameWithType.vb: Task(Of RenderResult)
+  fullName.vb: System.Threading.Tasks.Task(Of DocumentGenerator.Core.Models.RenderResult)
+  name.vb: Task(Of RenderResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: DocumentGenerator.Core.Models.RenderResult
+    name: RenderResult
+    href: DocumentGenerator.Core.Models.RenderResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Core.Models.RenderResult
+    name: RenderResult
+    href: DocumentGenerator.Core.Models.RenderResult.html
+  - name: )
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

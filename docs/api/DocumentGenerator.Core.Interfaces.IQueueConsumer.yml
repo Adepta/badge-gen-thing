@@ -1,0 +1,226 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Interfaces.IQueueConsumer
+  commentId: T:DocumentGenerator.Core.Interfaces.IQueueConsumer
+  id: IQueueConsumer
+  parent: DocumentGenerator.Core.Interfaces
+  children:
+  - DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync(System.Threading.CancellationToken)
+  - DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync(System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IQueueConsumer
+  nameWithType: IQueueConsumer
+  fullName: DocumentGenerator.Core.Interfaces.IQueueConsumer
+  type: Interface
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IQueueConsumer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: IQueueConsumer
+    path: src/DocumentGenerator.Core/Interfaces/IQueueConsumer.cs
+    startLine: 7
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: >-
+    Abstraction over a message queue consumer.
+
+    Implemented by <code>KafkaConsumerService</code> in DocumentGenerator.Messaging.
+
+    Could equally be implemented for Azure Service Bus, SQS, etc.
+  example: []
+  syntax:
+    content: public interface IQueueConsumer
+    content.vb: Public Interface IQueueConsumer
+- uid: DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync(System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync(System.Threading.CancellationToken)
+  id: StartAsync(System.Threading.CancellationToken)
+  parent: DocumentGenerator.Core.Interfaces.IQueueConsumer
+  langs:
+  - csharp
+  - vb
+  name: StartAsync(CancellationToken)
+  nameWithType: IQueueConsumer.StartAsync(CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IQueueConsumer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: StartAsync
+    path: src/DocumentGenerator.Core/Interfaces/IQueueConsumer.cs
+    startLine: 10
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: Starts consuming messages from the configured topic/queue.
+  example: []
+  syntax:
+    content: Task StartAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function StartAsync(cancellationToken As CancellationToken = Nothing) As Task
+  overload: DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync*
+- uid: DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync(System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync(System.Threading.CancellationToken)
+  id: StopAsync(System.Threading.CancellationToken)
+  parent: DocumentGenerator.Core.Interfaces.IQueueConsumer
+  langs:
+  - csharp
+  - vb
+  name: StopAsync(CancellationToken)
+  nameWithType: IQueueConsumer.StopAsync(CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IQueueConsumer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: StopAsync
+    path: src/DocumentGenerator.Core/Interfaces/IQueueConsumer.cs
+    startLine: 13
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: Gracefully drains in-flight work and stops the consumer.
+  example: []
+  syntax:
+    content: Task StopAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function StopAsync(cancellationToken As CancellationToken = Nothing) As Task
+  overload: DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync*
+references:
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync
+  href: DocumentGenerator.Core.Interfaces.IQueueConsumer.html#DocumentGenerator_Core_Interfaces_IQueueConsumer_StartAsync_System_Threading_CancellationToken_
+  name: StartAsync
+  nameWithType: IQueueConsumer.StartAsync
+  fullName: DocumentGenerator.Core.Interfaces.IQueueConsumer.StartAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync
+  href: DocumentGenerator.Core.Interfaces.IQueueConsumer.html#DocumentGenerator_Core_Interfaces_IQueueConsumer_StopAsync_System_Threading_CancellationToken_
+  name: StopAsync
+  nameWithType: IQueueConsumer.StopAsync
+  fullName: DocumentGenerator.Core.Interfaces.IQueueConsumer.StopAsync

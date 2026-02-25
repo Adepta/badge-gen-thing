@@ -1,0 +1,1160 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  commentId: T:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  id: ChromiumBrowserPool
+  parent: DocumentGenerator.Pdf.Pool
+  children:
+  - DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.#ctor(Microsoft.Extensions.Options.IOptions{DocumentGenerator.Core.Configuration.BrowserPoolOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.Pool.ChromiumBrowserPool})
+  - DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync(System.Threading.CancellationToken)
+  - DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount
+  - DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync
+  - DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize
+  langs:
+  - csharp
+  - vb
+  name: ChromiumBrowserPool
+  nameWithType: ChromiumBrowserPool
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ChromiumBrowserPool
+    path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+    startLine: 22
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf.Pool
+  summary: >-
+    A thread-safe pool of PuppeteerSharp Chromium browser instances.
+
+
+    Strategy:
+
+    - A <xref href="System.Threading.SemaphoreSlim" data-throw-if-not-resolved="false"></xref> caps concurrent leases at <xref href="DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize" data-throw-if-not-resolved="false"></xref>.
+
+    - An idle queue (<xref href="System.Collections.Concurrent.ConcurrentQueue%601" data-throw-if-not-resolved="false"></xref>) hands out warm browsers instantly.
+
+    - When the idle queue is empty but the semaphore permits, a new browser is launched.
+
+    - Each instance tracks render count; when <xref href="DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxRendersPerInstance" data-throw-if-not-resolved="false"></xref>
+      is reached the browser is recycled rather than returned to the idle queue.
+    - A background reaper task closes browsers that have been idle longer than
+      <xref href="DocumentGenerator.Core.Configuration.BrowserPoolOptions.IdleTimeout" data-throw-if-not-resolved="false"></xref> (while keeping at least MinSize warm).
+  example: []
+  syntax:
+    content: 'public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>, IAsyncDisposable'
+    content.vb: Public NotInheritable Class ChromiumBrowserPool Implements IBrowserPool(Of IBrowser), IAsyncDisposable
+  inheritance:
+  - System.Object
+  implements:
+  - DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  - System.IAsyncDisposable
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize
+  commentId: P:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize
+  id: PoolSize
+  parent: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  langs:
+  - csharp
+  - vb
+  name: PoolSize
+  nameWithType: ChromiumBrowserPool.PoolSize
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PoolSize
+    path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+    startLine: 35
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf.Pool
+  summary: Total number of browser instances currently tracked by the pool (idle + active).
+  example: []
+  syntax:
+    content: public int PoolSize { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public ReadOnly Property PoolSize As Integer
+  overload: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize*
+  implements:
+  - DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.PoolSize
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount
+  commentId: P:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount
+  id: ActiveCount
+  parent: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  langs:
+  - csharp
+  - vb
+  name: ActiveCount
+  nameWithType: ChromiumBrowserPool.ActiveCount
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ActiveCount
+    path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+    startLine: 38
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf.Pool
+  summary: Number of browser instances currently leased out to callers.
+  example: []
+  syntax:
+    content: public int ActiveCount { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public ReadOnly Property ActiveCount As Integer
+  overload: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount*
+  implements:
+  - DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.ActiveCount
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.#ctor(Microsoft.Extensions.Options.IOptions{DocumentGenerator.Core.Configuration.BrowserPoolOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.Pool.ChromiumBrowserPool})
+  commentId: M:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.#ctor(Microsoft.Extensions.Options.IOptions{DocumentGenerator.Core.Configuration.BrowserPoolOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.Pool.ChromiumBrowserPool})
+  id: '#ctor(Microsoft.Extensions.Options.IOptions{DocumentGenerator.Core.Configuration.BrowserPoolOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.Pool.ChromiumBrowserPool})'
+  parent: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  langs:
+  - csharp
+  - vb
+  name: ChromiumBrowserPool(IOptions<BrowserPoolOptions>, ILogger<ChromiumBrowserPool>)
+  nameWithType: ChromiumBrowserPool.ChromiumBrowserPool(IOptions<BrowserPoolOptions>, ILogger<ChromiumBrowserPool>)
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ChromiumBrowserPool(Microsoft.Extensions.Options.IOptions<DocumentGenerator.Core.Configuration.BrowserPoolOptions>, Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Pdf.Pool.ChromiumBrowserPool>)
+  type: Constructor
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: .ctor
+    path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+    startLine: 45
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf.Pool
+  summary: Initialises the pool, starts the idle reaper background task, and logs configuration.
+  example: []
+  syntax:
+    content: public ChromiumBrowserPool(IOptions<BrowserPoolOptions> options, ILogger<ChromiumBrowserPool> logger)
+    parameters:
+    - id: options
+      type: Microsoft.Extensions.Options.IOptions{DocumentGenerator.Core.Configuration.BrowserPoolOptions}
+      description: Pool configuration (min/max size, idle timeout, recycle limit).
+    - id: logger
+      type: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.Pool.ChromiumBrowserPool}
+      description: Logger for pool lifecycle events.
+    content.vb: Public Sub New(options As IOptions(Of BrowserPoolOptions), logger As ILogger(Of ChromiumBrowserPool))
+  overload: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.#ctor*
+  nameWithType.vb: ChromiumBrowserPool.New(IOptions(Of BrowserPoolOptions), ILogger(Of ChromiumBrowserPool))
+  fullName.vb: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.New(Microsoft.Extensions.Options.IOptions(Of DocumentGenerator.Core.Configuration.BrowserPoolOptions), Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Pdf.Pool.ChromiumBrowserPool))
+  name.vb: New(IOptions(Of BrowserPoolOptions), ILogger(Of ChromiumBrowserPool))
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync(System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync(System.Threading.CancellationToken)
+  id: AcquireAsync(System.Threading.CancellationToken)
+  parent: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  langs:
+  - csharp
+  - vb
+  name: AcquireAsync(CancellationToken)
+  nameWithType: ChromiumBrowserPool.AcquireAsync(CancellationToken)
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: AcquireAsync
+    path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+    startLine: 69
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf.Pool
+  summary: >-
+    Acquires a browser lease from the pool, waiting up to <xref href="DocumentGenerator.Core.Configuration.BrowserPoolOptions.AcquireTimeout" data-throw-if-not-resolved="false"></xref>
+
+    for an available slot. Throws <xref href="System.TimeoutException" data-throw-if-not-resolved="false"></xref> if no browser becomes available in time.
+  example: []
+  syntax:
+    content: public Task<IBrowserLease<IBrowser>> AcquireAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the wait.
+    return:
+      type: System.Threading.Tasks.Task{DocumentGenerator.Core.Interfaces.IBrowserLease{PuppeteerSharp.IBrowser}}
+      description: A lease that must be disposed to return the browser to the pool.
+    content.vb: Public Function AcquireAsync(cancellationToken As CancellationToken = Nothing) As Task(Of IBrowserLease(Of IBrowser))
+  overload: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync*
+  exceptions:
+  - type: System.TimeoutException
+    commentId: T:System.TimeoutException
+    description: Thrown when the pool is exhausted and the timeout elapses.
+  implements:
+  - DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.AcquireAsync(System.Threading.CancellationToken)
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync
+  commentId: M:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync
+  id: DisposeAsync
+  parent: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+  langs:
+  - csharp
+  - vb
+  name: DisposeAsync()
+  nameWithType: ChromiumBrowserPool.DisposeAsync()
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync()
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DisposeAsync
+    path: src/DocumentGenerator.Pdf/Pool/ChromiumBrowserPool.cs
+    startLine: 286
+  assemblies:
+  - DocumentGenerator.Pdf
+  namespace: DocumentGenerator.Pdf.Pool
+  summary: >-
+    Performs application-defined tasks associated with freeing, releasing, or
+
+    resetting unmanaged resources asynchronously.
+  example: []
+  syntax:
+    content: public ValueTask DisposeAsync()
+    return:
+      type: System.Threading.Tasks.ValueTask
+      description: A task that represents the asynchronous dispose operation.
+    content.vb: Public Function DisposeAsync() As ValueTask
+  overload: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync*
+  implements:
+  - System.IAsyncDisposable.DisposeAsync
+references:
+- uid: System.Threading.SemaphoreSlim
+  commentId: T:System.Threading.SemaphoreSlim
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.semaphoreslim
+  name: SemaphoreSlim
+  nameWithType: SemaphoreSlim
+  fullName: System.Threading.SemaphoreSlim
+- uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize
+  commentId: P:DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize
+  href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html#DocumentGenerator_Core_Configuration_BrowserPoolOptions_MaxSize
+  name: MaxSize
+  nameWithType: BrowserPoolOptions.MaxSize
+  fullName: DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize
+- uid: System.Collections.Concurrent.ConcurrentQueue`1
+  commentId: T:System.Collections.Concurrent.ConcurrentQueue`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.concurrent.concurrentqueue-1
+  name: ConcurrentQueue<T>
+  nameWithType: ConcurrentQueue<T>
+  fullName: System.Collections.Concurrent.ConcurrentQueue<T>
+  nameWithType.vb: ConcurrentQueue(Of T)
+  fullName.vb: System.Collections.Concurrent.ConcurrentQueue(Of T)
+  name.vb: ConcurrentQueue(Of T)
+  spec.csharp:
+  - uid: System.Collections.Concurrent.ConcurrentQueue`1
+    name: ConcurrentQueue
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.concurrent.concurrentqueue-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Concurrent.ConcurrentQueue`1
+    name: ConcurrentQueue
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.concurrent.concurrentqueue-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxRendersPerInstance
+  commentId: P:DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxRendersPerInstance
+  href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html#DocumentGenerator_Core_Configuration_BrowserPoolOptions_MaxRendersPerInstance
+  name: MaxRendersPerInstance
+  nameWithType: BrowserPoolOptions.MaxRendersPerInstance
+  fullName: DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxRendersPerInstance
+- uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions.IdleTimeout
+  commentId: P:DocumentGenerator.Core.Configuration.BrowserPoolOptions.IdleTimeout
+  href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html#DocumentGenerator_Core_Configuration_BrowserPoolOptions_IdleTimeout
+  name: IdleTimeout
+  nameWithType: BrowserPoolOptions.IdleTimeout
+  fullName: DocumentGenerator.Core.Configuration.BrowserPoolOptions.IdleTimeout
+- uid: DocumentGenerator.Pdf.Pool
+  commentId: N:DocumentGenerator.Pdf.Pool
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Pdf.Pool
+  nameWithType: DocumentGenerator.Pdf.Pool
+  fullName: DocumentGenerator.Pdf.Pool
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  - name: .
+  - uid: DocumentGenerator.Pdf.Pool
+    name: Pool
+    href: DocumentGenerator.Pdf.Pool.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  - name: .
+  - uid: DocumentGenerator.Pdf.Pool
+    name: Pool
+    href: DocumentGenerator.Pdf.Pool.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  parent: DocumentGenerator.Core.Interfaces
+  definition: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  name: IBrowserPool<IBrowser>
+  nameWithType: IBrowserPool<IBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<PuppeteerSharp.IBrowser>
+  nameWithType.vb: IBrowserPool(Of IBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of PuppeteerSharp.IBrowser)
+  name.vb: IBrowserPool(Of IBrowser)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: <
+  - uid: PuppeteerSharp.IBrowser
+    name: IBrowser
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: PuppeteerSharp.IBrowser
+    name: IBrowser
+    isExternal: true
+  - name: )
+- uid: System.IAsyncDisposable
+  commentId: T:System.IAsyncDisposable
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable
+  name: IAsyncDisposable
+  nameWithType: IAsyncDisposable
+  fullName: System.IAsyncDisposable
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserPool`1
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  name: IBrowserPool<TBrowser>
+  nameWithType: IBrowserPool<TBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>
+  nameWithType.vb: IBrowserPool(Of TBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser)
+  name.vb: IBrowserPool(Of TBrowser)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: <
+  - name: TBrowser
+  - name: '>'
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1
+    name: IBrowserPool
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TBrowser
+  - name: )
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize*
+  commentId: Overload:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize
+  href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html#DocumentGenerator_Pdf_Pool_ChromiumBrowserPool_PoolSize
+  name: PoolSize
+  nameWithType: ChromiumBrowserPool.PoolSize
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.PoolSize
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.PoolSize
+  commentId: P:DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.PoolSize
+  parent: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  definition: DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_PoolSize
+  name: PoolSize
+  nameWithType: IBrowserPool<IBrowser>.PoolSize
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<PuppeteerSharp.IBrowser>.PoolSize
+  nameWithType.vb: IBrowserPool(Of IBrowser).PoolSize
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of PuppeteerSharp.IBrowser).PoolSize
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize
+  commentId: P:DocumentGenerator.Core.Interfaces.IBrowserPool`1.PoolSize
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_PoolSize
+  name: PoolSize
+  nameWithType: IBrowserPool<TBrowser>.PoolSize
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.PoolSize
+  nameWithType.vb: IBrowserPool(Of TBrowser).PoolSize
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).PoolSize
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount*
+  commentId: Overload:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount
+  href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html#DocumentGenerator_Pdf_Pool_ChromiumBrowserPool_ActiveCount
+  name: ActiveCount
+  nameWithType: ChromiumBrowserPool.ActiveCount
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ActiveCount
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.ActiveCount
+  commentId: P:DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.ActiveCount
+  parent: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  definition: DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_ActiveCount
+  name: ActiveCount
+  nameWithType: IBrowserPool<IBrowser>.ActiveCount
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<PuppeteerSharp.IBrowser>.ActiveCount
+  nameWithType.vb: IBrowserPool(Of IBrowser).ActiveCount
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of PuppeteerSharp.IBrowser).ActiveCount
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount
+  commentId: P:DocumentGenerator.Core.Interfaces.IBrowserPool`1.ActiveCount
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_ActiveCount
+  name: ActiveCount
+  nameWithType: IBrowserPool<TBrowser>.ActiveCount
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.ActiveCount
+  nameWithType.vb: IBrowserPool(Of TBrowser).ActiveCount
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).ActiveCount
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.#ctor*
+  commentId: Overload:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.#ctor
+  href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html#DocumentGenerator_Pdf_Pool_ChromiumBrowserPool__ctor_Microsoft_Extensions_Options_IOptions_DocumentGenerator_Core_Configuration_BrowserPoolOptions__Microsoft_Extensions_Logging_ILogger_DocumentGenerator_Pdf_Pool_ChromiumBrowserPool__
+  name: ChromiumBrowserPool
+  nameWithType: ChromiumBrowserPool.ChromiumBrowserPool
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.ChromiumBrowserPool
+  nameWithType.vb: ChromiumBrowserPool.New
+  fullName.vb: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.New
+  name.vb: New
+- uid: Microsoft.Extensions.Options.IOptions{DocumentGenerator.Core.Configuration.BrowserPoolOptions}
+  commentId: T:Microsoft.Extensions.Options.IOptions{DocumentGenerator.Core.Configuration.BrowserPoolOptions}
+  parent: Microsoft.Extensions.Options
+  definition: Microsoft.Extensions.Options.IOptions`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<BrowserPoolOptions>
+  nameWithType: IOptions<BrowserPoolOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<DocumentGenerator.Core.Configuration.BrowserPoolOptions>
+  nameWithType.vb: IOptions(Of BrowserPoolOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of DocumentGenerator.Core.Configuration.BrowserPoolOptions)
+  name.vb: IOptions(Of BrowserPoolOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions
+    name: BrowserPoolOptions
+    href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions
+    name: BrowserPoolOptions
+    href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html
+  - name: )
+- uid: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.Pool.ChromiumBrowserPool}
+  commentId: T:Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Pdf.Pool.ChromiumBrowserPool}
+  parent: Microsoft.Extensions.Logging
+  definition: Microsoft.Extensions.Logging.ILogger`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<ChromiumBrowserPool>
+  nameWithType: ILogger<ChromiumBrowserPool>
+  fullName: Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Pdf.Pool.ChromiumBrowserPool>
+  nameWithType.vb: ILogger(Of ChromiumBrowserPool)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Pdf.Pool.ChromiumBrowserPool)
+  name.vb: ILogger(Of ChromiumBrowserPool)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+    name: ChromiumBrowserPool
+    href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool
+    name: ChromiumBrowserPool
+    href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html
+  - name: )
+- uid: Microsoft.Extensions.Options.IOptions`1
+  commentId: T:Microsoft.Extensions.Options.IOptions`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<TOptions>
+  nameWithType: IOptions<TOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<TOptions>
+  nameWithType.vb: IOptions(Of TOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of TOptions)
+  name.vb: IOptions(Of TOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - name: TOptions
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TOptions
+  - name: )
+- uid: Microsoft.Extensions.Options
+  commentId: N:Microsoft.Extensions.Options
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Options
+  nameWithType: Microsoft.Extensions.Options
+  fullName: Microsoft.Extensions.Options
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
+- uid: Microsoft.Extensions.Logging.ILogger`1
+  commentId: T:Microsoft.Extensions.Logging.ILogger`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<TCategoryName>
+  nameWithType: ILogger<TCategoryName>
+  fullName: Microsoft.Extensions.Logging.ILogger<TCategoryName>
+  nameWithType.vb: ILogger(Of TCategoryName)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of TCategoryName)
+  name.vb: ILogger(Of TCategoryName)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - name: TCategoryName
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TCategoryName
+  - name: )
+- uid: Microsoft.Extensions.Logging
+  commentId: N:Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Logging
+  nameWithType: Microsoft.Extensions.Logging
+  fullName: Microsoft.Extensions.Logging
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+- uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions.AcquireTimeout
+  commentId: P:DocumentGenerator.Core.Configuration.BrowserPoolOptions.AcquireTimeout
+  href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html#DocumentGenerator_Core_Configuration_BrowserPoolOptions_AcquireTimeout
+  name: AcquireTimeout
+  nameWithType: BrowserPoolOptions.AcquireTimeout
+  fullName: DocumentGenerator.Core.Configuration.BrowserPoolOptions.AcquireTimeout
+- uid: System.TimeoutException
+  commentId: T:System.TimeoutException
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timeoutexception
+  name: TimeoutException
+  nameWithType: TimeoutException
+  fullName: System.TimeoutException
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync*
+  commentId: Overload:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync
+  href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html#DocumentGenerator_Pdf_Pool_ChromiumBrowserPool_AcquireAsync_System_Threading_CancellationToken_
+  name: AcquireAsync
+  nameWithType: ChromiumBrowserPool.AcquireAsync
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.AcquireAsync
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.AcquireAsync(System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.AcquireAsync(System.Threading.CancellationToken)
+  parent: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}
+  definition: DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_AcquireAsync_System_Threading_CancellationToken_
+  name: AcquireAsync(CancellationToken)
+  nameWithType: IBrowserPool<IBrowser>.AcquireAsync(CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<PuppeteerSharp.IBrowser>.AcquireAsync(System.Threading.CancellationToken)
+  nameWithType.vb: IBrowserPool(Of IBrowser).AcquireAsync(CancellationToken)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of PuppeteerSharp.IBrowser).AcquireAsync(System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.AcquireAsync(System.Threading.CancellationToken)
+    name: AcquireAsync
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_AcquireAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool{PuppeteerSharp.IBrowser}.AcquireAsync(System.Threading.CancellationToken)
+    name: AcquireAsync
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_AcquireAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{DocumentGenerator.Core.Interfaces.IBrowserLease{PuppeteerSharp.IBrowser}}
+  commentId: T:System.Threading.Tasks.Task{DocumentGenerator.Core.Interfaces.IBrowserLease{PuppeteerSharp.IBrowser}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<IBrowserLease<IBrowser>>
+  nameWithType: Task<IBrowserLease<IBrowser>>
+  fullName: System.Threading.Tasks.Task<DocumentGenerator.Core.Interfaces.IBrowserLease<PuppeteerSharp.IBrowser>>
+  nameWithType.vb: Task(Of IBrowserLease(Of IBrowser))
+  fullName.vb: System.Threading.Tasks.Task(Of DocumentGenerator.Core.Interfaces.IBrowserLease(Of PuppeteerSharp.IBrowser))
+  name.vb: Task(Of IBrowserLease(Of IBrowser))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: <
+  - uid: PuppeteerSharp.IBrowser
+    name: IBrowser
+    isExternal: true
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+    name: IBrowserLease
+    href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: PuppeteerSharp.IBrowser
+    name: IBrowser
+    isExternal: true
+  - name: )
+  - name: )
+- uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+  isExternal: true
+  href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_AcquireAsync_System_Threading_CancellationToken_
+  name: AcquireAsync(CancellationToken)
+  nameWithType: IBrowserPool<TBrowser>.AcquireAsync(CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserPool<TBrowser>.AcquireAsync(System.Threading.CancellationToken)
+  nameWithType.vb: IBrowserPool(Of TBrowser).AcquireAsync(CancellationToken)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserPool(Of TBrowser).AcquireAsync(System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+    name: AcquireAsync
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_AcquireAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IBrowserPool`1.AcquireAsync(System.Threading.CancellationToken)
+    name: AcquireAsync
+    href: DocumentGenerator.Core.Interfaces.IBrowserPool-1.html#DocumentGenerator_Core_Interfaces_IBrowserPool_1_AcquireAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync*
+  commentId: Overload:DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync
+  href: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.html#DocumentGenerator_Pdf_Pool_ChromiumBrowserPool_DisposeAsync
+  name: DisposeAsync
+  nameWithType: ChromiumBrowserPool.DisposeAsync
+  fullName: DocumentGenerator.Pdf.Pool.ChromiumBrowserPool.DisposeAsync
+- uid: System.IAsyncDisposable.DisposeAsync
+  commentId: M:System.IAsyncDisposable.DisposeAsync
+  parent: System.IAsyncDisposable
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  name: DisposeAsync()
+  nameWithType: IAsyncDisposable.DisposeAsync()
+  fullName: System.IAsyncDisposable.DisposeAsync()
+  spec.csharp:
+  - uid: System.IAsyncDisposable.DisposeAsync
+    name: DisposeAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.IAsyncDisposable.DisposeAsync
+    name: DisposeAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  - name: (
+  - name: )
+- uid: System.Threading.Tasks.ValueTask
+  commentId: T:System.Threading.Tasks.ValueTask
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask
+  name: ValueTask
+  nameWithType: ValueTask
+  fullName: System.Threading.Tasks.ValueTask

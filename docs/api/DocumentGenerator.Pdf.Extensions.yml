@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Pdf.Extensions
+  commentId: N:DocumentGenerator.Pdf.Extensions
+  id: Extensions
+  parent: DocumentGenerator.Pdf
+  children:
+  - DocumentGenerator.Pdf.Extensions.ServiceCollectionExtensions
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Pdf.Extensions
+  nameWithType: DocumentGenerator.Pdf.Extensions
+  fullName: DocumentGenerator.Pdf.Extensions
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Pdf
+references:
+- uid: DocumentGenerator.Pdf.Extensions.ServiceCollectionExtensions
+  commentId: T:DocumentGenerator.Pdf.Extensions.ServiceCollectionExtensions
+  href: DocumentGenerator.Pdf.Extensions.ServiceCollectionExtensions.html
+  name: ServiceCollectionExtensions
+  nameWithType: ServiceCollectionExtensions
+  fullName: DocumentGenerator.Pdf.Extensions.ServiceCollectionExtensions

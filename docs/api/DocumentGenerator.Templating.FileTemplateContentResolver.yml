@@ -1,0 +1,789 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Templating.FileTemplateContentResolver
+  commentId: T:DocumentGenerator.Templating.FileTemplateContentResolver
+  id: FileTemplateContentResolver
+  parent: DocumentGenerator.Templating
+  children:
+  - DocumentGenerator.Templating.FileTemplateContentResolver.#ctor(Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Templating.FileTemplateContentResolver})
+  - DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: FileTemplateContentResolver
+  nameWithType: FileTemplateContentResolver
+  fullName: DocumentGenerator.Templating.FileTemplateContentResolver
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Templating/FileTemplateContentResolver.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: FileTemplateContentResolver
+    path: src/DocumentGenerator.Templating/FileTemplateContentResolver.cs
+    startLine: 16
+  assemblies:
+  - DocumentGenerator.Templating
+  namespace: DocumentGenerator.Templating
+  summary: >-
+    Resolves external HTML and CSS file references inside a <xref href="DocumentGenerator.Core.Models.DocumentTemplate" data-throw-if-not-resolved="false"></xref>.
+
+
+    When <xref href="DocumentGenerator.Core.Models.TemplateContent.HtmlPath" data-throw-if-not-resolved="false"></xref> or <xref href="DocumentGenerator.Core.Models.TemplateContent.CssPath" data-throw-if-not-resolved="false"></xref>
+
+    are set, the files are read from disk and their contents replace
+
+    <xref href="DocumentGenerator.Core.Models.TemplateContent.Html" data-throw-if-not-resolved="false"></xref> and <xref href="DocumentGenerator.Core.Models.TemplateContent.Css" data-throw-if-not-resolved="false"></xref> respectively.
+
+    Relative paths are resolved against the <code>basePath</code> supplied at call time
+
+    (normally the directory that contains the JSON template file).
+
+    Inline content is left untouched if the corresponding path property is absent.
+  example: []
+  syntax:
+    content: 'public sealed class FileTemplateContentResolver : ITemplateContentResolver'
+    content.vb: Public NotInheritable Class FileTemplateContentResolver Implements ITemplateContentResolver
+  inheritance:
+  - System.Object
+  implements:
+  - DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Templating.FileTemplateContentResolver.#ctor(Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Templating.FileTemplateContentResolver})
+  commentId: M:DocumentGenerator.Templating.FileTemplateContentResolver.#ctor(Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Templating.FileTemplateContentResolver})
+  id: '#ctor(Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Templating.FileTemplateContentResolver})'
+  parent: DocumentGenerator.Templating.FileTemplateContentResolver
+  langs:
+  - csharp
+  - vb
+  name: FileTemplateContentResolver(ILogger<FileTemplateContentResolver>)
+  nameWithType: FileTemplateContentResolver.FileTemplateContentResolver(ILogger<FileTemplateContentResolver>)
+  fullName: DocumentGenerator.Templating.FileTemplateContentResolver.FileTemplateContentResolver(Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Templating.FileTemplateContentResolver>)
+  type: Constructor
+  source:
+    remote:
+      path: src/DocumentGenerator.Templating/FileTemplateContentResolver.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: .ctor
+    path: src/DocumentGenerator.Templating/FileTemplateContentResolver.cs
+    startLine: 24
+  assemblies:
+  - DocumentGenerator.Templating
+  namespace: DocumentGenerator.Templating
+  summary: Initialises the resolver.
+  example: []
+  syntax:
+    content: public FileTemplateContentResolver(ILogger<FileTemplateContentResolver> logger)
+    parameters:
+    - id: logger
+      type: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Templating.FileTemplateContentResolver}
+      description: Logger for file-load events.
+    content.vb: Public Sub New(logger As ILogger(Of FileTemplateContentResolver))
+  overload: DocumentGenerator.Templating.FileTemplateContentResolver.#ctor*
+  nameWithType.vb: FileTemplateContentResolver.New(ILogger(Of FileTemplateContentResolver))
+  fullName.vb: DocumentGenerator.Templating.FileTemplateContentResolver.New(Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Templating.FileTemplateContentResolver))
+  name.vb: New(ILogger(Of FileTemplateContentResolver))
+- uid: DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+  id: ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+  parent: DocumentGenerator.Templating.FileTemplateContentResolver
+  langs:
+  - csharp
+  - vb
+  name: ResolveAsync(DocumentTemplate, string, CancellationToken)
+  nameWithType: FileTemplateContentResolver.ResolveAsync(DocumentTemplate, string, CancellationToken)
+  fullName: DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Templating/FileTemplateContentResolver.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ResolveAsync
+    path: src/DocumentGenerator.Templating/FileTemplateContentResolver.cs
+    startLine: 30
+  assemblies:
+  - DocumentGenerator.Templating
+  namespace: DocumentGenerator.Templating
+  summary: >-
+    Reads any external HTML/CSS files referenced by
+
+    <xref href="DocumentGenerator.Core.Models.TemplateContent.HtmlPath" data-throw-if-not-resolved="false"></xref> and <xref href="DocumentGenerator.Core.Models.TemplateContent.CssPath" data-throw-if-not-resolved="false"></xref>
+
+    and returns a new <xref href="DocumentGenerator.Core.Models.DocumentTemplate" data-throw-if-not-resolved="false"></xref> with those values inlined.
+  example: []
+  syntax:
+    content: public Task<DocumentTemplate> ResolveAsync(DocumentTemplate template, string basePath, CancellationToken cancellationToken = default)
+    parameters:
+    - id: template
+      type: DocumentGenerator.Core.Models.DocumentTemplate
+      description: The template to resolve.
+    - id: basePath
+      type: System.String
+      description: >-
+        The directory used to resolve relative paths.
+
+        Typically the directory that contains the JSON template file.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel I/O operations.
+    return:
+      type: System.Threading.Tasks.Task{DocumentGenerator.Core.Models.DocumentTemplate}
+      description: >-
+        A <xref href="DocumentGenerator.Core.Models.DocumentTemplate" data-throw-if-not-resolved="false"></xref> whose <xref href="DocumentGenerator.Core.Models.TemplateContent.Html" data-throw-if-not-resolved="false"></xref>
+
+        and <xref href="DocumentGenerator.Core.Models.TemplateContent.Css" data-throw-if-not-resolved="false"></xref> are fully populated strings.
+    content.vb: Public Function ResolveAsync(template As DocumentTemplate, basePath As String, cancellationToken As CancellationToken = Nothing) As Task(Of DocumentTemplate)
+  overload: DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync*
+  implements:
+  - DocumentGenerator.Core.Interfaces.ITemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+  nameWithType.vb: FileTemplateContentResolver.ResolveAsync(DocumentTemplate, String, CancellationToken)
+  fullName.vb: DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate, String, System.Threading.CancellationToken)
+  name.vb: ResolveAsync(DocumentTemplate, String, CancellationToken)
+references:
+- uid: DocumentGenerator.Core.Models.DocumentTemplate
+  commentId: T:DocumentGenerator.Core.Models.DocumentTemplate
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html
+  name: DocumentTemplate
+  nameWithType: DocumentTemplate
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate
+- uid: DocumentGenerator.Core.Models.TemplateContent.HtmlPath
+  commentId: P:DocumentGenerator.Core.Models.TemplateContent.HtmlPath
+  href: DocumentGenerator.Core.Models.TemplateContent.html#DocumentGenerator_Core_Models_TemplateContent_HtmlPath
+  name: HtmlPath
+  nameWithType: TemplateContent.HtmlPath
+  fullName: DocumentGenerator.Core.Models.TemplateContent.HtmlPath
+- uid: DocumentGenerator.Core.Models.TemplateContent.CssPath
+  commentId: P:DocumentGenerator.Core.Models.TemplateContent.CssPath
+  href: DocumentGenerator.Core.Models.TemplateContent.html#DocumentGenerator_Core_Models_TemplateContent_CssPath
+  name: CssPath
+  nameWithType: TemplateContent.CssPath
+  fullName: DocumentGenerator.Core.Models.TemplateContent.CssPath
+- uid: DocumentGenerator.Core.Models.TemplateContent.Html
+  commentId: P:DocumentGenerator.Core.Models.TemplateContent.Html
+  href: DocumentGenerator.Core.Models.TemplateContent.html#DocumentGenerator_Core_Models_TemplateContent_Html
+  name: Html
+  nameWithType: TemplateContent.Html
+  fullName: DocumentGenerator.Core.Models.TemplateContent.Html
+- uid: DocumentGenerator.Core.Models.TemplateContent.Css
+  commentId: P:DocumentGenerator.Core.Models.TemplateContent.Css
+  href: DocumentGenerator.Core.Models.TemplateContent.html#DocumentGenerator_Core_Models_TemplateContent_Css
+  name: Css
+  nameWithType: TemplateContent.Css
+  fullName: DocumentGenerator.Core.Models.TemplateContent.Css
+- uid: DocumentGenerator.Templating
+  commentId: N:DocumentGenerator.Templating
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Templating
+  nameWithType: DocumentGenerator.Templating
+  fullName: DocumentGenerator.Templating
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Templating
+    name: Templating
+    href: DocumentGenerator.Templating.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Templating
+    name: Templating
+    href: DocumentGenerator.Templating.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+  commentId: T:DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.ITemplateContentResolver.html
+  name: ITemplateContentResolver
+  nameWithType: ITemplateContentResolver
+  fullName: DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: DocumentGenerator.Templating.FileTemplateContentResolver.#ctor*
+  commentId: Overload:DocumentGenerator.Templating.FileTemplateContentResolver.#ctor
+  href: DocumentGenerator.Templating.FileTemplateContentResolver.html#DocumentGenerator_Templating_FileTemplateContentResolver__ctor_Microsoft_Extensions_Logging_ILogger_DocumentGenerator_Templating_FileTemplateContentResolver__
+  name: FileTemplateContentResolver
+  nameWithType: FileTemplateContentResolver.FileTemplateContentResolver
+  fullName: DocumentGenerator.Templating.FileTemplateContentResolver.FileTemplateContentResolver
+  nameWithType.vb: FileTemplateContentResolver.New
+  fullName.vb: DocumentGenerator.Templating.FileTemplateContentResolver.New
+  name.vb: New
+- uid: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Templating.FileTemplateContentResolver}
+  commentId: T:Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Templating.FileTemplateContentResolver}
+  parent: Microsoft.Extensions.Logging
+  definition: Microsoft.Extensions.Logging.ILogger`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<FileTemplateContentResolver>
+  nameWithType: ILogger<FileTemplateContentResolver>
+  fullName: Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Templating.FileTemplateContentResolver>
+  nameWithType.vb: ILogger(Of FileTemplateContentResolver)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Templating.FileTemplateContentResolver)
+  name.vb: ILogger(Of FileTemplateContentResolver)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - uid: DocumentGenerator.Templating.FileTemplateContentResolver
+    name: FileTemplateContentResolver
+    href: DocumentGenerator.Templating.FileTemplateContentResolver.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Templating.FileTemplateContentResolver
+    name: FileTemplateContentResolver
+    href: DocumentGenerator.Templating.FileTemplateContentResolver.html
+  - name: )
+- uid: Microsoft.Extensions.Logging.ILogger`1
+  commentId: T:Microsoft.Extensions.Logging.ILogger`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<TCategoryName>
+  nameWithType: ILogger<TCategoryName>
+  fullName: Microsoft.Extensions.Logging.ILogger<TCategoryName>
+  nameWithType.vb: ILogger(Of TCategoryName)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of TCategoryName)
+  name.vb: ILogger(Of TCategoryName)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - name: TCategoryName
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TCategoryName
+  - name: )
+- uid: Microsoft.Extensions.Logging
+  commentId: N:Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Logging
+  nameWithType: Microsoft.Extensions.Logging
+  fullName: Microsoft.Extensions.Logging
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+- uid: DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync*
+  commentId: Overload:DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync
+  href: DocumentGenerator.Templating.FileTemplateContentResolver.html#DocumentGenerator_Templating_FileTemplateContentResolver_ResolveAsync_DocumentGenerator_Core_Models_DocumentTemplate_System_String_System_Threading_CancellationToken_
+  name: ResolveAsync
+  nameWithType: FileTemplateContentResolver.ResolveAsync
+  fullName: DocumentGenerator.Templating.FileTemplateContentResolver.ResolveAsync
+- uid: DocumentGenerator.Core.Interfaces.ITemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Core.Interfaces.ITemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+  parent: DocumentGenerator.Core.Interfaces.ITemplateContentResolver
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: ResolveAsync(DocumentTemplate, string, CancellationToken)
+  nameWithType: ITemplateContentResolver.ResolveAsync(DocumentTemplate, string, CancellationToken)
+  fullName: DocumentGenerator.Core.Interfaces.ITemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate, string, System.Threading.CancellationToken)
+  nameWithType.vb: ITemplateContentResolver.ResolveAsync(DocumentTemplate, String, CancellationToken)
+  fullName.vb: DocumentGenerator.Core.Interfaces.ITemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate, String, System.Threading.CancellationToken)
+  name.vb: ResolveAsync(DocumentTemplate, String, CancellationToken)
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.ITemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+    name: ResolveAsync
+  - name: (
+  - uid: DocumentGenerator.Core.Models.DocumentTemplate
+    name: DocumentTemplate
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.ITemplateContentResolver.ResolveAsync(DocumentGenerator.Core.Models.DocumentTemplate,System.String,System.Threading.CancellationToken)
+    name: ResolveAsync
+  - name: (
+  - uid: DocumentGenerator.Core.Models.DocumentTemplate
+    name: DocumentTemplate
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{DocumentGenerator.Core.Models.DocumentTemplate}
+  commentId: T:System.Threading.Tasks.Task{DocumentGenerator.Core.Models.DocumentTemplate}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<DocumentTemplate>
+  nameWithType: Task<DocumentTemplate>
+  fullName: System.Threading.Tasks.Task<DocumentGenerator.Core.Models.DocumentTemplate>
+  nameWithType.vb: Task(Of DocumentTemplate)
+  fullName.vb: System.Threading.Tasks.Task(Of DocumentGenerator.Core.Models.DocumentTemplate)
+  name.vb: Task(Of DocumentTemplate)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: DocumentGenerator.Core.Models.DocumentTemplate
+    name: DocumentTemplate
+    href: DocumentGenerator.Core.Models.DocumentTemplate.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Core.Models.DocumentTemplate
+    name: DocumentTemplate
+    href: DocumentGenerator.Core.Models.DocumentTemplate.html
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

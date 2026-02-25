@@ -1,0 +1,63 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Messages
+  commentId: N:DocumentGenerator.Messaging.Messages
+  id: Messages
+  parent: DocumentGenerator.Messaging
+  children:
+  - DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Messaging.Messages
+  nameWithType: DocumentGenerator.Messaging.Messages
+  fullName: DocumentGenerator.Messaging.Messages
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Messaging
+references:
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  commentId: T:DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  parent: DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html
+  name: DocumentRenderRequest
+  nameWithType: DocumentRenderRequest
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  commentId: T:DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  parent: DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html
+  name: DocumentRenderResult
+  nameWithType: DocumentRenderResult
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+- uid: DocumentGenerator.Messaging.Messages
+  commentId: N:DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Messaging.Messages
+  nameWithType: DocumentGenerator.Messaging.Messages
+  fullName: DocumentGenerator.Messaging.Messages
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html

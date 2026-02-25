@@ -1,0 +1,874 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  commentId: T:DocumentGenerator.Messaging.Configuration.KafkaOptions
+  id: KafkaOptions
+  parent: DocumentGenerator.Messaging.Configuration
+  children:
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.SectionName
+  - DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol
+  langs:
+  - csharp
+  - vb
+  name: KafkaOptions
+  nameWithType: KafkaOptions
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: KafkaOptions
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 7
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: >-
+    Keep <xref href="DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders" data-throw-if-not-resolved="false"></xref> at or below
+
+    <xref href="DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize" data-throw-if-not-resolved="false"></xref>
+
+    — Rebus worker threads map 1:1 onto pool slots.
+  example: []
+  syntax:
+    content: public sealed class KafkaOptions
+    content.vb: Public NotInheritable Class KafkaOptions
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SectionName
+  commentId: F:DocumentGenerator.Messaging.Configuration.KafkaOptions.SectionName
+  id: SectionName
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: SectionName
+  nameWithType: KafkaOptions.SectionName
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SectionName
+  type: Field
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SectionName
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 9
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  syntax:
+    content: public const string SectionName = "Kafka"
+    return:
+      type: System.String
+    content.vb: Public Const SectionName As String = "Kafka"
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers
+  id: BootstrapServers
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: BootstrapServers
+  nameWithType: KafkaOptions.BootstrapServers
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: BootstrapServers
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 12
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: Comma-separated list of bootstrap brokers, e.g. "localhost:9092".
+  example: []
+  syntax:
+    content: public string BootstrapServers { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property BootstrapServers As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId
+  id: ConsumerGroupId
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: ConsumerGroupId
+  nameWithType: KafkaOptions.ConsumerGroupId
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ConsumerGroupId
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 19
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: >-
+    Consumer group ID. All instances of the document generator sharing the same
+
+    group will load-balance partitions between them — giving you horizontal scale
+
+    without duplicate processing.
+  example: []
+  syntax:
+    content: public string ConsumerGroupId { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ConsumerGroupId As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic
+  id: RequestTopic
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: RequestTopic
+  nameWithType: KafkaOptions.RequestTopic
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RequestTopic
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 22
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: Topic the iPads publish render requests to.
+  example: []
+  syntax:
+    content: public string RequestTopic { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property RequestTopic As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic
+  id: ResultTopic
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: ResultTopic
+  nameWithType: KafkaOptions.ResultTopic
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ResultTopic
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 25
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: Topic the generator publishes completed results to, consumed by iPads.
+  example: []
+  syntax:
+    content: public string ResultTopic { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ResultTopic As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic
+  id: DeadLetterTopic
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: DeadLetterTopic
+  nameWithType: KafkaOptions.DeadLetterTopic
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DeadLetterTopic
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 31
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: >-
+    Topic for dead-letter messages — requests that failed after all retries.
+
+    The iPad can monitor this for error handling / user feedback.
+  example: []
+  syntax:
+    content: public string DeadLetterTopic { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DeadLetterTopic As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries
+  id: MaxRetries
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: MaxRetries
+  nameWithType: KafkaOptions.MaxRetries
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: MaxRetries
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 37
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: >-
+    Maximum number of times a failed render is retried before the message
+
+    is sent to the dead-letter topic. Defaults to 3.
+  example: []
+  syntax:
+    content: public int MaxRetries { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property MaxRetries As Integer
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay
+  id: RetryDelay
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: RetryDelay
+  nameWithType: KafkaOptions.RetryDelay
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RetryDelay
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 43
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: >-
+    Delay between retry attempts. Defaults to 2 seconds.
+
+    Uses exponential backoff: attempt N waits RetryDelay * 2^(N-1).
+  example: []
+  syntax:
+    content: public TimeSpan RetryDelay { get; init; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public Property RetryDelay As TimeSpan
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout
+  id: PollTimeout
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: PollTimeout
+  nameWithType: KafkaOptions.PollTimeout
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PollTimeout
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 49
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: >-
+    How long to wait for messages before looping. Keeps the consumer
+
+    responsive to cancellation. Defaults to 1 second.
+  example: []
+  syntax:
+    content: public TimeSpan PollTimeout { get; init; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public Property PollTimeout As TimeSpan
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+  id: MaxConcurrentRenders
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: MaxConcurrentRenders
+  nameWithType: KafkaOptions.MaxConcurrentRenders
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: MaxConcurrentRenders
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 56
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: >-
+    Maximum number of render requests processed concurrently.
+
+    Should be kept at or below <xref href="DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize" data-throw-if-not-resolved="false"></xref>
+
+    to avoid pool starvation. Defaults to 4.
+  example: []
+  syntax:
+    content: public int MaxConcurrentRenders { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property MaxConcurrentRenders As Integer
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol
+  id: SecurityProtocol
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: SecurityProtocol
+  nameWithType: KafkaOptions.SecurityProtocol
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SecurityProtocol
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 63
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: 'Security protocol. Options: Plaintext, Ssl, SaslPlaintext, SaslSsl.'
+  example: []
+  syntax:
+    content: public string SecurityProtocol { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property SecurityProtocol As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism
+  id: SaslMechanism
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: SaslMechanism
+  nameWithType: KafkaOptions.SaslMechanism
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SaslMechanism
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 66
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: 'SASL mechanism. Options: Plain, ScramSha256, ScramSha512, OAuthBearer.'
+  example: []
+  syntax:
+    content: public string? SaslMechanism { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property SaslMechanism As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername
+  id: SaslUsername
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: SaslUsername
+  nameWithType: KafkaOptions.SaslUsername
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SaslUsername
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 69
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: SASL username (for managed Kafka services e.g. Confluent Cloud).
+  example: []
+  syntax:
+    content: public string? SaslUsername { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property SaslUsername As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername*
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword
+  id: SaslPassword
+  parent: DocumentGenerator.Messaging.Configuration.KafkaOptions
+  langs:
+  - csharp
+  - vb
+  name: SaslPassword
+  nameWithType: KafkaOptions.SaslPassword
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SaslPassword
+    path: src/DocumentGenerator.Messaging/Configuration/KafkaOptions.cs
+    startLine: 72
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Configuration
+  summary: SASL password.
+  example: []
+  syntax:
+    content: public string? SaslPassword { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property SaslPassword As String
+  overload: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword*
+references:
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_MaxConcurrentRenders
+  name: MaxConcurrentRenders
+  nameWithType: KafkaOptions.MaxConcurrentRenders
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+- uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize
+  commentId: P:DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize
+  href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html#DocumentGenerator_Core_Configuration_BrowserPoolOptions_MaxSize
+  name: MaxSize
+  nameWithType: BrowserPoolOptions.MaxSize
+  fullName: DocumentGenerator.Core.Configuration.BrowserPoolOptions.MaxSize
+- uid: DocumentGenerator.Messaging.Configuration
+  commentId: N:DocumentGenerator.Messaging.Configuration
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Messaging.Configuration
+  nameWithType: DocumentGenerator.Messaging.Configuration
+  fullName: DocumentGenerator.Messaging.Configuration
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Configuration
+    name: Configuration
+    href: DocumentGenerator.Messaging.Configuration.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Configuration
+    name: Configuration
+    href: DocumentGenerator.Messaging.Configuration.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_BootstrapServers
+  name: BootstrapServers
+  nameWithType: KafkaOptions.BootstrapServers
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.BootstrapServers
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_ConsumerGroupId
+  name: ConsumerGroupId
+  nameWithType: KafkaOptions.ConsumerGroupId
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.ConsumerGroupId
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_RequestTopic
+  name: RequestTopic
+  nameWithType: KafkaOptions.RequestTopic
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.RequestTopic
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_ResultTopic
+  name: ResultTopic
+  nameWithType: KafkaOptions.ResultTopic
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.ResultTopic
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_DeadLetterTopic
+  name: DeadLetterTopic
+  nameWithType: KafkaOptions.DeadLetterTopic
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.DeadLetterTopic
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_MaxRetries
+  name: MaxRetries
+  nameWithType: KafkaOptions.MaxRetries
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxRetries
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_RetryDelay
+  name: RetryDelay
+  nameWithType: KafkaOptions.RetryDelay
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.RetryDelay
+- uid: System.TimeSpan
+  commentId: T:System.TimeSpan
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_PollTimeout
+  name: PollTimeout
+  nameWithType: KafkaOptions.PollTimeout
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.PollTimeout
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_MaxConcurrentRenders
+  name: MaxConcurrentRenders
+  nameWithType: KafkaOptions.MaxConcurrentRenders
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.MaxConcurrentRenders
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_SecurityProtocol
+  name: SecurityProtocol
+  nameWithType: KafkaOptions.SecurityProtocol
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SecurityProtocol
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_SaslMechanism
+  name: SaslMechanism
+  nameWithType: KafkaOptions.SaslMechanism
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslMechanism
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_SaslUsername
+  name: SaslUsername
+  nameWithType: KafkaOptions.SaslUsername
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslUsername
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword*
+  commentId: Overload:DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_SaslPassword
+  name: SaslPassword
+  nameWithType: KafkaOptions.SaslPassword
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.SaslPassword

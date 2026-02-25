@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Configuration
+  commentId: N:DocumentGenerator.Core.Configuration
+  id: Configuration
+  parent: DocumentGenerator.Core
+  children:
+  - DocumentGenerator.Core.Configuration.BrowserPoolOptions
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Core.Configuration
+  nameWithType: DocumentGenerator.Core.Configuration
+  fullName: DocumentGenerator.Core.Configuration
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Core
+references:
+- uid: DocumentGenerator.Core.Configuration.BrowserPoolOptions
+  commentId: T:DocumentGenerator.Core.Configuration.BrowserPoolOptions
+  href: DocumentGenerator.Core.Configuration.BrowserPoolOptions.html
+  name: BrowserPoolOptions
+  nameWithType: BrowserPoolOptions
+  fullName: DocumentGenerator.Core.Configuration.BrowserPoolOptions

@@ -1,0 +1,93 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Pdf
+  commentId: N:DocumentGenerator.Pdf
+  id: Pdf
+  parent: DocumentGenerator
+  children:
+  - DocumentGenerator.Pdf.DocumentPipeline
+  - DocumentGenerator.Pdf.Extensions
+  - DocumentGenerator.Pdf.Pool
+  - DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Pdf
+  nameWithType: DocumentGenerator.Pdf
+  fullName: DocumentGenerator.Pdf
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Pdf
+references:
+- uid: DocumentGenerator.Pdf.Extensions
+  commentId: N:DocumentGenerator.Pdf.Extensions
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Pdf.Extensions
+  nameWithType: DocumentGenerator.Pdf.Extensions
+  fullName: DocumentGenerator.Pdf.Extensions
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  - name: .
+  - uid: DocumentGenerator.Pdf.Extensions
+    name: Extensions
+    href: DocumentGenerator.Pdf.Extensions.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  - name: .
+  - uid: DocumentGenerator.Pdf.Extensions
+    name: Extensions
+    href: DocumentGenerator.Pdf.Extensions.html
+- uid: DocumentGenerator.Pdf.Pool
+  commentId: N:DocumentGenerator.Pdf.Pool
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Pdf.Pool
+  nameWithType: DocumentGenerator.Pdf.Pool
+  fullName: DocumentGenerator.Pdf.Pool
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  - name: .
+  - uid: DocumentGenerator.Pdf.Pool
+    name: Pool
+    href: DocumentGenerator.Pdf.Pool.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  - name: .
+  - uid: DocumentGenerator.Pdf.Pool
+    name: Pool
+    href: DocumentGenerator.Pdf.Pool.html
+- uid: DocumentGenerator.Pdf.DocumentPipeline
+  commentId: T:DocumentGenerator.Pdf.DocumentPipeline
+  href: DocumentGenerator.Pdf.DocumentPipeline.html
+  name: DocumentPipeline
+  nameWithType: DocumentPipeline
+  fullName: DocumentGenerator.Pdf.DocumentPipeline
+- uid: DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  commentId: T:DocumentGenerator.Pdf.PuppeteerDocumentRenderer
+  href: DocumentGenerator.Pdf.PuppeteerDocumentRenderer.html
+  name: PuppeteerDocumentRenderer
+  nameWithType: PuppeteerDocumentRenderer
+  fullName: DocumentGenerator.Pdf.PuppeteerDocumentRenderer

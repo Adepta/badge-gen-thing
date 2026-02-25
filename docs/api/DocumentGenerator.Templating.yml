@@ -1,0 +1,62 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Templating
+  commentId: N:DocumentGenerator.Templating
+  id: Templating
+  parent: DocumentGenerator
+  children:
+  - DocumentGenerator.Templating.Extensions
+  - DocumentGenerator.Templating.FileTemplateContentResolver
+  - DocumentGenerator.Templating.HandlebarsTemplateEngine
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Templating
+  nameWithType: DocumentGenerator.Templating
+  fullName: DocumentGenerator.Templating
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Templating
+references:
+- uid: DocumentGenerator.Templating.Extensions
+  commentId: N:DocumentGenerator.Templating.Extensions
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Templating.Extensions
+  nameWithType: DocumentGenerator.Templating.Extensions
+  fullName: DocumentGenerator.Templating.Extensions
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Templating
+    name: Templating
+    href: DocumentGenerator.Templating.html
+  - name: .
+  - uid: DocumentGenerator.Templating.Extensions
+    name: Extensions
+    href: DocumentGenerator.Templating.Extensions.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Templating
+    name: Templating
+    href: DocumentGenerator.Templating.html
+  - name: .
+  - uid: DocumentGenerator.Templating.Extensions
+    name: Extensions
+    href: DocumentGenerator.Templating.Extensions.html
+- uid: DocumentGenerator.Templating.FileTemplateContentResolver
+  commentId: T:DocumentGenerator.Templating.FileTemplateContentResolver
+  href: DocumentGenerator.Templating.FileTemplateContentResolver.html
+  name: FileTemplateContentResolver
+  nameWithType: FileTemplateContentResolver
+  fullName: DocumentGenerator.Templating.FileTemplateContentResolver
+- uid: DocumentGenerator.Templating.HandlebarsTemplateEngine
+  commentId: T:DocumentGenerator.Templating.HandlebarsTemplateEngine
+  href: DocumentGenerator.Templating.HandlebarsTemplateEngine.html
+  name: HandlebarsTemplateEngine
+  nameWithType: HandlebarsTemplateEngine
+  fullName: DocumentGenerator.Templating.HandlebarsTemplateEngine

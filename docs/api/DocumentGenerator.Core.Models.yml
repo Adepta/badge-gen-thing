@@ -1,0 +1,103 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  id: Models
+  parent: DocumentGenerator.Core
+  children:
+  - DocumentGenerator.Core.Models.Branding
+  - DocumentGenerator.Core.Models.DocumentTemplate
+  - DocumentGenerator.Core.Models.PdfMargins
+  - DocumentGenerator.Core.Models.PdfOptions
+  - DocumentGenerator.Core.Models.RenderRequest
+  - DocumentGenerator.Core.Models.RenderResult
+  - DocumentGenerator.Core.Models.TemplateContent
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Core
+references:
+- uid: DocumentGenerator.Core.Models.Branding
+  commentId: T:DocumentGenerator.Core.Models.Branding
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.Branding.html
+  name: Branding
+  nameWithType: Branding
+  fullName: DocumentGenerator.Core.Models.Branding
+- uid: DocumentGenerator.Core.Models.DocumentTemplate
+  commentId: T:DocumentGenerator.Core.Models.DocumentTemplate
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html
+  name: DocumentTemplate
+  nameWithType: DocumentTemplate
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate
+- uid: DocumentGenerator.Core.Models.PdfMargins
+  commentId: T:DocumentGenerator.Core.Models.PdfMargins
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.PdfMargins.html
+  name: PdfMargins
+  nameWithType: PdfMargins
+  fullName: DocumentGenerator.Core.Models.PdfMargins
+- uid: DocumentGenerator.Core.Models.PdfOptions
+  commentId: T:DocumentGenerator.Core.Models.PdfOptions
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.PdfOptions.html
+  name: PdfOptions
+  nameWithType: PdfOptions
+  fullName: DocumentGenerator.Core.Models.PdfOptions
+- uid: DocumentGenerator.Core.Models.RenderRequest
+  commentId: T:DocumentGenerator.Core.Models.RenderRequest
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.RenderRequest.html
+  name: RenderRequest
+  nameWithType: RenderRequest
+  fullName: DocumentGenerator.Core.Models.RenderRequest
+- uid: DocumentGenerator.Core.Models.RenderResult
+  commentId: T:DocumentGenerator.Core.Models.RenderResult
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.RenderResult.html
+  name: RenderResult
+  nameWithType: RenderResult
+  fullName: DocumentGenerator.Core.Models.RenderResult
+- uid: DocumentGenerator.Core.Models.TemplateContent
+  commentId: T:DocumentGenerator.Core.Models.TemplateContent
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.TemplateContent.html
+  name: TemplateContent
+  nameWithType: TemplateContent
+  fullName: DocumentGenerator.Core.Models.TemplateContent
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html

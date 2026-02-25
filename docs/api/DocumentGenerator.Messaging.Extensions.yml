@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Extensions
+  commentId: N:DocumentGenerator.Messaging.Extensions
+  id: Extensions
+  parent: DocumentGenerator.Messaging
+  children:
+  - DocumentGenerator.Messaging.Extensions.ServiceCollectionExtensions
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Messaging.Extensions
+  nameWithType: DocumentGenerator.Messaging.Extensions
+  fullName: DocumentGenerator.Messaging.Extensions
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Messaging
+references:
+- uid: DocumentGenerator.Messaging.Extensions.ServiceCollectionExtensions
+  commentId: T:DocumentGenerator.Messaging.Extensions.ServiceCollectionExtensions
+  href: DocumentGenerator.Messaging.Extensions.ServiceCollectionExtensions.html
+  name: ServiceCollectionExtensions
+  nameWithType: ServiceCollectionExtensions
+  fullName: DocumentGenerator.Messaging.Extensions.ServiceCollectionExtensions

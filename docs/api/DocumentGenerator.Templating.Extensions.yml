@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Templating.Extensions
+  commentId: N:DocumentGenerator.Templating.Extensions
+  id: Extensions
+  parent: DocumentGenerator.Templating
+  children:
+  - DocumentGenerator.Templating.Extensions.ServiceCollectionExtensions
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Templating.Extensions
+  nameWithType: DocumentGenerator.Templating.Extensions
+  fullName: DocumentGenerator.Templating.Extensions
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Templating
+references:
+- uid: DocumentGenerator.Templating.Extensions.ServiceCollectionExtensions
+  commentId: T:DocumentGenerator.Templating.Extensions.ServiceCollectionExtensions
+  href: DocumentGenerator.Templating.Extensions.ServiceCollectionExtensions.html
+  name: ServiceCollectionExtensions
+  nameWithType: ServiceCollectionExtensions
+  fullName: DocumentGenerator.Templating.Extensions.ServiceCollectionExtensions

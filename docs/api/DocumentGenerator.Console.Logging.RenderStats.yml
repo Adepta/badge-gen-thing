@@ -1,0 +1,572 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Console.Logging.RenderStats
+  commentId: T:DocumentGenerator.Console.Logging.RenderStats
+  id: RenderStats
+  parent: DocumentGenerator.Console.Logging
+  children:
+  - DocumentGenerator.Console.Logging.RenderStats.FailureCount
+  - DocumentGenerator.Console.Logging.RenderStats.RecordFailure
+  - DocumentGenerator.Console.Logging.RenderStats.RecordSuccess
+  - DocumentGenerator.Console.Logging.RenderStats.SuccessCount
+  - DocumentGenerator.Console.Logging.RenderStats.Uptime
+  langs:
+  - csharp
+  - vb
+  name: RenderStats
+  nameWithType: RenderStats
+  fullName: DocumentGenerator.Console.Logging.RenderStats
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RenderStats
+    path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+    startLine: 10
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  summary: >-
+    Thread-safe counters for the TUI status bar.
+
+    Injected as a singleton so both <xref href="DocumentGenerator.Console.Logging.TuiRenderer" data-throw-if-not-resolved="false"></xref> (reads)
+
+    and <code>DocumentRenderRequestHandler</code> (writes) share the same instance.
+  example: []
+  syntax:
+    content: 'public sealed class RenderStats : IRenderMetrics'
+    content.vb: Public NotInheritable Class RenderStats Implements IRenderMetrics
+  inheritance:
+  - System.Object
+  implements:
+  - DocumentGenerator.Core.Interfaces.IRenderMetrics
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Console.Logging.RenderStats.SuccessCount
+  commentId: P:DocumentGenerator.Console.Logging.RenderStats.SuccessCount
+  id: SuccessCount
+  parent: DocumentGenerator.Console.Logging.RenderStats
+  langs:
+  - csharp
+  - vb
+  name: SuccessCount
+  nameWithType: RenderStats.SuccessCount
+  fullName: DocumentGenerator.Console.Logging.RenderStats.SuccessCount
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SuccessCount
+    path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+    startLine: 17
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  summary: Total successfully completed renders since service start.
+  example: []
+  syntax:
+    content: public long SuccessCount { get; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public ReadOnly Property SuccessCount As Long
+  overload: DocumentGenerator.Console.Logging.RenderStats.SuccessCount*
+- uid: DocumentGenerator.Console.Logging.RenderStats.FailureCount
+  commentId: P:DocumentGenerator.Console.Logging.RenderStats.FailureCount
+  id: FailureCount
+  parent: DocumentGenerator.Console.Logging.RenderStats
+  langs:
+  - csharp
+  - vb
+  name: FailureCount
+  nameWithType: RenderStats.FailureCount
+  fullName: DocumentGenerator.Console.Logging.RenderStats.FailureCount
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: FailureCount
+    path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+    startLine: 20
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  summary: Total failed renders since service start.
+  example: []
+  syntax:
+    content: public long FailureCount { get; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public ReadOnly Property FailureCount As Long
+  overload: DocumentGenerator.Console.Logging.RenderStats.FailureCount*
+- uid: DocumentGenerator.Console.Logging.RenderStats.Uptime
+  commentId: P:DocumentGenerator.Console.Logging.RenderStats.Uptime
+  id: Uptime
+  parent: DocumentGenerator.Console.Logging.RenderStats
+  langs:
+  - csharp
+  - vb
+  name: Uptime
+  nameWithType: RenderStats.Uptime
+  fullName: DocumentGenerator.Console.Logging.RenderStats.Uptime
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Uptime
+    path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+    startLine: 23
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  summary: Time elapsed since the service started.
+  example: []
+  syntax:
+    content: public TimeSpan Uptime { get; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public ReadOnly Property Uptime As TimeSpan
+  overload: DocumentGenerator.Console.Logging.RenderStats.Uptime*
+- uid: DocumentGenerator.Console.Logging.RenderStats.RecordSuccess
+  commentId: M:DocumentGenerator.Console.Logging.RenderStats.RecordSuccess
+  id: RecordSuccess
+  parent: DocumentGenerator.Console.Logging.RenderStats
+  langs:
+  - csharp
+  - vb
+  name: RecordSuccess()
+  nameWithType: RenderStats.RecordSuccess()
+  fullName: DocumentGenerator.Console.Logging.RenderStats.RecordSuccess()
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RecordSuccess
+    path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+    startLine: 26
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  summary: Increments the success counter by one.
+  example: []
+  syntax:
+    content: public void RecordSuccess()
+    content.vb: Public Sub RecordSuccess()
+  overload: DocumentGenerator.Console.Logging.RenderStats.RecordSuccess*
+  implements:
+  - DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+- uid: DocumentGenerator.Console.Logging.RenderStats.RecordFailure
+  commentId: M:DocumentGenerator.Console.Logging.RenderStats.RecordFailure
+  id: RecordFailure
+  parent: DocumentGenerator.Console.Logging.RenderStats
+  langs:
+  - csharp
+  - vb
+  name: RecordFailure()
+  nameWithType: RenderStats.RecordFailure()
+  fullName: DocumentGenerator.Console.Logging.RenderStats.RecordFailure()
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RecordFailure
+    path: src/DocumentGenerator.Console/Logging/RenderStats.cs
+    startLine: 29
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  summary: Increments the failure counter by one.
+  example: []
+  syntax:
+    content: public void RecordFailure()
+    content.vb: Public Sub RecordFailure()
+  overload: DocumentGenerator.Console.Logging.RenderStats.RecordFailure*
+  implements:
+  - DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+references:
+- uid: DocumentGenerator.Console.Logging.TuiRenderer
+  commentId: T:DocumentGenerator.Console.Logging.TuiRenderer
+  href: DocumentGenerator.Console.Logging.TuiRenderer.html
+  name: TuiRenderer
+  nameWithType: TuiRenderer
+  fullName: DocumentGenerator.Console.Logging.TuiRenderer
+- uid: DocumentGenerator.Console.Logging
+  commentId: N:DocumentGenerator.Console.Logging
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Console.Logging
+  nameWithType: DocumentGenerator.Console.Logging
+  fullName: DocumentGenerator.Console.Logging
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  commentId: T:DocumentGenerator.Core.Interfaces.IRenderMetrics
+  parent: DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.Core.Interfaces.IRenderMetrics.html
+  name: IRenderMetrics
+  nameWithType: IRenderMetrics
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: DocumentGenerator.Console.Logging.RenderStats.SuccessCount*
+  commentId: Overload:DocumentGenerator.Console.Logging.RenderStats.SuccessCount
+  href: DocumentGenerator.Console.Logging.RenderStats.html#DocumentGenerator_Console_Logging_RenderStats_SuccessCount
+  name: SuccessCount
+  nameWithType: RenderStats.SuccessCount
+  fullName: DocumentGenerator.Console.Logging.RenderStats.SuccessCount
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: DocumentGenerator.Console.Logging.RenderStats.FailureCount*
+  commentId: Overload:DocumentGenerator.Console.Logging.RenderStats.FailureCount
+  href: DocumentGenerator.Console.Logging.RenderStats.html#DocumentGenerator_Console_Logging_RenderStats_FailureCount
+  name: FailureCount
+  nameWithType: RenderStats.FailureCount
+  fullName: DocumentGenerator.Console.Logging.RenderStats.FailureCount
+- uid: DocumentGenerator.Console.Logging.RenderStats.Uptime*
+  commentId: Overload:DocumentGenerator.Console.Logging.RenderStats.Uptime
+  href: DocumentGenerator.Console.Logging.RenderStats.html#DocumentGenerator_Console_Logging_RenderStats_Uptime
+  name: Uptime
+  nameWithType: RenderStats.Uptime
+  fullName: DocumentGenerator.Console.Logging.RenderStats.Uptime
+- uid: System.TimeSpan
+  commentId: T:System.TimeSpan
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: DocumentGenerator.Console.Logging.RenderStats.RecordSuccess*
+  commentId: Overload:DocumentGenerator.Console.Logging.RenderStats.RecordSuccess
+  href: DocumentGenerator.Console.Logging.RenderStats.html#DocumentGenerator_Console_Logging_RenderStats_RecordSuccess
+  name: RecordSuccess
+  nameWithType: RenderStats.RecordSuccess
+  fullName: DocumentGenerator.Console.Logging.RenderStats.RecordSuccess
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+  commentId: M:DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+  parent: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  name: RecordSuccess()
+  nameWithType: IRenderMetrics.RecordSuccess()
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess()
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+    name: RecordSuccess
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordSuccess
+    name: RecordSuccess
+  - name: (
+  - name: )
+- uid: DocumentGenerator.Console.Logging.RenderStats.RecordFailure*
+  commentId: Overload:DocumentGenerator.Console.Logging.RenderStats.RecordFailure
+  href: DocumentGenerator.Console.Logging.RenderStats.html#DocumentGenerator_Console_Logging_RenderStats_RecordFailure
+  name: RecordFailure
+  nameWithType: RenderStats.RecordFailure
+  fullName: DocumentGenerator.Console.Logging.RenderStats.RecordFailure
+- uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+  commentId: M:DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+  parent: DocumentGenerator.Core.Interfaces.IRenderMetrics
+  name: RecordFailure()
+  nameWithType: IRenderMetrics.RecordFailure()
+  fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure()
+  spec.csharp:
+  - uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+    name: RecordFailure
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: DocumentGenerator.Core.Interfaces.IRenderMetrics.RecordFailure
+    name: RecordFailure
+  - name: (
+  - name: )

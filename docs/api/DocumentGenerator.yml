@@ -1,0 +1,86 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator
+  id: DocumentGenerator
+  children:
+  - DocumentGenerator.Console
+  - DocumentGenerator.Core
+  - DocumentGenerator.Messaging
+  - DocumentGenerator.Pdf
+  - DocumentGenerator.Templating
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator
+  type: Namespace
+references:
+- uid: DocumentGenerator.Console
+  commentId: N:DocumentGenerator.Console
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Console
+  nameWithType: DocumentGenerator.Console
+  fullName: DocumentGenerator.Console
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+- uid: DocumentGenerator.Core
+  isExternal: true
+- uid: DocumentGenerator.Messaging
+  isExternal: true
+- uid: DocumentGenerator.Pdf
+  commentId: N:DocumentGenerator.Pdf
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Pdf
+  nameWithType: DocumentGenerator.Pdf
+  fullName: DocumentGenerator.Pdf
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Pdf
+    name: Pdf
+    href: DocumentGenerator.Pdf.html
+- uid: DocumentGenerator.Templating
+  commentId: N:DocumentGenerator.Templating
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Templating
+  nameWithType: DocumentGenerator.Templating
+  fullName: DocumentGenerator.Templating
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Templating
+    name: Templating
+    href: DocumentGenerator.Templating.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Templating
+    name: Templating
+    href: DocumentGenerator.Templating.html

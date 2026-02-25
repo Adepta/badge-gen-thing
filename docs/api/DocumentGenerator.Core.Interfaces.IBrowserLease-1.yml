@@ -1,0 +1,209 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  commentId: T:DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  id: IBrowserLease`1
+  parent: DocumentGenerator.Core.Interfaces
+  children:
+  - DocumentGenerator.Core.Interfaces.IBrowserLease`1.Browser
+  - DocumentGenerator.Core.Interfaces.IBrowserLease`1.Invalidate
+  langs:
+  - csharp
+  - vb
+  name: IBrowserLease<TBrowser>
+  nameWithType: IBrowserLease<TBrowser>
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>
+  type: Interface
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IBrowserLease.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: IBrowserLease
+    path: src/DocumentGenerator.Core/Interfaces/IBrowserLease.cs
+    startLine: 11
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: >-
+    Represents a leased Chromium browser instance from the pool.
+
+    Disposing the lease returns the browser to the pool rather than
+
+    closing it, unless the browser has crashed or been invalidated.
+  remarks: >-
+    TBrowser is kept generic so Core has zero dependency on PuppeteerSharp.
+
+    The Pdf project binds TBrowser to PuppeteerSharp.IBrowser.
+  example: []
+  syntax:
+    content: 'public interface IBrowserLease<TBrowser> : IAsyncDisposable'
+    typeParameters:
+    - id: TBrowser
+    content.vb: Public Interface IBrowserLease(Of TBrowser) Inherits IAsyncDisposable
+  inheritedMembers:
+  - System.IAsyncDisposable.DisposeAsync
+  nameWithType.vb: IBrowserLease(Of TBrowser)
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser)
+  name.vb: IBrowserLease(Of TBrowser)
+- uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1.Browser
+  commentId: P:DocumentGenerator.Core.Interfaces.IBrowserLease`1.Browser
+  id: Browser
+  parent: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  langs:
+  - csharp
+  - vb
+  name: Browser
+  nameWithType: IBrowserLease<TBrowser>.Browser
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>.Browser
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IBrowserLease.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Browser
+    path: src/DocumentGenerator.Core/Interfaces/IBrowserLease.cs
+    startLine: 14
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: The underlying browser instance (e.g. PuppeteerSharp.IBrowser).
+  example: []
+  syntax:
+    content: TBrowser Browser { get; }
+    parameters: []
+    return:
+      type: '{TBrowser}'
+    content.vb: ReadOnly Property Browser As TBrowser
+  overload: DocumentGenerator.Core.Interfaces.IBrowserLease`1.Browser*
+  nameWithType.vb: IBrowserLease(Of TBrowser).Browser
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser).Browser
+- uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1.Invalidate
+  commentId: M:DocumentGenerator.Core.Interfaces.IBrowserLease`1.Invalidate
+  id: Invalidate
+  parent: DocumentGenerator.Core.Interfaces.IBrowserLease`1
+  langs:
+  - csharp
+  - vb
+  name: Invalidate()
+  nameWithType: IBrowserLease<TBrowser>.Invalidate()
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>.Invalidate()
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Core/Interfaces/IBrowserLease.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Invalidate
+    path: src/DocumentGenerator.Core/Interfaces/IBrowserLease.cs
+    startLine: 20
+  assemblies:
+  - DocumentGenerator.Core
+  namespace: DocumentGenerator.Core.Interfaces
+  summary: >-
+    Marks this lease as faulted. The pool will discard the underlying
+
+    browser rather than returning it to circulation.
+  example: []
+  syntax:
+    content: void Invalidate()
+    content.vb: Sub Invalidate()
+  overload: DocumentGenerator.Core.Interfaces.IBrowserLease`1.Invalidate*
+  nameWithType.vb: IBrowserLease(Of TBrowser).Invalidate()
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser).Invalidate()
+references:
+- uid: DocumentGenerator.Core.Interfaces
+  commentId: N:DocumentGenerator.Core.Interfaces
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Interfaces
+  nameWithType: DocumentGenerator.Core.Interfaces
+  fullName: DocumentGenerator.Core.Interfaces
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Interfaces
+    name: Interfaces
+    href: DocumentGenerator.Core.Interfaces.html
+- uid: System.IAsyncDisposable.DisposeAsync
+  commentId: M:System.IAsyncDisposable.DisposeAsync
+  parent: System.IAsyncDisposable
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  name: DisposeAsync()
+  nameWithType: IAsyncDisposable.DisposeAsync()
+  fullName: System.IAsyncDisposable.DisposeAsync()
+  spec.csharp:
+  - uid: System.IAsyncDisposable.DisposeAsync
+    name: DisposeAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.IAsyncDisposable.DisposeAsync
+    name: DisposeAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync
+  - name: (
+  - name: )
+- uid: System.IAsyncDisposable
+  commentId: T:System.IAsyncDisposable
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iasyncdisposable
+  name: IAsyncDisposable
+  nameWithType: IAsyncDisposable
+  fullName: System.IAsyncDisposable
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1.Browser*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IBrowserLease`1.Browser
+  href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html#DocumentGenerator_Core_Interfaces_IBrowserLease_1_Browser
+  name: Browser
+  nameWithType: IBrowserLease<TBrowser>.Browser
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>.Browser
+  nameWithType.vb: IBrowserLease(Of TBrowser).Browser
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser).Browser
+- uid: '{TBrowser}'
+  commentId: '!:TBrowser'
+  definition: TBrowser
+  name: TBrowser
+  nameWithType: TBrowser
+  fullName: TBrowser
+- uid: TBrowser
+  commentId: '!:TBrowser'
+  name: TBrowser
+  nameWithType: TBrowser
+  fullName: TBrowser
+- uid: DocumentGenerator.Core.Interfaces.IBrowserLease`1.Invalidate*
+  commentId: Overload:DocumentGenerator.Core.Interfaces.IBrowserLease`1.Invalidate
+  href: DocumentGenerator.Core.Interfaces.IBrowserLease-1.html#DocumentGenerator_Core_Interfaces_IBrowserLease_1_Invalidate
+  name: Invalidate
+  nameWithType: IBrowserLease<TBrowser>.Invalidate
+  fullName: DocumentGenerator.Core.Interfaces.IBrowserLease<TBrowser>.Invalidate
+  nameWithType.vb: IBrowserLease(Of TBrowser).Invalidate
+  fullName.vb: DocumentGenerator.Core.Interfaces.IBrowserLease(Of TBrowser).Invalidate

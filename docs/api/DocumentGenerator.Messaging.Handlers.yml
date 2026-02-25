@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Handlers
+  commentId: N:DocumentGenerator.Messaging.Handlers
+  id: Handlers
+  parent: DocumentGenerator.Messaging
+  children:
+  - DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Messaging.Handlers
+  nameWithType: DocumentGenerator.Messaging.Handlers
+  fullName: DocumentGenerator.Messaging.Handlers
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Messaging
+references:
+- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  commentId: T:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
+  href: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.html
+  name: DocumentRenderRequestHandler
+  nameWithType: DocumentRenderRequestHandler
+  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler

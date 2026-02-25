@@ -1,0 +1,844 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  commentId: T:DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  id: DocumentRenderResult
+  parent: DocumentGenerator.Messaging.Messages
+  children:
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid,System.String,System.String,System.String,System.String)
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  langs:
+  - csharp
+  - vb
+  name: DocumentRenderResult
+  nameWithType: DocumentRenderResult
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentRenderResult
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 9
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Outbound Kafka message published by the generator after a render completes
+
+    (successfully or otherwise).
+
+
+    Topic: render.results
+
+    Key:   CorrelationId (iPad filters on this to find its own response)
+  example: []
+  syntax:
+    content: public sealed class DocumentRenderResult
+    content.vb: Public NotInheritable Class DocumentRenderResult
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId
+  id: CorrelationId
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: CorrelationId
+  nameWithType: DocumentRenderResult.CorrelationId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CorrelationId
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 12
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: Matches <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public Guid CorrelationId { get; init; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property CorrelationId As Guid
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId
+  id: DeviceId
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: DeviceId
+  nameWithType: DocumentRenderResult.DeviceId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DeviceId
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 15
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: Echoed from the originating request for easy routing on the iPad.
+  example: []
+  syntax:
+    content: public string DeviceId { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DeviceId As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId
+  id: SessionId
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: SessionId
+  nameWithType: DocumentRenderResult.SessionId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SessionId
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 18
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: Echoed from the originating request.
+  example: []
+  syntax:
+    content: public string? SessionId { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property SessionId As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  id: Success
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: Success
+  nameWithType: DocumentRenderResult.Success
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Success
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 21
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: Whether the render succeeded.
+  example: []
+  syntax:
+    content: public bool Success { get; init; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property Success As Boolean
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  id: PdfBase64
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: PdfBase64
+  nameWithType: DocumentRenderResult.PdfBase64
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PdfBase64
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 27
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Base64-encoded PDF bytes. Null when <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success" data-throw-if-not-resolved="false"></xref> is false.
+
+    The iPad decodes this and hands it to the AirPrint / printing stack.
+  example: []
+  syntax:
+    content: public string? PdfBase64 { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PdfBase64 As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
+  id: ErrorMessage
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: ErrorMessage
+  nameWithType: DocumentRenderResult.ErrorMessage
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ErrorMessage
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 30
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: Human-readable error description when <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success" data-throw-if-not-resolved="false"></xref> is false.
+  example: []
+  syntax:
+    content: public string? ErrorMessage { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ErrorMessage As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType
+  id: DocumentType
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: DocumentType
+  nameWithType: DocumentRenderResult.DocumentType
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentType
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 33
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: Document type from the original template, e.g. "badge".
+  example: []
+  syntax:
+    content: public string DocumentType { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DocumentType As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime
+  id: ElapsedTime
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: ElapsedTime
+  nameWithType: DocumentRenderResult.ElapsedTime
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ElapsedTime
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 36
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: How long the full render pipeline took.
+  example: []
+  syntax:
+    content: public TimeSpan ElapsedTime { get; init; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public Property ElapsedTime As TimeSpan
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt
+  id: CompletedAt
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: CompletedAt
+  nameWithType: DocumentRenderResult.CompletedAt
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CompletedAt
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 39
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: UTC timestamp when the result was published.
+  example: []
+  syntax:
+    content: public DateTimeOffset CompletedAt { get; init; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property CompletedAt As DateTimeOffset
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
+  commentId: M:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
+  id: Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: Succeeded(Guid, string, string?, string, byte[], TimeSpan)
+  nameWithType: DocumentRenderResult.Succeeded(Guid, string, string?, string, byte[], TimeSpan)
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid, string, string?, string, byte[], System.TimeSpan)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Succeeded
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 52
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Creates a successful <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> from rendered PDF bytes.
+
+    The bytes are automatically Base64-encoded for Kafka transport.
+  example: []
+  syntax:
+    content: public static DocumentRenderResult Succeeded(Guid correlationId, string deviceId, string? sessionId, string documentType, byte[] pdfBytes, TimeSpan elapsed)
+    parameters:
+    - id: correlationId
+      type: System.Guid
+      description: Correlation ID echoed from the request.
+    - id: deviceId
+      type: System.String
+      description: Device ID echoed from the request.
+    - id: sessionId
+      type: System.String
+      description: Session ID echoed from the request.
+    - id: documentType
+      type: System.String
+      description: Document type label from the template.
+    - id: pdfBytes
+      type: System.Byte[]
+      description: Raw PDF bytes to encode and include in the result.
+    - id: elapsed
+      type: System.TimeSpan
+      description: Time taken by the full render pipeline.
+    return:
+      type: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+      description: A populated success result ready to publish.
+    content.vb: Public Shared Function Succeeded(correlationId As Guid, deviceId As String, sessionId As String, documentType As String, pdfBytes As Byte(), elapsed As TimeSpan) As DocumentRenderResult
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded*
+  nameWithType.vb: DocumentRenderResult.Succeeded(Guid, String, String, String, Byte(), TimeSpan)
+  fullName.vb: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid, String, String, String, Byte(), System.TimeSpan)
+  name.vb: Succeeded(Guid, String, String, String, Byte(), TimeSpan)
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid,System.String,System.String,System.String,System.String)
+  commentId: M:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid,System.String,System.String,System.String,System.String)
+  id: Failed(System.Guid,System.String,System.String,System.String,System.String)
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: Failed(Guid, string, string?, string, string)
+  nameWithType: DocumentRenderResult.Failed(Guid, string, string?, string, string)
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid, string, string?, string, string)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Failed
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 78
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: Creates a failure <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> carrying the error description.
+  example: []
+  syntax:
+    content: public static DocumentRenderResult Failed(Guid correlationId, string deviceId, string? sessionId, string documentType, string errorMessage)
+    parameters:
+    - id: correlationId
+      type: System.Guid
+      description: Correlation ID echoed from the request.
+    - id: deviceId
+      type: System.String
+      description: Device ID echoed from the request.
+    - id: sessionId
+      type: System.String
+      description: Session ID echoed from the request.
+    - id: documentType
+      type: System.String
+      description: Document type label from the template.
+    - id: errorMessage
+      type: System.String
+      description: Human-readable description of why the render failed.
+    return:
+      type: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+      description: A populated failure result ready to publish.
+    content.vb: Public Shared Function Failed(correlationId As Guid, deviceId As String, sessionId As String, documentType As String, errorMessage As String) As DocumentRenderResult
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed*
+  nameWithType.vb: DocumentRenderResult.Failed(Guid, String, String, String, String)
+  fullName.vb: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid, String, String, String, String)
+  name.vb: Failed(Guid, String, String, String, String)
+references:
+- uid: DocumentGenerator.Messaging.Messages
+  commentId: N:DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Messaging.Messages
+  nameWithType: DocumentGenerator.Messaging.Messages
+  fullName: DocumentGenerator.Messaging.Messages
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_CorrelationId
+  name: CorrelationId
+  nameWithType: DocumentRenderRequest.CorrelationId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_CorrelationId
+  name: CorrelationId
+  nameWithType: DocumentRenderResult.CorrelationId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CorrelationId
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_DeviceId
+  name: DeviceId
+  nameWithType: DocumentRenderResult.DeviceId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DeviceId
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_SessionId
+  name: SessionId
+  nameWithType: DocumentRenderResult.SessionId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Success
+  name: Success
+  nameWithType: DocumentRenderResult.Success
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Success
+  name: Success
+  nameWithType: DocumentRenderResult.Success
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_PdfBase64
+  name: PdfBase64
+  nameWithType: DocumentRenderResult.PdfBase64
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_ErrorMessage
+  name: ErrorMessage
+  nameWithType: DocumentRenderResult.ErrorMessage
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_DocumentType
+  name: DocumentType
+  nameWithType: DocumentRenderResult.DocumentType
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.DocumentType
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_ElapsedTime
+  name: ElapsedTime
+  nameWithType: DocumentRenderResult.ElapsedTime
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ElapsedTime
+- uid: System.TimeSpan
+  commentId: T:System.TimeSpan
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_CompletedAt
+  name: CompletedAt
+  nameWithType: DocumentRenderResult.CompletedAt
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  commentId: T:DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  parent: DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html
+  name: DocumentRenderResult
+  nameWithType: DocumentRenderResult
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Succeeded_System_Guid_System_String_System_String_System_String_System_Byte___System_TimeSpan_
+  name: Succeeded
+  nameWithType: DocumentRenderResult.Succeeded
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded
+- uid: System.Byte[]
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.byte
+  name: byte[]
+  nameWithType: byte[]
+  fullName: byte[]
+  nameWithType.vb: Byte()
+  fullName.vb: Byte()
+  name.vb: Byte()
+  spec.csharp:
+  - uid: System.Byte
+    name: byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.Byte
+    name: Byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: (
+  - name: )
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Failed_System_Guid_System_String_System_String_System_String_System_String_
+  name: Failed
+  nameWithType: DocumentRenderResult.Failed
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed

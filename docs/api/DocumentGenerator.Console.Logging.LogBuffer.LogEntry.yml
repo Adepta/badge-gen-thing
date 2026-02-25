@@ -1,0 +1,682 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  commentId: T:DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  id: LogBuffer.LogEntry
+  parent: DocumentGenerator.Console.Logging
+  children:
+  - DocumentGenerator.Console.Logging.LogBuffer.LogEntry.#ctor(System.DateTime,Microsoft.Extensions.Logging.LogLevel,System.String,System.String,System.Exception)
+  - DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category
+  - DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception
+  - DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level
+  - DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message
+  - DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp
+  langs:
+  - csharp
+  - vb
+  name: LogBuffer.LogEntry
+  nameWithType: LogBuffer.LogEntry
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: LogEntry
+    path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+    startLine: 12
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  syntax:
+    content: 'public record LogBuffer.LogEntry : IEquatable<LogBuffer.LogEntry>'
+    content.vb: Public Class LogBuffer.LogEntry Implements IEquatable(Of LogBuffer.LogEntry)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{DocumentGenerator.Console.Logging.LogBuffer.LogEntry}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.#ctor(System.DateTime,Microsoft.Extensions.Logging.LogLevel,System.String,System.String,System.Exception)
+  commentId: M:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.#ctor(System.DateTime,Microsoft.Extensions.Logging.LogLevel,System.String,System.String,System.Exception)
+  id: '#ctor(System.DateTime,Microsoft.Extensions.Logging.LogLevel,System.String,System.String,System.Exception)'
+  parent: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  langs:
+  - csharp
+  - vb
+  name: LogEntry(DateTime, LogLevel, string, string, Exception?)
+  nameWithType: LogBuffer.LogEntry.LogEntry(DateTime, LogLevel, string, string, Exception?)
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.LogEntry(System.DateTime, Microsoft.Extensions.Logging.LogLevel, string, string, System.Exception?)
+  type: Constructor
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: .ctor
+    path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+    startLine: 12
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  syntax:
+    content: public LogEntry(DateTime Timestamp, LogLevel Level, string Category, string Message, Exception? Exception = null)
+    parameters:
+    - id: Timestamp
+      type: System.DateTime
+    - id: Level
+      type: Microsoft.Extensions.Logging.LogLevel
+    - id: Category
+      type: System.String
+    - id: Message
+      type: System.String
+    - id: Exception
+      type: System.Exception
+    content.vb: Public Sub New(Timestamp As Date, Level As LogLevel, Category As String, Message As String, Exception As Exception = Nothing)
+  overload: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.#ctor*
+  nameWithType.vb: LogBuffer.LogEntry.New(Date, LogLevel, String, String, Exception)
+  fullName.vb: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.New(Date, Microsoft.Extensions.Logging.LogLevel, String, String, System.Exception)
+  name.vb: New(Date, LogLevel, String, String, Exception)
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp
+  commentId: P:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp
+  id: Timestamp
+  parent: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  langs:
+  - csharp
+  - vb
+  name: Timestamp
+  nameWithType: LogBuffer.LogEntry.Timestamp
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Timestamp
+    path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+    startLine: 13
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  syntax:
+    content: public DateTime Timestamp { get; init; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property Timestamp As Date
+  overload: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp*
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level
+  commentId: P:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level
+  id: Level
+  parent: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  langs:
+  - csharp
+  - vb
+  name: Level
+  nameWithType: LogBuffer.LogEntry.Level
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Level
+    path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+    startLine: 14
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  syntax:
+    content: public LogLevel Level { get; init; }
+    parameters: []
+    return:
+      type: Microsoft.Extensions.Logging.LogLevel
+    content.vb: Public Property Level As LogLevel
+  overload: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level*
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category
+  commentId: P:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category
+  id: Category
+  parent: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  langs:
+  - csharp
+  - vb
+  name: Category
+  nameWithType: LogBuffer.LogEntry.Category
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Category
+    path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+    startLine: 15
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  syntax:
+    content: public string Category { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Category As String
+  overload: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category*
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message
+  commentId: P:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message
+  id: Message
+  parent: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  langs:
+  - csharp
+  - vb
+  name: Message
+  nameWithType: LogBuffer.LogEntry.Message
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Message
+    path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+    startLine: 16
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  syntax:
+    content: public string Message { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Message As String
+  overload: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message*
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception
+  commentId: P:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception
+  id: Exception
+  parent: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+  langs:
+  - csharp
+  - vb
+  name: Exception
+  nameWithType: LogBuffer.LogEntry.Exception
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Exception
+    path: src/DocumentGenerator.Console/Logging/LogBuffer.cs
+    startLine: 17
+  assemblies:
+  - DocumentGenerator.Console
+  namespace: DocumentGenerator.Console.Logging
+  syntax:
+    content: public Exception? Exception { get; init; }
+    parameters: []
+    return:
+      type: System.Exception
+    content.vb: Public Property Exception As Exception
+  overload: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception*
+references:
+- uid: DocumentGenerator.Console.Logging
+  commentId: N:DocumentGenerator.Console.Logging
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Console.Logging
+  nameWithType: DocumentGenerator.Console.Logging
+  fullName: DocumentGenerator.Console.Logging
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Console
+    name: Console
+    href: DocumentGenerator.Console.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging
+    name: Logging
+    href: DocumentGenerator.Console.Logging.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{DocumentGenerator.Console.Logging.LogBuffer.LogEntry}
+  commentId: T:System.IEquatable{DocumentGenerator.Console.Logging.LogBuffer.LogEntry}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<LogBuffer.LogEntry>
+  nameWithType: IEquatable<LogBuffer.LogEntry>
+  fullName: System.IEquatable<DocumentGenerator.Console.Logging.LogBuffer.LogEntry>
+  nameWithType.vb: IEquatable(Of LogBuffer.LogEntry)
+  fullName.vb: System.IEquatable(Of DocumentGenerator.Console.Logging.LogBuffer.LogEntry)
+  name.vb: IEquatable(Of LogBuffer.LogEntry)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: DocumentGenerator.Console.Logging.LogBuffer
+    name: LogBuffer
+    href: DocumentGenerator.Console.Logging.LogBuffer.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+    name: LogEntry
+    href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Console.Logging.LogBuffer
+    name: LogBuffer
+    href: DocumentGenerator.Console.Logging.LogBuffer.html
+  - name: .
+  - uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry
+    name: LogEntry
+    href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.#ctor*
+  commentId: Overload:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.#ctor
+  href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html#DocumentGenerator_Console_Logging_LogBuffer_LogEntry__ctor_System_DateTime_Microsoft_Extensions_Logging_LogLevel_System_String_System_String_System_Exception_
+  name: LogEntry
+  nameWithType: LogBuffer.LogEntry.LogEntry
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.LogEntry
+  nameWithType.vb: LogBuffer.LogEntry.New
+  fullName.vb: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.New
+  name.vb: New
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: Microsoft.Extensions.Logging.LogLevel
+  commentId: T:Microsoft.Extensions.Logging.LogLevel
+  parent: Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.loglevel
+  name: LogLevel
+  nameWithType: LogLevel
+  fullName: Microsoft.Extensions.Logging.LogLevel
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Exception
+  commentId: T:System.Exception
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.exception
+  name: Exception
+  nameWithType: Exception
+  fullName: System.Exception
+- uid: Microsoft.Extensions.Logging
+  commentId: N:Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Logging
+  nameWithType: Microsoft.Extensions.Logging
+  fullName: Microsoft.Extensions.Logging
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp*
+  commentId: Overload:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp
+  href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html#DocumentGenerator_Console_Logging_LogBuffer_LogEntry_Timestamp
+  name: Timestamp
+  nameWithType: LogBuffer.LogEntry.Timestamp
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Timestamp
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level*
+  commentId: Overload:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level
+  href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html#DocumentGenerator_Console_Logging_LogBuffer_LogEntry_Level
+  name: Level
+  nameWithType: LogBuffer.LogEntry.Level
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Level
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category*
+  commentId: Overload:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category
+  href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html#DocumentGenerator_Console_Logging_LogBuffer_LogEntry_Category
+  name: Category
+  nameWithType: LogBuffer.LogEntry.Category
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Category
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message*
+  commentId: Overload:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message
+  href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html#DocumentGenerator_Console_Logging_LogBuffer_LogEntry_Message
+  name: Message
+  nameWithType: LogBuffer.LogEntry.Message
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Message
+- uid: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception*
+  commentId: Overload:DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception
+  href: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.html#DocumentGenerator_Console_Logging_LogBuffer_LogEntry_Exception
+  name: Exception
+  nameWithType: LogBuffer.LogEntry.Exception
+  fullName: DocumentGenerator.Console.Logging.LogBuffer.LogEntry.Exception

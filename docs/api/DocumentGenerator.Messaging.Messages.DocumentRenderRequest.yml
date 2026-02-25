@@ -1,0 +1,557 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  commentId: T:DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  id: DocumentRenderRequest
+  parent: DocumentGenerator.Messaging.Messages
+  children:
+  - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+  - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId
+  - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt
+  - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId
+  - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template
+  langs:
+  - csharp
+  - vb
+  name: DocumentRenderRequest
+  nameWithType: DocumentRenderRequest
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentRenderRequest
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+    startLine: 11
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Inbound Kafka message published by the iPad when a badge (or any document)
+
+    needs to be generated.
+
+
+    Topic: render.requests
+
+    Key:   CorrelationId (ensures ordering per-request within a partition)
+  example: []
+  syntax:
+    content: public sealed class DocumentRenderRequest
+    content.vb: Public NotInheritable Class DocumentRenderRequest
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+  id: CorrelationId
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: CorrelationId
+  nameWithType: DocumentRenderRequest.CorrelationId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CorrelationId
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+    startLine: 17
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Unique ID for this render job. The iPad sets this and uses it to
+
+    match the response back to the correct attendee/screen.
+  example: []
+  syntax:
+    content: public Guid CorrelationId { get; init; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property CorrelationId As Guid
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId
+  id: DeviceId
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: DeviceId
+  nameWithType: DocumentRenderRequest.DeviceId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DeviceId
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+    startLine: 23
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Identifies the specific iPad that sent the request, so the result
+
+    can be routed back to the correct device.
+  example: []
+  syntax:
+    content: public string DeviceId { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DeviceId As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId
+  id: SessionId
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: SessionId
+  nameWithType: DocumentRenderRequest.SessionId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: SessionId
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+    startLine: 29
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Optional session/event context, e.g. "conference-2026" or "check-in-gate-3".
+
+    Useful for multi-tenant or multi-event deployments.
+  example: []
+  syntax:
+    content: public string? SessionId { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property SessionId As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template
+  id: Template
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: Template
+  nameWithType: DocumentRenderRequest.Template
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Template
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+    startLine: 35
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    The document to render. For badge printing this will always have
+
+    documentType = "badge".
+  example: []
+  syntax:
+    content: public required DocumentTemplate Template { get; init; }
+    parameters: []
+    return:
+      type: DocumentGenerator.Core.Models.DocumentTemplate
+    content.vb: Public Property Template As DocumentTemplate
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt
+  id: RequestedAt
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: RequestedAt
+  nameWithType: DocumentRenderRequest.RequestedAt
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RequestedAt
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+    startLine: 38
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: UTC timestamp when the iPad sent the request.
+  example: []
+  syntax:
+    content: public DateTimeOffset RequestedAt { get; init; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property RequestedAt As DateTimeOffset
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt*
+references:
+- uid: DocumentGenerator.Messaging.Messages
+  commentId: N:DocumentGenerator.Messaging.Messages
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Messaging.Messages
+  nameWithType: DocumentGenerator.Messaging.Messages
+  fullName: DocumentGenerator.Messaging.Messages
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Messaging
+    name: Messaging
+    href: DocumentGenerator.Messaging.html
+  - name: .
+  - uid: DocumentGenerator.Messaging.Messages
+    name: Messages
+    href: DocumentGenerator.Messaging.Messages.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_CorrelationId
+  name: CorrelationId
+  nameWithType: DocumentRenderRequest.CorrelationId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_DeviceId
+  name: DeviceId
+  nameWithType: DocumentRenderRequest.DeviceId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_SessionId
+  name: SessionId
+  nameWithType: DocumentRenderRequest.SessionId
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_Template
+  name: Template
+  nameWithType: DocumentRenderRequest.Template
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template
+- uid: DocumentGenerator.Core.Models.DocumentTemplate
+  commentId: T:DocumentGenerator.Core.Models.DocumentTemplate
+  parent: DocumentGenerator.Core.Models
+  href: DocumentGenerator.Core.Models.DocumentTemplate.html
+  name: DocumentTemplate
+  nameWithType: DocumentTemplate
+  fullName: DocumentGenerator.Core.Models.DocumentTemplate
+- uid: DocumentGenerator.Core.Models
+  commentId: N:DocumentGenerator.Core.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Core.Models
+  nameWithType: DocumentGenerator.Core.Models
+  fullName: DocumentGenerator.Core.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Core
+    name: Core
+    href: DocumentGenerator.Core.html
+  - name: .
+  - uid: DocumentGenerator.Core.Models
+    name: Models
+    href: DocumentGenerator.Core.Models.html
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_RequestedAt
+  name: RequestedAt
+  nameWithType: DocumentRenderRequest.RequestedAt
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
