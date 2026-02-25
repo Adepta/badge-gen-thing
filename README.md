@@ -165,4 +165,5 @@ docker compose -f docker-compose.kafka.yml down -v
 
 ## TODO
 
+- [x] Add unit and integration tests (`tests/` — xUnit, Moq, FluentAssertions)
 - [ ] Update templates to use standalone HTML and CSS files instead of inlining them in the JSON payload
