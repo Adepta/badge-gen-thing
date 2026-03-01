@@ -197,7 +197,8 @@ public sealed class BadgesController : ControllerBase
             CorrelationId   = correlationId,
             DeviceId        = "api",
             Template        = template,
-            ReturnPdfInline = true
+            ReturnPdfInline = true,
+            OutputFormat    = request.Format ?? "Pdf"
         };
 
         try
@@ -259,9 +260,9 @@ public sealed class BadgesController : ControllerBase
 
         return Ok(BadgeRenderResponse.Ok(
             correlationId,
-            correlationId,          // jobId — use correlationId as job identifier
+            correlationId,
             pdfBytes,
-            "application/pdf",
+            result.MimeType,
             result.DocumentType,
             result.ElapsedTime));
     }
@@ -276,7 +277,12 @@ public sealed class BadgesController : ControllerBase
         Guid               correlationId,
         CancellationToken  cancellationToken)
     {
-        var renderRequest = new RenderRequest { Template = template };
+        var outputFormat = Enum.TryParse<DocumentGenerator.Core.Interfaces.OutputFormat>(
+            request.Format, ignoreCase: true, out var fmt)
+            ? fmt
+            : DocumentGenerator.Core.Interfaces.OutputFormat.Pdf;
+
+        var renderRequest = new RenderRequest { Template = template, OutputFormat = outputFormat };
 
         try
         {

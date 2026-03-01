@@ -121,6 +121,113 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
         }
     }
 
+    /// <inheritdoc/>
+    public async Task<byte[]> RenderPngAsync(
+        string html,
+        CancellationToken cancellationToken = default)
+    {
+        var sw = Stopwatch.StartNew();
+        _logger.LogDebug("Acquiring browser lease for PNG — HtmlLength: {HtmlLength}", html.Length);
+
+        await using var lease = await _pool.AcquireAsync(cancellationToken);
+
+        IPage? page = null;
+        try
+        {
+            page = await lease.Browser.NewPageAsync();
+
+            // Measure the document's natural size after rendering at a neutral viewport,
+            // then resize the viewport to match exactly so the screenshot clips to the badge.
+            // DeviceScaleFactor = 2 gives a 2× retina-quality PNG without changing CSS layout.
+            await page.SetViewportAsync(new ViewPortOptions
+            {
+                Width             = 1200,
+                Height            = 900,
+                DeviceScaleFactor = 2
+            });
+
+            try
+            {
+                await page.SetContentAsync(html, new NavigationOptions
+                {
+                    WaitUntil = [WaitUntilNavigation.Load],
+                    Timeout   = 30_000
+                });
+            }
+            catch (PuppeteerSharp.PuppeteerException ex) when (ex.Message.Contains("Timeout"))
+            {
+                throw RenderException.PageTimeout(null, 30_000, ex);
+            }
+
+            try
+            {
+                await page.EvaluateFunctionAsync(
+                    "() => document.fonts.ready",
+                    Array.Empty<object>());
+            }
+            catch { /* best-effort */ }
+
+            // Measure the rendered document size so we can clip the screenshot to it.
+            // body/html may have explicit width/height in mm — Chromium converts these to px.
+            var dimensions = await page.EvaluateFunctionAsync<int[]>(@"() => {
+                const el = document.body.firstElementChild || document.body;
+                const r  = el.getBoundingClientRect();
+                return [Math.ceil(r.width), Math.ceil(r.height)];
+            }");
+
+            var docWidth  = dimensions?[0] ?? 0;
+            var docHeight = dimensions?[1] ?? 0;
+
+            // If we got a valid size, shrink the viewport to the badge dimensions so
+            // FullPage:false captures exactly the badge and nothing else.
+            if (docWidth > 0 && docHeight > 0)
+            {
+                await page.SetViewportAsync(new ViewPortOptions
+                {
+                    Width             = docWidth,
+                    Height            = docHeight,
+                    DeviceScaleFactor = 2
+                });
+            }
+
+            var pngBytes = await page.ScreenshotDataAsync(new ScreenshotOptions
+            {
+                FullPage = false,   // capture only the viewport = the badge
+                Type     = ScreenshotType.Png
+            });
+
+            sw.Stop();
+            _logger.LogInformation(
+                "Chromium PNG render complete — Bytes: {Bytes}, ElapsedMs: {ElapsedMs}",
+                pngBytes.Length, sw.ElapsedMilliseconds);
+
+            return pngBytes;
+        }
+        catch (DocumentGeneratorException)
+        {
+            sw.Stop();
+            lease.Invalidate();
+            throw;
+        }
+        catch (Exception ex)
+        {
+            sw.Stop();
+            _logger.LogError(ex,
+                "Chromium PNG render failed after {ElapsedMs}ms — invalidating browser lease",
+                sw.ElapsedMilliseconds);
+            lease.Invalidate();
+            throw;
+        }
+        finally
+        {
+            if (page is not null)
+            {
+                try { await page.CloseAsync(); }
+                catch { /* best-effort */ }
+            }
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Option mapping
     // -------------------------------------------------------------------------

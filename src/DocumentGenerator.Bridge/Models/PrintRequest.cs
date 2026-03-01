@@ -42,6 +42,12 @@ public sealed class PrintRequest
     /// When null, the bridge generates one.
     /// </summary>
     public Guid? CorrelationId { get; init; }
+
+    /// <summary>
+    /// Output format: <c>"Pdf"</c> (default) or <c>"Png"</c>.
+    /// Forwarded to the cloud API render request.
+    /// </summary>
+    public string? Format { get; init; }
 }
 
 /// <summary>

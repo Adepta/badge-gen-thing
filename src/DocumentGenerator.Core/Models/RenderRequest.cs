@@ -1,3 +1,5 @@
+using DocumentGenerator.Core.Interfaces;
+
 namespace DocumentGenerator.Core.Models;
 
 /// <summary>
@@ -15,4 +17,7 @@ public sealed class RenderRequest
 
     /// <summary>UTC timestamp when the request was created.</summary>
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+
+    /// <summary>Output format: <c>Pdf</c> (default) or <c>Png</c>.</summary>
+    public OutputFormat OutputFormat { get; init; } = OutputFormat.Pdf;
 }

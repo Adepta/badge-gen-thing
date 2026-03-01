@@ -79,31 +79,37 @@ public sealed class CloudBadgeClient
     {
         var opts   = _cloudOptions.CurrentValue;
         var client = _httpClientFactory.CreateClient(HttpClientName);
-
-        // Add the API key per-request so decryption happens at call time
-        // (after potential re-configuration via setup wizard).
         var apiKey = GetApiKey(opts);
-        if (!string.IsNullOrWhiteSpace(apiKey))
-            client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", apiKey);
+
+        // Use format from request if supplied, otherwise fall back to the parameter
+        var effectiveFormat = !string.IsNullOrWhiteSpace(request.Format) ? request.Format : format;
 
         var payload = new
         {
             templateName  = request.TemplateName,
             variables     = request.Variables,
             branding      = request.Branding,
-            format,
+            format        = effectiveFormat,
             correlationId
         };
 
         _logger.LogInformation(
-            "Cloud render request — CorrelationId={CorrelationId} Template={Template} Url={Url}",
-            correlationId, request.TemplateName, opts.BaseUrl);
+            "Cloud render request — CorrelationId={CorrelationId} Template={Template} Format={Format} Url={Url}",
+            correlationId, request.TemplateName, effectiveFormat, opts.BaseUrl);
+
+        // Use HttpRequestMessage so the API key header is set per-request and never stale.
+        var json    = JsonSerializer.Serialize(payload, JsonOptions);
+        var reqMsg  = new HttpRequestMessage(HttpMethod.Post, "/api/badges/render")
+        {
+            Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+        };
+        if (!string.IsNullOrWhiteSpace(apiKey))
+            reqMsg.Headers.TryAddWithoutValidation("X-Api-Key", apiKey);
 
         HttpResponseMessage response;
         try
         {
-            response = await client.PostAsJsonAsync(
-                "/api/badges/render", payload, JsonOptions, cancellationToken);
+            response = await client.SendAsync(reqMsg, cancellationToken);
         }
         catch (HttpRequestException ex)
         {
@@ -144,9 +150,20 @@ public sealed class CloudBadgeClient
     /// <returns>Array of template name strings.</returns>
     public async Task<IEnumerable<string>> ListTemplatesAsync(CancellationToken cancellationToken = default)
     {
+        var opts   = _cloudOptions.CurrentValue;
         var client = _httpClientFactory.CreateClient(HttpClientName);
-        var result = await client.GetFromJsonAsync<IEnumerable<string>>(
-            "/api/badges/templates", JsonOptions, cancellationToken);
+        var apiKey = GetApiKey(opts);
+
+        // Use HttpRequestMessage so the API key header is set per-request and never stale.
+        var reqMsg = new HttpRequestMessage(HttpMethod.Get, "/api/badges/templates");
+        if (!string.IsNullOrWhiteSpace(apiKey))
+            reqMsg.Headers.TryAddWithoutValidation("X-Api-Key", apiKey);
+
+        var response = await client.SendAsync(reqMsg, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.Content.ReadFromJsonAsync<IEnumerable<string>>(
+            JsonOptions, cancellationToken);
         return result ?? [];
     }
 }

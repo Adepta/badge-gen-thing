@@ -47,6 +47,9 @@ public sealed class DocumentRenderResult
     /// <summary>Document type from the original template, e.g. "badge".</summary>
     public string DocumentType { get; init; } = string.Empty;
 
+    /// <summary>MIME type of the rendered document, e.g. "application/pdf" or "image/png".</summary>
+    public string MimeType { get; init; } = "application/pdf";
+
     /// <summary>How long the full render pipeline took.</summary>
     public TimeSpan ElapsedTime { get; init; }
 
@@ -71,10 +74,12 @@ public sealed class DocumentRenderResult
     /// Absolute path to the saved PDF file. Only used when <paramref name="returnInline"/>
     /// is <see langword="false"/>; ignored otherwise.
     /// </param>
+    /// <param name="mimeType">MIME type of the rendered document, e.g. "application/pdf" or "image/png".</param>
     public static DocumentRenderResult Succeeded(
         Guid correlationId, string deviceId, string? sessionId,
         string documentType, byte[] pdfBytes, TimeSpan elapsed,
-        bool returnInline = true, string? pdfPath = null) => new()
+        bool returnInline = true, string? pdfPath = null,
+        string mimeType = "application/pdf") => new()
         {
             CorrelationId = correlationId,
             DeviceId      = deviceId,
@@ -83,7 +88,8 @@ public sealed class DocumentRenderResult
             Success       = true,
             PdfBase64     = returnInline ? Convert.ToBase64String(pdfBytes) : null,
             PdfPath       = returnInline ? null : pdfPath,
-            ElapsedTime   = elapsed
+            ElapsedTime   = elapsed,
+            MimeType      = mimeType
         };
 
     /// <summary>

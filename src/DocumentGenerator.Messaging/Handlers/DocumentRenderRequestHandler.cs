@@ -1,6 +1,7 @@
 using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
+using CoreOutputFormat = DocumentGenerator.Core.Interfaces.OutputFormat;
 using DocumentGenerator.Messaging.Configuration;
 using DocumentGenerator.Messaging.Messages;
 using Microsoft.Extensions.Logging;
@@ -79,16 +80,21 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
             ["DocumentType"]  = message.Template.DocumentType
         });
 
+        var outputFormat = Enum.TryParse<CoreOutputFormat>(message.OutputFormat, ignoreCase: true, out var fmt)
+            ? fmt
+            : CoreOutputFormat.Pdf;
+
         _logger.LogInformation(
             "Handling render request — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, " +
-            "DocumentType: {DocumentType}, ReturnPdfInline: {ReturnPdfInline}",
+            "DocumentType: {DocumentType}, ReturnPdfInline: {ReturnPdfInline}, OutputFormat: {OutputFormat}",
             message.CorrelationId, message.DeviceId,
-            message.Template.DocumentType, message.ReturnPdfInline);
+            message.Template.DocumentType, message.ReturnPdfInline, outputFormat);
 
         var renderJob = new RenderRequest
         {
-            JobId    = message.CorrelationId,
-            Template = message.Template
+            JobId        = message.CorrelationId,
+            Template     = message.Template,
+            OutputFormat = outputFormat
         };
 
         DocumentRenderResult result;
@@ -107,12 +113,15 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
                     message.CorrelationId);
             }
 
+            var mimeType = outputFormat == CoreOutputFormat.Png ? "image/png" : "application/pdf";
+
             result = DocumentRenderResult.Succeeded(
                 message.CorrelationId, message.DeviceId, message.SessionId,
                 message.Template.DocumentType,
                 renderResult.PdfBytes, renderResult.ElapsedTime,
                 returnInline: message.ReturnPdfInline,
-                pdfPath: pdfPath);
+                pdfPath: pdfPath,
+                mimeType: mimeType);
 
             _metrics.RecordSuccess();
 

@@ -47,4 +47,9 @@ public sealed class DocumentRenderRequest
     /// <see cref="DocumentRenderResult.PdfPath"/>, keeping the Kafka message small.
     /// </summary>
     public bool ReturnPdfInline { get; init; } = true;
+
+    /// <summary>
+    /// Output format: <c>"Pdf"</c> (default) or <c>"Png"</c>.
+    /// </summary>
+    public string OutputFormat { get; init; } = "Pdf";
 }

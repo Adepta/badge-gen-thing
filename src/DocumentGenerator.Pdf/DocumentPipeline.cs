@@ -79,8 +79,11 @@ public sealed class DocumentPipeline : IDocumentPipeline
                 "Template rendered to HTML — JobId: {JobId}, HtmlLength: {HtmlLength}",
                 request.JobId, html.Length);
 
-            // Step 3: Render HTML → PDF bytes
-            var pdfBytes = await _renderer.RenderPdfAsync(html, request.Template.Pdf, cancellationToken);
+            // Step 3: Render HTML → PDF or PNG bytes
+            activity?.SetTag("output_format", request.OutputFormat.ToString());
+            var pdfBytes = request.OutputFormat == OutputFormat.Png
+                ? await _renderer.RenderPngAsync(html, cancellationToken)
+                : await _renderer.RenderPdfAsync(html, request.Template.Pdf, cancellationToken);
 
             if (pdfBytes.Length == 0)
                 throw RenderException.EmptyOutput(request.JobId);
