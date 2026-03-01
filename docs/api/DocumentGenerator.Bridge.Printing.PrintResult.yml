@@ -1,0 +1,520 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Printing.PrintResult
+  commentId: T:DocumentGenerator.Bridge.Printing.PrintResult
+  id: PrintResult
+  parent: DocumentGenerator.Bridge.Printing
+  children:
+  - DocumentGenerator.Bridge.Printing.PrintResult.Error
+  - DocumentGenerator.Bridge.Printing.PrintResult.Fail(System.String,System.String)
+  - DocumentGenerator.Bridge.Printing.PrintResult.Ok(System.String)
+  - DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed
+  - DocumentGenerator.Bridge.Printing.PrintResult.Success
+  langs:
+  - csharp
+  - vb
+  name: PrintResult
+  nameWithType: PrintResult
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PrintResult
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 50
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: The outcome of a print job submission.
+  example: []
+  syntax:
+    content: public sealed class PrintResult
+    content.vb: Public NotInheritable Class PrintResult
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Success
+  commentId: P:DocumentGenerator.Bridge.Printing.PrintResult.Success
+  id: Success
+  parent: DocumentGenerator.Bridge.Printing.PrintResult
+  langs:
+  - csharp
+  - vb
+  name: Success
+  nameWithType: PrintResult.Success
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Success
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Success
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 53
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: <code>true</code> when the job was accepted by the print spooler.
+  example: []
+  syntax:
+    content: public bool Success { get; init; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property Success As Boolean
+  overload: DocumentGenerator.Bridge.Printing.PrintResult.Success*
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed
+  commentId: P:DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed
+  id: PrinterUsed
+  parent: DocumentGenerator.Bridge.Printing.PrintResult
+  langs:
+  - csharp
+  - vb
+  name: PrinterUsed
+  nameWithType: PrintResult.PrinterUsed
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PrinterUsed
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 58
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: The printer name actually used (resolves the OS default when input was null).
+  example: []
+  syntax:
+    content: public string? PrinterUsed { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PrinterUsed As String
+  overload: DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed*
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Error
+  commentId: P:DocumentGenerator.Bridge.Printing.PrintResult.Error
+  id: Error
+  parent: DocumentGenerator.Bridge.Printing.PrintResult
+  langs:
+  - csharp
+  - vb
+  name: Error
+  nameWithType: PrintResult.Error
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Error
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Error
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 61
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: Human-readable error when <xref href="DocumentGenerator.Bridge.Printing.PrintResult.Success" data-throw-if-not-resolved="false"></xref> is <code>false</code>.
+  example: []
+  syntax:
+    content: public string? Error { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property [Error] As String
+  overload: DocumentGenerator.Bridge.Printing.PrintResult.Error*
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Ok(System.String)
+  commentId: M:DocumentGenerator.Bridge.Printing.PrintResult.Ok(System.String)
+  id: Ok(System.String)
+  parent: DocumentGenerator.Bridge.Printing.PrintResult
+  langs:
+  - csharp
+  - vb
+  name: Ok(string)
+  nameWithType: PrintResult.Ok(string)
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Ok(string)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Ok
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 64
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: Creates a successful <xref href="DocumentGenerator.Bridge.Printing.PrintResult" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public static PrintResult Ok(string printerUsed)
+    parameters:
+    - id: printerUsed
+      type: System.String
+    return:
+      type: DocumentGenerator.Bridge.Printing.PrintResult
+    content.vb: Public Shared Function Ok(printerUsed As String) As PrintResult
+  overload: DocumentGenerator.Bridge.Printing.PrintResult.Ok*
+  nameWithType.vb: PrintResult.Ok(String)
+  fullName.vb: DocumentGenerator.Bridge.Printing.PrintResult.Ok(String)
+  name.vb: Ok(String)
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Fail(System.String,System.String)
+  commentId: M:DocumentGenerator.Bridge.Printing.PrintResult.Fail(System.String,System.String)
+  id: Fail(System.String,System.String)
+  parent: DocumentGenerator.Bridge.Printing.PrintResult
+  langs:
+  - csharp
+  - vb
+  name: Fail(string, string?)
+  nameWithType: PrintResult.Fail(string, string?)
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Fail(string, string?)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Fail
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 68
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: Creates a failed <xref href="DocumentGenerator.Bridge.Printing.PrintResult" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public static PrintResult Fail(string error, string? printerUsed = null)
+    parameters:
+    - id: error
+      type: System.String
+    - id: printerUsed
+      type: System.String
+    return:
+      type: DocumentGenerator.Bridge.Printing.PrintResult
+    content.vb: Public Shared Function Fail([error] As String, printerUsed As String = Nothing) As PrintResult
+  overload: DocumentGenerator.Bridge.Printing.PrintResult.Fail*
+  nameWithType.vb: PrintResult.Fail(String, String)
+  fullName.vb: DocumentGenerator.Bridge.Printing.PrintResult.Fail(String, String)
+  name.vb: Fail(String, String)
+references:
+- uid: DocumentGenerator.Bridge.Printing
+  commentId: N:DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Printing
+  nameWithType: DocumentGenerator.Bridge.Printing
+  fullName: DocumentGenerator.Bridge.Printing
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Success*
+  commentId: Overload:DocumentGenerator.Bridge.Printing.PrintResult.Success
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html#DocumentGenerator_Bridge_Printing_PrintResult_Success
+  name: Success
+  nameWithType: PrintResult.Success
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Success
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed*
+  commentId: Overload:DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html#DocumentGenerator_Bridge_Printing_PrintResult_PrinterUsed
+  name: PrinterUsed
+  nameWithType: PrintResult.PrinterUsed
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.PrinterUsed
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Success
+  commentId: P:DocumentGenerator.Bridge.Printing.PrintResult.Success
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html#DocumentGenerator_Bridge_Printing_PrintResult_Success
+  name: Success
+  nameWithType: PrintResult.Success
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Success
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Error*
+  commentId: Overload:DocumentGenerator.Bridge.Printing.PrintResult.Error
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html#DocumentGenerator_Bridge_Printing_PrintResult_Error
+  name: Error
+  nameWithType: PrintResult.Error
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Error
+- uid: DocumentGenerator.Bridge.Printing.PrintResult
+  commentId: T:DocumentGenerator.Bridge.Printing.PrintResult
+  parent: DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html
+  name: PrintResult
+  nameWithType: PrintResult
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Ok*
+  commentId: Overload:DocumentGenerator.Bridge.Printing.PrintResult.Ok
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html#DocumentGenerator_Bridge_Printing_PrintResult_Ok_System_String_
+  name: Ok
+  nameWithType: PrintResult.Ok
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Ok
+- uid: DocumentGenerator.Bridge.Printing.PrintResult.Fail*
+  commentId: Overload:DocumentGenerator.Bridge.Printing.PrintResult.Fail
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html#DocumentGenerator_Bridge_Printing_PrintResult_Fail_System_String_System_String_
+  name: Fail
+  nameWithType: PrintResult.Fail
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult.Fail

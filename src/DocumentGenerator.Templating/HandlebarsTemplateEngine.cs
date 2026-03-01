@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
@@ -58,7 +59,12 @@ public sealed class HandlebarsTemplateEngine : ITemplateEngine
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _logger.LogDebug("Rendering template '{DocumentType}' v{Version}", template.DocumentType, template.Version);
+        var sw = Stopwatch.StartNew();
+
+        _logger.LogDebug(
+            "Handlebars render start — DocumentType: {DocumentType}, Version: {Version}, " +
+            "PartialCount: {PartialCount}",
+            template.DocumentType, template.Version, template.Template.Partials.Count);
 
         // Register any per-template partials
         foreach (var (name, partial) in template.Template.Partials)
@@ -73,9 +79,9 @@ public sealed class HandlebarsTemplateEngine : ITemplateEngine
         string? renderedCss = null;
         if (!string.IsNullOrWhiteSpace(template.Template.Css))
         {
-            // Handlebars misparses `}}}`  as a triple-stache closing delimiter.
-            // Insert a zero-width space between `}}` and a following `}` so the
-            // CSS closing brace is never adjacent to a Handlebars closing tag.
+            // Handlebars misparses `}}}` as a triple-stache closing delimiter.
+            // Insert a space between `}}` and a following `}` so the CSS
+            // closing brace is never adjacent to a Handlebars closing tag.
             var safeCss = template.Template.Css.Replace("}}}", "}} }");
             var cssTemplate = _handlebars.Compile(safeCss);
             renderedCss = cssTemplate(context);
@@ -87,11 +93,14 @@ public sealed class HandlebarsTemplateEngine : ITemplateEngine
 
         // Inject CSS
         if (!string.IsNullOrWhiteSpace(renderedCss))
-        {
             renderedHtml = InjectCss(renderedHtml, renderedCss);
-        }
 
-        _logger.LogDebug("Template '{DocumentType}' rendered successfully ({Length} chars)", template.DocumentType, renderedHtml.Length);
+        sw.Stop();
+        _logger.LogDebug(
+            "Handlebars render complete — DocumentType: {DocumentType}, " +
+            "HtmlLength: {HtmlLength}, ElapsedMs: {ElapsedMs}",
+            template.DocumentType, renderedHtml.Length, sw.ElapsedMilliseconds);
+
         return Task.FromResult(renderedHtml);
     }
 

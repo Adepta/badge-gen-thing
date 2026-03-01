@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Api.Authentication
+  commentId: N:DocumentGenerator.Api.Authentication
+  id: Authentication
+  parent: DocumentGenerator.Api
+  children:
+  - DocumentGenerator.Api.Authentication.ApiKeyAuthenticationHandler
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Api.Authentication
+  nameWithType: DocumentGenerator.Api.Authentication
+  fullName: DocumentGenerator.Api.Authentication
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Api
+references:
+- uid: DocumentGenerator.Api.Authentication.ApiKeyAuthenticationHandler
+  commentId: T:DocumentGenerator.Api.Authentication.ApiKeyAuthenticationHandler
+  href: DocumentGenerator.Api.Authentication.ApiKeyAuthenticationHandler.html
+  name: ApiKeyAuthenticationHandler
+  nameWithType: ApiKeyAuthenticationHandler
+  fullName: DocumentGenerator.Api.Authentication.ApiKeyAuthenticationHandler

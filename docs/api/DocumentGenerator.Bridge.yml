@@ -1,0 +1,210 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge
+  commentId: N:DocumentGenerator.Bridge
+  id: Bridge
+  parent: DocumentGenerator
+  children:
+  - DocumentGenerator.Bridge.Configuration
+  - DocumentGenerator.Bridge.Endpoints
+  - DocumentGenerator.Bridge.Middleware
+  - DocumentGenerator.Bridge.Models
+  - DocumentGenerator.Bridge.Printing
+  - DocumentGenerator.Bridge.Program
+  - DocumentGenerator.Bridge.Services
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Bridge
+  nameWithType: DocumentGenerator.Bridge
+  fullName: DocumentGenerator.Bridge
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Bridge
+references:
+- uid: DocumentGenerator.Bridge.Configuration
+  commentId: N:DocumentGenerator.Bridge.Configuration
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Configuration
+  nameWithType: DocumentGenerator.Bridge.Configuration
+  fullName: DocumentGenerator.Bridge.Configuration
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Configuration
+    name: Configuration
+    href: DocumentGenerator.Bridge.Configuration.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Configuration
+    name: Configuration
+    href: DocumentGenerator.Bridge.Configuration.html
+- uid: DocumentGenerator.Bridge.Endpoints
+  commentId: N:DocumentGenerator.Bridge.Endpoints
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Endpoints
+  nameWithType: DocumentGenerator.Bridge.Endpoints
+  fullName: DocumentGenerator.Bridge.Endpoints
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Endpoints
+    name: Endpoints
+    href: DocumentGenerator.Bridge.Endpoints.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Endpoints
+    name: Endpoints
+    href: DocumentGenerator.Bridge.Endpoints.html
+- uid: DocumentGenerator.Bridge.Middleware
+  commentId: N:DocumentGenerator.Bridge.Middleware
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Middleware
+  nameWithType: DocumentGenerator.Bridge.Middleware
+  fullName: DocumentGenerator.Bridge.Middleware
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Middleware
+    name: Middleware
+    href: DocumentGenerator.Bridge.Middleware.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Middleware
+    name: Middleware
+    href: DocumentGenerator.Bridge.Middleware.html
+- uid: DocumentGenerator.Bridge.Models
+  commentId: N:DocumentGenerator.Bridge.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Models
+  nameWithType: DocumentGenerator.Bridge.Models
+  fullName: DocumentGenerator.Bridge.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Models
+    name: Models
+    href: DocumentGenerator.Bridge.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Models
+    name: Models
+    href: DocumentGenerator.Bridge.Models.html
+- uid: DocumentGenerator.Bridge.Printing
+  commentId: N:DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Printing
+  nameWithType: DocumentGenerator.Bridge.Printing
+  fullName: DocumentGenerator.Bridge.Printing
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html
+- uid: DocumentGenerator.Bridge.Services
+  commentId: N:DocumentGenerator.Bridge.Services
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Services
+  nameWithType: DocumentGenerator.Bridge.Services
+  fullName: DocumentGenerator.Bridge.Services
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Services
+    name: Services
+    href: DocumentGenerator.Bridge.Services.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Services
+    name: Services
+    href: DocumentGenerator.Bridge.Services.html
+- uid: DocumentGenerator.Bridge.Program
+  commentId: T:DocumentGenerator.Bridge.Program
+  href: DocumentGenerator.Bridge.Program.html
+  name: Program
+  nameWithType: Program
+  fullName: DocumentGenerator.Bridge.Program

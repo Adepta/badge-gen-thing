@@ -1,332 +1,207 @@
-using DocumentGenerator.Core.Models;
 using DocumentGenerator.Messaging.Messages;
+using DocumentGenerator.TestProducer.Configuration;
+using DocumentGenerator.TestProducer.Infrastructure;
+using DocumentGenerator.TestProducer.Messaging;
+using DocumentGenerator.TestProducer.Worker;
+using Rebus.Bus;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Rebus.Bus;
+using NLog;
+using NLog.Extensions.Logging;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Rebus.Config;
-using Rebus.Handlers;
 using Rebus.Kafka;
 using Rebus.Routing.TypeBased;
 using Rebus.ServiceProvider;
-using Spectre.Console;
-
-const string brokers      = "localhost:9092";
-const string requestTopic = "render.requests";
-const string resultTopic  = "render.results";
 
 // ---------------------------------------------------------------------------
-// Header
+// Bootstrap NLog before anything else so startup failures are captured.
 // ---------------------------------------------------------------------------
-AnsiConsole.Write(
-    new FigletText("DocGenerator")
-        .Centered()
-        .Color(Color.Purple));
+LogManager.Setup().LoadConfigurationFromFile("NLog.config");
+var bootstrapLogger = LogManager.GetCurrentClassLogger();
+bootstrapLogger.Info("DocumentGenerator.TestProducer starting up.");
 
-AnsiConsole.Write(new Rule("[grey]Test Producer[/]").RuleStyle("grey").Centered());
-AnsiConsole.WriteLine();
-
-var grid = new Grid().AddColumn().AddColumn();
-grid.AddRow("[grey]Broker[/]",  $"[white]{brokers}[/]");
-grid.AddRow("[grey]Request[/]", $"[white]{requestTopic}[/]");
-grid.AddRow("[grey]Result[/]",  $"[white]{resultTopic}[/]");
-AnsiConsole.Write(new Panel(grid).Header("[purple]Kafka[/]").BorderColor(Color.Grey));
-AnsiConsole.WriteLine();
-
-// ---------------------------------------------------------------------------
-// Build Rebus host (once — reused across all renders in the session)
-// ---------------------------------------------------------------------------
-var sessionId = Guid.NewGuid();
-var resultTcs = new ResultStore();
-
-var host = Host.CreateDefaultBuilder()
-    .ConfigureLogging(logging =>
-    {
-        logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.None);
-    })
-    .ConfigureServices(services =>
-    {
-        services.AddSingleton(resultTcs);
-        services.AddRebusHandler<ResultHandler>();
-
-        services.AddRebus(
-            configure => configure
-                .Transport(t => t.UseKafka(
-                    brokers,
-                    $"test-producer-{sessionId:N}"))
-                .Routing(r => r.TypeBased()
-                    .Map<DocumentRenderRequest>(requestTopic)),
-            onCreated: _ => Task.CompletedTask
-        );
-    })
-    .Build();
-
-await AnsiConsole.Status()
-    .Spinner(Spinner.Known.Dots)
-    .SpinnerStyle(Style.Parse("purple"))
-    .StartAsync("Connecting to Kafka...", async ctx =>
-    {
-        await host.StartAsync();
-        ctx.Status("Connected");
-        await Task.Delay(400);
-    });
-
-var bus = host.Services.GetRequiredService<IBus>();
-
-// ---------------------------------------------------------------------------
-// Locate the templates directory
-// (walks up from the assembly dir, so works from dotnet run and published)
-// ---------------------------------------------------------------------------
-static string FindTemplatesDir()
+try
 {
-    var dir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
-    for (var i = 0; i < 8; i++)
-    {
-        var candidate = Path.Combine(dir, "templates");
-        if (Directory.Exists(candidate)) return candidate;
-        var parent = Directory.GetParent(dir);
-        if (parent is null) break;
-        dir = parent.FullName;
-    }
-    throw new DirectoryNotFoundException("Could not locate the 'templates' directory.");
-}
+    // -----------------------------------------------------------------------
+    // Read configuration early — needed before the host is built so we can
+    // decide which service-manager integration to register.
+    // -----------------------------------------------------------------------
+    var preConfig = new ConfigurationBuilder()
+        .SetBasePath(AppContext.BaseDirectory)
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+        .AddJsonFile(
+            $"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json",
+            optional: true, reloadOnChange: false)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .Build();
 
-var templatesDir = FindTemplatesDir();
+    var kafkaBootstrap = preConfig["Kafka:BootstrapServers"] ?? "localhost:9092";
+    var requestTopic   = preConfig["Kafka:RequestTopic"]     ?? "render.requests";
+    var otelOptions    = preConfig.GetSection(OtelOptions.SectionName).Get<OtelOptions>() ?? new OtelOptions();
 
-// ---------------------------------------------------------------------------
-// Available badge / document variants
-// Each entry maps a menu label → (documentType, json file in templates/)
-// ---------------------------------------------------------------------------
-var variants = new Dictionary<string, (string DocumentType, string JsonFile)>
-{
-    ["Pulse     — A6  — TechConf 2026     (Speaker)"]   = ("badge",   "sample-badge-pulse-a6.json"),
-    ["Pulse     — CC  — TechConf 2026     (Speaker)"]   = ("badge",   "sample-badge-pulse-cc.json"),
-    ["Carbon    — A6  — GameJam '26       (Hacker)"]    = ("badge",   "sample-badge-carbon-a6.json"),
-    ["Carbon    — CC  — GameJam '26       (Hacker)"]    = ("badge",   "sample-badge-carbon-cc.json"),
-    ["Executive — A6  — Global Leaders    (Delegate)"]  = ("badge",   "sample-badge-executive-a6.json"),
-    ["Executive — CC  — Global Leaders    (Delegate)"]  = ("badge",   "sample-badge-executive-cc.json"),
-    ["Invoice   — A4"]                                  = ("invoice", "sample-invoice.json"),
-};
+    var rawMode = preConfig.GetValue<string>("ServiceMode") ?? "Auto";
+    if (!Enum.TryParse<ServiceMode>(rawMode, ignoreCase: true, out var serviceMode))
+        serviceMode = ServiceMode.Auto;
 
-// ---------------------------------------------------------------------------
-// Main menu loop
-// ---------------------------------------------------------------------------
-var jsonOptions = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    if (serviceMode == ServiceMode.Auto)
+        serviceMode = HostingHelpers.DetectServiceMode();
 
-while (true)
-{
-    AnsiConsole.WriteLine();
-    AnsiConsole.Write(new Rule("[purple]Select a document[/]").RuleStyle("grey"));
+    bootstrapLogger.Info("Service mode: {0} | Kafka: {1} | OTel enabled: {2}",
+        serviceMode, kafkaBootstrap, otelOptions.Enabled);
 
-    var choices = variants.Keys.ToList();
-    choices.Add("[red]Exit[/]");
-
-    var selection = AnsiConsole.Prompt(
-        new SelectionPrompt<string>()
-            .PageSize(10)
-            .HighlightStyle(Style.Parse("purple bold"))
-            .AddChoices(choices));
-
-    if (selection == "[red]Exit[/]")
-        break;
-
-    var (documentType, jsonFile) = variants[selection];
-
-    // ── Load template JSON ──────────────────────────────────────────────────
-    var jsonPath = Path.Combine(templatesDir, jsonFile);
-    var jsonText = await File.ReadAllTextAsync(jsonPath);
-    var template = System.Text.Json.JsonSerializer.Deserialize<DocumentTemplate>(jsonText, jsonOptions)!;
-
-    // ── Inline any external HTML / CSS files ────────────────────────────────
-    // The Kafka payload must be self-contained (no file paths on the server).
-    if (!string.IsNullOrWhiteSpace(template.Template.HtmlPath))
-    {
-        var htmlFull = Resolve(template.Template.HtmlPath, templatesDir);
-        var cssFull  = string.IsNullOrWhiteSpace(template.Template.CssPath)
-                           ? null
-                           : Resolve(template.Template.CssPath, templatesDir);
-
-        template = new DocumentTemplate
+    // -----------------------------------------------------------------------
+    // Build resource descriptor (shared by tracing, metrics, and log bridge).
+    // -----------------------------------------------------------------------
+    var resource = ResourceBuilder.CreateDefault()
+        .AddService(serviceName: otelOptions.ServiceName, serviceVersion: otelOptions.ServiceVersion)
+        .AddAttributes(new Dictionary<string, object>
         {
-            DocumentType = template.DocumentType,
-            Version      = template.Version,
-            Branding     = template.Branding,
-            Variables    = template.Variables,
-            Pdf          = template.Pdf,
-            Template     = new TemplateContent
-            {
-                Html     = await File.ReadAllTextAsync(htmlFull),
-                Css      = cssFull is null ? null : await File.ReadAllTextAsync(cssFull),
-                Partials = template.Template.Partials
-            }
-        };
-    }
-
-    static string Resolve(string path, string baseDir) =>
-        Path.IsPathRooted(path) ? path : Path.Combine(baseDir, path);
-
-    // ── Choose delivery mode ────────────────────────────────────────────────
-    var deliveryMode = AnsiConsole.Prompt(
-        new SelectionPrompt<string>()
-            .Title("[grey]Delivery mode[/]")
-            .HighlightStyle(Style.Parse("purple bold"))
-            .AddChoices(
-                "Inline  — PDF returned as Base64 in the Kafka reply",
-                "Path    — PDF saved to server disk, path returned in reply"));
-
-    var returnPdfInline = deliveryMode.StartsWith("Inline");
-
-    // ── Build and send the Kafka message ────────────────────────────────────
-    var correlationId = Guid.NewGuid();
-    var deviceId      = $"test-ipad-{Environment.MachineName}";
-
-    var request = new DocumentRenderRequest
-    {
-        CorrelationId  = correlationId,
-        DeviceId       = deviceId,
-        SessionId      = sessionId.ToString(),
-        Template       = template,
-        RequestedAt    = DateTimeOffset.UtcNow,
-        ReturnPdfInline = returnPdfInline
-    };
-
-    var tcs = new TaskCompletionSource<DocumentRenderResult>();
-    resultTcs.Register(correlationId, tcs);
-
-    DocumentRenderResult? result = null;
-
-    await AnsiConsole.Progress()
-        .AutoClear(false)
-        .Columns(
-            new TaskDescriptionColumn { Alignment = Justify.Left },
-            new ProgressBarColumn().FinishedStyle(Style.Parse("purple")),
-            new SpinnerColumn(Spinner.Known.Dots).Style(Style.Parse("purple")))
-        .StartAsync(async ctx =>
-        {
-            var sendSw   = System.Diagnostics.Stopwatch.StartNew();
-            var renderSw = new System.Diagnostics.Stopwatch();
-
-            var sendTask   = ctx.AddTask("[grey]Sending to Kafka...[/]",   maxValue: 1);
-            var renderTask = ctx.AddTask("[grey]Waiting for render...[/]", maxValue: 1);
-
-            await bus.Send(request);
-            sendSw.Stop();
-            sendTask.Increment(1);
-            sendTask.Description = $"[green]Sent[/] [grey]({sendSw.ElapsedMilliseconds}ms)[/]";
-
-            renderSw.Start();
-            renderTask.IsIndeterminate = true;
-
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(120));
-            cts.Token.Register(() => tcs.TrySetCanceled());
-
-            try
-            {
-                result = await tcs.Task;
-                renderSw.Stop();
-                renderTask.IsIndeterminate = false;
-                renderTask.Increment(1);
-                renderTask.Description = result.Success
-                    ? $"[green]Render complete[/] [grey]({renderSw.ElapsedMilliseconds}ms)[/]"
-                    : $"[red]Render failed[/] [grey]({renderSw.ElapsedMilliseconds}ms)[/]";
-            }
-            catch (OperationCanceledException)
-            {
-                renderSw.Stop();
-                renderTask.IsIndeterminate = false;
-                renderTask.Description = $"[red]Timed out[/] [grey]({renderSw.ElapsedMilliseconds}ms)[/]";
-            }
+            ["host.name"]      = Environment.MachineName,
+            ["deployment.env"] = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production",
+            ["service.mode"]   = serviceMode.ToString()
         });
 
-    AnsiConsole.WriteLine();
+    // -----------------------------------------------------------------------
+    // Each producer instance gets a unique consumer-group so multiple instances
+    // running in parallel do not steal each other's reply messages.
+    // -----------------------------------------------------------------------
+    var sessionId = Guid.NewGuid();
 
-    if (result is null)
+    // -----------------------------------------------------------------------
+    // Host
+    // -----------------------------------------------------------------------
+    var builder = Host.CreateDefaultBuilder(args);
+
+    // ── OS service-manager integration ──────────────────────────────────────
+    switch (serviceMode)
     {
-        AnsiConsole.MarkupLine("[red]No result received within 120s.[/] Check [link]http://localhost:8080[/] for dead-letter messages.");
-        continue;
+        case ServiceMode.WindowsService:
+            builder.UseWindowsService(o => o.ServiceName = "DocGen.TestProducer");
+            break;
+        case ServiceMode.Systemd:
+            builder.UseSystemd();
+            break;
+        // Console: no additional integration required.
     }
 
-    var resultGrid = new Grid().AddColumn(new GridColumn().NoWrap()).AddColumn();
-    resultGrid.AddRow("[grey]Correlation ID[/]", $"[white]{result.CorrelationId}[/]");
-    resultGrid.AddRow("[grey]Device[/]",         $"[white]{result.DeviceId}[/]");
-    resultGrid.AddRow("[grey]Type[/]",           $"[white]{result.DocumentType}[/]");
-    resultGrid.AddRow("[grey]Elapsed[/]",        $"[white]{result.ElapsedTime.TotalMilliseconds:N0}ms[/]");
+    builder
+        // ── Configuration ────────────────────────────────────────────────────
+        .ConfigureAppConfiguration((_, cfg) =>
+        {
+            cfg.Sources.Clear();
+            cfg.SetBasePath(AppContext.BaseDirectory)
+               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+               .AddJsonFile(
+                   $"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production"}.json",
+                   optional: true, reloadOnChange: true)
+               .AddEnvironmentVariables()
+               .AddCommandLine(args);
+        })
+        // ── Logging: NLog (structured sink) + OTel log bridge ────────────────
+        .ConfigureLogging((_, logging) =>
+        {
+            logging
+                .ClearProviders()
+                // Trace level here; NLog.config governs the effective per-logger minimums.
+                .SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace)
+                .AddNLog(new NLogProviderOptions
+                {
+                    CaptureMessageTemplates  = true,
+                    CaptureMessageProperties = true,
+                    IgnoreEmptyEventId       = true,
+                    ParseMessageTemplates    = true
+                });
 
-    if (result.Success && result.PdfBase64 is not null)
-    {
-        // Inline mode — decode Base64 and save locally
-        var pdfBytes  = Convert.FromBase64String(result.PdfBase64);
-        var outputDir = Path.GetFullPath("Generated");
-        Directory.CreateDirectory(outputDir);
-        var outputPath = Path.Combine(outputDir, $"{documentType}_{result.DocumentType}_{correlationId:N}.pdf");
-        await File.WriteAllBytesAsync(outputPath, pdfBytes);
+            if (otelOptions.Enabled)
+            {
+                logging.AddOpenTelemetry(otelLog =>
+                {
+                    otelLog.SetResourceBuilder(resource);
+                    otelLog.IncludeFormattedMessage = true;
+                    otelLog.IncludeScopes           = true;
+                    otelLog.ParseStateValues        = true;
 
-        resultGrid.AddRow("[grey]Mode[/]",      "[white]Inline (Base64)[/]");
-        resultGrid.AddRow("[grey]PDF size[/]",  $"[white]{pdfBytes.Length:N0} bytes[/]");
-        resultGrid.AddRow("[grey]Saved to[/]",  $"[green]{outputPath}[/]");
+                    if (!string.IsNullOrWhiteSpace(otelOptions.OtlpEndpoint))
+                        otelLog.AddOtlpExporter(o => o.Endpoint = new Uri(otelOptions.OtlpEndpoint));
 
-        AnsiConsole.Write(
-            new Panel(resultGrid)
-                .Header("[green] Success [/]")
-                .BorderColor(Color.Green));
-    }
-    else if (result.Success && result.PdfPath is not null)
-    {
-        // Path mode — PDF already on disk at the reported path
-        resultGrid.AddRow("[grey]Mode[/]",      "[white]Path (server disk)[/]");
-        resultGrid.AddRow("[grey]PDF path[/]",  $"[green]{result.PdfPath}[/]");
+                    if (otelOptions.ConsoleExporterEnabled)
+                        otelLog.AddConsoleExporter();
+                });
+            }
+        })
+        // ── Services ─────────────────────────────────────────────────────────
+        .ConfigureServices((ctx, services) =>
+        {
+            services
+                .Configure<ProducerOptions>(ctx.Configuration.GetSection(ProducerOptions.SectionName))
+                .Configure<OtelOptions>(ctx.Configuration.GetSection(OtelOptions.SectionName));
 
-        AnsiConsole.Write(
-            new Panel(resultGrid)
-                .Header("[green] Success [/]")
-                .BorderColor(Color.Green));
-    }
-    else
-    {
-        resultGrid.AddRow("[grey]Error[/]", $"[red]{result.ErrorMessage}[/]");
-        AnsiConsole.Write(
-            new Panel(resultGrid)
-                .Header("[red] Failed [/]")
-                .BorderColor(Color.Red));
-    }
+            // OpenTelemetry tracing + metrics
+            if (otelOptions.Enabled)
+            {
+                services.AddOpenTelemetry()
+                    .WithTracing(tracing =>
+                    {
+                        tracing.SetResourceBuilder(resource)
+                               .AddSource("DocumentGenerator.TestProducer.*")
+                               .AddHttpClientInstrumentation();
+
+                        if (!string.IsNullOrWhiteSpace(otelOptions.OtlpEndpoint))
+                            tracing.AddOtlpExporter(o => o.Endpoint = new Uri(otelOptions.OtlpEndpoint));
+
+                        if (otelOptions.ConsoleExporterEnabled)
+                            tracing.AddConsoleExporter();
+                    })
+                    .WithMetrics(metrics =>
+                    {
+                        metrics.SetResourceBuilder(resource)
+                               .AddRuntimeInstrumentation()
+                               .AddMeter("DocumentGenerator.TestProducer.*");
+
+                        if (!string.IsNullOrWhiteSpace(otelOptions.OtlpEndpoint))
+                            metrics.AddOtlpExporter(o => o.Endpoint = new Uri(otelOptions.OtlpEndpoint));
+
+                        if (otelOptions.ConsoleExporterEnabled)
+                            metrics.AddConsoleExporter();
+                    });
+            }
+
+            // Thread-safe store that maps correlation IDs to awaiting tasks
+            services.AddSingleton<ResultStore>();
+
+            // Rebus + Kafka
+            services.AddRebusHandler<ResultHandler>();
+            services.AddRebus(
+                configure => configure
+                    .Transport(t => t.UseKafka(kafkaBootstrap, $"docgen-producer-{sessionId:N}"))
+                    .Routing(r => r.TypeBased()
+                        .Map<DocumentRenderRequest>(requestTopic)),
+                onCreated: _ => Task.CompletedTask
+            );
+
+            // Subscribe after the host is fully started to avoid the deadlock
+            // that occurs when bus.Subscribe is called inside onCreated.
+            services.AddHostedService<ProducerResultSubscriptionService>();
+
+            // Headless worker — replaces the old interactive menu
+            services.AddHostedService<RenderJobWorker>();
+        });
+
+    await builder.Build().RunAsync();
 }
-
-await AnsiConsole.Status()
-    .Spinner(Spinner.Known.Dots)
-    .SpinnerStyle(Style.Parse("grey"))
-    .StartAsync("Shutting down...", async ctx =>
-    {
-        await host.StopAsync();
-    });
-
-AnsiConsole.MarkupLine("[grey]Goodbye.[/]");
-
-// =============================================================================
-// Result store — maps CorrelationId → TCS so concurrent renders work
-// =============================================================================
-class ResultStore
+catch (Exception ex) when (ex is not OperationCanceledException)
 {
-    private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, TaskCompletionSource<DocumentRenderResult>> _pending = new();
-
-    public void Register(Guid id, TaskCompletionSource<DocumentRenderResult> tcs) =>
-        _pending[id] = tcs;
-
-    public void Complete(DocumentRenderResult result)
-    {
-        if (_pending.TryRemove(result.CorrelationId, out var tcs))
-            tcs.TrySetResult(result);
-    }
+    bootstrapLogger.Fatal(ex, "Host terminated unexpectedly.");
+    throw;
 }
-
-// =============================================================================
-// Rebus result handler
-// =============================================================================
-class ResultHandler(ResultStore store) : IHandleMessages<DocumentRenderResult>
+finally
 {
-    /// <inheritdoc/>
-    public Task Handle(DocumentRenderResult message)
-    {
-        store.Complete(message);
-        return Task.CompletedTask;
-    }
+    LogManager.Shutdown();
 }

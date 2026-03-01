@@ -1,0 +1,454 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions
+  commentId: T:DocumentGenerator.Bridge.Configuration.CloudOptions
+  id: CloudOptions
+  parent: DocumentGenerator.Bridge.Configuration
+  children:
+  - DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey
+  - DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl
+  - DocumentGenerator.Bridge.Configuration.CloudOptions.Section
+  - DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout
+  langs:
+  - csharp
+  - vb
+  name: CloudOptions
+  nameWithType: CloudOptions
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CloudOptions
+    path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+    startLine: 29
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Configuration
+  summary: Cloud Badge Producer API connection settings.
+  example: []
+  syntax:
+    content: public sealed class CloudOptions
+    content.vb: Public NotInheritable Class CloudOptions
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions.Section
+  commentId: F:DocumentGenerator.Bridge.Configuration.CloudOptions.Section
+  id: Section
+  parent: DocumentGenerator.Bridge.Configuration.CloudOptions
+  langs:
+  - csharp
+  - vb
+  name: Section
+  nameWithType: CloudOptions.Section
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions.Section
+  type: Field
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Section
+    path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+    startLine: 32
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Configuration
+  summary: Configuration section name.
+  example: []
+  syntax:
+    content: public const string Section = "Cloud"
+    return:
+      type: System.String
+    content.vb: Public Const Section As String = "Cloud"
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl
+  commentId: P:DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl
+  id: BaseUrl
+  parent: DocumentGenerator.Bridge.Configuration.CloudOptions
+  langs:
+  - csharp
+  - vb
+  name: BaseUrl
+  nameWithType: CloudOptions.BaseUrl
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: BaseUrl
+    path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+    startLine: 38
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Configuration
+  summary: >-
+    Base URL of the hosted <code>DocumentGenerator.Api</code> instance,
+
+    e.g. <code>https://badges.yourcompany.com</code>.
+  example: []
+  syntax:
+    content: public string BaseUrl { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property BaseUrl As String
+  overload: DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl*
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey
+  commentId: P:DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey
+  id: ApiKey
+  parent: DocumentGenerator.Bridge.Configuration.CloudOptions
+  langs:
+  - csharp
+  - vb
+  name: ApiKey
+  nameWithType: CloudOptions.ApiKey
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ApiKey
+    path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+    startLine: 43
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Configuration
+  summary: API key sent in the <code>X-Api-Key</code> header with every cloud request.
+  example: []
+  syntax:
+    content: public string ApiKey { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ApiKey As String
+  overload: DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey*
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout
+  commentId: P:DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout
+  id: Timeout
+  parent: DocumentGenerator.Bridge.Configuration.CloudOptions
+  langs:
+  - csharp
+  - vb
+  name: Timeout
+  nameWithType: CloudOptions.Timeout
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Timeout
+    path: src/DocumentGenerator.Bridge/Configuration/BridgeOptions.cs
+    startLine: 50
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Configuration
+  summary: >-
+    HTTP request timeout for cloud render calls.
+
+    Badge rendering typically completes within a few seconds.
+
+    Defaults to 30 seconds.
+  example: []
+  syntax:
+    content: public TimeSpan Timeout { get; set; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public Property Timeout As TimeSpan
+  overload: DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout*
+references:
+- uid: DocumentGenerator.Bridge.Configuration
+  commentId: N:DocumentGenerator.Bridge.Configuration
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Configuration
+  nameWithType: DocumentGenerator.Bridge.Configuration
+  fullName: DocumentGenerator.Bridge.Configuration
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Configuration
+    name: Configuration
+    href: DocumentGenerator.Bridge.Configuration.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Configuration
+    name: Configuration
+    href: DocumentGenerator.Bridge.Configuration.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl*
+  commentId: Overload:DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl
+  href: DocumentGenerator.Bridge.Configuration.CloudOptions.html#DocumentGenerator_Bridge_Configuration_CloudOptions_BaseUrl
+  name: BaseUrl
+  nameWithType: CloudOptions.BaseUrl
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions.BaseUrl
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey*
+  commentId: Overload:DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey
+  href: DocumentGenerator.Bridge.Configuration.CloudOptions.html#DocumentGenerator_Bridge_Configuration_CloudOptions_ApiKey
+  name: ApiKey
+  nameWithType: CloudOptions.ApiKey
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions.ApiKey
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout*
+  commentId: Overload:DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout
+  href: DocumentGenerator.Bridge.Configuration.CloudOptions.html#DocumentGenerator_Bridge_Configuration_CloudOptions_Timeout
+  name: Timeout
+  nameWithType: CloudOptions.Timeout
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions.Timeout
+- uid: System.TimeSpan
+  commentId: T:System.TimeSpan
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan

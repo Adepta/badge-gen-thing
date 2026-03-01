@@ -8,31 +8,39 @@ namespace DocumentGenerator.Console.Logging;
 /// Owns the terminal for the lifetime of the host, rendering a live TUI via
 /// <see cref="AnsiConsole.Live"/>: a header rule, a scrolling log panel fed by
 /// <see cref="LogBuffer"/>, and a status bar with uptime and render counts.
+///
+/// Press Q (or Ctrl+C) to trigger a graceful host shutdown.
 /// </summary>
 public sealed class TuiRenderer : IHostedService, IDisposable
 {
     private const int VisibleLines = 30;
     private const int DebounceMs   = 80;
 
-    private readonly LogBuffer   _buffer;
-    private readonly RenderStats _stats;
+    private readonly LogBuffer              _buffer;
+    private readonly RenderStats            _stats;
+    private readonly IHostApplicationLifetime _lifetime;
 
     private CancellationTokenSource? _cts;
     private Task?                     _renderTask;
+    private Task?                     _keyTask;
 
-    public TuiRenderer(LogBuffer buffer, RenderStats stats)
+    public TuiRenderer(LogBuffer buffer, RenderStats stats, IHostApplicationLifetime lifetime)
     {
-        _buffer = buffer;
-        _stats  = stats;
+        _buffer   = buffer;
+        _stats    = stats;
+        _lifetime = lifetime;
     }
 
+    /// <inheritdoc/>
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _cts        = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         _renderTask = Task.Run(() => RunAsync(_cts.Token), CancellationToken.None);
+        _keyTask    = Task.Run(() => WatchKeysAsync(_cts.Token), CancellationToken.None);
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc/>
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         if (_cts is not null)
@@ -42,37 +50,83 @@ public sealed class TuiRenderer : IHostedService, IDisposable
             _cts = null;
         }
 
-        if (_renderTask is not null)
+        foreach (var t in new[] { _renderTask, _keyTask })
         {
-            try { await _renderTask.WaitAsync(TimeSpan.FromSeconds(3), cancellationToken); }
+            if (t is null) continue;
+            try { await t.WaitAsync(TimeSpan.FromSeconds(3), cancellationToken); }
             catch (OperationCanceledException) { }
-            _renderTask = null;
         }
+
+        _renderTask = null;
+        _keyTask    = null;
     }
 
+    /// <inheritdoc/>
     public void Dispose() => _cts?.Dispose();
+
+    // ── Key watcher ───────────────────────────────────────────────────────────
+
+    private async Task WatchKeysAsync(CancellationToken ct)
+    {
+        try
+        {
+            while (!ct.IsCancellationRequested)
+            {
+                // Poll every 100 ms so we don't block forever on KeyAvailable
+                if (System.Console.KeyAvailable)
+                {
+                    var key = System.Console.ReadKey(intercept: true);
+                    if (key.Key == ConsoleKey.Q)
+                    {
+                        _buffer.Add(new LogBuffer.LogEntry(
+                            DateTime.Now,
+                            Microsoft.Extensions.Logging.LogLevel.Information,
+                            "TuiRenderer",
+                            "Q pressed — shutting down gracefully..."));
+
+                        _lifetime.StopApplication();
+                        return;
+                    }
+                }
+
+                await Task.Delay(100, ct);
+            }
+        }
+        catch (OperationCanceledException) { /* normal shutdown */ }
+    }
+
+    // ── Render loop ───────────────────────────────────────────────────────────
 
     private async Task RunAsync(CancellationToken ct)
     {
-        await AnsiConsole.Live(BuildLayout())
-            .AutoClear(false)
-            .Overflow(VerticalOverflow.Ellipsis)
-            .StartAsync(async ctx =>
-            {
-                while (!ct.IsCancellationRequested)
+        try
+        {
+            await AnsiConsole.Live(BuildLayout())
+                .AutoClear(false)
+                .Overflow(VerticalOverflow.Ellipsis)
+                .StartAsync(async ctx =>
                 {
-                    await _buffer.WaitAsync(TimeSpan.FromSeconds(1), ct).AsTask()
-                        .ContinueWith(_ => { }); // swallow cancellation/timeout
+                    while (!ct.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            await _buffer.WaitAsync(TimeSpan.FromSeconds(1), ct).AsTask();
+                        }
+                        catch (OperationCanceledException) { break; }
 
-                    if (ct.IsCancellationRequested) break;
+                        if (ct.IsCancellationRequested) break;
 
-                    // Debounce: let burst traffic settle before redrawing
-                    await Task.Delay(DebounceMs, ct).ContinueWith(_ => { });
+                        try { await Task.Delay(DebounceMs, ct); }
+                        catch (OperationCanceledException) { break; }
 
-                    ctx.UpdateTarget(BuildLayout());
-                }
-            });
+                        ctx.UpdateTarget(BuildLayout());
+                    }
+                });
+        }
+        catch (OperationCanceledException) { /* normal shutdown */ }
     }
+
+    // ── Layout builders ───────────────────────────────────────────────────────
 
     private Table BuildLayout()
     {
@@ -142,7 +196,7 @@ public sealed class TuiRenderer : IHostedService, IDisposable
             $"[grey35] uptime [white]{uptime}[/]   " +
             $"ok [bold green]{_stats.SuccessCount}[/]   " +
             $"fail [bold red]{_stats.FailureCount}[/]   " +
-            $"[grey35]Ctrl+C to stop[/] [/]");
+            $"[grey35]Q to quit   Ctrl+C to force stop[/] [/]");
     }
 
     private static string EscapeMarkup(string text) =>

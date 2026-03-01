@@ -12,6 +12,7 @@ namespace DocumentGenerator.Pdf;
 public sealed class DocumentPipeline : IDocumentPipeline
 {
     private readonly ITemplateEngine _templateEngine;
+    private readonly ITemplateContentResolver _contentResolver;
     private readonly IDocumentRenderer _renderer;
     private readonly ILogger<DocumentPipeline> _logger;
 
@@ -19,16 +20,19 @@ public sealed class DocumentPipeline : IDocumentPipeline
     /// Initialises the pipeline with its required dependencies.
     /// </summary>
     /// <param name="templateEngine">Engine used to render Handlebars templates to HTML.</param>
+    /// <param name="contentResolver">Resolver that loads HTML/CSS from disk when paths are set.</param>
     /// <param name="renderer">Renderer used to convert HTML to PDF bytes.</param>
     /// <param name="logger">Logger for pipeline lifecycle events.</param>
     public DocumentPipeline(
         ITemplateEngine templateEngine,
+        ITemplateContentResolver contentResolver,
         IDocumentRenderer renderer,
         ILogger<DocumentPipeline> logger)
     {
-        _templateEngine = templateEngine;
-        _renderer       = renderer;
-        _logger         = logger;
+        _templateEngine  = templateEngine;
+        _contentResolver = contentResolver;
+        _renderer        = renderer;
+        _logger          = logger;
     }
 
     /// <summary>
@@ -41,30 +45,51 @@ public sealed class DocumentPipeline : IDocumentPipeline
     {
         var sw = Stopwatch.StartNew();
 
+        // Push JobId + DocumentType into the logging scope so all downstream
+        // log calls (renderer, browser pool) carry these properties automatically.
+        using var scope = _logger.BeginScope(new Dictionary<string, object>
+        {
+            ["JobId"]        = request.JobId,
+            ["DocumentType"] = request.Template.DocumentType
+        });
+
         _logger.LogInformation(
-            "Starting render job {JobId} — documentType: {DocumentType}",
+            "Pipeline start — JobId: {JobId}, DocumentType: {DocumentType}",
             request.JobId, request.Template.DocumentType);
 
         try
         {
-            // Step 1: Resolve Handlebars template → HTML
-            var html = await _templateEngine.RenderAsync(request.Template, cancellationToken);
+            // Step 1: Load HtmlPath / CssPath from disk into inline strings.
+            // basePath is empty because TemplateLocator always stores absolute paths.
+            // This is a no-op when Html is already populated inline (e.g. in unit tests).
+            var resolved = await _contentResolver.ResolveAsync(
+                request.Template, basePath: string.Empty, cancellationToken);
 
-            // Step 2: Render HTML → PDF bytes
+            // Step 2: Resolve Handlebars template → HTML
+            var html = await _templateEngine.RenderAsync(resolved, cancellationToken);
+
+            _logger.LogDebug(
+                "Template rendered to HTML — JobId: {JobId}, HtmlLength: {HtmlLength}",
+                request.JobId, html.Length);
+
+            // Step 3: Render HTML → PDF bytes
             var pdfBytes = await _renderer.RenderPdfAsync(html, request.Template.Pdf, cancellationToken);
 
             sw.Stop();
 
             _logger.LogInformation(
-                "Render job {JobId} completed in {Elapsed}ms — {Bytes:N0} bytes",
-                request.JobId, sw.ElapsedMilliseconds, pdfBytes.Length);
+                "Pipeline complete — JobId: {JobId}, DocumentType: {DocumentType}, " +
+                "Bytes: {Bytes}, ElapsedMs: {ElapsedMs}",
+                request.JobId, request.Template.DocumentType, pdfBytes.Length, sw.ElapsedMilliseconds);
 
             return RenderResult.Success(request.JobId, pdfBytes, sw.Elapsed, request.Template.DocumentType);
         }
         catch (Exception ex)
         {
             sw.Stop();
-            _logger.LogError(ex, "Render job {JobId} failed after {Elapsed}ms", request.JobId, sw.ElapsedMilliseconds);
+            _logger.LogError(ex,
+                "Pipeline failed — JobId: {JobId}, DocumentType: {DocumentType}, ElapsedMs: {ElapsedMs}",
+                request.JobId, request.Template.DocumentType, sw.ElapsedMilliseconds);
             throw;
         }
     }

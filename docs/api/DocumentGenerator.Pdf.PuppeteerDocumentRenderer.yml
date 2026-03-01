@@ -21,7 +21,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: PuppeteerDocumentRenderer
     path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
-    startLine: 14
+    startLine: 15
   assemblies:
   - DocumentGenerator.Pdf
   namespace: DocumentGenerator.Pdf
@@ -64,7 +64,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: .ctor
     path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
-    startLine: 24
+    startLine: 25
   assemblies:
   - DocumentGenerator.Pdf
   namespace: DocumentGenerator.Pdf
@@ -102,7 +102,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: RenderPdfAsync
     path: src/DocumentGenerator.Pdf/PuppeteerDocumentRenderer.cs
-    startLine: 40
+    startLine: 41
   assemblies:
   - DocumentGenerator.Pdf
   namespace: DocumentGenerator.Pdf

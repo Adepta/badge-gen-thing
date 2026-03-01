@@ -1,0 +1,24 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Middleware
+  commentId: N:DocumentGenerator.Bridge.Middleware
+  id: Middleware
+  parent: DocumentGenerator.Bridge
+  children:
+  - DocumentGenerator.Bridge.Middleware.SetupGuardMiddleware
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Bridge.Middleware
+  nameWithType: DocumentGenerator.Bridge.Middleware
+  fullName: DocumentGenerator.Bridge.Middleware
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Bridge
+references:
+- uid: DocumentGenerator.Bridge.Middleware.SetupGuardMiddleware
+  commentId: T:DocumentGenerator.Bridge.Middleware.SetupGuardMiddleware
+  href: DocumentGenerator.Bridge.Middleware.SetupGuardMiddleware.html
+  name: SetupGuardMiddleware
+  nameWithType: SetupGuardMiddleware
+  fullName: DocumentGenerator.Bridge.Middleware.SetupGuardMiddleware

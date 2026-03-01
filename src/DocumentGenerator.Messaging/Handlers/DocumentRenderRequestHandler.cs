@@ -32,6 +32,14 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
     private readonly KafkaOptions      _kafkaOptions;
     private readonly ILogger<DocumentRenderRequestHandler> _logger;
 
+    /// <summary>
+    /// Initialises the handler with its required dependencies.
+    /// </summary>
+    /// <param name="pipeline">The render pipeline that converts a template + variables to a PDF.</param>
+    /// <param name="bus">Rebus bus used to reply with the render result.</param>
+    /// <param name="metrics">Metrics sink for recording success/failure counts.</param>
+    /// <param name="kafkaOptions">Kafka configuration, including the PDF output path for non-inline mode.</param>
+    /// <param name="logger">Logger for structured render lifecycle events.</param>
     public DocumentRenderRequestHandler(
         IDocumentPipeline pipeline, IBus bus,
         IRenderMetrics metrics,
@@ -45,11 +53,29 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
         _logger       = logger;
     }
 
+    /// <summary>
+    /// Executes the render pipeline for the incoming <paramref name="message"/>,
+    /// then replies with a <see cref="DocumentRenderResult"/> indicating success or failure.
+    /// </summary>
+    /// <param name="message">The render request dispatched by the API or TestProducer.</param>
     public async Task Handle(DocumentRenderRequest message)
     {
+        // Push CorrelationId + DeviceId into the logging scope so every log line
+        // emitted by downstream services (DocumentPipeline, ChromiumPool, etc.)
+        // automatically carries these structured properties.
+        using var scope = _logger.BeginScope(new Dictionary<string, object>
+        {
+            ["CorrelationId"] = message.CorrelationId,
+            ["DeviceId"]      = message.DeviceId,
+            ["SessionId"]     = message.SessionId ?? string.Empty,
+            ["DocumentType"]  = message.Template.DocumentType
+        });
+
         _logger.LogInformation(
-            "Handling render request — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, DocumentType: {DocumentType}, ReturnPdfInline: {ReturnPdfInline}",
-            message.CorrelationId, message.DeviceId, message.Template.DocumentType, message.ReturnPdfInline);
+            "Handling render request — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, " +
+            "DocumentType: {DocumentType}, ReturnPdfInline: {ReturnPdfInline}",
+            message.CorrelationId, message.DeviceId,
+            message.Template.DocumentType, message.ReturnPdfInline);
 
         var renderJob = new RenderRequest
         {
@@ -83,16 +109,18 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
             _metrics.RecordSuccess();
 
             _logger.LogInformation(
-                "Render succeeded — CorrelationId: {CorrelationId}, {Bytes:N0} bytes in {Elapsed}ms{PathSuffix}",
+                "Render succeeded — CorrelationId: {CorrelationId}, Bytes: {Bytes}, " +
+                "ElapsedMs: {ElapsedMs}, PdfPath: {PdfPath}",
                 message.CorrelationId, renderResult.PdfBytes.Length,
                 (int)renderResult.ElapsedTime.TotalMilliseconds,
-                pdfPath is null ? string.Empty : $", saved to {pdfPath}");
+                pdfPath ?? "(inline)");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex,
-                "Render failed — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}",
-                message.CorrelationId, message.DeviceId);
+                "Render failed — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, " +
+                "DocumentType: {DocumentType}",
+                message.CorrelationId, message.DeviceId, message.Template.DocumentType);
 
             _metrics.RecordFailure();
 

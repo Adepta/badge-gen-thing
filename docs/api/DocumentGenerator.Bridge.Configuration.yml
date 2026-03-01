@@ -1,0 +1,38 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Configuration
+  commentId: N:DocumentGenerator.Bridge.Configuration
+  id: Configuration
+  parent: DocumentGenerator.Bridge
+  children:
+  - DocumentGenerator.Bridge.Configuration.BridgeOptions
+  - DocumentGenerator.Bridge.Configuration.CloudOptions
+  - DocumentGenerator.Bridge.Configuration.PrinterOptions
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Bridge.Configuration
+  nameWithType: DocumentGenerator.Bridge.Configuration
+  fullName: DocumentGenerator.Bridge.Configuration
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Bridge
+references:
+- uid: DocumentGenerator.Bridge.Configuration.BridgeOptions
+  commentId: T:DocumentGenerator.Bridge.Configuration.BridgeOptions
+  href: DocumentGenerator.Bridge.Configuration.BridgeOptions.html
+  name: BridgeOptions
+  nameWithType: BridgeOptions
+  fullName: DocumentGenerator.Bridge.Configuration.BridgeOptions
+- uid: DocumentGenerator.Bridge.Configuration.CloudOptions
+  commentId: T:DocumentGenerator.Bridge.Configuration.CloudOptions
+  href: DocumentGenerator.Bridge.Configuration.CloudOptions.html
+  name: CloudOptions
+  nameWithType: CloudOptions
+  fullName: DocumentGenerator.Bridge.Configuration.CloudOptions
+- uid: DocumentGenerator.Bridge.Configuration.PrinterOptions
+  commentId: T:DocumentGenerator.Bridge.Configuration.PrinterOptions
+  href: DocumentGenerator.Bridge.Configuration.PrinterOptions.html
+  name: PrinterOptions
+  nameWithType: PrinterOptions
+  fullName: DocumentGenerator.Bridge.Configuration.PrinterOptions

@@ -8,6 +8,7 @@ items:
   - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.CorrelationId
   - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.DeviceId
   - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt
+  - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
   - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.SessionId
   - DocumentGenerator.Messaging.Messages.DocumentRenderRequest.Template
   langs:
@@ -217,6 +218,47 @@ items:
       type: System.DateTimeOffset
     content.vb: Public Property RequestedAt As DateTimeOffset
   overload: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.RequestedAt*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  id: ReturnPdfInline
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: ReturnPdfInline
+  nameWithType: DocumentRenderRequest.ReturnPdfInline
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ReturnPdfInline
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderRequest.cs
+    startLine: 48
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    When <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> (the default), the rendered PDF is Base64-encoded and
+
+    returned directly in <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64" data-throw-if-not-resolved="false"></xref>.
+
+
+    Set to <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> when the device can reach a shared network path —
+
+    the generator will instead save the PDF to disk and return its path in
+
+    <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath" data-throw-if-not-resolved="false"></xref>, keeping the Kafka message small.
+  example: []
+  syntax:
+    content: public bool ReturnPdfInline { get; init; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property ReturnPdfInline As Boolean
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline*
 references:
 - uid: DocumentGenerator.Messaging.Messages
   commentId: N:DocumentGenerator.Messaging.Messages
@@ -555,3 +597,32 @@ references:
   name: DateTimeOffset
   nameWithType: DateTimeOffset
   fullName: System.DateTimeOffset
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_PdfBase64
+  name: PdfBase64
+  nameWithType: DocumentRenderResult.PdfBase64
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_PdfPath
+  name: PdfPath
+  nameWithType: DocumentRenderResult.PdfPath
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_ReturnPdfInline
+  name: ReturnPdfInline
+  nameWithType: DocumentRenderRequest.ReturnPdfInline
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean

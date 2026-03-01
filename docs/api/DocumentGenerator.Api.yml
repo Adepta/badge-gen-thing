@@ -1,0 +1,148 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Api
+  commentId: N:DocumentGenerator.Api
+  id: Api
+  parent: DocumentGenerator
+  children:
+  - DocumentGenerator.Api.Authentication
+  - DocumentGenerator.Api.Controllers
+  - DocumentGenerator.Api.Models
+  - DocumentGenerator.Api.Program
+  - DocumentGenerator.Api.Services
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Api
+  nameWithType: DocumentGenerator.Api
+  fullName: DocumentGenerator.Api
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Api
+references:
+- uid: DocumentGenerator.Api.Authentication
+  commentId: N:DocumentGenerator.Api.Authentication
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Authentication
+  nameWithType: DocumentGenerator.Api.Authentication
+  fullName: DocumentGenerator.Api.Authentication
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Authentication
+    name: Authentication
+    href: DocumentGenerator.Api.Authentication.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Authentication
+    name: Authentication
+    href: DocumentGenerator.Api.Authentication.html
+- uid: DocumentGenerator.Api.Controllers
+  commentId: N:DocumentGenerator.Api.Controllers
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Controllers
+  nameWithType: DocumentGenerator.Api.Controllers
+  fullName: DocumentGenerator.Api.Controllers
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Controllers
+    name: Controllers
+    href: DocumentGenerator.Api.Controllers.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Controllers
+    name: Controllers
+    href: DocumentGenerator.Api.Controllers.html
+- uid: DocumentGenerator.Api.Models
+  commentId: N:DocumentGenerator.Api.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Models
+  nameWithType: DocumentGenerator.Api.Models
+  fullName: DocumentGenerator.Api.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
+- uid: DocumentGenerator.Api.Services
+  commentId: N:DocumentGenerator.Api.Services
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Services
+  nameWithType: DocumentGenerator.Api.Services
+  fullName: DocumentGenerator.Api.Services
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Services
+    name: Services
+    href: DocumentGenerator.Api.Services.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Services
+    name: Services
+    href: DocumentGenerator.Api.Services.html
+- uid: DocumentGenerator.Api.Program
+  commentId: T:DocumentGenerator.Api.Program
+  href: DocumentGenerator.Api.Program.html
+  name: Program
+  nameWithType: Program
+  fullName: DocumentGenerator.Api.Program

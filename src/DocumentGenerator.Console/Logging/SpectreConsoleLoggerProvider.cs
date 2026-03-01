@@ -11,9 +11,11 @@ namespace DocumentGenerator.Console.Logging;
 internal sealed class SpectreConsoleLoggerProvider(LogLevel minimumLevel, LogBuffer buffer)
     : ILoggerProvider
 {
+    /// <inheritdoc/>
     public ILogger CreateLogger(string categoryName) =>
         new SpectreConsoleLogger(categoryName, minimumLevel, buffer);
 
+    /// <inheritdoc/>
     public void Dispose() { }
 }
 
@@ -35,7 +37,8 @@ internal static class SpectreConsoleLoggerExtensions
         LogBuffer buffer,
         LogLevel minimumLevel = LogLevel.Debug)
     {
-        builder.ClearProviders();
+        // Note: do NOT call ClearProviders() here — NLog and OTel providers
+        // are added alongside this one in Program.cs.
         builder.AddProvider(new SpectreConsoleLoggerProvider(minimumLevel, buffer));
         return builder;
     }

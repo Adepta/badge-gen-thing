@@ -1,0 +1,114 @@
+# =============================================================================
+# OpenTelemetry Collector configuration
+# =============================================================================
+# Pipeline:
+#
+#   .NET app  ──OTLP/gRPC──►  Collector
+#                                 │
+#                    ┌────────────┼────────────┐
+#                    ▼            ▼            ▼
+#                  Loki        Tempo      Prometheus
+#               (logs)       (traces)    (metrics)
+#                    │            │            │
+#                    └────────────┴────────────┘
+#                                 │
+#                              Grafana
+# =============================================================================
+
+extensions:
+  health_check:
+    endpoint: "0.0.0.0:13133"
+  pprof:
+    endpoint: "0.0.0.0:1777"
+
+receivers:
+  # OTLP receiver — accepts gRPC (4317) and HTTP (4318) from .NET apps
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+processors:
+  # Batch before exporting to reduce round-trips
+  batch:
+    timeout: 5s
+    send_batch_size: 512
+    send_batch_max_size: 1024
+
+  # Add resource attributes that apply to every signal
+  resource:
+    attributes:
+      - key: environment
+        value: "local-docker"
+        action: upsert
+      - key: collector.version
+        value: "0.120.0"
+        action: upsert
+
+  # Drop noisy health-check spans to keep traces clean
+  filter/drop_health:
+    traces:
+      span:
+        - 'attributes["http.route"] == "/healthz"'
+
+  # Attach log severity numbers where missing
+  transform/logs:
+    log_statements:
+      - context: log
+        statements:
+          - set(severity_text, "INFO") where severity_text == ""
+
+exporters:
+  # ── Logs → Loki ──────────────────────────────────────────────────────────
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
+    default_labels_enabled:
+      exporter: false
+      job: true
+      instance: true
+      level: true
+
+  # ── Traces → Tempo ───────────────────────────────────────────────────────
+  otlp/tempo:
+    endpoint: "http://tempo:4317"
+    tls:
+      insecure: true
+
+  # ── Metrics → Prometheus (scrape endpoint exposed by the collector) ───────
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: "docgen"
+    send_timestamps: true
+    metric_expiration: 180m
+    resource_to_telemetry_conversion:
+      enabled: true
+
+  # ── Debug: echo a sample of each signal to the collector log ─────────────
+  debug:
+    verbosity: basic
+    sampling_initial: 2
+    sampling_thereafter: 100
+
+service:
+  extensions: [health_check, pprof]
+
+  pipelines:
+    # Logs
+    logs:
+      receivers:  [otlp]
+      processors: [resource, transform/logs, batch]
+      exporters:  [loki, debug]
+
+    # Traces
+    traces:
+      receivers:  [otlp]
+      processors: [resource, filter/drop_health, batch]
+      exporters:  [otlp/tempo, debug]
+
+    # Metrics
+    metrics:
+      receivers:  [otlp]
+      processors: [resource, batch]
+      exporters:  [prometheus, debug]

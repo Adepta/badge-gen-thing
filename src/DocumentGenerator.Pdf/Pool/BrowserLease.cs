@@ -14,8 +14,14 @@ internal sealed class BrowserLease : IBrowserLease<IBrowser>
     private bool _invalidated;
     private bool _disposed;
 
+    /// <summary>The leased Puppeteer browser instance.</summary>
     public IBrowser Browser { get; }
 
+    /// <summary>
+    /// Initialises a new lease wrapping <paramref name="browser"/>.
+    /// </summary>
+    /// <param name="browser">The Chromium browser instance obtained from the pool.</param>
+    /// <param name="pool">The pool that owns <paramref name="browser"/> and must be notified on disposal.</param>
     internal BrowserLease(IBrowser browser, ChromiumBrowserPool pool)
     {
         Browser = browser;

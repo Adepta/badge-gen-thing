@@ -14,16 +14,26 @@ namespace DocumentGenerator.UnitTests.Pdf;
 /// </summary>
 public sealed class DocumentPipelineTests
 {
-    private readonly Mock<ITemplateEngine>    _templateEngineMock = new();
-    private readonly Mock<IDocumentRenderer>  _rendererMock       = new();
-    private readonly DocumentPipeline         _sut;
+    private readonly Mock<ITemplateEngine>          _templateEngineMock  = new();
+    private readonly Mock<ITemplateContentResolver> _resolverMock        = new();
+    private readonly Mock<IDocumentRenderer>        _rendererMock        = new();
+    private readonly DocumentPipeline               _sut;
 
     private static readonly byte[] FakePdfBytes = [0x25, 0x50, 0x44, 0x46]; // %PDF
 
     public DocumentPipelineTests()
     {
+        // Resolver is a pass-through by default — tests use inline Html, not HtmlPath.
+        _resolverMock
+            .Setup(r => r.ResolveAsync(
+                It.IsAny<DocumentTemplate>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync((DocumentTemplate t, string _, CancellationToken _) => t);
+
         _sut = new DocumentPipeline(
             _templateEngineMock.Object,
+            _resolverMock.Object,
             _rendererMock.Object,
             NullLogger<DocumentPipeline>.Instance);
     }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
 
+
 namespace DocumentGenerator.IntegrationTests.Pipeline;
 
 /// <summary>
@@ -34,8 +35,12 @@ public sealed class RenderPipelineIntegrationTests
         ITemplateEngine engine = new HandlebarsTemplateEngine(
             NullLogger<HandlebarsTemplateEngine>.Instance);
 
+        ITemplateContentResolver resolver = new FileTemplateContentResolver(
+            NullLogger<FileTemplateContentResolver>.Instance);
+
         return new DocumentPipeline(
             engine,
+            resolver,
             rendererMock.Object,
             NullLogger<DocumentPipeline>.Instance);
     }

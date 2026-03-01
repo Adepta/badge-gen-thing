@@ -1,0 +1,631 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  commentId: T:DocumentGenerator.Bridge.Services.CloudRenderResponse
+  id: CloudRenderResponse
+  parent: DocumentGenerator.Bridge.Services
+  children:
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.Error
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+  langs:
+  - csharp
+  - vb
+  name: CloudRenderResponse
+  nameWithType: CloudRenderResponse
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CloudRenderResponse
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 107
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: Shape of the JSON response returned by <code>POST /api/badges/render</code> on the cloud API.
+  example: []
+  syntax:
+    content: public sealed class CloudRenderResponse
+    content.vb: Public NotInheritable Class CloudRenderResponse
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId
+  id: CorrelationId
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: CorrelationId
+  nameWithType: CloudRenderResponse.CorrelationId
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CorrelationId
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 110
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: Correlation ID echoed from the request.
+  example: []
+  syntax:
+    content: public Guid CorrelationId { get; init; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property CorrelationId As Guid
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId*
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId
+  id: JobId
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: JobId
+  nameWithType: CloudRenderResponse.JobId
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: JobId
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 112
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: Server-side job ID.
+  example: []
+  syntax:
+    content: public Guid JobId { get; init; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property JobId As Guid
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId*
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+  id: Success
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: Success
+  nameWithType: CloudRenderResponse.Success
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Success
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 114
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: <code>true</code> on success.
+  example: []
+  syntax:
+    content: public bool Success { get; init; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property Success As Boolean
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.Success*
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64
+  id: DocumentBase64
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: DocumentBase64
+  nameWithType: CloudRenderResponse.DocumentBase64
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentBase64
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 116
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: Base64-encoded PDF or PNG bytes.
+  example: []
+  syntax:
+    content: public string? DocumentBase64 { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DocumentBase64 As String
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64*
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType
+  id: MimeType
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: MimeType
+  nameWithType: CloudRenderResponse.MimeType
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: MimeType
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 118
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: MIME type of the document.
+  example: []
+  syntax:
+    content: public string? MimeType { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property MimeType As String
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType*
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType
+  id: DocumentType
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: DocumentType
+  nameWithType: CloudRenderResponse.DocumentType
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentType
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 120
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: Document type from the template.
+  example: []
+  syntax:
+    content: public string? DocumentType { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DocumentType As String
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType*
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime
+  id: ElapsedTime
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: ElapsedTime
+  nameWithType: CloudRenderResponse.ElapsedTime
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ElapsedTime
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 122
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: Cloud-side render duration.
+  example: []
+  syntax:
+    content: public TimeSpan ElapsedTime { get; init; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public Property ElapsedTime As TimeSpan
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime*
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.Error
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.Error
+  id: Error
+  parent: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: Error
+  nameWithType: CloudRenderResponse.Error
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.Error
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Error
+    path: src/DocumentGenerator.Bridge/Services/CloudBadgeClient.cs
+    startLine: 124
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Services
+  summary: Error message when <xref href="DocumentGenerator.Bridge.Services.CloudRenderResponse.Success" data-throw-if-not-resolved="false"></xref> is <code>false</code>.
+  example: []
+  syntax:
+    content: public string? Error { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property [Error] As String
+  overload: DocumentGenerator.Bridge.Services.CloudRenderResponse.Error*
+references:
+- uid: DocumentGenerator.Bridge.Services
+  commentId: N:DocumentGenerator.Bridge.Services
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Services
+  nameWithType: DocumentGenerator.Bridge.Services
+  fullName: DocumentGenerator.Bridge.Services
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Services
+    name: Services
+    href: DocumentGenerator.Bridge.Services.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Services
+    name: Services
+    href: DocumentGenerator.Bridge.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_CorrelationId
+  name: CorrelationId
+  nameWithType: CloudRenderResponse.CorrelationId
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.CorrelationId
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_JobId
+  name: JobId
+  nameWithType: CloudRenderResponse.JobId
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.JobId
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.Success*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_Success
+  name: Success
+  nameWithType: CloudRenderResponse.Success
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_DocumentBase64
+  name: DocumentBase64
+  nameWithType: CloudRenderResponse.DocumentBase64
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentBase64
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_MimeType
+  name: MimeType
+  nameWithType: CloudRenderResponse.MimeType
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.MimeType
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_DocumentType
+  name: DocumentType
+  nameWithType: CloudRenderResponse.DocumentType
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.DocumentType
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_ElapsedTime
+  name: ElapsedTime
+  nameWithType: CloudRenderResponse.ElapsedTime
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.ElapsedTime
+- uid: System.TimeSpan
+  commentId: T:System.TimeSpan
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+  commentId: P:DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_Success
+  name: Success
+  nameWithType: CloudRenderResponse.Success
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.Success
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse.Error*
+  commentId: Overload:DocumentGenerator.Bridge.Services.CloudRenderResponse.Error
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html#DocumentGenerator_Bridge_Services_CloudRenderResponse_Error
+  name: Error
+  nameWithType: CloudRenderResponse.Error
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse.Error

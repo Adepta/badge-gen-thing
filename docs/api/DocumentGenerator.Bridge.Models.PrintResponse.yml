@@ -1,0 +1,897 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Models.PrintResponse
+  commentId: T:DocumentGenerator.Bridge.Models.PrintResponse
+  id: PrintResponse
+  parent: DocumentGenerator.Bridge.Models
+  children:
+  - DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt
+  - DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId
+  - DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+  - DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime
+  - DocumentGenerator.Bridge.Models.PrintResponse.Error
+  - DocumentGenerator.Bridge.Models.PrintResponse.Fail(System.Guid,System.String,System.TimeSpan)
+  - DocumentGenerator.Bridge.Models.PrintResponse.MimeType
+  - DocumentGenerator.Bridge.Models.PrintResponse.PrintOk(System.Guid,System.String,System.String,System.String,System.TimeSpan)
+  - DocumentGenerator.Bridge.Models.PrintResponse.Printed
+  - DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed
+  - DocumentGenerator.Bridge.Models.PrintResponse.RenderOk(System.Guid,System.String,System.String,System.TimeSpan)
+  - DocumentGenerator.Bridge.Models.PrintResponse.Success
+  langs:
+  - csharp
+  - vb
+  name: PrintResponse
+  nameWithType: PrintResponse
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PrintResponse
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 5
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: Response returned to the iPad by both <code>POST /print</code> and <code>POST /render</code>.
+  example: []
+  syntax:
+    content: public sealed class PrintResponse
+    content.vb: Public NotInheritable Class PrintResponse
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId
+  id: CorrelationId
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: CorrelationId
+  nameWithType: PrintResponse.CorrelationId
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CorrelationId
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 10
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: Echoes the <code>CorrelationId</code> from the request (or a bridge-generated one).
+  example: []
+  syntax:
+    content: public Guid CorrelationId { get; init; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property CorrelationId As Guid
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Success
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.Success
+  id: Success
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: Success
+  nameWithType: PrintResponse.Success
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Success
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Success
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 13
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: <code>true</code> when the cloud render (and optional local print) succeeded.
+  example: []
+  syntax:
+    content: public bool Success { get; init; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property Success As Boolean
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.Success*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+  id: DocumentBase64
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: DocumentBase64
+  nameWithType: PrintResponse.DocumentBase64
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentBase64
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 19
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: >-
+    Base64-encoded PDF or PNG bytes of the rendered badge.
+
+    Always present on success so the iPad can show a preview or save the badge.
+  example: []
+  syntax:
+    content: public string? DocumentBase64 { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DocumentBase64 As String
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.MimeType
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.MimeType
+  id: MimeType
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: MimeType
+  nameWithType: PrintResponse.MimeType
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.MimeType
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: MimeType
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 24
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: 'MIME type of <xref href="DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64" data-throw-if-not-resolved="false"></xref>: <code>application/pdf</code> or <code>image/png</code>.'
+  example: []
+  syntax:
+    content: public string? MimeType { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property MimeType As String
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.MimeType*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed
+  id: PrinterUsed
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: PrinterUsed
+  nameWithType: PrintResponse.PrinterUsed
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PrinterUsed
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 30
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: >-
+    Name of the local printer the job was sent to.
+
+    <code>null</code> when called via <code>POST /render</code> (render-only, no print).
+  example: []
+  syntax:
+    content: public string? PrinterUsed { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PrinterUsed As String
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Printed
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.Printed
+  id: Printed
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: Printed
+  nameWithType: PrintResponse.Printed
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Printed
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Printed
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 36
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: >-
+    <code>true</code> when the document was successfully submitted to the local print spooler.
+
+    <code>null</code> when called via <code>POST /render</code>.
+  example: []
+  syntax:
+    content: public bool? Printed { get; init; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: Public Property Printed As Boolean?
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.Printed*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime
+  id: ElapsedTime
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: ElapsedTime
+  nameWithType: PrintResponse.ElapsedTime
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ElapsedTime
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 39
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: Total time from iPad request to bridge response.
+  example: []
+  syntax:
+    content: public TimeSpan ElapsedTime { get; init; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public Property ElapsedTime As TimeSpan
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt
+  id: CompletedAt
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: CompletedAt
+  nameWithType: PrintResponse.CompletedAt
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CompletedAt
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 42
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: UTC timestamp when the bridge completed processing.
+  example: []
+  syntax:
+    content: public DateTimeOffset CompletedAt { get; init; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property CompletedAt As DateTimeOffset
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Error
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.Error
+  id: Error
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: Error
+  nameWithType: PrintResponse.Error
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Error
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Error
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 45
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: Human-readable error. Populated only when <xref href="DocumentGenerator.Bridge.Models.PrintResponse.Success" data-throw-if-not-resolved="false"></xref> is <code>false</code>.
+  example: []
+  syntax:
+    content: public string? Error { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property [Error] As String
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.Error*
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.RenderOk(System.Guid,System.String,System.String,System.TimeSpan)
+  commentId: M:DocumentGenerator.Bridge.Models.PrintResponse.RenderOk(System.Guid,System.String,System.String,System.TimeSpan)
+  id: RenderOk(System.Guid,System.String,System.String,System.TimeSpan)
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: RenderOk(Guid, string, string, TimeSpan)
+  nameWithType: PrintResponse.RenderOk(Guid, string, string, TimeSpan)
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.RenderOk(System.Guid, string, string, System.TimeSpan)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: RenderOk
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 48
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: Creates a successful render-only response (no print).
+  example: []
+  syntax:
+    content: public static PrintResponse RenderOk(Guid correlationId, string documentBase64, string mimeType, TimeSpan elapsed)
+    parameters:
+    - id: correlationId
+      type: System.Guid
+    - id: documentBase64
+      type: System.String
+    - id: mimeType
+      type: System.String
+    - id: elapsed
+      type: System.TimeSpan
+    return:
+      type: DocumentGenerator.Bridge.Models.PrintResponse
+    content.vb: Public Shared Function RenderOk(correlationId As Guid, documentBase64 As String, mimeType As String, elapsed As TimeSpan) As PrintResponse
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.RenderOk*
+  nameWithType.vb: PrintResponse.RenderOk(Guid, String, String, TimeSpan)
+  fullName.vb: DocumentGenerator.Bridge.Models.PrintResponse.RenderOk(System.Guid, String, String, System.TimeSpan)
+  name.vb: RenderOk(Guid, String, String, TimeSpan)
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.PrintOk(System.Guid,System.String,System.String,System.String,System.TimeSpan)
+  commentId: M:DocumentGenerator.Bridge.Models.PrintResponse.PrintOk(System.Guid,System.String,System.String,System.String,System.TimeSpan)
+  id: PrintOk(System.Guid,System.String,System.String,System.String,System.TimeSpan)
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: PrintOk(Guid, string, string, string, TimeSpan)
+  nameWithType: PrintResponse.PrintOk(Guid, string, string, string, TimeSpan)
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.PrintOk(System.Guid, string, string, string, System.TimeSpan)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PrintOk
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 64
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: Creates a successful print response.
+  example: []
+  syntax:
+    content: public static PrintResponse PrintOk(Guid correlationId, string documentBase64, string mimeType, string printerUsed, TimeSpan elapsed)
+    parameters:
+    - id: correlationId
+      type: System.Guid
+    - id: documentBase64
+      type: System.String
+    - id: mimeType
+      type: System.String
+    - id: printerUsed
+      type: System.String
+    - id: elapsed
+      type: System.TimeSpan
+    return:
+      type: DocumentGenerator.Bridge.Models.PrintResponse
+    content.vb: Public Shared Function PrintOk(correlationId As Guid, documentBase64 As String, mimeType As String, printerUsed As String, elapsed As TimeSpan) As PrintResponse
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.PrintOk*
+  nameWithType.vb: PrintResponse.PrintOk(Guid, String, String, String, TimeSpan)
+  fullName.vb: DocumentGenerator.Bridge.Models.PrintResponse.PrintOk(System.Guid, String, String, String, System.TimeSpan)
+  name.vb: PrintOk(Guid, String, String, String, TimeSpan)
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Fail(System.Guid,System.String,System.TimeSpan)
+  commentId: M:DocumentGenerator.Bridge.Models.PrintResponse.Fail(System.Guid,System.String,System.TimeSpan)
+  id: Fail(System.Guid,System.String,System.TimeSpan)
+  parent: DocumentGenerator.Bridge.Models.PrintResponse
+  langs:
+  - csharp
+  - vb
+  name: Fail(Guid, string, TimeSpan)
+  nameWithType: PrintResponse.Fail(Guid, string, TimeSpan)
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Fail(System.Guid, string, System.TimeSpan)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Fail
+    path: src/DocumentGenerator.Bridge/Models/PrintResponse.cs
+    startLine: 82
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Models
+  summary: Creates a failure response.
+  example: []
+  syntax:
+    content: public static PrintResponse Fail(Guid correlationId, string error, TimeSpan elapsed)
+    parameters:
+    - id: correlationId
+      type: System.Guid
+    - id: error
+      type: System.String
+    - id: elapsed
+      type: System.TimeSpan
+    return:
+      type: DocumentGenerator.Bridge.Models.PrintResponse
+    content.vb: Public Shared Function Fail(correlationId As Guid, [error] As String, elapsed As TimeSpan) As PrintResponse
+  overload: DocumentGenerator.Bridge.Models.PrintResponse.Fail*
+  nameWithType.vb: PrintResponse.Fail(Guid, String, TimeSpan)
+  fullName.vb: DocumentGenerator.Bridge.Models.PrintResponse.Fail(System.Guid, String, System.TimeSpan)
+  name.vb: Fail(Guid, String, TimeSpan)
+references:
+- uid: DocumentGenerator.Bridge.Models
+  commentId: N:DocumentGenerator.Bridge.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Models
+  nameWithType: DocumentGenerator.Bridge.Models
+  fullName: DocumentGenerator.Bridge.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Models
+    name: Models
+    href: DocumentGenerator.Bridge.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Models
+    name: Models
+    href: DocumentGenerator.Bridge.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_CorrelationId
+  name: CorrelationId
+  nameWithType: PrintResponse.CorrelationId
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.CorrelationId
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Success*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.Success
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_Success
+  name: Success
+  nameWithType: PrintResponse.Success
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Success
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_DocumentBase64
+  name: DocumentBase64
+  nameWithType: PrintResponse.DocumentBase64
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_DocumentBase64
+  name: DocumentBase64
+  nameWithType: PrintResponse.DocumentBase64
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.DocumentBase64
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.MimeType*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.MimeType
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_MimeType
+  name: MimeType
+  nameWithType: PrintResponse.MimeType
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.MimeType
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_PrinterUsed
+  name: PrinterUsed
+  nameWithType: PrintResponse.PrinterUsed
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.PrinterUsed
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Printed*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.Printed
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_Printed
+  name: Printed
+  nameWithType: PrintResponse.Printed
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Printed
+- uid: System.Nullable{System.Boolean}
+  commentId: T:System.Nullable{System.Boolean}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool?
+  nameWithType: bool?
+  fullName: bool?
+  nameWithType.vb: Boolean?
+  fullName.vb: Boolean?
+  name.vb: Boolean?
+  spec.csharp:
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+  spec.vb:
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_ElapsedTime
+  name: ElapsedTime
+  nameWithType: PrintResponse.ElapsedTime
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.ElapsedTime
+- uid: System.TimeSpan
+  commentId: T:System.TimeSpan
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_CompletedAt
+  name: CompletedAt
+  nameWithType: PrintResponse.CompletedAt
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.CompletedAt
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Success
+  commentId: P:DocumentGenerator.Bridge.Models.PrintResponse.Success
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_Success
+  name: Success
+  nameWithType: PrintResponse.Success
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Success
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Error*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.Error
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_Error
+  name: Error
+  nameWithType: PrintResponse.Error
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Error
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.RenderOk*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.RenderOk
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_RenderOk_System_Guid_System_String_System_String_System_TimeSpan_
+  name: RenderOk
+  nameWithType: PrintResponse.RenderOk
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.RenderOk
+- uid: DocumentGenerator.Bridge.Models.PrintResponse
+  commentId: T:DocumentGenerator.Bridge.Models.PrintResponse
+  parent: DocumentGenerator.Bridge.Models
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html
+  name: PrintResponse
+  nameWithType: PrintResponse
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.PrintOk*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.PrintOk
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_PrintOk_System_Guid_System_String_System_String_System_String_System_TimeSpan_
+  name: PrintOk
+  nameWithType: PrintResponse.PrintOk
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.PrintOk
+- uid: DocumentGenerator.Bridge.Models.PrintResponse.Fail*
+  commentId: Overload:DocumentGenerator.Bridge.Models.PrintResponse.Fail
+  href: DocumentGenerator.Bridge.Models.PrintResponse.html#DocumentGenerator_Bridge_Models_PrintResponse_Fail_System_Guid_System_String_System_TimeSpan_
+  name: Fail
+  nameWithType: PrintResponse.Fail
+  fullName: DocumentGenerator.Bridge.Models.PrintResponse.Fail

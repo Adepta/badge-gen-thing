@@ -3,6 +3,7 @@ using DocumentGenerator.Messaging.Handlers;
 using DocumentGenerator.Messaging.Messages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Rebus.Bus;
 using Rebus.Config;
 using Rebus.Kafka;
@@ -62,14 +63,24 @@ public static class ServiceCollectionExtensions
 /// Calls bus.Subscribe after the host has fully started, avoiding the
 /// deadlock that occurs when Subscribe is called inside Rebus's onCreated callback.
 /// </summary>
-internal sealed class RebusSubscriptionService(IBus bus) : IHostedService
+internal sealed class RebusSubscriptionService(IBus bus, ILogger<RebusSubscriptionService> logger) : IHostedService
 {
     /// <inheritdoc/>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        logger.LogInformation(
+            "Subscribing to Kafka topic for {MessageType}", nameof(DocumentRenderRequest));
+
         await bus.Subscribe<DocumentRenderRequest>();
+
+        logger.LogInformation(
+            "Rebus subscription active — listening for {MessageType}", nameof(DocumentRenderRequest));
     }
 
     /// <inheritdoc/>
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Rebus subscription stopping.");
+        return Task.CompletedTask;
+    }
 }

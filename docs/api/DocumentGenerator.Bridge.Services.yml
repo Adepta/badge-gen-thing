@@ -1,0 +1,38 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Services
+  commentId: N:DocumentGenerator.Bridge.Services
+  id: Services
+  parent: DocumentGenerator.Bridge
+  children:
+  - DocumentGenerator.Bridge.Services.CloudBadgeClient
+  - DocumentGenerator.Bridge.Services.CloudRenderResponse
+  - DocumentGenerator.Bridge.Services.SetupService
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Bridge.Services
+  nameWithType: DocumentGenerator.Bridge.Services
+  fullName: DocumentGenerator.Bridge.Services
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Bridge
+references:
+- uid: DocumentGenerator.Bridge.Services.CloudBadgeClient
+  commentId: T:DocumentGenerator.Bridge.Services.CloudBadgeClient
+  href: DocumentGenerator.Bridge.Services.CloudBadgeClient.html
+  name: CloudBadgeClient
+  nameWithType: CloudBadgeClient
+  fullName: DocumentGenerator.Bridge.Services.CloudBadgeClient
+- uid: DocumentGenerator.Bridge.Services.CloudRenderResponse
+  commentId: T:DocumentGenerator.Bridge.Services.CloudRenderResponse
+  href: DocumentGenerator.Bridge.Services.CloudRenderResponse.html
+  name: CloudRenderResponse
+  nameWithType: CloudRenderResponse
+  fullName: DocumentGenerator.Bridge.Services.CloudRenderResponse
+- uid: DocumentGenerator.Bridge.Services.SetupService
+  commentId: T:DocumentGenerator.Bridge.Services.SetupService
+  href: DocumentGenerator.Bridge.Services.SetupService.html
+  name: SetupService
+  nameWithType: SetupService
+  fullName: DocumentGenerator.Bridge.Services.SetupService

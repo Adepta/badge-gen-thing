@@ -1,0 +1,55 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Api.Services
+  commentId: N:DocumentGenerator.Api.Services
+  id: Services
+  parent: DocumentGenerator.Api
+  children:
+  - DocumentGenerator.Api.Services.TemplateLocator
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Api.Services
+  nameWithType: DocumentGenerator.Api.Services
+  fullName: DocumentGenerator.Api.Services
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Api
+references:
+- uid: DocumentGenerator.Api.Services.TemplateLocator
+  commentId: T:DocumentGenerator.Api.Services.TemplateLocator
+  parent: DocumentGenerator.Api.Services
+  href: DocumentGenerator.Api.Services.TemplateLocator.html
+  name: TemplateLocator
+  nameWithType: TemplateLocator
+  fullName: DocumentGenerator.Api.Services.TemplateLocator
+- uid: DocumentGenerator.Api.Services
+  commentId: N:DocumentGenerator.Api.Services
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Services
+  nameWithType: DocumentGenerator.Api.Services
+  fullName: DocumentGenerator.Api.Services
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Services
+    name: Services
+    href: DocumentGenerator.Api.Services.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Services
+    name: Services
+    href: DocumentGenerator.Api.Services.html

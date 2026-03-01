@@ -1,0 +1,45 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Endpoints
+  commentId: N:DocumentGenerator.Bridge.Endpoints
+  id: Endpoints
+  parent: DocumentGenerator.Bridge
+  children:
+  - DocumentGenerator.Bridge.Endpoints.BridgeEndpoints
+  - DocumentGenerator.Bridge.Endpoints.SaveConfigRequest
+  - DocumentGenerator.Bridge.Endpoints.SetupEndpoints
+  - DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Bridge.Endpoints
+  nameWithType: DocumentGenerator.Bridge.Endpoints
+  fullName: DocumentGenerator.Bridge.Endpoints
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Bridge
+references:
+- uid: DocumentGenerator.Bridge.Endpoints.BridgeEndpoints
+  commentId: T:DocumentGenerator.Bridge.Endpoints.BridgeEndpoints
+  href: DocumentGenerator.Bridge.Endpoints.BridgeEndpoints.html
+  name: BridgeEndpoints
+  nameWithType: BridgeEndpoints
+  fullName: DocumentGenerator.Bridge.Endpoints.BridgeEndpoints
+- uid: DocumentGenerator.Bridge.Endpoints.SaveConfigRequest
+  commentId: T:DocumentGenerator.Bridge.Endpoints.SaveConfigRequest
+  href: DocumentGenerator.Bridge.Endpoints.SaveConfigRequest.html
+  name: SaveConfigRequest
+  nameWithType: SaveConfigRequest
+  fullName: DocumentGenerator.Bridge.Endpoints.SaveConfigRequest
+- uid: DocumentGenerator.Bridge.Endpoints.SetupEndpoints
+  commentId: T:DocumentGenerator.Bridge.Endpoints.SetupEndpoints
+  href: DocumentGenerator.Bridge.Endpoints.SetupEndpoints.html
+  name: SetupEndpoints
+  nameWithType: SetupEndpoints
+  fullName: DocumentGenerator.Bridge.Endpoints.SetupEndpoints
+- uid: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  commentId: T:DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  href: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.html
+  name: TestConnectionRequest
+  nameWithType: TestConnectionRequest
+  fullName: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest

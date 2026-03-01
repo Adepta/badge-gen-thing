@@ -1,0 +1,84 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Printing
+  commentId: N:DocumentGenerator.Bridge.Printing
+  id: Printing
+  parent: DocumentGenerator.Bridge
+  children:
+  - DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+  - DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  - DocumentGenerator.Bridge.Printing.PrintResult
+  - DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+  - DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Bridge.Printing
+  nameWithType: DocumentGenerator.Bridge.Printing
+  fullName: DocumentGenerator.Bridge.Printing
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Bridge
+references:
+- uid: DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+  commentId: T:DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+  href: DocumentGenerator.Bridge.Printing.CupsPrinterAdapter.html
+  name: CupsPrinterAdapter
+  nameWithType: CupsPrinterAdapter
+  fullName: DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+- uid: DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  commentId: T:DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  parent: DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.Bridge.Printing.IPrinterAdapter.html
+  name: IPrinterAdapter
+  nameWithType: IPrinterAdapter
+  fullName: DocumentGenerator.Bridge.Printing.IPrinterAdapter
+- uid: DocumentGenerator.Bridge.Printing.PrintResult
+  commentId: T:DocumentGenerator.Bridge.Printing.PrintResult
+  parent: DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html
+  name: PrintResult
+  nameWithType: PrintResult
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult
+- uid: DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+  commentId: T:DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+  href: DocumentGenerator.Bridge.Printing.PrinterAdapterFactory.html
+  name: PrinterAdapterFactory
+  nameWithType: PrinterAdapterFactory
+  fullName: DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+- uid: DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+  commentId: T:DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+  href: DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter.html
+  name: WindowsPrinterAdapter
+  nameWithType: WindowsPrinterAdapter
+  fullName: DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+- uid: DocumentGenerator.Bridge.Printing
+  commentId: N:DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Printing
+  nameWithType: DocumentGenerator.Bridge.Printing
+  fullName: DocumentGenerator.Bridge.Printing
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html

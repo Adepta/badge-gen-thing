@@ -1,0 +1,469 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  commentId: T:DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  id: IPrinterAdapter
+  parent: DocumentGenerator.Bridge.Printing
+  children:
+  - DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters
+  - DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync(System.Byte[],System.String,System.String,System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IPrinterAdapter
+  nameWithType: IPrinterAdapter
+  fullName: DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  type: Interface
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: IPrinterAdapter
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 14
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: >-
+    Abstraction over a local printer. Implementations handle OS-specific
+
+    print spooler APIs so the rest of the bridge remains platform-agnostic.
+  remarks: >-
+    Two adapters are provided out of the box:
+
+
+    <ul><li><xref href="DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter" data-throw-if-not-resolved="false"></xref> — uses <code>System.Drawing.Printing</code> on Windows.</li><li><xref href="DocumentGenerator.Bridge.Printing.CupsPrinterAdapter" data-throw-if-not-resolved="false"></xref> — shells out to <code>lp</code> on Linux and macOS.</li></ul>
+
+
+    The correct adapter is selected at startup via <xref href="DocumentGenerator.Bridge.Printing.PrinterAdapterFactory" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public interface IPrinterAdapter
+    content.vb: Public Interface IPrinterAdapter
+  derivedClasses:
+  - DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+  - DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+- uid: DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters
+  commentId: M:DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters
+  id: GetAvailablePrinters
+  parent: DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  langs:
+  - csharp
+  - vb
+  name: GetAvailablePrinters()
+  nameWithType: IPrinterAdapter.GetAvailablePrinters()
+  fullName: DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters()
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: GetAvailablePrinters
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 20
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: Returns the names of all printers currently visible to the OS.
+  example: []
+  syntax:
+    content: IEnumerable<string> GetAvailablePrinters()
+    return:
+      type: System.Collections.Generic.IEnumerable{System.String}
+      description: An ordered sequence of printer display names.
+    content.vb: Function GetAvailablePrinters() As IEnumerable(Of String)
+  overload: DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters*
+- uid: DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync(System.Byte[],System.String,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync(System.Byte[],System.String,System.String,System.String,System.Threading.CancellationToken)
+  id: PrintAsync(System.Byte[],System.String,System.String,System.String,System.Threading.CancellationToken)
+  parent: DocumentGenerator.Bridge.Printing.IPrinterAdapter
+  langs:
+  - csharp
+  - vb
+  name: PrintAsync(byte[], string, string?, string, CancellationToken)
+  nameWithType: IPrinterAdapter.PrintAsync(byte[], string, string?, string, CancellationToken)
+  fullName: DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync(byte[], string, string?, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PrintAsync
+    path: src/DocumentGenerator.Bridge/Printing/IPrinterAdapter.cs
+    startLine: 39
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Printing
+  summary: Sends raw document bytes to the specified printer via the OS print spooler.
+  example: []
+  syntax:
+    content: Task<PrintResult> PrintAsync(byte[] documentBytes, string mimeType, string? printerName, string jobName, CancellationToken cancellationToken = default)
+    parameters:
+    - id: documentBytes
+      type: System.Byte[]
+      description: PDF or PNG bytes to print.
+    - id: mimeType
+      type: System.String
+      description: 'MIME type of the document: <code>application/pdf</code> or <code>image/png</code>.'
+    - id: printerName
+      type: System.String
+      description: Target printer name. When <code>null</code> or empty, the OS default printer is used.
+    - id: jobName
+      type: System.String
+      description: Display name shown in the print queue, e.g. <code>"Badge – Jane Smith"</code>.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the print operation.
+    return:
+      type: System.Threading.Tasks.Task{DocumentGenerator.Bridge.Printing.PrintResult}
+      description: A <xref href="DocumentGenerator.Bridge.Printing.PrintResult" data-throw-if-not-resolved="false"></xref> describing whether the job was submitted successfully.
+    content.vb: Function PrintAsync(documentBytes As Byte(), mimeType As String, printerName As String, jobName As String, cancellationToken As CancellationToken = Nothing) As Task(Of PrintResult)
+  overload: DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync*
+  nameWithType.vb: IPrinterAdapter.PrintAsync(Byte(), String, String, String, CancellationToken)
+  fullName.vb: DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync(Byte(), String, String, String, System.Threading.CancellationToken)
+  name.vb: PrintAsync(Byte(), String, String, String, CancellationToken)
+references:
+- uid: DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+  commentId: T:DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+  href: DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter.html
+  name: WindowsPrinterAdapter
+  nameWithType: WindowsPrinterAdapter
+  fullName: DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+- uid: DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+  commentId: T:DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+  href: DocumentGenerator.Bridge.Printing.CupsPrinterAdapter.html
+  name: CupsPrinterAdapter
+  nameWithType: CupsPrinterAdapter
+  fullName: DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+- uid: DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+  commentId: T:DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+  href: DocumentGenerator.Bridge.Printing.PrinterAdapterFactory.html
+  name: PrinterAdapterFactory
+  nameWithType: PrinterAdapterFactory
+  fullName: DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+- uid: DocumentGenerator.Bridge.Printing
+  commentId: N:DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Printing
+  nameWithType: DocumentGenerator.Bridge.Printing
+  fullName: DocumentGenerator.Bridge.Printing
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Printing
+    name: Printing
+    href: DocumentGenerator.Bridge.Printing.html
+- uid: DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters*
+  commentId: Overload:DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters
+  href: DocumentGenerator.Bridge.Printing.IPrinterAdapter.html#DocumentGenerator_Bridge_Printing_IPrinterAdapter_GetAvailablePrinters
+  name: GetAvailablePrinters
+  nameWithType: IPrinterAdapter.GetAvailablePrinters
+  fullName: DocumentGenerator.Bridge.Printing.IPrinterAdapter.GetAvailablePrinters
+- uid: System.Collections.Generic.IEnumerable{System.String}
+  commentId: T:System.Collections.Generic.IEnumerable{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<string>
+  nameWithType: IEnumerable<string>
+  fullName: System.Collections.Generic.IEnumerable<string>
+  nameWithType.vb: IEnumerable(Of String)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of String)
+  name.vb: IEnumerable(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.IEnumerable`1
+  commentId: T:System.Collections.Generic.IEnumerable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<T>
+  nameWithType: IEnumerable<T>
+  fullName: System.Collections.Generic.IEnumerable<T>
+  nameWithType.vb: IEnumerable(Of T)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of T)
+  name.vb: IEnumerable(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: DocumentGenerator.Bridge.Printing.PrintResult
+  commentId: T:DocumentGenerator.Bridge.Printing.PrintResult
+  parent: DocumentGenerator.Bridge.Printing
+  href: DocumentGenerator.Bridge.Printing.PrintResult.html
+  name: PrintResult
+  nameWithType: PrintResult
+  fullName: DocumentGenerator.Bridge.Printing.PrintResult
+- uid: DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync*
+  commentId: Overload:DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync
+  href: DocumentGenerator.Bridge.Printing.IPrinterAdapter.html#DocumentGenerator_Bridge_Printing_IPrinterAdapter_PrintAsync_System_Byte___System_String_System_String_System_String_System_Threading_CancellationToken_
+  name: PrintAsync
+  nameWithType: IPrinterAdapter.PrintAsync
+  fullName: DocumentGenerator.Bridge.Printing.IPrinterAdapter.PrintAsync
+- uid: System.Byte[]
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.byte
+  name: byte[]
+  nameWithType: byte[]
+  fullName: byte[]
+  nameWithType.vb: Byte()
+  fullName.vb: Byte()
+  name.vb: Byte()
+  spec.csharp:
+  - uid: System.Byte
+    name: byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.Byte
+    name: Byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: (
+  - name: )
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{DocumentGenerator.Bridge.Printing.PrintResult}
+  commentId: T:System.Threading.Tasks.Task{DocumentGenerator.Bridge.Printing.PrintResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<PrintResult>
+  nameWithType: Task<PrintResult>
+  fullName: System.Threading.Tasks.Task<DocumentGenerator.Bridge.Printing.PrintResult>
+  nameWithType.vb: Task(Of PrintResult)
+  fullName.vb: System.Threading.Tasks.Task(Of DocumentGenerator.Bridge.Printing.PrintResult)
+  name.vb: Task(Of PrintResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: DocumentGenerator.Bridge.Printing.PrintResult
+    name: PrintResult
+    href: DocumentGenerator.Bridge.Printing.PrintResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Bridge.Printing.PrintResult
+    name: PrintResult
+    href: DocumentGenerator.Bridge.Printing.PrintResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

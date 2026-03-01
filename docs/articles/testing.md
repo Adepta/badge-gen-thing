@@ -1,13 +1,13 @@
 # Testing
 
-DocumentGenerator has a two-project test suite totalling **109 test executions** across 103 test methods.
+DocumentGenerator has a two-project test suite totalling **231 test executions**.
 
 | Project | Tests | Type | Chromium? |
 |---|---|---|---|
-| `DocumentGenerator.UnitTests` | 91 executions (85 methods) | Unit | No |
-| `DocumentGenerator.IntegrationTests` | 18 | Integration | No |
+| `DocumentGenerator.UnitTests` | 170 | Unit | No |
+| `DocumentGenerator.IntegrationTests` | 61 | Integration | No |
 
-All tests run fully in-process. No real browser, no Kafka broker, and no file system state outside of explicitly-created temp directories is required.
+All tests run fully in-process. No real browser, no Kafka broker, no cloud API, and no file system state outside of explicitly-created temp directories is required.
 
 ---
 
@@ -216,18 +216,89 @@ Uses `IDisposable` — creates unique temp `templates/` and `output/` directorie
 | `WorkerLoop_EmptyTemplateDirectory_ProducesNoPdfs` | No input files → no PDF files produced |
 | `WorkerLoop_VariablesInTemplate_AreRenderedIntoHtml` | Variables substituted into HTML in the full file-loop path |
 
+### `Api.BadgesApiIntegrationTests` (17 tests)
+
+**File:** `tests/DocumentGenerator.IntegrationTests/Api/BadgesApiIntegrationTests.cs`
+
+Uses `ApiWebApplicationFactory` — an in-process `WebApplicationFactory<Program>` that replaces `IDocumentPipeline` with a `Mock<IDocumentPipeline>` and seeds a temp directory with stub HTML templates. No Chromium, no real file system beyond the temp dir.
+
+| Test | What's verified |
+|---|---|
+| `Health_Get_Returns200` | Health probe returns 200 without an API key |
+| `Health_Get_NoApiKeyRequired` | Health endpoint is exempt from authentication |
+| `Health_Get_ReturnsHealthyStatus` | Response body contains `"healthy"` |
+| `Templates_Get_Returns200` | Authenticated `GET /api/badges/templates` returns 200 |
+| `Templates_Get_MissingApiKey_Returns401` | Missing key → 401 |
+| `Templates_Get_WrongApiKey_Returns401` | Wrong key → 401 |
+| `Templates_Get_ReturnsTemplateNames` | Response array contains the seeded template names |
+| `Render_ValidRequest_Returns200` | Authenticated POST with valid body → 200 |
+| `Render_ValidRequest_ResponseSuccessIsTrue` | `success: true` on happy path |
+| `Render_ValidRequest_MimeTypeIsPdf` | `mimeType: "application/pdf"` by default |
+| `Render_ValidRequest_DocumentBase64IsPopulated` | `documentBase64` is non-empty |
+| `Render_ValidRequest_EchoesCorrelationId` | Supplied `correlationId` is echoed back |
+| `Render_MissingApiKey_Returns401` | Missing key → 401 |
+| `Render_WrongApiKey_Returns401` | Wrong key → 401 |
+| `Render_PngFormat_MimeTypeIsPng` | `format: "Png"` → `mimeType: "image/png"` |
+| `Render_UnknownTemplate_Returns400` | Unknown template name → 400 |
+| `Render_UnknownTemplate_ResponseSuccessIsFalse` | `success: false` with unknown template |
+| `Render_PipelineThrows_Returns500` | Pipeline exception → 500 |
+
+### `Bridge.BridgeEndpointsIntegrationTests` (26 tests)
+
+**File:** `tests/DocumentGenerator.IntegrationTests/Bridge/BridgeEndpointsIntegrationTests.cs`
+
+Uses `BridgeWebApplicationFactory` — an in-process test server that replaces `IPrinterAdapter` with `MockPrinterAdapter` (records calls) and replaces `IHttpClientFactory` with a `StubHttpClientFactory` backed by `MockCloudHandler` (returns canned responses). No real printer, no real cloud API.
+
+| Group | Test | What's verified |
+|---|---|---|
+| `/health` | `Health_Get_Returns200` | Liveness probe is always 200 |
+| `/health` | `Health_Get_ReturnsHealthyStatus` | Response body contains `"healthy"` |
+| `/health` | `Health_Get_IsConfiguredIsTrue` | `isConfigured: true` once configured |
+| `/printers` | `Printers_Get_Returns200` | 200 with printer list |
+| `/printers` | `Printers_Get_ReturnsAvailablePrinters` | Stub printers appear in list |
+| `/templates` | `Templates_Get_Returns200` | Proxied template list returns 200 |
+| `/render` | `Render_ValidRequest_Returns200` | Cloud render proxied, 200 returned |
+| `/render` | `Render_ValidRequest_SuccessIsTrue` | `success: true` on happy path |
+| `/render` | `Render_ValidRequest_DocumentBase64IsPopulated` | Base64 document present |
+| `/render` | `Render_ValidRequest_PrintedIsNull` | `printed` is null (not sent to printer) |
+| `/render` | `Render_ValidRequest_EchoesCorrelationId` | Correlation ID echoed |
+| `/render` | `Render_DoesNotCallPrinter` | `MockPrinterAdapter.PrintCalled` is false |
+| `/print` | `Print_ValidRequest_Returns200` | Full render+print flow returns 200 |
+| `/print` | `Print_ValidRequest_SuccessIsTrue` | `success: true` |
+| `/print` | `Print_ValidRequest_PrintedIsTrue` | `printed: true` |
+| `/print` | `Print_ValidRequest_DocumentBase64IsPresent` | Document returned even after printing |
+| `/print` | `Print_ValidRequest_PrinterUsedIsSet` | `printerUsed` is populated |
+| `/print` | `Print_ValidRequest_CallsPrinterAdapter` | `MockPrinterAdapter.PrintCalled` is true |
+| `/print` | `Print_SpecificPrinterName_ForwardsToAdapter` | `printerName` field forwarded to adapter |
+| `/print` | `Print_PrinterFails_DocumentStillReturnedInResponse` | Print failure → document still in response, `printed: false` |
+| `/print` | `Print_CloudFails_SuccessIsFalse` | Cloud 500 → `success: false` |
+| Setup guard | `SetupGuard_WhenConfigured_AllowsNormalRequests` | `/render` works when `IsConfigured: true` |
+| `/setup/printers` | `SetupPrinters_Get_Returns200` | Setup wizard printer list endpoint returns 200 |
+| `/setup/printers` | `SetupPrinters_Get_ReturnsPrinterList` | Printer list is non-empty |
+| `/setup/test-connection` | `SetupTestConnection_ValidRequest_Returns200` | Connection test endpoint returns 200 |
+
 ---
 
 ## Test Infrastructure Details
 
+### WebApplicationFactory pattern (Api + Bridge)
+
+Both `ApiWebApplicationFactory` and `BridgeWebApplicationFactory` extend `WebApplicationFactory<Program>` from `Microsoft.AspNetCore.Mvc.Testing`. They use `ConfigureWebHost(IWebHostBuilder builder)` to:
+
+- Inject test settings via `builder.UseSetting(key, value)` — no `AddInMemoryCollection` or `AddEnvironmentVariables` extensions required.
+- Replace real services with stubs via `builder.ConfigureServices(services => { ... })`.
+
+The `Program` class in each project is exposed as `public partial class Program` inside its own namespace (`DocumentGenerator.Api` and `DocumentGenerator.Bridge`) to prevent CS0433 conflicts when both are referenced in the same test project.
+
 ### IDisposable fixtures
 
-Two test classes create real temp directories and clean them up via `IDisposable`:
+Test classes that create real temp directories implement `IDisposable` and clean them up in `Dispose()`:
 
-- `FileTemplateContentResolverTests` — verifies path resolution against real files
-- `FileModeWorkerIntegrationTests` — verifies the complete read→render→write loop
+- `FileTemplateContentResolverTests` — path resolution against real files
+- `FileModeWorkerIntegrationTests` — complete read→render→write loop
+- `ApiWebApplicationFactory` — temp directory of stub HTML templates
 
-xUnit calls `Dispose()` after every test, so each test gets a fresh, isolated directory.
+xUnit calls `Dispose()` after every test (or after the class fixture is torn down), so each run gets a fresh, isolated directory.
 
 ### No base classes
 
@@ -248,7 +319,14 @@ All constructors that accept real implementations pass `NullLogger<T>.Instance` 
 3. Use Moq for any interface dependencies; assert with FluentAssertions.
 4. For helpers in `HandlebarsTemplateEngine`, follow the pattern in `HandlebarsTemplateEngineTests` — call `BuildTemplate(html: "…")` and call `engine.RenderAsync(template, CancellationToken.None)`.
 
-### Integration test checklist
+### Integration test checklist (Api / Bridge)
+
+1. Add the test method to the appropriate `*IntegrationTests` class.
+2. Use the factory's `CreateClient()` for HTTP calls.
+3. Use `_factory.PipelineMock` (Api) or `_factory.PrinterAdapter` / `_factory.CloudHandler` (Bridge) to control stubs.
+4. For new endpoint stubs in `MockCloudHandler`, route on `request.RequestUri.PathAndQuery` to return the appropriate canned response.
+
+### Integration test checklist (Console pipeline)
 
 1. Create the class under `tests/DocumentGenerator.IntegrationTests/`.
 2. Wire the real `HandlebarsTemplateEngine` and `DocumentPipeline` via `BuildPipeline()`.

@@ -17,10 +17,13 @@ internal sealed class SpectreConsoleLogger(
 {
     private readonly string _shortCategory = ShortenCategory(categoryName);
 
+    /// <inheritdoc/>
     public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
 
+    /// <inheritdoc/>
     public bool IsEnabled(LogLevel logLevel) => logLevel >= minimumLevel;
 
+    /// <inheritdoc/>
     public void Log<TState>(
         LogLevel logLevel,
         EventId eventId,

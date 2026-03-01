@@ -1,0 +1,370 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  commentId: T:DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  id: TestConnectionRequest
+  parent: DocumentGenerator.Bridge.Endpoints
+  children:
+  - DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey
+  - DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl
+  langs:
+  - csharp
+  - vb
+  name: TestConnectionRequest
+  nameWithType: TestConnectionRequest
+  fullName: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Endpoints/SetupEndpoints.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: TestConnectionRequest
+    path: src/DocumentGenerator.Bridge/Endpoints/SetupEndpoints.cs
+    startLine: 82
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Endpoints
+  summary: Request body for the connection test endpoint.
+  example: []
+  syntax:
+    content: public sealed class TestConnectionRequest
+    content.vb: Public NotInheritable Class TestConnectionRequest
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl
+  commentId: P:DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl
+  id: BaseUrl
+  parent: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  langs:
+  - csharp
+  - vb
+  name: BaseUrl
+  nameWithType: TestConnectionRequest.BaseUrl
+  fullName: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Endpoints/SetupEndpoints.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: BaseUrl
+    path: src/DocumentGenerator.Bridge/Endpoints/SetupEndpoints.cs
+    startLine: 85
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Endpoints
+  summary: Cloud API base URL to test.
+  example: []
+  syntax:
+    content: public string BaseUrl { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property BaseUrl As String
+  overload: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl*
+- uid: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey
+  commentId: P:DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey
+  id: ApiKey
+  parent: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+  langs:
+  - csharp
+  - vb
+  name: ApiKey
+  nameWithType: TestConnectionRequest.ApiKey
+  fullName: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Bridge/Endpoints/SetupEndpoints.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ApiKey
+    path: src/DocumentGenerator.Bridge/Endpoints/SetupEndpoints.cs
+    startLine: 87
+  assemblies:
+  - DocumentGenerator.Bridge
+  namespace: DocumentGenerator.Bridge.Endpoints
+  summary: API key to use in the test request.
+  example: []
+  syntax:
+    content: public string ApiKey { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ApiKey As String
+  overload: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey*
+references:
+- uid: DocumentGenerator.Bridge.Endpoints
+  commentId: N:DocumentGenerator.Bridge.Endpoints
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge.Endpoints
+  nameWithType: DocumentGenerator.Bridge.Endpoints
+  fullName: DocumentGenerator.Bridge.Endpoints
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Endpoints
+    name: Endpoints
+    href: DocumentGenerator.Bridge.Endpoints.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  - name: .
+  - uid: DocumentGenerator.Bridge.Endpoints
+    name: Endpoints
+    href: DocumentGenerator.Bridge.Endpoints.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl*
+  commentId: Overload:DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl
+  href: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.html#DocumentGenerator_Bridge_Endpoints_TestConnectionRequest_BaseUrl
+  name: BaseUrl
+  nameWithType: TestConnectionRequest.BaseUrl
+  fullName: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.BaseUrl
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey*
+  commentId: Overload:DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey
+  href: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.html#DocumentGenerator_Bridge_Endpoints_TestConnectionRequest_ApiKey
+  name: ApiKey
+  nameWithType: TestConnectionRequest.ApiKey
+  fullName: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest.ApiKey

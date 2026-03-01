@@ -21,7 +21,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: HandlebarsTemplateEngine
     path: src/DocumentGenerator.Templating/HandlebarsTemplateEngine.cs
-    startLine: 26
+    startLine: 27
   assemblies:
   - DocumentGenerator.Templating
   namespace: DocumentGenerator.Templating
@@ -75,7 +75,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: .ctor
     path: src/DocumentGenerator.Templating/HandlebarsTemplateEngine.cs
-    startLine: 37
+    startLine: 38
   assemblies:
   - DocumentGenerator.Templating
   namespace: DocumentGenerator.Templating
@@ -115,7 +115,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: RenderAsync
     path: src/DocumentGenerator.Templating/HandlebarsTemplateEngine.cs
-    startLine: 56
+    startLine: 57
   assemblies:
   - DocumentGenerator.Templating
   namespace: DocumentGenerator.Templating

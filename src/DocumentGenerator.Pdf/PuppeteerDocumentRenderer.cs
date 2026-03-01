@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using Microsoft.Extensions.Logging;
@@ -43,6 +44,10 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
         CorePdfOptions options,
         CancellationToken cancellationToken = default)
     {
+        var sw = Stopwatch.StartNew();
+        _logger.LogDebug(
+            "Acquiring browser lease — HtmlLength: {HtmlLength}", html.Length);
+
         await using var lease = await _pool.AcquireAsync(cancellationToken);
 
         IPage? page = null;
@@ -53,19 +58,39 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
             // Load HTML directly — avoids file I/O and works in containers
             await page.SetContentAsync(html, new NavigationOptions
             {
-                WaitUntil = [WaitUntilNavigation.Networkidle0],
-                Timeout = 30_000
+                // Load fires after all sub-resources (stylesheets, fonts) have loaded.
+                // Networkidle0 was previously used but blocks indefinitely when external
+                // resources (e.g. Google Fonts) are slow or unreachable, causing blank PDFs.
+                WaitUntil = [WaitUntilNavigation.Load],
+                Timeout   = 30_000
             });
 
-            var pdfOptions = MapOptions(options);
-            var pdfBytes = await page.PdfDataAsync(pdfOptions);
+            // Wait for fonts to finish loading (covers CSS @import font faces).
+            // Times out gracefully after 5s so a missing font never blocks rendering.
+            try
+            {
+                await page.EvaluateFunctionAsync(
+                    "() => document.fonts.ready",
+                    Array.Empty<object>());
+            }
+            catch { /* best-effort — proceed even if fonts API unavailable */ }
 
-            _logger.LogDebug("PDF rendered — {Bytes:N0} bytes", pdfBytes.Length);
+            var pdfOptions = MapOptions(options);
+            var pdfBytes   = await page.PdfDataAsync(pdfOptions);
+
+            sw.Stop();
+            _logger.LogInformation(
+                "Chromium render complete — Bytes: {Bytes}, ElapsedMs: {ElapsedMs}",
+                pdfBytes.Length, sw.ElapsedMilliseconds);
+
             return pdfBytes;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "PDF render failed, invalidating browser lease");
+            sw.Stop();
+            _logger.LogError(ex,
+                "Chromium render failed after {ElapsedMs}ms — invalidating browser lease",
+                sw.ElapsedMilliseconds);
             lease.Invalidate();
             throw;
         }

@@ -105,6 +105,12 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
     // Internal — called by BrowserLease
     // -------------------------------------------------------------------------
 
+    /// <summary>
+    /// Returns <paramref name="browser"/> to the idle queue (or recycles it if its render
+    /// count has reached <see cref="BrowserPoolOptions.MaxRendersPerInstance"/>).
+    /// Called by <see cref="BrowserLease"/> on disposal when not invalidated.
+    /// </summary>
+    /// <param name="browser">The browser instance being returned.</param>
     internal async Task ReturnAsync(IBrowser browser)
     {
         if (!_all.TryGetValue(browser, out var pooled))
@@ -139,6 +145,11 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
         _semaphore.Release();
     }
 
+    /// <summary>
+    /// Closes and removes <paramref name="browser"/> from the pool without returning it to the idle queue.
+    /// Called by <see cref="BrowserLease"/> on disposal when <see cref="BrowserLease.Invalidate"/> was called.
+    /// </summary>
+    /// <param name="browser">The invalidated browser instance to discard.</param>
     internal async Task DiscardAsync(IBrowser browser)
     {
         await DiscardInternalAsync(browser);
@@ -184,11 +195,11 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",   // prevents /dev/shm OOM in containers
                 "--disable-gpu",
-                "--disable-extensions",
-                "--disable-background-networking",
-                "--disable-sync",
                 "--no-first-run",
                 "--mute-audio"
+                // NOTE: --disable-background-networking and --disable-extensions are
+                // intentionally omitted — they block external resources such as
+                // Google Fonts, causing pages to render blank.
             ]
         });
 

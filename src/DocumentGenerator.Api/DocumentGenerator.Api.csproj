@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>DocumentGenerator.Api</RootNamespace>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DocumentGenerator.Core\DocumentGenerator.Core.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Templating\DocumentGenerator.Templating.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Pdf\DocumentGenerator.Pdf.csproj" />
+    <ProjectReference Include="..\DocumentGenerator.Messaging\DocumentGenerator.Messaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+  </ItemGroup>
+
+  <!--
+    Link badge templates from the Console project so the API shares a single
+    source of truth. At build time they are copied to the output 'templates/' dir.
+  -->
+  <ItemGroup>
+    <None Include="..\DocumentGenerator.Console\templates\**\*"
+          LinkBase="templates">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

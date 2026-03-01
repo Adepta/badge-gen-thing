@@ -34,6 +34,13 @@ public sealed class DocumentGeneratorWorker : BackgroundService
         ReadCommentHandling = JsonCommentHandling.Skip
     };
 
+    /// <summary>
+    /// Initialises the worker with its required dependencies.
+    /// </summary>
+    /// <param name="pipeline">Render pipeline that produces PDF bytes from a template.</param>
+    /// <param name="resolver">Resolves external HTML/CSS file references on <see cref="DocumentTemplate"/>.</param>
+    /// <param name="options">Configuration specifying the templates and output directories.</param>
+    /// <param name="logger">Logger for per-template render progress and errors.</param>
     public DocumentGeneratorWorker(
         IDocumentPipeline pipeline,
         ITemplateContentResolver resolver,
@@ -46,6 +53,12 @@ public sealed class DocumentGeneratorWorker : BackgroundService
         _logger   = logger;
     }
 
+    /// <summary>
+    /// Scans the templates directory, renders every discovered template in parallel,
+    /// and writes the resulting PDFs to the output directory.
+    /// The host shuts down after this method returns.
+    /// </summary>
+    /// <param name="stoppingToken">Token signalled when the host is requesting a graceful stop.</param>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var templatesDir = Path.GetFullPath(_options.TemplatesPath);

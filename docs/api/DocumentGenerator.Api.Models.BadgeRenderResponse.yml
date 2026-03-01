@@ -1,0 +1,820 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse
+  commentId: T:DocumentGenerator.Api.Models.BadgeRenderResponse
+  id: BadgeRenderResponse
+  parent: DocumentGenerator.Api.Models
+  children:
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.Error
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.Fail(System.Guid,System.String)
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.JobId
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.Ok(System.Guid,System.Guid,System.Byte[],System.String,System.String,System.TimeSpan)
+  - DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+  langs:
+  - csharp
+  - vb
+  name: BadgeRenderResponse
+  nameWithType: BadgeRenderResponse
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: BadgeRenderResponse
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 6
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: >-
+    Response body returned from POST /api/badges/render.
+
+    On success, <xref href="DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64" data-throw-if-not-resolved="false"></xref> contains the rendered badge encoded as Base64.
+  example: []
+  syntax:
+    content: public sealed class BadgeRenderResponse
+    content.vb: Public NotInheritable Class BadgeRenderResponse
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId
+  id: CorrelationId
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: CorrelationId
+  nameWithType: BadgeRenderResponse.CorrelationId
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CorrelationId
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 12
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: >-
+    Echoes the <code>CorrelationId</code> supplied in the request (or a server-generated one).
+
+    The bridge uses this to match the response back to the originating iPad request.
+  example: []
+  syntax:
+    content: public Guid CorrelationId { get; init; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property CorrelationId As Guid
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.JobId
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.JobId
+  id: JobId
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: JobId
+  nameWithType: BadgeRenderResponse.JobId
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.JobId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: JobId
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 17
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: Unique server-side job identifier — useful for distributed tracing and support queries.
+  example: []
+  syntax:
+    content: public Guid JobId { get; init; }
+    parameters: []
+    return:
+      type: System.Guid
+    content.vb: Public Property JobId As Guid
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.JobId*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+  id: Success
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: Success
+  nameWithType: BadgeRenderResponse.Success
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Success
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 22
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: <code>true</code> when the badge was rendered successfully.
+  example: []
+  syntax:
+    content: public bool Success { get; init; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property Success As Boolean
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.Success*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+  id: DocumentBase64
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: DocumentBase64
+  nameWithType: BadgeRenderResponse.DocumentBase64
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentBase64
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 28
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: >-
+    Base64-encoded PDF or PNG bytes of the rendered badge.
+
+    Populated only when <xref href="DocumentGenerator.Api.Models.BadgeRenderResponse.Success" data-throw-if-not-resolved="false"></xref> is <code>true</code>.
+  example: []
+  syntax:
+    content: public string? DocumentBase64 { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DocumentBase64 As String
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType
+  id: MimeType
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: MimeType
+  nameWithType: BadgeRenderResponse.MimeType
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: MimeType
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 33
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: 'MIME type of the encoded document: <code>application/pdf</code> or <code>image/png</code>.'
+  example: []
+  syntax:
+    content: public string? MimeType { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property MimeType As String
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType
+  id: DocumentType
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: DocumentType
+  nameWithType: BadgeRenderResponse.DocumentType
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: DocumentType
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 38
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: The document type resolved from the template, e.g. "badge".
+  example: []
+  syntax:
+    content: public string? DocumentType { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DocumentType As String
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime
+  id: ElapsedTime
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: ElapsedTime
+  nameWithType: BadgeRenderResponse.ElapsedTime
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: ElapsedTime
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 43
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: Server-side render duration. Useful for performance monitoring.
+  example: []
+  syntax:
+    content: public TimeSpan ElapsedTime { get; init; }
+    parameters: []
+    return:
+      type: System.TimeSpan
+    content.vb: Public Property ElapsedTime As TimeSpan
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt
+  id: CompletedAt
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: CompletedAt
+  nameWithType: BadgeRenderResponse.CompletedAt
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CompletedAt
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 48
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: UTC timestamp when rendering completed.
+  example: []
+  syntax:
+    content: public DateTimeOffset CompletedAt { get; init; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property CompletedAt As DateTimeOffset
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Error
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.Error
+  id: Error
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: Error
+  nameWithType: BadgeRenderResponse.Error
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Error
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Error
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 53
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: Human-readable error description. Populated only when <xref href="DocumentGenerator.Api.Models.BadgeRenderResponse.Success" data-throw-if-not-resolved="false"></xref> is <code>false</code>.
+  example: []
+  syntax:
+    content: public string? Error { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property [Error] As String
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.Error*
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Ok(System.Guid,System.Guid,System.Byte[],System.String,System.String,System.TimeSpan)
+  commentId: M:DocumentGenerator.Api.Models.BadgeRenderResponse.Ok(System.Guid,System.Guid,System.Byte[],System.String,System.String,System.TimeSpan)
+  id: Ok(System.Guid,System.Guid,System.Byte[],System.String,System.String,System.TimeSpan)
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: Ok(Guid, Guid, byte[], string, string, TimeSpan)
+  nameWithType: BadgeRenderResponse.Ok(Guid, Guid, byte[], string, string, TimeSpan)
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Ok(System.Guid, System.Guid, byte[], string, string, System.TimeSpan)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Ok
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 58
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: Creates a successful response containing the rendered document.
+  example: []
+  syntax:
+    content: public static BadgeRenderResponse Ok(Guid correlationId, Guid jobId, byte[] documentBytes, string mimeType, string documentType, TimeSpan elapsed)
+    parameters:
+    - id: correlationId
+      type: System.Guid
+    - id: jobId
+      type: System.Guid
+    - id: documentBytes
+      type: System.Byte[]
+    - id: mimeType
+      type: System.String
+    - id: documentType
+      type: System.String
+    - id: elapsed
+      type: System.TimeSpan
+    return:
+      type: DocumentGenerator.Api.Models.BadgeRenderResponse
+    content.vb: Public Shared Function Ok(correlationId As Guid, jobId As Guid, documentBytes As Byte(), mimeType As String, documentType As String, elapsed As TimeSpan) As BadgeRenderResponse
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.Ok*
+  nameWithType.vb: BadgeRenderResponse.Ok(Guid, Guid, Byte(), String, String, TimeSpan)
+  fullName.vb: DocumentGenerator.Api.Models.BadgeRenderResponse.Ok(System.Guid, System.Guid, Byte(), String, String, System.TimeSpan)
+  name.vb: Ok(Guid, Guid, Byte(), String, String, TimeSpan)
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Fail(System.Guid,System.String)
+  commentId: M:DocumentGenerator.Api.Models.BadgeRenderResponse.Fail(System.Guid,System.String)
+  id: Fail(System.Guid,System.String)
+  parent: DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: Fail(Guid, string)
+  nameWithType: BadgeRenderResponse.Fail(Guid, string)
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Fail(System.Guid, string)
+  type: Method
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Fail
+    path: src/DocumentGenerator.Api/Models/BadgeRenderResponse.cs
+    startLine: 79
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: Creates a failure response with an error message.
+  example: []
+  syntax:
+    content: public static BadgeRenderResponse Fail(Guid correlationId, string error)
+    parameters:
+    - id: correlationId
+      type: System.Guid
+    - id: error
+      type: System.String
+    return:
+      type: DocumentGenerator.Api.Models.BadgeRenderResponse
+    content.vb: Public Shared Function Fail(correlationId As Guid, [error] As String) As BadgeRenderResponse
+  overload: DocumentGenerator.Api.Models.BadgeRenderResponse.Fail*
+  nameWithType.vb: BadgeRenderResponse.Fail(Guid, String)
+  fullName.vb: DocumentGenerator.Api.Models.BadgeRenderResponse.Fail(System.Guid, String)
+  name.vb: Fail(Guid, String)
+references:
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_DocumentBase64
+  name: DocumentBase64
+  nameWithType: BadgeRenderResponse.DocumentBase64
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+- uid: DocumentGenerator.Api.Models
+  commentId: N:DocumentGenerator.Api.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Models
+  nameWithType: DocumentGenerator.Api.Models
+  fullName: DocumentGenerator.Api.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_CorrelationId
+  name: CorrelationId
+  nameWithType: BadgeRenderResponse.CorrelationId
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.CorrelationId
+- uid: System.Guid
+  commentId: T:System.Guid
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid
+  nameWithType: Guid
+  fullName: System.Guid
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.JobId*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.JobId
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_JobId
+  name: JobId
+  nameWithType: BadgeRenderResponse.JobId
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.JobId
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Success*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_Success
+  name: Success
+  nameWithType: BadgeRenderResponse.Success
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_Success
+  name: Success
+  nameWithType: BadgeRenderResponse.Success
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Success
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_DocumentBase64
+  name: DocumentBase64
+  nameWithType: BadgeRenderResponse.DocumentBase64
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentBase64
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_MimeType
+  name: MimeType
+  nameWithType: BadgeRenderResponse.MimeType
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.MimeType
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_DocumentType
+  name: DocumentType
+  nameWithType: BadgeRenderResponse.DocumentType
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.DocumentType
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_ElapsedTime
+  name: ElapsedTime
+  nameWithType: BadgeRenderResponse.ElapsedTime
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.ElapsedTime
+- uid: System.TimeSpan
+  commentId: T:System.TimeSpan
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.timespan
+  name: TimeSpan
+  nameWithType: TimeSpan
+  fullName: System.TimeSpan
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_CompletedAt
+  name: CompletedAt
+  nameWithType: BadgeRenderResponse.CompletedAt
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.CompletedAt
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Error*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.Error
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_Error
+  name: Error
+  nameWithType: BadgeRenderResponse.Error
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Error
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Ok*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.Ok
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_Ok_System_Guid_System_Guid_System_Byte___System_String_System_String_System_TimeSpan_
+  name: Ok
+  nameWithType: BadgeRenderResponse.Ok
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Ok
+- uid: System.Byte[]
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.byte
+  name: byte[]
+  nameWithType: byte[]
+  fullName: byte[]
+  nameWithType.vb: Byte()
+  fullName.vb: Byte()
+  name.vb: Byte()
+  spec.csharp:
+  - uid: System.Byte
+    name: byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.Byte
+    name: Byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: (
+  - name: )
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse
+  commentId: T:DocumentGenerator.Api.Models.BadgeRenderResponse
+  parent: DocumentGenerator.Api.Models
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html
+  name: BadgeRenderResponse
+  nameWithType: BadgeRenderResponse
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse.Fail*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderResponse.Fail
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html#DocumentGenerator_Api_Models_BadgeRenderResponse_Fail_System_Guid_System_String_
+  name: Fail
+  nameWithType: BadgeRenderResponse.Fail
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse.Fail

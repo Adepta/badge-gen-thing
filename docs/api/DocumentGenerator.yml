@@ -3,6 +3,8 @@ items:
 - uid: DocumentGenerator
   id: DocumentGenerator
   children:
+  - DocumentGenerator.Api
+  - DocumentGenerator.Bridge
   - DocumentGenerator.Console
   - DocumentGenerator.Core
   - DocumentGenerator.Messaging
@@ -14,6 +16,50 @@ items:
   name: DocumentGenerator
   type: Namespace
 references:
+- uid: DocumentGenerator.Api
+  commentId: N:DocumentGenerator.Api
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api
+  nameWithType: DocumentGenerator.Api
+  fullName: DocumentGenerator.Api
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+- uid: DocumentGenerator.Bridge
+  commentId: N:DocumentGenerator.Bridge
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Bridge
+  nameWithType: DocumentGenerator.Bridge
+  fullName: DocumentGenerator.Bridge
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    href: DocumentGenerator.Bridge.html
 - uid: DocumentGenerator.Console
   commentId: N:DocumentGenerator.Console
   href: DocumentGenerator.html

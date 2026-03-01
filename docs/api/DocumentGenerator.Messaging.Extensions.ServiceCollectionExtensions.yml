@@ -20,7 +20,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: ServiceCollectionExtensions
     path: src/DocumentGenerator.Messaging/Extensions/ServiceCollectionExtensions.cs
-    startLine: 16
+    startLine: 17
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Extensions
@@ -58,7 +58,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: AddRebusKafkaMessaging
     path: src/DocumentGenerator.Messaging/Extensions/ServiceCollectionExtensions.cs
-    startLine: 31
+    startLine: 32
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Extensions

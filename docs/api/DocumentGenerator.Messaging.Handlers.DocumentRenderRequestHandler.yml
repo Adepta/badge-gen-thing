@@ -5,7 +5,7 @@ items:
   id: DocumentRenderRequestHandler
   parent: DocumentGenerator.Messaging.Handlers
   children:
-  - DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
+  - DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Options.IOptions{DocumentGenerator.Messaging.Configuration.KafkaOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
   - DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
   langs:
   - csharp
@@ -21,7 +21,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: DocumentRenderRequestHandler
     path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
-    startLine: 19
+    startLine: 26
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Handlers
@@ -29,16 +29,20 @@ items:
     Rebus message handler for <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest" data-throw-if-not-resolved="false"></xref>.
 
 
-    Rebus dispatches one instance per message on the <code>render.requests</code> topic.
+    Rebus dispatches one instance per message on the render.requests topic.
 
-    Concurrency is controlled by Rebus worker thread count, which is kept at or
+    Concurrency is controlled by Rebus worker thread count, kept at or
 
     below the Chromium pool MaxSize to avoid starvation.
 
 
-    On success  → replies <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> to the sender's return address
-
-    On failure  → replies failure result (Rebus handles dead-lettering after MaxRetries)
+    On success  → replies <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> to the sender's return address.
+                  When <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline" data-throw-if-not-resolved="false"></xref> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>
+                  (the default) the PDF is Base64-encoded in the reply message.
+                  When <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>, the PDF is saved to
+                  <xref href="DocumentGenerator.Messaging.Configuration.KafkaOptions.PdfOutputPath" data-throw-if-not-resolved="false"></xref> and the path is returned instead,
+                  keeping the Kafka message small for devices that can reach shared storage.
+    On failure  → replies failure result (Rebus handles dead-lettering after MaxRetries).
   example: []
   syntax:
     content: 'public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRenderRequest>, IHandleMessages'
@@ -55,16 +59,16 @@ items:
   - System.Object.GetType
   - System.Object.ReferenceEquals(System.Object,System.Object)
   - System.Object.ToString
-- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
-  commentId: M:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
-  id: '#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})'
+- uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Options.IOptions{DocumentGenerator.Messaging.Configuration.KafkaOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
+  commentId: M:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Options.IOptions{DocumentGenerator.Messaging.Configuration.KafkaOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})
+  id: '#ctor(DocumentGenerator.Core.Interfaces.IDocumentPipeline,Rebus.Bus.IBus,DocumentGenerator.Core.Interfaces.IRenderMetrics,Microsoft.Extensions.Options.IOptions{DocumentGenerator.Messaging.Configuration.KafkaOptions},Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler})'
   parent: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler
   langs:
   - csharp
   - vb
-  name: DocumentRenderRequestHandler(IDocumentPipeline, IBus, IRenderMetrics, ILogger<DocumentRenderRequestHandler>)
-  nameWithType: DocumentRenderRequestHandler.DocumentRenderRequestHandler(IDocumentPipeline, IBus, IRenderMetrics, ILogger<DocumentRenderRequestHandler>)
-  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.DocumentRenderRequestHandler(DocumentGenerator.Core.Interfaces.IDocumentPipeline, Rebus.Bus.IBus, DocumentGenerator.Core.Interfaces.IRenderMetrics, Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler>)
+  name: DocumentRenderRequestHandler(IDocumentPipeline, IBus, IRenderMetrics, IOptions<KafkaOptions>, ILogger<DocumentRenderRequestHandler>)
+  nameWithType: DocumentRenderRequestHandler.DocumentRenderRequestHandler(IDocumentPipeline, IBus, IRenderMetrics, IOptions<KafkaOptions>, ILogger<DocumentRenderRequestHandler>)
+  fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.DocumentRenderRequestHandler(DocumentGenerator.Core.Interfaces.IDocumentPipeline, Rebus.Bus.IBus, DocumentGenerator.Core.Interfaces.IRenderMetrics, Microsoft.Extensions.Options.IOptions<DocumentGenerator.Messaging.Configuration.KafkaOptions>, Microsoft.Extensions.Logging.ILogger<DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler>)
   type: Constructor
   source:
     remote:
@@ -73,32 +77,28 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: .ctor
     path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
-    startLine: 33
+    startLine: 34
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Handlers
-  summary: Initialises the handler with its required dependencies.
-  example: []
   syntax:
-    content: public DocumentRenderRequestHandler(IDocumentPipeline pipeline, IBus bus, IRenderMetrics metrics, ILogger<DocumentRenderRequestHandler> logger)
+    content: public DocumentRenderRequestHandler(IDocumentPipeline pipeline, IBus bus, IRenderMetrics metrics, IOptions<KafkaOptions> kafkaOptions, ILogger<DocumentRenderRequestHandler> logger)
     parameters:
     - id: pipeline
       type: DocumentGenerator.Core.Interfaces.IDocumentPipeline
-      description: The document rendering pipeline.
     - id: bus
       type: Rebus.Bus.IBus
-      description: The Rebus bus used to reply to the sender.
     - id: metrics
       type: DocumentGenerator.Core.Interfaces.IRenderMetrics
-      description: Render outcome metrics recorder.
+    - id: kafkaOptions
+      type: Microsoft.Extensions.Options.IOptions{DocumentGenerator.Messaging.Configuration.KafkaOptions}
     - id: logger
       type: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler}
-      description: Logger for this handler.
-    content.vb: Public Sub New(pipeline As IDocumentPipeline, bus As IBus, metrics As IRenderMetrics, logger As ILogger(Of DocumentRenderRequestHandler))
+    content.vb: Public Sub New(pipeline As IDocumentPipeline, bus As IBus, metrics As IRenderMetrics, kafkaOptions As IOptions(Of KafkaOptions), logger As ILogger(Of DocumentRenderRequestHandler))
   overload: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor*
-  nameWithType.vb: DocumentRenderRequestHandler.New(IDocumentPipeline, IBus, IRenderMetrics, ILogger(Of DocumentRenderRequestHandler))
-  fullName.vb: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.New(DocumentGenerator.Core.Interfaces.IDocumentPipeline, Rebus.Bus.IBus, DocumentGenerator.Core.Interfaces.IRenderMetrics, Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler))
-  name.vb: New(IDocumentPipeline, IBus, IRenderMetrics, ILogger(Of DocumentRenderRequestHandler))
+  nameWithType.vb: DocumentRenderRequestHandler.New(IDocumentPipeline, IBus, IRenderMetrics, IOptions(Of KafkaOptions), ILogger(Of DocumentRenderRequestHandler))
+  fullName.vb: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.New(DocumentGenerator.Core.Interfaces.IDocumentPipeline, Rebus.Bus.IBus, DocumentGenerator.Core.Interfaces.IRenderMetrics, Microsoft.Extensions.Options.IOptions(Of DocumentGenerator.Messaging.Configuration.KafkaOptions), Microsoft.Extensions.Logging.ILogger(Of DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler))
+  name.vb: New(IDocumentPipeline, IBus, IRenderMetrics, IOptions(Of KafkaOptions), ILogger(Of DocumentRenderRequestHandler))
 - uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
   commentId: M:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
   id: Handle(DocumentGenerator.Messaging.Messages.DocumentRenderRequest)
@@ -117,21 +117,17 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: Handle
     path: src/DocumentGenerator.Messaging/Handlers/DocumentRenderRequestHandler.cs
-    startLine: 50
+    startLine: 47
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Handlers
-  summary: >-
-    Handles a <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest" data-throw-if-not-resolved="false"></xref> by executing the render pipeline
-
-    and replying with a <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> (success or failure).
+  summary: This method will be invoked with a message of type <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest" data-throw-if-not-resolved="false"></xref>
   example: []
   syntax:
     content: public Task Handle(DocumentRenderRequest message)
     parameters:
     - id: message
       type: DocumentGenerator.Messaging.Messages.DocumentRenderRequest
-      description: The incoming render request.
     return:
       type: System.Threading.Tasks.Task
     content.vb: Public Function Handle(message As DocumentRenderRequest) As Task
@@ -153,6 +149,18 @@ references:
   name: DocumentRenderResult
   nameWithType: DocumentRenderResult
   fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_ReturnPdfInline
+  name: ReturnPdfInline
+  nameWithType: DocumentRenderRequest.ReturnPdfInline
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+- uid: DocumentGenerator.Messaging.Configuration.KafkaOptions.PdfOutputPath
+  commentId: P:DocumentGenerator.Messaging.Configuration.KafkaOptions.PdfOutputPath
+  href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html#DocumentGenerator_Messaging_Configuration_KafkaOptions_PdfOutputPath
+  name: PdfOutputPath
+  nameWithType: KafkaOptions.PdfOutputPath
+  fullName: DocumentGenerator.Messaging.Configuration.KafkaOptions.PdfOutputPath
 - uid: DocumentGenerator.Messaging.Handlers
   commentId: N:DocumentGenerator.Messaging.Handlers
   href: DocumentGenerator.html
@@ -519,7 +527,7 @@ references:
     isExternal: true
 - uid: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor*
   commentId: Overload:DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.#ctor
-  href: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.html#DocumentGenerator_Messaging_Handlers_DocumentRenderRequestHandler__ctor_DocumentGenerator_Core_Interfaces_IDocumentPipeline_Rebus_Bus_IBus_DocumentGenerator_Core_Interfaces_IRenderMetrics_Microsoft_Extensions_Logging_ILogger_DocumentGenerator_Messaging_Handlers_DocumentRenderRequestHandler__
+  href: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.html#DocumentGenerator_Messaging_Handlers_DocumentRenderRequestHandler__ctor_DocumentGenerator_Core_Interfaces_IDocumentPipeline_Rebus_Bus_IBus_DocumentGenerator_Core_Interfaces_IRenderMetrics_Microsoft_Extensions_Options_IOptions_DocumentGenerator_Messaging_Configuration_KafkaOptions__Microsoft_Extensions_Logging_ILogger_DocumentGenerator_Messaging_Handlers_DocumentRenderRequestHandler__
   name: DocumentRenderRequestHandler
   nameWithType: DocumentRenderRequestHandler.DocumentRenderRequestHandler
   fullName: DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler.DocumentRenderRequestHandler
@@ -548,6 +556,39 @@ references:
   name: IRenderMetrics
   nameWithType: IRenderMetrics
   fullName: DocumentGenerator.Core.Interfaces.IRenderMetrics
+- uid: Microsoft.Extensions.Options.IOptions{DocumentGenerator.Messaging.Configuration.KafkaOptions}
+  commentId: T:Microsoft.Extensions.Options.IOptions{DocumentGenerator.Messaging.Configuration.KafkaOptions}
+  parent: Microsoft.Extensions.Options
+  definition: Microsoft.Extensions.Options.IOptions`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<KafkaOptions>
+  nameWithType: IOptions<KafkaOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<DocumentGenerator.Messaging.Configuration.KafkaOptions>
+  nameWithType.vb: IOptions(Of KafkaOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of DocumentGenerator.Messaging.Configuration.KafkaOptions)
+  name.vb: IOptions(Of KafkaOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - uid: DocumentGenerator.Messaging.Configuration.KafkaOptions
+    name: KafkaOptions
+    href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: DocumentGenerator.Messaging.Configuration.KafkaOptions
+    name: KafkaOptions
+    href: DocumentGenerator.Messaging.Configuration.KafkaOptions.html
+  - name: )
 - uid: Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler}
   commentId: T:Microsoft.Extensions.Logging.ILogger{DocumentGenerator.Messaging.Handlers.DocumentRenderRequestHandler}
   parent: Microsoft.Extensions.Logging
@@ -633,6 +674,71 @@ references:
   - uid: Rebus.Bus
     name: Bus
     isExternal: true
+- uid: Microsoft.Extensions.Options.IOptions`1
+  commentId: T:Microsoft.Extensions.Options.IOptions`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<TOptions>
+  nameWithType: IOptions<TOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<TOptions>
+  nameWithType.vb: IOptions(Of TOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of TOptions)
+  name.vb: IOptions(Of TOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - name: TOptions
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TOptions
+  - name: )
+- uid: Microsoft.Extensions.Options
+  commentId: N:Microsoft.Extensions.Options
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Options
+  nameWithType: Microsoft.Extensions.Options
+  fullName: Microsoft.Extensions.Options
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
 - uid: Microsoft.Extensions.Logging.ILogger`1
   commentId: T:Microsoft.Extensions.Logging.ILogger`1
   isExternal: true

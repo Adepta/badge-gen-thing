@@ -4,6 +4,10 @@
   href: overview.md
 - name: Architecture
   href: architecture.md
+- name: Cloud API
+  href: cloud-api.md
+- name: Bridge
+  href: bridge.md
 - name: Template Schema
   href: template-schema.md
 - name: Handlebars Helpers

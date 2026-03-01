@@ -1,0 +1,689 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest
+  commentId: T:DocumentGenerator.Api.Models.BadgeRenderRequest
+  id: BadgeRenderRequest
+  parent: DocumentGenerator.Api.Models
+  children:
+  - DocumentGenerator.Api.Models.BadgeRenderRequest.Branding
+  - DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId
+  - DocumentGenerator.Api.Models.BadgeRenderRequest.Format
+  - DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName
+  - DocumentGenerator.Api.Models.BadgeRenderRequest.Variables
+  langs:
+  - csharp
+  - vb
+  name: BadgeRenderRequest
+  nameWithType: BadgeRenderRequest
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest
+  type: Class
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: BadgeRenderRequest
+    path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+    startLine: 8
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: >-
+    Request body for POST /api/badges/render.
+
+    The iPad (via the bridge) sends attendee data and template selection here.
+  example: []
+  syntax:
+    content: public sealed class BadgeRenderRequest
+    content.vb: Public NotInheritable Class BadgeRenderRequest
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName
+  id: TemplateName
+  parent: DocumentGenerator.Api.Models.BadgeRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: TemplateName
+  nameWithType: BadgeRenderRequest.TemplateName
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: TemplateName
+    path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+    startLine: 14
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: >-
+    The template to use, e.g. "badge-pulse-a6", "badge-executive-cc".
+
+    Must correspond to an HTML/CSS template pair in the templates directory.
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      public string TemplateName { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      Public Property TemplateName As String
+  overload: DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.Variables
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderRequest.Variables
+  id: Variables
+  parent: DocumentGenerator.Api.Models.BadgeRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: Variables
+  nameWithType: BadgeRenderRequest.Variables
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.Variables
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Variables
+    path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+    startLine: 21
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: >-
+    Attendee / badge data injected into the Handlebars template as {{variables.*}}.
+
+    Common keys: firstName, lastName, jobTitle, company, ticketType, attendeeId.
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      public Dictionary<string, object?> Variables { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.Dictionary{System.String,System.Object}
+    content.vb: >-
+      <Required>
+
+      Public Property Variables As Dictionary(Of String, Object)
+  overload: DocumentGenerator.Api.Models.BadgeRenderRequest.Variables*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.Branding
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderRequest.Branding
+  id: Branding
+  parent: DocumentGenerator.Api.Models.BadgeRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: Branding
+  nameWithType: BadgeRenderRequest.Branding
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.Branding
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Branding
+    path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+    startLine: 27
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: Optional branding overrides. When null, the template's default branding is used.
+  example: []
+  syntax:
+    content: public BadgeBrandingRequest? Branding { get; init; }
+    parameters: []
+    return:
+      type: DocumentGenerator.Api.Models.BadgeBrandingRequest
+    content.vb: Public Property Branding As BadgeBrandingRequest
+  overload: DocumentGenerator.Api.Models.BadgeRenderRequest.Branding*
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.Format
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderRequest.Format
+  id: Format
+  parent: DocumentGenerator.Api.Models.BadgeRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: Format
+  nameWithType: BadgeRenderRequest.Format
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.Format
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: Format
+    path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+    startLine: 32
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: Output format. "Pdf" (default) or "Png".
+  example: []
+  syntax:
+    content: public string Format { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Format As String
+  overload: DocumentGenerator.Api.Models.BadgeRenderRequest.Format*
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId
+  commentId: P:DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId
+  id: CorrelationId
+  parent: DocumentGenerator.Api.Models.BadgeRenderRequest
+  langs:
+  - csharp
+  - vb
+  name: CorrelationId
+  nameWithType: BadgeRenderRequest.CorrelationId
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: CorrelationId
+    path: src/DocumentGenerator.Api/Models/BadgeRenderRequest.cs
+    startLine: 38
+  assemblies:
+  - DocumentGenerator.Api
+  namespace: DocumentGenerator.Api.Models
+  summary: >-
+    Caller-supplied correlation ID — echoed back in the response so the bridge
+
+    can match async replies. When null, the API generates one.
+  example: []
+  syntax:
+    content: public Guid? CorrelationId { get; init; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Guid}
+    content.vb: Public Property CorrelationId As Guid?
+  overload: DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId*
+references:
+- uid: DocumentGenerator.Api.Models
+  commentId: N:DocumentGenerator.Api.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Models
+  nameWithType: DocumentGenerator.Api.Models
+  fullName: DocumentGenerator.Api.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName
+  href: DocumentGenerator.Api.Models.BadgeRenderRequest.html#DocumentGenerator_Api_Models_BadgeRenderRequest_TemplateName
+  name: TemplateName
+  nameWithType: BadgeRenderRequest.TemplateName
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.TemplateName
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.Variables*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderRequest.Variables
+  href: DocumentGenerator.Api.Models.BadgeRenderRequest.html#DocumentGenerator_Api_Models_BadgeRenderRequest_Variables
+  name: Variables
+  nameWithType: BadgeRenderRequest.Variables
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.Variables
+- uid: System.Collections.Generic.Dictionary{System.String,System.Object}
+  commentId: T:System.Collections.Generic.Dictionary{System.String,System.Object}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.Dictionary`2
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  name: Dictionary<string, object>
+  nameWithType: Dictionary<string, object>
+  fullName: System.Collections.Generic.Dictionary<string, object>
+  nameWithType.vb: Dictionary(Of String, Object)
+  fullName.vb: System.Collections.Generic.Dictionary(Of String, Object)
+  name.vb: Dictionary(Of String, Object)
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Collections.Generic.Dictionary`2
+  commentId: T:System.Collections.Generic.Dictionary`2
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  name: Dictionary<TKey, TValue>
+  nameWithType: Dictionary<TKey, TValue>
+  fullName: System.Collections.Generic.Dictionary<TKey, TValue>
+  nameWithType.vb: Dictionary(Of TKey, TValue)
+  fullName.vb: System.Collections.Generic.Dictionary(Of TKey, TValue)
+  name.vb: Dictionary(Of TKey, TValue)
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: <
+  - name: TKey
+  - name: ','
+  - name: " "
+  - name: TValue
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TKey
+  - name: ','
+  - name: " "
+  - name: TValue
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.Branding*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderRequest.Branding
+  href: DocumentGenerator.Api.Models.BadgeRenderRequest.html#DocumentGenerator_Api_Models_BadgeRenderRequest_Branding
+  name: Branding
+  nameWithType: BadgeRenderRequest.Branding
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.Branding
+- uid: DocumentGenerator.Api.Models.BadgeBrandingRequest
+  commentId: T:DocumentGenerator.Api.Models.BadgeBrandingRequest
+  parent: DocumentGenerator.Api.Models
+  href: DocumentGenerator.Api.Models.BadgeBrandingRequest.html
+  name: BadgeBrandingRequest
+  nameWithType: BadgeBrandingRequest
+  fullName: DocumentGenerator.Api.Models.BadgeBrandingRequest
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.Format*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderRequest.Format
+  href: DocumentGenerator.Api.Models.BadgeRenderRequest.html#DocumentGenerator_Api_Models_BadgeRenderRequest_Format
+  name: Format
+  nameWithType: BadgeRenderRequest.Format
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.Format
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId*
+  commentId: Overload:DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId
+  href: DocumentGenerator.Api.Models.BadgeRenderRequest.html#DocumentGenerator_Api_Models_BadgeRenderRequest_CorrelationId
+  name: CorrelationId
+  nameWithType: BadgeRenderRequest.CorrelationId
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest.CorrelationId
+- uid: System.Nullable{System.Guid}
+  commentId: T:System.Nullable{System.Guid}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.guid
+  name: Guid?
+  nameWithType: Guid?
+  fullName: System.Guid?
+  spec.csharp:
+  - uid: System.Guid
+    name: Guid
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.guid
+  - name: '?'
+  spec.vb:
+  - uid: System.Guid
+    name: Guid
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.guid
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )

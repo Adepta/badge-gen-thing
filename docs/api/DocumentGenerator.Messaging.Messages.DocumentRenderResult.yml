@@ -13,8 +13,9 @@ items:
   - DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
   - DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid,System.String,System.String,System.String,System.String)
   - DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
   - DocumentGenerator.Messaging.Messages.DocumentRenderResult.SessionId
-  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
+  - DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan,System.Boolean,System.String)
   - DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
   langs:
   - csharp
@@ -198,12 +199,14 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: PdfBase64
     path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
-    startLine: 27
+    startLine: 28
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Messages
   summary: >-
-    Base64-encoded PDF bytes. Null when <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success" data-throw-if-not-resolved="false"></xref> is false.
+    Base64-encoded PDF bytes. Populated when <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline" data-throw-if-not-resolved="false"></xref>
+
+    is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> and the render succeeded. Null otherwise.
 
     The iPad decodes this and hands it to the AirPrint / printing stack.
   example: []
@@ -214,6 +217,42 @@ items:
       type: System.String
     content.vb: Public Property PdfBase64 As String
   overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64*
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  id: PdfPath
+  parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+  langs:
+  - csharp
+  - vb
+  name: PdfPath
+  nameWithType: DocumentRenderResult.PdfPath
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  type: Property
+  source:
+    remote:
+      path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+      branch: main
+      repo: https://github.com/Adepta/badge-gen-thing.git
+    id: PdfPath
+    path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
+    startLine: 35
+  assemblies:
+  - DocumentGenerator.Messaging
+  namespace: DocumentGenerator.Messaging.Messages
+  summary: >-
+    Absolute path to the saved PDF file on the shared network location.
+
+    Populated when <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline" data-throw-if-not-resolved="false"></xref> is
+
+    <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> and the render succeeded. Null otherwise.
+  example: []
+  syntax:
+    content: public string? PdfPath { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PdfPath As String
+  overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath*
 - uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
   commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
   id: ErrorMessage
@@ -232,7 +271,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: ErrorMessage
     path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
-    startLine: 30
+    startLine: 38
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Messages
@@ -263,7 +302,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: DocumentType
     path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
-    startLine: 33
+    startLine: 41
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Messages
@@ -294,7 +333,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: ElapsedTime
     path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
-    startLine: 36
+    startLine: 44
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Messages
@@ -325,7 +364,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: CompletedAt
     path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
-    startLine: 39
+    startLine: 47
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Messages
@@ -338,16 +377,16 @@ items:
       type: System.DateTimeOffset
     content.vb: Public Property CompletedAt As DateTimeOffset
   overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.CompletedAt*
-- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
-  commentId: M:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
-  id: Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan)
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan,System.Boolean,System.String)
+  commentId: M:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan,System.Boolean,System.String)
+  id: Succeeded(System.Guid,System.String,System.String,System.String,System.Byte[],System.TimeSpan,System.Boolean,System.String)
   parent: DocumentGenerator.Messaging.Messages.DocumentRenderResult
   langs:
   - csharp
   - vb
-  name: Succeeded(Guid, string, string?, string, byte[], TimeSpan)
-  nameWithType: DocumentRenderResult.Succeeded(Guid, string, string?, string, byte[], TimeSpan)
-  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid, string, string?, string, byte[], System.TimeSpan)
+  name: Succeeded(Guid, string, string?, string, byte[], TimeSpan, bool, string?)
+  nameWithType: DocumentRenderResult.Succeeded(Guid, string, string?, string, byte[], TimeSpan, bool, string?)
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid, string, string?, string, byte[], System.TimeSpan, bool, string?)
   type: Method
   source:
     remote:
@@ -356,44 +395,54 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: Succeeded
     path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
-    startLine: 52
+    startLine: 67
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Messages
-  summary: >-
-    Creates a successful <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> from rendered PDF bytes.
-
-    The bytes are automatically Base64-encoded for Kafka transport.
+  summary: Creates a successful <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult" data-throw-if-not-resolved="false"></xref> from rendered PDF bytes.
   example: []
   syntax:
-    content: public static DocumentRenderResult Succeeded(Guid correlationId, string deviceId, string? sessionId, string documentType, byte[] pdfBytes, TimeSpan elapsed)
+    content: public static DocumentRenderResult Succeeded(Guid correlationId, string deviceId, string? sessionId, string documentType, byte[] pdfBytes, TimeSpan elapsed, bool returnInline = true, string? pdfPath = null)
     parameters:
     - id: correlationId
       type: System.Guid
-      description: Correlation ID echoed from the request.
+      description: Matched from the originating request.
     - id: deviceId
       type: System.String
-      description: Device ID echoed from the request.
+      description: Echoed from the originating request.
     - id: sessionId
       type: System.String
-      description: Session ID echoed from the request.
+      description: Echoed from the originating request.
     - id: documentType
       type: System.String
-      description: Document type label from the template.
+      description: Document type from the template.
     - id: pdfBytes
       type: System.Byte[]
-      description: Raw PDF bytes to encode and include in the result.
+      description: Raw rendered PDF bytes.
     - id: elapsed
       type: System.TimeSpan
-      description: Time taken by the full render pipeline.
+      description: Total pipeline duration.
+    - id: returnInline
+      type: System.Boolean
+      description: >-
+        When <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a>, <code class="paramref">pdfBytes</code> are Base64-encoded into
+
+        <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64" data-throw-if-not-resolved="false"></xref>. When <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>, <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64" data-throw-if-not-resolved="false"></xref> is
+
+        null and <xref href="DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath" data-throw-if-not-resolved="false"></xref> must be set by the caller.
+    - id: pdfPath
+      type: System.String
+      description: >-
+        Absolute path to the saved PDF file. Only used when <code class="paramref">returnInline</code>
+
+        is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>; ignored otherwise.
     return:
       type: DocumentGenerator.Messaging.Messages.DocumentRenderResult
-      description: A populated success result ready to publish.
-    content.vb: Public Shared Function Succeeded(correlationId As Guid, deviceId As String, sessionId As String, documentType As String, pdfBytes As Byte(), elapsed As TimeSpan) As DocumentRenderResult
+    content.vb: Public Shared Function Succeeded(correlationId As Guid, deviceId As String, sessionId As String, documentType As String, pdfBytes As Byte(), elapsed As TimeSpan, returnInline As Boolean = True, pdfPath As String = Nothing) As DocumentRenderResult
   overload: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded*
-  nameWithType.vb: DocumentRenderResult.Succeeded(Guid, String, String, String, Byte(), TimeSpan)
-  fullName.vb: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid, String, String, String, Byte(), System.TimeSpan)
-  name.vb: Succeeded(Guid, String, String, String, Byte(), TimeSpan)
+  nameWithType.vb: DocumentRenderResult.Succeeded(Guid, String, String, String, Byte(), TimeSpan, Boolean, String)
+  fullName.vb: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded(System.Guid, String, String, String, Byte(), System.TimeSpan, Boolean, String)
+  name.vb: Succeeded(Guid, String, String, String, Byte(), TimeSpan, Boolean, String)
 - uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid,System.String,System.String,System.String,System.String)
   commentId: M:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Failed(System.Guid,System.String,System.String,System.String,System.String)
   id: Failed(System.Guid,System.String,System.String,System.String,System.String)
@@ -412,7 +461,7 @@ items:
       repo: https://github.com/Adepta/badge-gen-thing.git
     id: Failed
     path: src/DocumentGenerator.Messaging/Messages/DocumentRenderResult.cs
-    startLine: 78
+    startLine: 91
   assemblies:
   - DocumentGenerator.Messaging
   namespace: DocumentGenerator.Messaging.Messages
@@ -748,18 +797,30 @@ references:
   nameWithType.vb: Boolean
   fullName.vb: Boolean
   name.vb: Boolean
-- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
-  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
-  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Success
-  name: Success
-  nameWithType: DocumentRenderResult.Success
-  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.html#DocumentGenerator_Messaging_Messages_DocumentRenderRequest_ReturnPdfInline
+  name: ReturnPdfInline
+  nameWithType: DocumentRenderRequest.ReturnPdfInline
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderRequest.ReturnPdfInline
 - uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64*
   commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
   href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_PdfBase64
   name: PdfBase64
   nameWithType: DocumentRenderResult.PdfBase64
   fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath*
+  commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_PdfPath
+  name: PdfPath
+  nameWithType: DocumentRenderResult.PdfPath
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Success
+  name: Success
+  nameWithType: DocumentRenderResult.Success
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Success
 - uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage*
   commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.ErrorMessage
   href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_ErrorMessage
@@ -807,9 +868,21 @@ references:
   name: DocumentRenderResult
   nameWithType: DocumentRenderResult
   fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_PdfBase64
+  name: PdfBase64
+  nameWithType: DocumentRenderResult.PdfBase64
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfBase64
+- uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  commentId: P:DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_PdfPath
+  name: PdfPath
+  nameWithType: DocumentRenderResult.PdfPath
+  fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.PdfPath
 - uid: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded*
   commentId: Overload:DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded
-  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Succeeded_System_Guid_System_String_System_String_System_String_System_Byte___System_TimeSpan_
+  href: DocumentGenerator.Messaging.Messages.DocumentRenderResult.html#DocumentGenerator_Messaging_Messages_DocumentRenderResult_Succeeded_System_Guid_System_String_System_String_System_String_System_Byte___System_TimeSpan_System_Boolean_System_String_
   name: Succeeded
   nameWithType: DocumentRenderResult.Succeeded
   fullName: DocumentGenerator.Messaging.Messages.DocumentRenderResult.Succeeded

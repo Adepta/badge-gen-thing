@@ -10,6 +10,12 @@ namespace DocumentGenerator.Console.Logging;
 /// </summary>
 public sealed class LogBuffer
 {
+    /// <summary>An immutable snapshot of a single log event written to the buffer.</summary>
+    /// <param name="Timestamp">Local time the log entry was created.</param>
+    /// <param name="Level">Severity level of the log event.</param>
+    /// <param name="Category">Shortened logger category (type name).</param>
+    /// <param name="Message">Formatted log message with Spectre markup already escaped.</param>
+    /// <param name="Exception">Optional exception attached to the log event.</param>
     public record LogEntry(
         DateTime Timestamp,
         LogLevel Level,
@@ -32,12 +38,22 @@ public sealed class LogBuffer
             SingleReader = true
         });
 
+    /// <summary>
+    /// Creates a new buffer that retains the most recent <paramref name="capacity"/> entries.
+    /// Older entries are silently overwritten when the ring fills.
+    /// </summary>
+    /// <param name="capacity">Maximum number of entries to retain. Defaults to <c>500</c>.</param>
     public LogBuffer(int capacity = 500)
     {
         _capacity = capacity;
         _ring     = new LogEntry[capacity];
     }
 
+    /// <summary>
+    /// Appends <paramref name="entry"/> to the ring buffer and signals any waiting readers.
+    /// Thread-safe; may be called from multiple logger instances concurrently.
+    /// </summary>
+    /// <param name="entry">The log entry to append.</param>
     public void Add(LogEntry entry)
     {
         lock (_lock)

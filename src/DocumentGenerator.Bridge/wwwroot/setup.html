@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Badge Bridge — Setup</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 560px;
+      padding: 2.5rem;
+      box-shadow: 0 25px 50px rgba(0,0,0,.5);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 2rem;
+    }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #6c3ce1, #4f46e5);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .logo h1 { font-size: 1.25rem; font-weight: 700; color: #f1f5f9; }
+    .logo p  { font-size: .8rem; color: #94a3b8; margin-top: .1rem; }
+
+    h2 { font-size: 1rem; font-weight: 600; color: #94a3b8; margin-bottom: 1.5rem; letter-spacing: .05em; text-transform: uppercase; }
+
+    .field { margin-bottom: 1.25rem; }
+    .field label { display: block; font-size: .85rem; font-weight: 500; color: #cbd5e1; margin-bottom: .4rem; }
+
+    .field input, .field select {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: .9rem;
+      padding: .65rem .875rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .field input:focus, .field select:focus { border-color: #6c3ce1; }
+    .field input::placeholder { color: #475569; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .hint { font-size: .78rem; color: #64748b; margin-top: .3rem; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #6c3ce1; color: #fff;
+      border: none; border-radius: 8px;
+      font-size: .9rem; font-weight: 600;
+      padding: .75rem 1.25rem;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .btn:hover  { background: #5b31c6; }
+    .btn:active { transform: scale(.98); }
+    .btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #334155;
+      color: #94a3b8;
+    }
+    .btn-outline:hover { border-color: #6c3ce1; color: #e2e8f0; background: transparent; }
+
+    .actions { display: flex; gap: .75rem; margin-top: 1.75rem; }
+
+    .status {
+      margin-top: 1rem;
+      padding: .75rem 1rem;
+      border-radius: 8px;
+      font-size: .85rem;
+      display: none;
+    }
+    .status.ok    { background: #052e16; border: 1px solid #166534; color: #86efac; display: block; }
+    .status.error { background: #450a0a; border: 1px solid #991b1b; color: #fca5a5; display: block; }
+    .status.info  { background: #0c1a2e; border: 1px solid #1d4ed8; color: #93c5fd; display: block; }
+
+    .divider { border: none; border-top: 1px solid #334155; margin: 2rem 0; }
+
+    .step { display: flex; align-items: flex-start; gap: .75rem; margin-bottom: 1rem; }
+    .step-num {
+      width: 24px; height: 24px; min-width: 24px;
+      background: #6c3ce1; border-radius: 50%;
+      font-size: .75rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: .1rem;
+    }
+    .step p { font-size: .85rem; color: #94a3b8; line-height: 1.5; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🖨</div>
+    <div>
+      <h1>Badge Bridge</h1>
+      <p>First-run Setup Wizard</p>
+    </div>
+  </div>
+
+  <h2>How it works</h2>
+  <div class="step"><div class="step-num">1</div><p>Enter your cloud Badge Producer URL and API key below.</p></div>
+  <div class="step"><div class="step-num">2</div><p>Select the local printer that badges should be sent to.</p></div>
+  <div class="step"><div class="step-num">3</div><p>Save — then restart the Bridge service. Your iPad can now print badges.</p></div>
+
+  <hr class="divider" />
+
+  <h2>Cloud Connection</h2>
+
+  <div class="field">
+    <label for="cloudUrl">Badge Producer URL</label>
+    <input id="cloudUrl" type="url" placeholder="https://badges.yourcompany.com" />
+    <p class="hint">The base URL of your hosted DocumentGenerator.Api instance.</p>
+  </div>
+
+  <div class="field">
+    <label for="apiKey">API Key</label>
+    <input id="apiKey" type="password" placeholder="sk-..." />
+    <p class="hint">Paste the <code>X-Api-Key</code> value from your cloud dashboard.</p>
+  </div>
+
+  <button class="btn btn-outline" onclick="testConnection()">Test Connection</button>
+  <div id="connectionStatus" class="status"></div>
+
+  <hr class="divider" />
+
+  <h2>Local Printer</h2>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="printer">Default Printer</label>
+      <select id="printer">
+        <option value="">— OS Default —</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="format">Output Format</label>
+      <select id="format">
+        <option value="Pdf" selected>PDF</option>
+        <option value="Png">PNG</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="port">Bridge Listen Port</label>
+    <input id="port" type="number" value="5100" min="1024" max="65535" />
+    <p class="hint">The iPad connects to <code>http://&lt;this-machine&gt;:&lt;port&gt;</code>.</p>
+  </div>
+
+  <div id="saveStatus" class="status"></div>
+
+  <div class="actions">
+    <button class="btn" id="saveBtn" onclick="saveConfig()">Save &amp; Finish</button>
+    <button class="btn btn-outline" onclick="loadPrinters()">Refresh Printers</button>
+  </div>
+</div>
+
+<script>
+  // Load available printers on page load
+  window.addEventListener('DOMContentLoaded', loadPrinters);
+
+  async function loadPrinters() {
+    try {
+      const res  = await fetch('/setup/printers');
+      const list = await res.json();
+      const sel  = document.getElementById('printer');
+      // Keep the default option, append discovered printers
+      sel.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+      list.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name; opt.textContent = name;
+        sel.appendChild(opt);
+      });
+    } catch (e) {
+      console.warn('Could not load printers:', e);
+    }
+  }
+
+  async function testConnection() {
+    const statusEl = document.getElementById('connectionStatus');
+    const baseUrl  = document.getElementById('cloudUrl').value.trim();
+    const apiKey   = document.getElementById('apiKey').value.trim();
+
+    if (!baseUrl || !apiKey) {
+      showStatus(statusEl, 'error', 'Please enter both the URL and API key before testing.');
+      return;
+    }
+
+    showStatus(statusEl, 'info', 'Testing connection...');
+
+    try {
+      const res  = await fetch('/setup/test-connection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ baseUrl, apiKey })
+      });
+      const data = await res.json();
+      if (data.connected)
+        showStatus(statusEl, 'ok', 'Connected successfully to the cloud Badge Producer.');
+      else
+        showStatus(statusEl, 'error', 'Could not connect. Check the URL and API key.');
+    } catch (e) {
+      showStatus(statusEl, 'error', 'Network error: ' + e.message);
+    }
+  }
+
+  async function saveConfig() {
+    const saveEl  = document.getElementById('saveStatus');
+    const saveBtn = document.getElementById('saveBtn');
+
+    const payload = {
+      cloudBaseUrl:       document.getElementById('cloudUrl').value.trim(),
+      apiKey:             document.getElementById('apiKey').value.trim(),
+      defaultPrinterName: document.getElementById('printer').value || null,
+      format:             document.getElementById('format').value,
+      port:               parseInt(document.getElementById('port').value, 10)
+    };
+
+    if (!payload.cloudBaseUrl || !payload.apiKey) {
+      showStatus(saveEl, 'error', 'Cloud URL and API key are required.');
+      return;
+    }
+
+    saveBtn.disabled = true;
+    showStatus(saveEl, 'info', 'Saving configuration...');
+
+    try {
+      const res  = await fetch('/setup/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success)
+        showStatus(saveEl, 'ok', data.message);
+      else
+        showStatus(saveEl, 'error', 'Save failed. Check the bridge logs.');
+    } catch (e) {
+      showStatus(saveEl, 'error', 'Error: ' + e.message);
+    } finally {
+      saveBtn.disabled = false;
+    }
+  }
+
+  function showStatus(el, type, msg) {
+    el.className = 'status ' + type;
+    el.textContent = msg;
+  }
+</script>
+</body>
+</html>

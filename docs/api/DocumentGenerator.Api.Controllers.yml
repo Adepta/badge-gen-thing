@@ -1,0 +1,31 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Api.Controllers
+  commentId: N:DocumentGenerator.Api.Controllers
+  id: Controllers
+  parent: DocumentGenerator.Api
+  children:
+  - DocumentGenerator.Api.Controllers.BadgesController
+  - DocumentGenerator.Api.Controllers.HealthController
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Api.Controllers
+  nameWithType: DocumentGenerator.Api.Controllers
+  fullName: DocumentGenerator.Api.Controllers
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Api
+references:
+- uid: DocumentGenerator.Api.Controllers.BadgesController
+  commentId: T:DocumentGenerator.Api.Controllers.BadgesController
+  href: DocumentGenerator.Api.Controllers.BadgesController.html
+  name: BadgesController
+  nameWithType: BadgesController
+  fullName: DocumentGenerator.Api.Controllers.BadgesController
+- uid: DocumentGenerator.Api.Controllers.HealthController
+  commentId: T:DocumentGenerator.Api.Controllers.HealthController
+  href: DocumentGenerator.Api.Controllers.HealthController.html
+  name: HealthController
+  nameWithType: HealthController
+  fullName: DocumentGenerator.Api.Controllers.HealthController

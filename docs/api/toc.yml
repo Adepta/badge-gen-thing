@@ -4,6 +4,138 @@ items:
   name: DocumentGenerator
   type: Namespace
   items:
+  - uid: DocumentGenerator.Api
+    name: Api
+    type: Namespace
+    items:
+    - uid: DocumentGenerator.Api.Authentication
+      name: Authentication
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Api.Authentication.ApiKeyAuthenticationHandler
+        name: ApiKeyAuthenticationHandler
+        type: Class
+    - uid: DocumentGenerator.Api.Controllers
+      name: Controllers
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Api.Controllers.BadgesController
+        name: BadgesController
+        type: Class
+      - uid: DocumentGenerator.Api.Controllers.HealthController
+        name: HealthController
+        type: Class
+    - uid: DocumentGenerator.Api.Models
+      name: Models
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Api.Models.BadgeBrandingRequest
+        name: BadgeBrandingRequest
+        type: Class
+      - uid: DocumentGenerator.Api.Models.BadgeRenderRequest
+        name: BadgeRenderRequest
+        type: Class
+      - uid: DocumentGenerator.Api.Models.BadgeRenderResponse
+        name: BadgeRenderResponse
+        type: Class
+    - uid: DocumentGenerator.Api.Services
+      name: Services
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Api.Services.TemplateLocator
+        name: TemplateLocator
+        type: Class
+    - uid: DocumentGenerator.Api.Program
+      name: Program
+      type: Class
+  - uid: DocumentGenerator.Bridge
+    name: Bridge
+    type: Namespace
+    items:
+    - uid: DocumentGenerator.Bridge.Configuration
+      name: Configuration
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Bridge.Configuration.BridgeOptions
+        name: BridgeOptions
+        type: Class
+      - uid: DocumentGenerator.Bridge.Configuration.CloudOptions
+        name: CloudOptions
+        type: Class
+      - uid: DocumentGenerator.Bridge.Configuration.PrinterOptions
+        name: PrinterOptions
+        type: Class
+    - uid: DocumentGenerator.Bridge.Endpoints
+      name: Endpoints
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Bridge.Endpoints.BridgeEndpoints
+        name: BridgeEndpoints
+        type: Class
+      - uid: DocumentGenerator.Bridge.Endpoints.SaveConfigRequest
+        name: SaveConfigRequest
+        type: Class
+      - uid: DocumentGenerator.Bridge.Endpoints.SetupEndpoints
+        name: SetupEndpoints
+        type: Class
+      - uid: DocumentGenerator.Bridge.Endpoints.TestConnectionRequest
+        name: TestConnectionRequest
+        type: Class
+    - uid: DocumentGenerator.Bridge.Middleware
+      name: Middleware
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Bridge.Middleware.SetupGuardMiddleware
+        name: SetupGuardMiddleware
+        type: Class
+    - uid: DocumentGenerator.Bridge.Models
+      name: Models
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Bridge.Models.BrandingRequest
+        name: BrandingRequest
+        type: Class
+      - uid: DocumentGenerator.Bridge.Models.PrintRequest
+        name: PrintRequest
+        type: Class
+      - uid: DocumentGenerator.Bridge.Models.PrintResponse
+        name: PrintResponse
+        type: Class
+    - uid: DocumentGenerator.Bridge.Printing
+      name: Printing
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Bridge.Printing.CupsPrinterAdapter
+        name: CupsPrinterAdapter
+        type: Class
+      - uid: DocumentGenerator.Bridge.Printing.IPrinterAdapter
+        name: IPrinterAdapter
+        type: Interface
+      - uid: DocumentGenerator.Bridge.Printing.PrintResult
+        name: PrintResult
+        type: Class
+      - uid: DocumentGenerator.Bridge.Printing.PrinterAdapterFactory
+        name: PrinterAdapterFactory
+        type: Class
+      - uid: DocumentGenerator.Bridge.Printing.WindowsPrinterAdapter
+        name: WindowsPrinterAdapter
+        type: Class
+    - uid: DocumentGenerator.Bridge.Services
+      name: Services
+      type: Namespace
+      items:
+      - uid: DocumentGenerator.Bridge.Services.CloudBadgeClient
+        name: CloudBadgeClient
+        type: Class
+      - uid: DocumentGenerator.Bridge.Services.CloudRenderResponse
+        name: CloudRenderResponse
+        type: Class
+      - uid: DocumentGenerator.Bridge.Services.SetupService
+        name: SetupService
+        type: Class
+    - uid: DocumentGenerator.Bridge.Program
+      name: Program
+      type: Class
   - uid: DocumentGenerator.Console
     name: Console
     type: Namespace

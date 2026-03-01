@@ -1,0 +1,71 @@
+### YamlMime:ManagedReference
+items:
+- uid: DocumentGenerator.Api.Models
+  commentId: N:DocumentGenerator.Api.Models
+  id: Models
+  parent: DocumentGenerator.Api
+  children:
+  - DocumentGenerator.Api.Models.BadgeBrandingRequest
+  - DocumentGenerator.Api.Models.BadgeRenderRequest
+  - DocumentGenerator.Api.Models.BadgeRenderResponse
+  langs:
+  - csharp
+  - vb
+  name: DocumentGenerator.Api.Models
+  nameWithType: DocumentGenerator.Api.Models
+  fullName: DocumentGenerator.Api.Models
+  type: Namespace
+  assemblies:
+  - DocumentGenerator.Api
+references:
+- uid: DocumentGenerator.Api.Models.BadgeBrandingRequest
+  commentId: T:DocumentGenerator.Api.Models.BadgeBrandingRequest
+  parent: DocumentGenerator.Api.Models
+  href: DocumentGenerator.Api.Models.BadgeBrandingRequest.html
+  name: BadgeBrandingRequest
+  nameWithType: BadgeBrandingRequest
+  fullName: DocumentGenerator.Api.Models.BadgeBrandingRequest
+- uid: DocumentGenerator.Api.Models.BadgeRenderRequest
+  commentId: T:DocumentGenerator.Api.Models.BadgeRenderRequest
+  parent: DocumentGenerator.Api.Models
+  href: DocumentGenerator.Api.Models.BadgeRenderRequest.html
+  name: BadgeRenderRequest
+  nameWithType: BadgeRenderRequest
+  fullName: DocumentGenerator.Api.Models.BadgeRenderRequest
+- uid: DocumentGenerator.Api.Models.BadgeRenderResponse
+  commentId: T:DocumentGenerator.Api.Models.BadgeRenderResponse
+  parent: DocumentGenerator.Api.Models
+  href: DocumentGenerator.Api.Models.BadgeRenderResponse.html
+  name: BadgeRenderResponse
+  nameWithType: BadgeRenderResponse
+  fullName: DocumentGenerator.Api.Models.BadgeRenderResponse
+- uid: DocumentGenerator.Api.Models
+  commentId: N:DocumentGenerator.Api.Models
+  href: DocumentGenerator.html
+  name: DocumentGenerator.Api.Models
+  nameWithType: DocumentGenerator.Api.Models
+  fullName: DocumentGenerator.Api.Models
+  spec.csharp:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
+  spec.vb:
+  - uid: DocumentGenerator
+    name: DocumentGenerator
+    href: DocumentGenerator.html
+  - name: .
+  - uid: DocumentGenerator.Api
+    name: Api
+    href: DocumentGenerator.Api.html
+  - name: .
+  - uid: DocumentGenerator.Api.Models
+    name: Models
+    href: DocumentGenerator.Api.Models.html
