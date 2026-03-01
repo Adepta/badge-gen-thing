@@ -20,3 +20,5 @@
   href: browser-pool.md
 - name: Testing
   href: testing.md
+- name: Error Codes
+  href: Errors.md

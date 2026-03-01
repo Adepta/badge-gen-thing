@@ -121,4 +121,27 @@ public sealed class BadgeRenderResponseTests
         var response = BadgeRenderResponse.Fail(Guid.NewGuid(), "err");
         response.JobId.Should().Be(Guid.Empty);
     }
+
+    // ── ErrorCode ─────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Fail_WithErrorCode_SetsErrorCode()
+    {
+        var response = BadgeRenderResponse.Fail(Guid.NewGuid(), "template not found", "DG1001");
+        response.ErrorCode.Should().Be("DG1001");
+    }
+
+    [Fact]
+    public void Fail_WithoutErrorCode_ErrorCodeIsNull()
+    {
+        var response = BadgeRenderResponse.Fail(Guid.NewGuid(), "err");
+        response.ErrorCode.Should().BeNull();
+    }
+
+    [Fact]
+    public void Ok_ErrorCodeIsNull()
+    {
+        var response = BadgeRenderResponse.Ok(Guid.NewGuid(), Guid.NewGuid(), FakeBytes, "application/pdf", "badge", TimeSpan.Zero);
+        response.ErrorCode.Should().BeNull();
+    }
 }

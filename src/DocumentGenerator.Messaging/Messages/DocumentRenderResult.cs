@@ -38,6 +38,12 @@ public sealed class DocumentRenderResult
     /// <summary>Human-readable error description when <see cref="Success"/> is false.</summary>
     public string? ErrorMessage { get; init; }
 
+    /// <summary>
+    /// Machine-readable error code when <see cref="Success"/> is false.
+    /// Null on success. Allows callers to distinguish error categories without parsing <see cref="ErrorMessage"/>.
+    /// </summary>
+    public string? ErrorCode { get; init; }
+
     /// <summary>Document type from the original template, e.g. "badge".</summary>
     public string DocumentType { get; init; } = string.Empty;
 
@@ -88,19 +94,26 @@ public sealed class DocumentRenderResult
     /// <param name="sessionId">Session ID echoed from the request.</param>
     /// <param name="documentType">Document type label from the template.</param>
     /// <param name="errorMessage">Human-readable description of why the render failed.</param>
+    /// <param name="errorCode">
+    /// Optional machine-readable error code. When supplied from a
+    /// <c>DocumentGeneratorException</c>, pass <c>ex.ToString()</c>
+    /// (e.g. <c>"DG2001"</c>) so callers can distinguish categories without parsing the message.
+    /// </param>
     /// <returns>A populated failure result ready to publish.</returns>
     public static DocumentRenderResult Failed(
         Guid correlationId,
         string deviceId,
         string? sessionId,
         string documentType,
-        string errorMessage) => new()
+        string errorMessage,
+        string? errorCode = null) => new()
         {
             CorrelationId = correlationId,
             DeviceId      = deviceId,
             SessionId     = sessionId,
             DocumentType  = documentType,
             Success       = false,
-            ErrorMessage  = errorMessage
+            ErrorMessage  = errorMessage,
+            ErrorCode     = errorCode
         };
 }

@@ -1,13 +1,13 @@
 # Testing
 
-DocumentGenerator has a two-project test suite totalling **231 test executions**.
+DocumentGenerator has a two-project test suite totalling **310 test executions**.
 
 | Project | Tests | Type | Chromium? |
 |---|---|---|---|
-| `DocumentGenerator.UnitTests` | 170 | Unit | No |
-| `DocumentGenerator.IntegrationTests` | 61 | Integration | No |
+| `DocumentGenerator.UnitTests` | 245 | Unit | No |
+| `DocumentGenerator.IntegrationTests` | 65 | Integration | No |
 
-All tests run fully in-process. No real browser, no Kafka broker, no cloud API, and no file system state outside of explicitly-created temp directories is required.
+All tests run fully in-process with no real browser or cloud API. The `KafkaRenderIntegrationTests` class starts a real Kafka broker in Docker via Testcontainers — all other tests require no external infrastructure beyond explicitly-created temp directories.
 
 ---
 
@@ -61,7 +61,7 @@ Pure in-memory tests. No mocks, no I/O. Covers the value-object and factory meth
 | `Branding` defaults | Non-null empty `Custom` dictionary |
 | `TemplateContent` defaults | Non-null empty `Partials`, null `Css` |
 
-### `Messaging.DocumentRenderRequestHandlerTests` (11 tests)
+### `Messaging.DocumentRenderRequestHandlerTests` (20 tests)
 
 **File:** `tests/DocumentGenerator.UnitTests/Messaging/DocumentRenderRequestHandlerTests.cs`
 
@@ -71,9 +71,15 @@ Tests the Kafka message handler in isolation:
 
 | Scenario | Assertions |
 |---|---|
-| Successful render | `IBus.Reply` called once with `Success=true`; PDF bytes Base64-encoded; correlation/device/session IDs echoed; `IRenderMetrics.RecordSuccess()` called once |
-| Successful render | Pipeline invoked with a `RenderRequest` whose `JobId` matches the message's `CorrelationId` |
-| Pipeline throws | `IBus.Reply` called with `Success=false`; exception message in `ErrorMessage`; `IRenderMetrics.RecordFailure()` called once; bus reply is never swallowed |
+| Successful render (inline) | `IBus.Reply` called once with `Success=true`; PDF bytes Base64-encoded; correlation/device/session IDs echoed; `IRenderMetrics.RecordSuccess()` called once |
+| Successful render (inline) | Pipeline invoked with a `RenderRequest` whose `JobId` matches the message's `CorrelationId` |
+| Successful render (inline) | `PdfPath` is null when `ReturnPdfInline=true` |
+| Successful render (file) | `PdfBase64` is null when `ReturnPdfInline=false` |
+| Successful render (file) | `PdfPath` is populated; file written to `PdfOutputPath`; bytes match renderer output |
+| Successful render (file) | Filename contains `DocumentType` and `CorrelationId` with `.pdf` extension |
+| Successful render (file) | Reply still has `Success=true` |
+| Pipeline throws (non-transient) | `IBus.Reply` called with `Success=false`; exception message in `ErrorMessage`; `IRenderMetrics.RecordFailure()` called once |
+| `BrowserPoolException` (transient) | Exception is re-thrown so Rebus can retry — `IBus.Reply` is never called; `IRenderMetrics.RecordFailure()` called once |
 
 ### `Pdf.DocumentPipelineTests` (10 tests)
 
@@ -174,6 +180,86 @@ No mocks, no I/O. Tests the real `HandlebarsTemplateEngine` with in-memory templ
 | `RenderAsync_WithPartial_ExpandsPartialContent` | `{{> partialName}}` expands registered partial |
 | `RenderAsync_CancelledToken_ThrowsOperationCanceledException` | Pre-cancelled token causes `OperationCanceledException` |
 
+### `Api.RateLimitOptionsTests` (11 tests)
+
+**File:** `tests/DocumentGenerator.UnitTests/Api/RateLimitOptionsTests.cs`
+
+No mocks, no I/O. Exercises `System.ComponentModel.DataAnnotations.Validator` against `RateLimitOptions`:
+
+| Scenario | Assertions |
+|---|---|
+| Default options | `Validate()` returns no errors |
+| `PermitLimit = 0` | Validation fails |
+| `PermitLimit = -1` | Validation fails |
+| `PermitLimit = 1` | Validation passes |
+| `PermitLimit = 10_000` | Validation passes |
+| `Window = TimeSpan.Zero` | Validation fails |
+| `Window = 1s` | Validation passes |
+| `SegmentsPerWindow = 0` | Validation fails |
+| `SegmentsPerWindow = 1` | Validation passes |
+| `SegmentsPerWindow = 100` | Validation passes |
+| `SegmentsPerWindow = 101` | Validation fails (exceeds max) |
+
+### `Api.TemplateDirHealthCheckTests` (6 tests)
+
+**File:** `tests/DocumentGenerator.UnitTests/Api/TemplateDirHealthCheckTests.cs`
+
+Uses `IDisposable` — creates a unique temp directory per test. No mocks; tests the real `TemplateDirHealthCheck` against real temp directories.
+
+| Scenario | Assertions |
+|---|---|
+| Directory exists with `.html` files | Returns `Healthy` |
+| Healthy case | Description includes file count |
+| Directory exists but empty | Returns `Degraded` |
+| Degraded case | Description contains `"empty"` or `"no .html"` |
+| Directory does not exist | Returns `Unhealthy` |
+| Unhealthy case | Description contains `"does not exist"` |
+
+### `Api.ChromiumPoolHealthCheckTests` (6 tests)
+
+**File:** `tests/DocumentGenerator.UnitTests/Api/ChromiumPoolHealthCheckTests.cs`
+
+Mock: `Mock<IBrowserPool<IBrowser>>`
+
+| Scenario | Assertions |
+|---|---|
+| Kafka mode enabled | Returns `Healthy` with "skipped" message; `AcquireAsync` never called |
+| Inline mode, pool healthy | `AcquireAsync` returns a lease; result is `Healthy` |
+| Inline mode, pool healthy | `IBrowserLease.DisposeAsync()` called once (lease released) |
+| Inline mode, pool throws `BrowserPoolException.Disposed()` | Returns `Unhealthy` |
+| Inline mode, pool throws generic exception | Description contains `"unhealthy"` |
+
+### `Api.TemplateLocatorPathTraversalTests` (6 tests)
+
+**File:** `tests/DocumentGenerator.UnitTests/Api/TemplateLocatorPathTraversalTests.cs`
+
+Uses `IDisposable` — seeds a temp directory with one valid template. Verifies the path-traversal guard in `TemplateLocator.Resolve`:
+
+| Scenario | Assertions |
+|---|---|
+| `../etc/passwd` (single traversal) | Throws `TemplateException` with `ErrorCode.TemplateNameInvalid` |
+| `../../secret` (double traversal) | Throws `TemplateException` with `ErrorCode.TemplateNameInvalid` |
+| `C:\Windows\...` (absolute Windows path) | Throws `TemplateException` with `ErrorCode.TemplateNameInvalid` |
+| `/etc/passwd` (absolute Unix path) | Throws `TemplateException` with `ErrorCode.TemplateNameInvalid` |
+| `../tpl_bypass/secret` (sibling-prefix bypass) | Throws `TemplateException` with `ErrorCode.TemplateNameInvalid` |
+| `badge-ok` (valid name) | Does not throw `TemplateNameInvalid` |
+
+### `Bridge.BridgeTokenAuthMiddlewareTests` (10 tests)
+
+**File:** `tests/DocumentGenerator.UnitTests/Bridge/BridgeTokenAuthMiddlewareTests.cs`
+
+Uses `DefaultHttpContext` — no web host required. Verifies `BridgeTokenAuthMiddleware.InvokeAsync` logic:
+
+| Scenario | Assertions |
+|---|---|
+| No token configured | Passes through to `next` |
+| Empty token configured | Passes through to `next` |
+| Request to `/health` (token configured) | Passes through regardless of header |
+| Request to `/setup/...` (token configured) | Passes through regardless of header |
+| Correct token in `X-Bridge-Token` header | Passes through to `next`; status is not 401 |
+| Token configured, no header provided | Returns 401; `next` not called |
+| Token configured, wrong header value | Returns 401; `next` not called |
+
 ---
 
 ## Integration Tests — `DocumentGenerator.IntegrationTests`
@@ -216,7 +302,7 @@ Uses `IDisposable` — creates unique temp `templates/` and `output/` directorie
 | `WorkerLoop_EmptyTemplateDirectory_ProducesNoPdfs` | No input files → no PDF files produced |
 | `WorkerLoop_VariablesInTemplate_AreRenderedIntoHtml` | Variables substituted into HTML in the full file-loop path |
 
-### `Api.BadgesApiIntegrationTests` (17 tests)
+### `Api.BadgesApiIntegrationTests` (18 tests)
 
 **File:** `tests/DocumentGenerator.IntegrationTests/Api/BadgesApiIntegrationTests.cs`
 
@@ -240,8 +326,21 @@ Uses `ApiWebApplicationFactory` — an in-process `WebApplicationFactory<Program
 | `Render_WrongApiKey_Returns401` | Wrong key → 401 |
 | `Render_PngFormat_MimeTypeIsPng` | `format: "Png"` → `mimeType: "image/png"` |
 | `Render_UnknownTemplate_Returns400` | Unknown template name → 400 |
-| `Render_UnknownTemplate_ResponseSuccessIsFalse` | `success: false` with unknown template |
+| `Render_UnknownTemplate_ResponseSuccessIsFalse` | `success: false` with unknown template; `error` field populated |
 | `Render_PipelineThrows_Returns500` | Pipeline exception → 500 |
+
+### `Api.KafkaRenderIntegrationTests` (4 tests)
+
+**File:** `tests/DocumentGenerator.IntegrationTests/Api/KafkaRenderIntegrationTests.cs`
+
+Requires Docker. Starts a real Kafka broker via **Testcontainers** (`confluentinc/cp-kafka:7.9.0`). Two Rebus buses are wired in-process: an API-side bus that publishes requests and awaits results via `PendingRenderStore`, and a stub Console-side bus that replies immediately without Chromium. Tests are tagged `[Trait("Category", "Kafka")]`.
+
+| Test | What's verified |
+|---|---|
+| `RenderRequest_PublishedToKafka_ResultReturnsToApiStore` | Request sent through API bus is handled by stub Console, result resolves via `PendingRenderStore` within 15s |
+| `MultipleRequests_AllResolveToCorrectCorrelationId` | 5 concurrent requests each resolve to their own correlation ID — store does not mix results |
+| `FailureResult_PropagatesErrorToAwaiter` | Stub configured to fail; awaiter receives `Success=false` with non-empty `ErrorMessage` |
+| `Timeout_CancelsAwaiterAndRemovesFromStore` | Awaiter cancelled before result arrives; `PendingCount` returns to 0 |
 
 ### `Bridge.BridgeEndpointsIntegrationTests` (26 tests)
 
@@ -297,8 +396,19 @@ Test classes that create real temp directories implement `IDisposable` and clean
 - `FileTemplateContentResolverTests` — path resolution against real files
 - `FileModeWorkerIntegrationTests` — complete read→render→write loop
 - `ApiWebApplicationFactory` — temp directory of stub HTML templates
+- `TemplateDirHealthCheckTests` — real temp directory for health check assertions
+- `TemplateLocatorPathTraversalTests` — temp directory with a seed template for guard testing
 
 xUnit calls `Dispose()` after every test (or after the class fixture is torn down), so each run gets a fresh, isolated directory.
+
+### IAsyncLifetime (Kafka tests)
+
+`KafkaRenderIntegrationTests` implements `IAsyncLifetime` to start and stop the Docker-based Kafka container around the entire test class:
+
+- `InitializeAsync()` — pulls and starts the Kafka image, wires two Rebus buses, waits 5 seconds for topic subscriptions to propagate
+- `DisposeAsync()` — disposes both Rebus buses and stops the Kafka container
+
+These tests require Docker to be running. They will fail with a container startup error if Docker is unavailable.
 
 ### No base classes
 
@@ -332,3 +442,11 @@ All constructors that accept real implementations pass `NullLogger<T>.Instance` 
 2. Wire the real `HandlebarsTemplateEngine` and `DocumentPipeline` via `BuildPipeline()`.
 3. Mock `IDocumentRenderer` — return fixed `byte[]` PDF content.
 4. If you need temp files, implement `IDisposable` and clean up in `Dispose()`.
+
+### Integration test checklist (Kafka end-to-end)
+
+1. Implement `IAsyncLifetime` — start the Kafka container in `InitializeAsync()`, tear it down in `DisposeAsync()`.
+2. Use `Testcontainers.Kafka` with the `confluentinc/cp-kafka:7.9.0` image.
+3. Wire two `BuiltinHandlerActivator` instances: one for the API side, one for the stub Console side.
+4. Tag the class with `[Trait("Category", "Kafka")]` so CI can optionally exclude these tests when Docker is unavailable.
+5. Allow at least 5 seconds after `Start()` for Rebus subscription propagation before sending messages.

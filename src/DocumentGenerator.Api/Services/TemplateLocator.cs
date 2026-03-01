@@ -1,3 +1,4 @@
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Models;
 
 namespace DocumentGenerator.Api.Services;
@@ -51,21 +52,36 @@ public sealed class TemplateLocator
     /// <param name="variables">Attendee / badge data injected as Handlebars variables.</param>
     /// <param name="branding">Optional branding overrides. When null, sensible defaults are used.</param>
     /// <returns>A <see cref="DocumentTemplate"/> ready to pass to <c>IDocumentPipeline</c>.</returns>
-    /// <exception cref="FileNotFoundException">
-    /// Thrown when the HTML template file does not exist on disk.
+    /// <exception cref="TemplateException">
+    /// Thrown with <see cref="ErrorCode.TemplateNameInvalid"/> when <paramref name="templateName"/>
+    /// is null or empty, or with <see cref="ErrorCode.TemplateNotFound"/> when the HTML file
+    /// does not exist on disk.
     /// </exception>
     public DocumentTemplate Resolve(
         string templateName,
         Dictionary<string, object?> variables,
         Branding? branding = null)
     {
-        var htmlPath = Path.Combine(_templatesPath, $"{templateName}.html");
-        var cssPath  = Path.Combine(_templatesPath, $"{templateName}.css");
+        if (string.IsNullOrWhiteSpace(templateName))
+            throw TemplateException.InvalidName(templateName ?? string.Empty);
+
+        // Guard against path traversal: verify resolved paths stay inside the templates directory.
+        // Path.Combine with an absolute segment (e.g. "/etc/passwd") replaces the base path,
+        // so we must canonicalise and prefix-check after combining.
+        var htmlPath = Path.GetFullPath(Path.Combine(_templatesPath, $"{templateName}.html"));
+        var cssPath  = Path.GetFullPath(Path.Combine(_templatesPath, $"{templateName}.css"));
+
+        // Ensure the resolved path is still within the templates directory.
+        // The trailing separator prevents a directory named "templates-evil" from matching "templates".
+        var safeRoot = _templatesPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                       + Path.DirectorySeparatorChar;
+        if (!htmlPath.StartsWith(safeRoot, StringComparison.OrdinalIgnoreCase))
+            throw TemplateException.InvalidName(templateName);
 
         if (!File.Exists(htmlPath))
         {
             _logger.LogWarning("Template not found: {HtmlPath}", htmlPath);
-            throw new FileNotFoundException($"Badge template '{templateName}' not found.", htmlPath);
+            throw TemplateException.NotFound(templateName, htmlPath);
         }
 
         var hasCss = File.Exists(cssPath);

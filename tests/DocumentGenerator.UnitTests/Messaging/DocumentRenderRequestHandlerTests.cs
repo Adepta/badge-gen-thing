@@ -351,6 +351,57 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
     }
 
     // -----------------------------------------------------------------------
+    // BrowserPoolException — must be re-thrown (not swallowed into a reply)
+    // -----------------------------------------------------------------------
+
+    [Fact]
+    public async Task Handle_BrowserPoolException_IsRethrownForRebusRetry()
+    {
+        // Arrange
+        var message = BuildRequest();
+        _pipelineMock
+            .Setup(p => p.ExecuteAsync(It.IsAny<RenderRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(DocumentGenerator.Core.Errors.BrowserPoolException.Disposed());
+
+        // Act — the handler must re-throw so Rebus can retry
+        var act = async () => await _sut.Handle(message);
+
+        // Assert
+        await act.Should().ThrowAsync<DocumentGenerator.Core.Errors.BrowserPoolException>();
+    }
+
+    [Fact]
+    public async Task Handle_BrowserPoolException_DoesNotSendReplyToSender()
+    {
+        // The bus must NOT receive a Reply for a transient BrowserPoolException —
+        // replying would tell the iPad the render is done, defeating retry logic.
+        var message = BuildRequest();
+        _pipelineMock
+            .Setup(p => p.ExecuteAsync(It.IsAny<RenderRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(DocumentGenerator.Core.Errors.BrowserPoolException.AcquireTimeout(
+                TimeSpan.FromSeconds(30), 4, 4));
+
+        try { await _sut.Handle(message); } catch { /* expected — we only care about bus interactions */ }
+
+        _busMock.Verify(
+            b => b.Reply(It.IsAny<object>(), It.IsAny<IDictionary<string, string>>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public async Task Handle_BrowserPoolException_RecordsFailureMetric()
+    {
+        var message = BuildRequest();
+        _pipelineMock
+            .Setup(p => p.ExecuteAsync(It.IsAny<RenderRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(DocumentGenerator.Core.Errors.BrowserPoolException.Disconnected());
+
+        try { await _sut.Handle(message); } catch { /* expected */ }
+
+        _metricsMock.Verify(m => m.RecordFailure(), Times.Once);
+    }
+
+    // -----------------------------------------------------------------------
     // Helpers
     // -----------------------------------------------------------------------
 

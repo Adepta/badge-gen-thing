@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using DocumentGenerator.Core.Errors;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
@@ -32,8 +33,7 @@ public sealed class ApiKeyAuthenticationHandler : AuthenticationHandler<Authenti
         : base(options, logger, encoder)
     {
         _expectedKey = configuration["ApiAuth:ApiKey"]
-            ?? throw new InvalidOperationException(
-                "ApiAuth:ApiKey is not configured. Set it in appsettings.json or via an environment variable.");
+            ?? throw ConfigurationException.Missing("ApiAuth:ApiKey");
     }
 
     /// <summary>

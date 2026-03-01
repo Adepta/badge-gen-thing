@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.Versioning;
+using DocumentGenerator.Core.Errors;
 
 namespace DocumentGenerator.Bridge.Printing;
 
@@ -77,6 +78,13 @@ public sealed class CupsPrinterAdapter : IPrinterAdapter
 
             return PrintResult.Ok(resolvedPrinter);
         }
+        catch (PrintException ex)
+        {
+            _logger.LogError(ex,
+                "[{ErrorCode}] CUPS print failed — Printer={Printer}",
+                ex.ToString(), printerName);
+            return PrintResult.Fail(ex.Message, printerName, ex.ToString());
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "CUPS print failed — Printer={Printer}", printerName);
@@ -131,7 +139,7 @@ public sealed class CupsPrinterAdapter : IPrinterAdapter
         };
 
         using var process = Process.Start(psi)
-            ?? throw new InvalidOperationException($"Failed to start {command}.");
+            ?? throw PrintException.SpoolerFailed(command, $"Failed to start {command}.");
 
         process.WaitForExit();
         return process.StandardOutput.ReadToEnd();
@@ -148,7 +156,7 @@ public sealed class CupsPrinterAdapter : IPrinterAdapter
         };
 
         using var process = Process.Start(psi)
-            ?? throw new InvalidOperationException($"Failed to start {command}.");
+            ?? throw PrintException.SpoolerFailed(command, $"Failed to start {command}.");
 
         var output = await process.StandardOutput.ReadToEndAsync(ct);
         await process.WaitForExitAsync(ct);
@@ -156,7 +164,7 @@ public sealed class CupsPrinterAdapter : IPrinterAdapter
         if (process.ExitCode != 0)
         {
             var error = await process.StandardError.ReadToEndAsync(ct);
-            throw new InvalidOperationException($"lp exited with code {process.ExitCode}: {error}");
+            throw PrintException.SpoolerFailed(command, $"lp exited with code {process.ExitCode}: {error}");
         }
 
         return output;

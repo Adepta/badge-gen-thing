@@ -44,12 +44,6 @@ public sealed class KafkaOptions
     public TimeSpan RetryDelay { get; init; } = TimeSpan.FromSeconds(2);
 
     /// <summary>
-    /// How long to wait for messages before looping. Keeps the consumer
-    /// responsive to cancellation. Defaults to 1 second.
-    /// </summary>
-    public TimeSpan PollTimeout { get; init; } = TimeSpan.FromSeconds(1);
-
-    /// <summary>
     /// Maximum number of render requests processed concurrently.
     /// Should be kept at or below <see cref="Core.Configuration.BrowserPoolOptions.MaxSize"/>
     /// to avoid pool starvation. Defaults to 4.

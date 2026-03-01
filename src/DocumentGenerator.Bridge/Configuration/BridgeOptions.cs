@@ -22,6 +22,22 @@ public sealed class BridgeOptions
     /// When <c>false</c>, the bridge redirects all requests to <c>/setup</c>.
     /// </summary>
     public bool IsConfigured { get; set; } = false;
+
+    /// <summary>
+    /// Optional shared-secret token that iPad clients must send in the
+    /// <c>X-Bridge-Token</c> header. When empty, token authentication is disabled.
+    ///
+    /// Set via environment variable <c>Bridge__AccessToken</c> or in <c>appsettings.json</c>.
+    /// This provides lightweight LAN-level access control without requiring a full auth stack.
+    /// </summary>
+    public string AccessToken { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Comma-separated list of allowed CORS origins for Bridge API endpoints.
+    /// Defaults to wildcard (<c>*</c>) for local-network compatibility.
+    /// Override in production with the specific iPad app origin.
+    /// </summary>
+    public string AllowedOrigins { get; set; } = "*";
 }
 
 /// <summary>
@@ -40,8 +56,16 @@ public sealed class CloudOptions
 
     /// <summary>
     /// API key sent in the <c>X-Api-Key</c> header with every cloud request.
+    /// Deprecated — prefer <see cref="ProtectedApiKey"/> which stores an encrypted value.
     /// </summary>
     public string ApiKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Data-Protection-encrypted form of the API key, written by the setup wizard.
+    /// At runtime <see cref="Services.SetupService.UnprotectApiKey"/> decrypts it.
+    /// Takes precedence over <see cref="ApiKey"/> when set.
+    /// </summary>
+    public string ProtectedApiKey { get; set; } = string.Empty;
 
     /// <summary>
     /// HTTP request timeout for cloud render calls.

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using HandlebarsDotNet;
@@ -83,13 +84,46 @@ public sealed class HandlebarsTemplateEngine : ITemplateEngine
             // Insert a space between `}}` and a following `}` so the CSS
             // closing brace is never adjacent to a Handlebars closing tag.
             var safeCss = template.Template.Css.Replace("}}}", "}} }");
-            var cssTemplate = _handlebars.Compile(safeCss);
-            renderedCss = cssTemplate(context);
+            HandlebarsTemplate<object, object> cssTemplate;
+            try
+            {
+                cssTemplate = _handlebars.Compile(safeCss);
+            }
+            catch (Exception ex)
+            {
+                throw TemplateException.CompileFailed(template.DocumentType, ex);
+            }
+
+            try
+            {
+                renderedCss = cssTemplate(context);
+            }
+            catch (Exception ex)
+            {
+                throw TemplateException.RenderFailed(template.DocumentType, ex);
+            }
         }
 
         // Render HTML body
-        var htmlTemplate = _handlebars.Compile(template.Template.Html);
-        var renderedHtml = htmlTemplate(context);
+        HandlebarsTemplate<object, object> htmlTemplate;
+        try
+        {
+            htmlTemplate = _handlebars.Compile(template.Template.Html);
+        }
+        catch (Exception ex)
+        {
+            throw TemplateException.CompileFailed(template.DocumentType, ex);
+        }
+
+        string renderedHtml;
+        try
+        {
+            renderedHtml = htmlTemplate(context);
+        }
+        catch (Exception ex)
+        {
+            throw TemplateException.RenderFailed(template.DocumentType, ex);
+        }
 
         // Inject CSS
         if (!string.IsNullOrWhiteSpace(renderedCss))

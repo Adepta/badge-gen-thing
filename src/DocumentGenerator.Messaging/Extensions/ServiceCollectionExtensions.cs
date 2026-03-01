@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Rebus.Bus;
 using Rebus.Config;
 using Rebus.Kafka;
+using Rebus.Retry.Simple;
 using Rebus.Routing.TypeBased;
 using Rebus.ServiceProvider;
 
@@ -44,6 +45,12 @@ public static class ServiceCollectionExtensions
                     options.RequestTopic))           // input queue = render.requests topic
                 .Routing(r => r.TypeBased()
                     .Map<DocumentRenderResult>(options.ResultTopic))  // outbound route
+                // Retry transient failures (BrowserPoolException) with exponential backoff.
+                // After MaxRetries the message is moved to the dead-letter queue (error queue).
+                .Options(o => o.RetryStrategy(
+                    errorQueueName:            options.DeadLetterTopic,
+                    maxDeliveryAttempts:       options.MaxRetries + 1, // +1 because first attempt counts
+                    secondLevelRetriesEnabled: false))
                 .Options(o =>
                 {
                     o.SetMaxParallelism(options.MaxConcurrentRenders);

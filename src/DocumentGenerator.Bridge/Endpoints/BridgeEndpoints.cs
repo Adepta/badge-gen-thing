@@ -3,6 +3,7 @@ using DocumentGenerator.Bridge.Configuration;
 using DocumentGenerator.Bridge.Models;
 using DocumentGenerator.Bridge.Printing;
 using DocumentGenerator.Bridge.Services;
+using DocumentGenerator.Core.Errors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -90,6 +91,13 @@ public static class BridgeEndpoints
                     cloudResult.MimeType ?? "application/pdf",
                     sw.Elapsed));
             }
+            catch (PrintException ex)
+            {
+                logger.LogError(ex,
+                    "[{ErrorCode}] Render failed — CorrelationId={CorrelationId}",
+                    ex.ToString(), correlationId);
+                return Results.Ok(PrintResponse.Fail(correlationId, ex.Message, sw.Elapsed, ex.ToString()));
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Render failed — CorrelationId={CorrelationId}", correlationId);
@@ -123,6 +131,13 @@ public static class BridgeEndpoints
             {
                 cloudResult = await cloud.RenderAsync(request, format, correlationId, ct);
             }
+            catch (DocumentGeneratorException ex)
+            {
+                logger.LogError(ex,
+                    "[{ErrorCode}] Cloud render failed — CorrelationId={CorrelationId}",
+                    ex.ToString(), correlationId);
+                return Results.Ok(PrintResponse.Fail(correlationId, ex.Message, sw.Elapsed, ex.ToString()));
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Cloud render failed — CorrelationId={CorrelationId}", correlationId);
@@ -138,10 +153,13 @@ public static class BridgeEndpoints
             {
                 docBytes = Convert.FromBase64String(cloudResult.DocumentBase64);
             }
-            catch (Exception ex)
+            catch (FormatException ex)
             {
-                logger.LogError(ex, "Base64 decode failed — CorrelationId={CorrelationId}", correlationId);
-                return Results.Ok(PrintResponse.Fail(correlationId, "Failed to decode document from cloud.", sw.Elapsed));
+                var decodeEx = PrintException.DecodeFailed(ex);
+                logger.LogError(ex,
+                    "[{ErrorCode}] Base64 decode failed — CorrelationId={CorrelationId}",
+                    decodeEx.ToString(), correlationId);
+                return Results.Ok(PrintResponse.Fail(correlationId, decodeEx.Message, sw.Elapsed, decodeEx.ToString()));
             }
 
             // Step 3: Send to local printer
@@ -164,8 +182,8 @@ public static class BridgeEndpoints
             if (!printResult.Success)
             {
                 logger.LogWarning(
-                    "Print failed (document still returned) — CorrelationId={CorrelationId} Error={Error}",
-                    correlationId, printResult.Error);
+                    "[{ErrorCode}] Print failed (document still returned) — CorrelationId={CorrelationId} Error={Error}",
+                    printResult.ErrorCode ?? "DG5003", correlationId, printResult.Error);
 
                 // Return the document even if printing failed so the iPad still has it
                 return Results.Ok(new PrintResponse
@@ -177,6 +195,7 @@ public static class BridgeEndpoints
                     Printed        = false,
                     PrinterUsed    = printResult.PrinterUsed,
                     Error          = $"Print spooler error: {printResult.Error}",
+                    ErrorCode      = printResult.ErrorCode ?? "DG5003",
                     ElapsedTime    = sw.Elapsed,
                     CompletedAt    = DateTimeOffset.UtcNow
                 });

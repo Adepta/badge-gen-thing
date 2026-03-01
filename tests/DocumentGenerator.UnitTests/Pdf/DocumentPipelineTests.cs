@@ -1,3 +1,4 @@
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Pdf;
@@ -142,8 +143,9 @@ public sealed class DocumentPipelineTests
     // -----------------------------------------------------------------------
 
     [Fact]
-    public async Task ExecuteAsync_TemplateEngineThrows_ExceptionPropagates()
+    public async Task ExecuteAsync_TemplateEngineThrows_WrapsAsRenderException()
     {
+        // Raw exceptions from the template engine are wrapped by the pipeline as RenderException(DG2001).
         var request = BuildRequest();
         _templateEngineMock
             .Setup(e => e.RenderAsync(It.IsAny<DocumentTemplate>(), It.IsAny<CancellationToken>()))
@@ -151,14 +153,16 @@ public sealed class DocumentPipelineTests
 
         var act = async () => await _sut.ExecuteAsync(request);
 
-        await act.Should()
-            .ThrowAsync<InvalidOperationException>()
-            .WithMessage("engine boom");
+        var ex = await act.Should().ThrowAsync<RenderException>();
+        ex.Which.Code.Should().Be(ErrorCode.PipelineFailed);
+        ex.Which.InnerException.Should().BeOfType<InvalidOperationException>()
+            .Which.Message.Should().Be("engine boom");
     }
 
     [Fact]
-    public async Task ExecuteAsync_RendererThrows_ExceptionPropagates()
+    public async Task ExecuteAsync_RendererThrows_WrapsAsRenderException()
     {
+        // Raw exceptions from the renderer are wrapped by the pipeline as RenderException(DG2001).
         var request = BuildRequest();
         _templateEngineMock
             .Setup(e => e.RenderAsync(It.IsAny<DocumentTemplate>(), It.IsAny<CancellationToken>()))
@@ -170,9 +174,10 @@ public sealed class DocumentPipelineTests
 
         var act = async () => await _sut.ExecuteAsync(request);
 
-        await act.Should()
-            .ThrowAsync<TimeoutException>()
-            .WithMessage("chromium timeout");
+        var ex = await act.Should().ThrowAsync<RenderException>();
+        ex.Which.Code.Should().Be(ErrorCode.PipelineFailed);
+        ex.Which.InnerException.Should().BeOfType<TimeoutException>()
+            .Which.Message.Should().Be("chromium timeout");
     }
 
     [Fact]

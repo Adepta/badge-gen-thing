@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using Microsoft.Extensions.Logging;
@@ -44,18 +45,24 @@ public sealed class DocumentPipeline : IDocumentPipeline
     public async Task<RenderResult> ExecuteAsync(RenderRequest request, CancellationToken cancellationToken = default)
     {
         var sw = Stopwatch.StartNew();
+        var docType = request.Template.DocumentType;
+
+        // Emit an OTel span for the entire pipeline execution.
+        using var activity = DocumentGeneratorTelemetry.Source.StartActivity("render.pipeline");
+        activity?.SetTag("document_type", docType);
+        activity?.SetTag("job_id",        request.JobId.ToString());
 
         // Push JobId + DocumentType into the logging scope so all downstream
         // log calls (renderer, browser pool) carry these properties automatically.
         using var scope = _logger.BeginScope(new Dictionary<string, object>
         {
             ["JobId"]        = request.JobId,
-            ["DocumentType"] = request.Template.DocumentType
+            ["DocumentType"] = docType
         });
 
         _logger.LogInformation(
             "Pipeline start — JobId: {JobId}, DocumentType: {DocumentType}",
-            request.JobId, request.Template.DocumentType);
+            request.JobId, docType);
 
         try
         {
@@ -75,22 +82,65 @@ public sealed class DocumentPipeline : IDocumentPipeline
             // Step 3: Render HTML → PDF bytes
             var pdfBytes = await _renderer.RenderPdfAsync(html, request.Template.Pdf, cancellationToken);
 
+            if (pdfBytes.Length == 0)
+                throw RenderException.EmptyOutput(request.JobId);
+
             sw.Stop();
+            var elapsedMs = sw.Elapsed.TotalMilliseconds;
+
+            // Record metrics — success path.
+            var tags = new TagList
+            {
+                { "document_type", docType },
+                { "success",       "true"  }
+            };
+            DocumentGeneratorTelemetry.RenderDuration.Record(elapsedMs, tags);
+            DocumentGeneratorTelemetry.RenderCount.Add(1, tags);
+
+            activity?.SetTag("success", true);
 
             _logger.LogInformation(
                 "Pipeline complete — JobId: {JobId}, DocumentType: {DocumentType}, " +
                 "Bytes: {Bytes}, ElapsedMs: {ElapsedMs}",
-                request.JobId, request.Template.DocumentType, pdfBytes.Length, sw.ElapsedMilliseconds);
+                request.JobId, docType, pdfBytes.Length, sw.ElapsedMilliseconds);
 
-            return RenderResult.Success(request.JobId, pdfBytes, sw.Elapsed, request.Template.DocumentType);
+            return RenderResult.Success(request.JobId, pdfBytes, sw.Elapsed, docType);
+        }
+        catch (DocumentGeneratorException)
+        {
+            // Already a typed domain exception — log and re-throw without wrapping.
+            sw.Stop();
+            var elapsedMs = sw.Elapsed.TotalMilliseconds;
+            var tags = new TagList { { "document_type", docType }, { "success", "false" } };
+            DocumentGeneratorTelemetry.RenderDuration.Record(elapsedMs, tags);
+            DocumentGeneratorTelemetry.RenderCount.Add(1, tags);
+            activity?.SetStatus(ActivityStatusCode.Error);
+            _logger.LogError(
+                "Pipeline failed — JobId: {JobId}, DocumentType: {DocumentType}, ElapsedMs: {ElapsedMs}",
+                request.JobId, docType, sw.ElapsedMilliseconds);
+            throw;
+        }
+        catch (OperationCanceledException)
+        {
+            sw.Stop();
+            activity?.SetStatus(ActivityStatusCode.Error, "cancelled");
+            _logger.LogWarning(
+                "Pipeline cancelled — JobId: {JobId}, ElapsedMs: {ElapsedMs}",
+                request.JobId, sw.ElapsedMilliseconds);
+            throw;
         }
         catch (Exception ex)
         {
             sw.Stop();
+            var elapsedMs = sw.Elapsed.TotalMilliseconds;
+            var tags = new TagList { { "document_type", docType }, { "success", "false" } };
+            DocumentGeneratorTelemetry.RenderDuration.Record(elapsedMs, tags);
+            DocumentGeneratorTelemetry.RenderCount.Add(1, tags);
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
             _logger.LogError(ex,
                 "Pipeline failed — JobId: {JobId}, DocumentType: {DocumentType}, ElapsedMs: {ElapsedMs}",
-                request.JobId, request.Template.DocumentType, sw.ElapsedMilliseconds);
-            throw;
+                request.JobId, docType, sw.ElapsedMilliseconds);
+            throw RenderException.PipelineFailed(request.JobId, ex);
         }
     }
 }

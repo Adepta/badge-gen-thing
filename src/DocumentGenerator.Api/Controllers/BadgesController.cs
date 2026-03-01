@@ -2,11 +2,13 @@ using DocumentGenerator.Api.Configuration;
 using DocumentGenerator.Api.Messaging;
 using DocumentGenerator.Api.Models;
 using DocumentGenerator.Api.Services;
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Messaging.Messages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using Rebus.Bus;
 
@@ -101,6 +103,7 @@ public sealed class BadgesController : ControllerBase
     /// </list>
     /// </returns>
     [HttpPost("render")]
+    [EnableRateLimiting("render")]
     [ProducesResponseType(typeof(BadgeRenderResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BadgeRenderResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -134,15 +137,18 @@ public sealed class BadgesController : ControllerBase
             };
         }
 
-        // Resolve the template — returns 400 if template name is unknown
+        // Resolve the template — returns 400 if template name is unknown or invalid
         DocumentTemplate template;
         try
         {
             template = _locator.Resolve(request.TemplateName, request.Variables, branding);
         }
-        catch (FileNotFoundException ex)
+        catch (TemplateException ex) when (
+            ex.Code is ErrorCode.TemplateNotFound or ErrorCode.TemplateNameInvalid)
         {
-            _logger.LogWarning("Unknown template: {TemplateName}", request.TemplateName);
+            _logger.LogWarning(
+                "[{ErrorCode}] Template lookup failed — TemplateName={TemplateName}",
+                ex.ToString(), request.TemplateName);
             return BadRequest(BadgeRenderResponse.Fail(correlationId, ex.Message));
         }
 
@@ -205,11 +211,12 @@ public sealed class BadgesController : ControllerBase
         }
         catch (Exception ex)
         {
+            var brokerEx = BrokerException.PublishFailed(correlationId, ex);
             _logger.LogError(ex,
-                "Failed to publish render request to Kafka — CorrelationId={CorrelationId}",
-                correlationId);
+                "[{ErrorCode}] Failed to publish render request to Kafka — CorrelationId={CorrelationId}",
+                brokerEx.ToString(), correlationId);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                BadgeRenderResponse.Fail(correlationId, "Failed to queue render request."));
+                BadgeRenderResponse.Fail(correlationId, brokerEx.Message));
         }
 
         DocumentRenderResult result;
@@ -219,12 +226,12 @@ public sealed class BadgesController : ControllerBase
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
+            var timeoutEx = BrokerException.ResultTimeout(correlationId, _kafkaOpts.ResultTimeoutSeconds);
             _logger.LogWarning(
-                "Render result timed out after {TimeoutS}s — CorrelationId={CorrelationId}",
-                _kafkaOpts.ResultTimeoutSeconds, correlationId);
+                "[{ErrorCode}] Render result timed out — CorrelationId={CorrelationId}",
+                timeoutEx.ToString(), correlationId);
             return StatusCode(StatusCodes.Status504GatewayTimeout,
-                BadgeRenderResponse.Fail(correlationId,
-                    $"Render service did not respond within {_kafkaOpts.ResultTimeoutSeconds}s."));
+                BadgeRenderResponse.Fail(correlationId, timeoutEx.Message));
         }
         catch (OperationCanceledException)
         {
@@ -236,10 +243,10 @@ public sealed class BadgesController : ControllerBase
         if (!result.Success)
         {
             _logger.LogError(
-                "Render failed (reported by Console) — CorrelationId={CorrelationId} Error={Error}",
-                correlationId, result.ErrorMessage);
+                "[{ErrorCode}] Render failed (reported by Console) — CorrelationId={CorrelationId} Error={Error}",
+                result.ErrorCode, correlationId, result.ErrorMessage);
             return StatusCode(StatusCodes.Status500InternalServerError,
-                BadgeRenderResponse.Fail(correlationId, result.ErrorMessage ?? "Render failed."));
+                BadgeRenderResponse.Fail(correlationId, result.ErrorMessage ?? "Render failed.", result.ErrorCode));
         }
 
         var pdfBytes = Convert.FromBase64String(result.PdfBase64!);
@@ -297,6 +304,14 @@ public sealed class BadgesController : ControllerBase
             _logger.LogWarning(
                 "Badge render cancelled — CorrelationId={CorrelationId}", correlationId);
             return StatusCode(StatusCodes.Status499ClientClosedRequest);
+        }
+        catch (DocumentGeneratorException ex)
+        {
+            _logger.LogError(ex,
+                "[{ErrorCode}] Badge render failed — CorrelationId={CorrelationId}",
+                ex.Code, correlationId);
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                BadgeRenderResponse.Fail(correlationId, ex.Message, ex.Code.ToString()));
         }
         catch (Exception ex)
         {

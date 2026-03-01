@@ -52,6 +52,8 @@ public sealed class ApiWebApplicationFactory : WebApplicationFactory<DocumentGen
         builder.UseSetting("DocumentGenerator:TemplatesPath", TemplatesDir);
         // Disable Kafka for integration tests — inline pipeline mock is used instead.
         builder.UseSetting("Kafka:Enabled", "false");
+        // Raise rate-limit ceiling so integration tests (all from 127.0.0.1) do not hit 429.
+        builder.UseSetting("RateLimit:PermitLimit", "10000");
 
         builder.ConfigureServices(services =>
         {

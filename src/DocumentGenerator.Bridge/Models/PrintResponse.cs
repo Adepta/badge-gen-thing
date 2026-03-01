@@ -45,6 +45,12 @@ public sealed class PrintResponse
     /// <summary>Human-readable error. Populated only when <see cref="Success"/> is <c>false</c>.</summary>
     public string? Error { get; init; }
 
+    /// <summary>
+    /// Machine-readable error code (e.g. <c>DG5001</c>) when <see cref="Success"/> is <c>false</c>.
+    /// Allows iPad clients to distinguish error categories without parsing <see cref="Error"/>.
+    /// </summary>
+    public string? ErrorCode { get; init; }
+
     /// <summary>Creates a successful render-only response (no print).</summary>
     public static PrintResponse RenderOk(
         Guid correlationId,
@@ -79,13 +85,18 @@ public sealed class PrintResponse
             CompletedAt    = DateTimeOffset.UtcNow
         };
 
-    /// <summary>Creates a failure response.</summary>
-    public static PrintResponse Fail(Guid correlationId, string error, TimeSpan elapsed) => new()
-    {
-        CorrelationId = correlationId,
-        Success       = false,
-        Error         = error,
-        ElapsedTime   = elapsed,
-        CompletedAt   = DateTimeOffset.UtcNow
-    };
+    /// <summary>Creates a failure response with optional machine-readable error code.</summary>
+    public static PrintResponse Fail(
+        Guid correlationId,
+        string error,
+        TimeSpan elapsed,
+        string? errorCode = null) => new()
+        {
+            CorrelationId = correlationId,
+            Success       = false,
+            Error         = error,
+            ErrorCode     = errorCode,
+            ElapsedTime   = elapsed,
+            CompletedAt   = DateTimeOffset.UtcNow
+        };
 }

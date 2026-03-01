@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using Microsoft.Extensions.Logging;
@@ -56,14 +57,21 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
             page = await lease.Browser.NewPageAsync();
 
             // Load HTML directly — avoids file I/O and works in containers
-            await page.SetContentAsync(html, new NavigationOptions
+            try
             {
-                // Load fires after all sub-resources (stylesheets, fonts) have loaded.
-                // Networkidle0 was previously used but blocks indefinitely when external
-                // resources (e.g. Google Fonts) are slow or unreachable, causing blank PDFs.
-                WaitUntil = [WaitUntilNavigation.Load],
-                Timeout   = 30_000
-            });
+                await page.SetContentAsync(html, new NavigationOptions
+                {
+                    // Load fires after all sub-resources (stylesheets, fonts) have loaded.
+                    // Networkidle0 was previously used but blocks indefinitely when external
+                    // resources (e.g. Google Fonts) are slow or unreachable, causing blank PDFs.
+                    WaitUntil = [WaitUntilNavigation.Load],
+                    Timeout   = 30_000
+                });
+            }
+            catch (PuppeteerSharp.PuppeteerException ex) when (ex.Message.Contains("Timeout"))
+            {
+                throw RenderException.PageTimeout(null, 30_000, ex);
+            }
 
             // Wait for fonts to finish loading (covers CSS @import font faces).
             // Times out gracefully after 5s so a missing font never blocks rendering.
@@ -84,6 +92,15 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
                 pdfBytes.Length, sw.ElapsedMilliseconds);
 
             return pdfBytes;
+        }
+        catch (DocumentGeneratorException)
+        {
+            sw.Stop();
+            _logger.LogError(
+                "Chromium render failed after {ElapsedMs}ms — invalidating browser lease",
+                sw.ElapsedMilliseconds);
+            lease.Invalidate();
+            throw;
         }
         catch (Exception ex)
         {

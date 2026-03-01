@@ -1,4 +1,5 @@
 using DocumentGenerator.Api.Services;
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Models;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -101,10 +102,11 @@ public sealed class TemplateLocatorTests : IDisposable
     }
 
     [Fact]
-    public void Resolve_UnknownTemplate_ThrowsFileNotFoundException()
+    public void Resolve_UnknownTemplate_ThrowsTemplateException()
     {
         var act = () => _sut.Resolve("does-not-exist", []);
-        act.Should().Throw<FileNotFoundException>();
+        act.Should().Throw<TemplateException>()
+            .Which.Code.Should().Be(ErrorCode.TemplateNotFound);
     }
 
     // ── PDF options by suffix ─────────────────────────────────────────────────

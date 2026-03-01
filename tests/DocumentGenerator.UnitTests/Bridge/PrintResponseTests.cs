@@ -134,4 +134,32 @@ public sealed class PrintResponseTests
         var r  = PrintResponse.Fail(id, "err", TimeSpan.Zero);
         r.CorrelationId.Should().Be(id);
     }
+
+    [Fact]
+    public void Fail_WithErrorCode_SetsErrorCode()
+    {
+        var r = PrintResponse.Fail(Guid.NewGuid(), "cloud render failed", TimeSpan.Zero, "DG5001");
+        r.ErrorCode.Should().Be("DG5001");
+    }
+
+    [Fact]
+    public void Fail_WithoutErrorCode_ErrorCodeIsNull()
+    {
+        var r = PrintResponse.Fail(Guid.NewGuid(), "err", TimeSpan.Zero);
+        r.ErrorCode.Should().BeNull();
+    }
+
+    [Fact]
+    public void RenderOk_ErrorCodeIsNull()
+    {
+        var r = PrintResponse.RenderOk(Guid.NewGuid(), FakeBase64, "application/pdf", TimeSpan.Zero);
+        r.ErrorCode.Should().BeNull();
+    }
+
+    [Fact]
+    public void PrintOk_ErrorCodeIsNull()
+    {
+        var r = PrintResponse.PrintOk(Guid.NewGuid(), FakeBase64, "application/pdf", "HP LaserJet", TimeSpan.Zero);
+        r.ErrorCode.Should().BeNull();
+    }
 }

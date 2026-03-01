@@ -2,6 +2,8 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using DocumentGenerator.Bridge.Configuration;
 using DocumentGenerator.Bridge.Models;
+using DocumentGenerator.Core.Errors;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 
 namespace DocumentGenerator.Bridge.Services;
@@ -17,6 +19,7 @@ public sealed class CloudBadgeClient
 
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IOptionsMonitor<CloudOptions> _cloudOptions;
+    private readonly IDataProtector _protector;
     private readonly ILogger<CloudBadgeClient> _logger;
 
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -28,17 +31,33 @@ public sealed class CloudBadgeClient
     /// <summary>
     /// Initialises a new <see cref="CloudBadgeClient"/>.
     /// </summary>
-    /// <param name="httpClientFactory">Factory used to resolve the named HTTP client.</param>
-    /// <param name="cloudOptions">Live cloud connection options (URL + API key).</param>
-    /// <param name="logger">Logger for request diagnostics.</param>
     public CloudBadgeClient(
         IHttpClientFactory httpClientFactory,
         IOptionsMonitor<CloudOptions> cloudOptions,
+        IDataProtectionProvider dataProtectionProvider,
         ILogger<CloudBadgeClient> logger)
     {
         _httpClientFactory = httpClientFactory;
         _cloudOptions      = cloudOptions;
+        _protector         = dataProtectionProvider.CreateProtector("Bridge.CloudApiKey.v1");
         _logger            = logger;
+    }
+
+    /// <summary>
+    /// Resolves the effective API key — prefers the Data-Protection-encrypted value
+    /// written by the setup wizard over the plaintext fallback.
+    /// </summary>
+    private string GetApiKey(CloudOptions opts)
+    {
+        if (!string.IsNullOrWhiteSpace(opts.ProtectedApiKey))
+        {
+            try { return _protector.Unprotect(opts.ProtectedApiKey); }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to decrypt ProtectedApiKey — falling back to ApiKey.");
+            }
+        }
+        return opts.ApiKey;
     }
 
     /// <summary>
@@ -49,7 +68,9 @@ public sealed class CloudBadgeClient
     /// <param name="correlationId">Correlation ID to pass through to the cloud.</param>
     /// <param name="cancellationToken">Propagated from the HTTP request lifetime.</param>
     /// <returns>A <see cref="CloudRenderResponse"/> containing the Base64 document.</returns>
-    /// <exception cref="HttpRequestException">Thrown on non-success HTTP status.</exception>
+    /// <exception cref="PrintException">
+    /// Thrown with <see cref="ErrorCode.CloudRenderFailed"/> on network errors or non-2xx responses.
+    /// </exception>
     public async Task<CloudRenderResponse> RenderAsync(
         PrintRequest      request,
         string            format,
@@ -58,6 +79,12 @@ public sealed class CloudBadgeClient
     {
         var opts   = _cloudOptions.CurrentValue;
         var client = _httpClientFactory.CreateClient(HttpClientName);
+
+        // Add the API key per-request so decryption happens at call time
+        // (after potential re-configuration via setup wizard).
+        var apiKey = GetApiKey(opts);
+        if (!string.IsNullOrWhiteSpace(apiKey))
+            client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", apiKey);
 
         var payload = new
         {
@@ -72,14 +99,36 @@ public sealed class CloudBadgeClient
             "Cloud render request — CorrelationId={CorrelationId} Template={Template} Url={Url}",
             correlationId, request.TemplateName, opts.BaseUrl);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/badges/render", payload, JsonOptions, cancellationToken);
+        HttpResponseMessage response;
+        try
+        {
+            response = await client.PostAsJsonAsync(
+                "/api/badges/render", payload, JsonOptions, cancellationToken);
+        }
+        catch (HttpRequestException ex)
+        {
+            throw PrintException.CloudRenderFailed($"HTTP request to cloud API failed: {ex.Message}", ex);
+        }
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw PrintException.CloudRenderFailed(
+                $"Cloud API returned HTTP {(int)response.StatusCode} {response.ReasonPhrase}");
+        }
 
-        var result = await response.Content.ReadFromJsonAsync<CloudRenderResponse>(
-            JsonOptions, cancellationToken)
-            ?? throw new InvalidOperationException("Cloud API returned an empty response body.");
+        CloudRenderResponse? result;
+        try
+        {
+            result = await response.Content.ReadFromJsonAsync<CloudRenderResponse>(
+                JsonOptions, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            throw PrintException.CloudRenderFailed("Failed to deserialize cloud API response.", ex);
+        }
+
+        if (result is null)
+            throw PrintException.CloudRenderFailed("Cloud API returned an empty response body.");
 
         _logger.LogInformation(
             "Cloud render complete — CorrelationId={CorrelationId} Success={Success} Elapsed={Elapsed}ms",

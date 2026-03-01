@@ -1,3 +1,4 @@
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Messaging.Configuration;
@@ -6,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Rebus.Bus;
 using Rebus.Handlers;
+using Rebus.Messages;
+using Rebus.Pipeline;
 
 namespace DocumentGenerator.Messaging.Handlers;
 
@@ -16,13 +19,29 @@ namespace DocumentGenerator.Messaging.Handlers;
 /// Concurrency is controlled by Rebus worker thread count, kept at or
 /// below the Chromium pool MaxSize to avoid starvation.
 ///
-/// On success  → replies <see cref="DocumentRenderResult"/> to the sender's return address.
-///               When <see cref="DocumentRenderRequest.ReturnPdfInline"/> is <see langword="true"/>
-///               (the default) the PDF is Base64-encoded in the reply message.
-///               When <see langword="false"/>, the PDF is saved to
-///               <see cref="KafkaOptions.PdfOutputPath"/> and the path is returned instead,
-///               keeping the Kafka message small for devices that can reach shared storage.
-/// On failure  → replies failure result (Rebus handles dead-lettering after MaxRetries).
+/// Error handling strategy:
+/// <list type="bullet">
+///   <item>
+///     <term>Transient failures (<see cref="BrowserPoolException"/>)</term>
+///     <description>
+///       Re-thrown so Rebus retries up to <see cref="KafkaOptions.MaxRetries"/> times
+///       with exponential backoff. After all retries are exhausted Rebus dead-letters
+///       the message to <see cref="KafkaOptions.DeadLetterTopic"/>.
+///     </description>
+///   </item>
+///   <item>
+///     <term>Domain failures (other <see cref="DocumentGeneratorException"/>)</term>
+///     <description>
+///       Replied as a failure <see cref="DocumentRenderResult"/> — retrying would not help.
+///     </description>
+///   </item>
+///   <item>
+///     <term>Unexpected exceptions</term>
+///     <description>
+///       Replied as a generic DG9001 failure. The exception is logged.
+///     </description>
+///   </item>
+/// </list>
 /// </summary>
 public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRenderRequest>
 {
@@ -32,14 +51,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
     private readonly KafkaOptions      _kafkaOptions;
     private readonly ILogger<DocumentRenderRequestHandler> _logger;
 
-    /// <summary>
-    /// Initialises the handler with its required dependencies.
-    /// </summary>
-    /// <param name="pipeline">The render pipeline that converts a template + variables to a PDF.</param>
-    /// <param name="bus">Rebus bus used to reply with the render result.</param>
-    /// <param name="metrics">Metrics sink for recording success/failure counts.</param>
-    /// <param name="kafkaOptions">Kafka configuration, including the PDF output path for non-inline mode.</param>
-    /// <param name="logger">Logger for structured render lifecycle events.</param>
+    /// <summary>Initialises the handler with its required dependencies.</summary>
     public DocumentRenderRequestHandler(
         IDocumentPipeline pipeline, IBus bus,
         IRenderMetrics metrics,
@@ -57,12 +69,8 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
     /// Executes the render pipeline for the incoming <paramref name="message"/>,
     /// then replies with a <see cref="DocumentRenderResult"/> indicating success or failure.
     /// </summary>
-    /// <param name="message">The render request dispatched by the API or TestProducer.</param>
     public async Task Handle(DocumentRenderRequest message)
     {
-        // Push CorrelationId + DeviceId into the logging scope so every log line
-        // emitted by downstream services (DocumentPipeline, ChromiumPool, etc.)
-        // automatically carries these structured properties.
         using var scope = _logger.BeginScope(new Dictionary<string, object>
         {
             ["CorrelationId"] = message.CorrelationId,
@@ -115,10 +123,36 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
                 (int)renderResult.ElapsedTime.TotalMilliseconds,
                 pdfPath ?? "(inline)");
         }
+        catch (BrowserPoolException ex)
+        {
+            // Transient — re-throw so Rebus can retry with backoff and eventually dead-letter.
+            _logger.LogWarning(ex,
+                "[{ErrorCode}] Transient browser pool failure — CorrelationId: {CorrelationId}. " +
+                "Rebus will retry (max {MaxRetries}).",
+                ex.Code, message.CorrelationId, _kafkaOptions.MaxRetries);
+
+            _metrics.RecordFailure();
+            throw; // Let Rebus handle retry + dead-lettering
+        }
+        catch (DocumentGeneratorException ex)
+        {
+            // Non-transient domain exception — reply with failure, do not retry.
+            _logger.LogError(ex,
+                "[{ErrorCode}] Render failed — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, " +
+                "DocumentType: {DocumentType}",
+                ex.Code, message.CorrelationId, message.DeviceId, message.Template.DocumentType);
+
+            _metrics.RecordFailure();
+
+            result = DocumentRenderResult.Failed(
+                message.CorrelationId, message.DeviceId, message.SessionId,
+                message.Template.DocumentType, ex.Message, ex.Code.ToString());
+        }
         catch (Exception ex)
         {
+            // Unexpected exception — reply with failure, do not retry.
             _logger.LogError(ex,
-                "Render failed — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, " +
+                "[DG9001] Unexpected render failure — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, " +
                 "DocumentType: {DocumentType}",
                 message.CorrelationId, message.DeviceId, message.Template.DocumentType);
 
@@ -126,7 +160,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
 
             result = DocumentRenderResult.Failed(
                 message.CorrelationId, message.DeviceId, message.SessionId,
-                message.Template.DocumentType, ex.Message);
+                message.Template.DocumentType, ex.Message, "DG9001");
         }
 
         // Reply routes the result back to the sender's return address automatically

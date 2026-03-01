@@ -61,11 +61,16 @@ public sealed class PrintResult
     /// <summary>Human-readable error when <see cref="Success"/> is <c>false</c>.</summary>
     public string? Error { get; init; }
 
+    /// <summary>
+    /// Machine-readable error code (e.g. <c>DG5003</c>) when <see cref="Success"/> is <c>false</c>.
+    /// </summary>
+    public string? ErrorCode { get; init; }
+
     /// <summary>Creates a successful <see cref="PrintResult"/>.</summary>
     public static PrintResult Ok(string printerUsed) =>
         new() { Success = true, PrinterUsed = printerUsed };
 
     /// <summary>Creates a failed <see cref="PrintResult"/>.</summary>
-    public static PrintResult Fail(string error, string? printerUsed = null) =>
-        new() { Success = false, Error = error, PrinterUsed = printerUsed };
+    public static PrintResult Fail(string error, string? printerUsed = null, string? errorCode = null) =>
+        new() { Success = false, Error = error, PrinterUsed = printerUsed, ErrorCode = errorCode };
 }

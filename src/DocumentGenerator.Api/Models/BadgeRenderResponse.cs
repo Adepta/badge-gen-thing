@@ -54,6 +54,12 @@ public sealed class BadgeRenderResponse
     public string? Error { get; init; }
 
     /// <summary>
+    /// Machine-readable error code (e.g. <c>DG1001</c>) when <see cref="Success"/> is <c>false</c>.
+    /// Allows Bridge and iPad clients to distinguish error categories without parsing <see cref="Error"/>.
+    /// </summary>
+    public string? ErrorCode { get; init; }
+
+    /// <summary>
     /// Creates a successful response containing the rendered document.
     /// </summary>
     public static BadgeRenderResponse Ok(
@@ -75,14 +81,22 @@ public sealed class BadgeRenderResponse
         };
 
     /// <summary>
-    /// Creates a failure response with an error message.
+    /// Creates a failure response with an error message and optional machine-readable error code.
     /// </summary>
-    public static BadgeRenderResponse Fail(Guid correlationId, string error) => new()
+    /// <param name="correlationId">Correlation ID echoed from the request.</param>
+    /// <param name="error">Human-readable error description.</param>
+    /// <param name="errorCode">
+    /// Optional machine-readable code (e.g. <c>"DG1001"</c>). Pass the result of
+    /// <c>DocumentGeneratorException.ToString()</c> or the <c>ErrorCode</c> field
+    /// from a <c>DocumentRenderResult</c>.
+    /// </param>
+    public static BadgeRenderResponse Fail(Guid correlationId, string error, string? errorCode = null) => new()
     {
         CorrelationId = correlationId,
         JobId = Guid.Empty,
         Success = false,
         Error = error,
+        ErrorCode = errorCode,
         CompletedAt = DateTimeOffset.UtcNow
     };
 }

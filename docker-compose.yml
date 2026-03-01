@@ -1,0 +1,88 @@
+version: "3.9"
+
+# ── DocumentGenerator application stack ───────────────────────────────────────
+# Requires infrastructure services from docker-compose.kafka.yml.
+# Run both together:
+#   docker compose -f docker-compose.kafka.yml -f docker-compose.yml up
+#
+# All secrets should be supplied via environment variables or a .env file.
+# See .env.example for the full list of required variables.
+
+services:
+
+  # ── Cloud render API ─────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: src/DocumentGenerator.Api/Dockerfile
+    image: documentgenerator/api:latest
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      # API key — override from .env or secret manager
+      ApiAuth__ApiKey: "${API_KEY:?API_KEY must be set}"
+      # CORS — set to your Bridge host(s), comma-separated
+      Cors__AllowedOrigins: "${CORS_ALLOWED_ORIGINS:-*}"
+      # Kafka — set Kafka__Enabled=true to use the Console render worker
+      Kafka__Enabled: "${KAFKA_ENABLED:-false}"
+      Kafka__BootstrapServers: "${KAFKA_BOOTSTRAP_SERVERS:-kafka:29092}"
+      # Rate limiting
+      RateLimit__RenderPermitLimit: "${RATE_LIMIT_RENDER:-10}"
+      RateLimit__WindowSeconds: "${RATE_LIMIT_WINDOW_SECONDS:-60}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+  # ── Kafka render worker ───────────────────────────────────────────────────────
+  console:
+    build:
+      context: .
+      dockerfile: src/DocumentGenerator.Console/Dockerfile
+    image: documentgenerator/console:latest
+    volumes:
+      - render-output:/app/output
+      - render-logs:/app/logs
+    environment:
+      DOTNET_ENVIRONMENT: Production
+      Kafka__Enabled: "true"
+      Kafka__BootstrapServers: "${KAFKA_BOOTSTRAP_SERVERS:-kafka:29092}"
+      BrowserPool__MaxSize: "${BROWSER_POOL_MAX_SIZE:-4}"
+      Kafka__MaxConcurrentRenders: "${KAFKA_MAX_CONCURRENT_RENDERS:-4}"
+      # OpenTelemetry
+      OpenTelemetry__Enabled: "${OTEL_ENABLED:-true}"
+      OpenTelemetry__OtlpEndpoint: "${OTEL_ENDPOINT:-http://otel-collector:4317}"
+    restart: unless-stopped
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+  # ── On-premises bridge (optional — run on the local Windows/Linux print host) ─
+  # In production the bridge typically runs natively (not in Docker) to access
+  # local printers. This service definition is provided for local development.
+  bridge:
+    build:
+      context: .
+      dockerfile: src/DocumentGenerator.Bridge/Dockerfile
+    image: documentgenerator/bridge:latest
+    ports:
+      - "5100:5100"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Cloud__BaseUrl: "${CLOUD_API_BASE_URL:-http://api:8080}"
+      Cloud__ApiKey: "${API_KEY:?API_KEY must be set}"
+      Bridge__IsConfigured: "${BRIDGE_IS_CONFIGURED:-false}"
+    restart: unless-stopped
+    depends_on:
+      - api
+
+volumes:
+  render-output:
+  render-logs:

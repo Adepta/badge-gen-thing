@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using DocumentGenerator.Core.Configuration;
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -66,10 +67,14 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
     /// </summary>
     /// <param name="cancellationToken">Token to cancel the wait.</param>
     /// <returns>A lease that must be disposed to return the browser to the pool.</returns>
-    /// <exception cref="TimeoutException">Thrown when the pool is exhausted and the timeout elapses.</exception>
+    /// <exception cref="BrowserPoolException">
+    /// Thrown with <see cref="ErrorCode.BrowserPoolDisposed"/> if the pool is disposed,
+    /// or <see cref="ErrorCode.BrowserPoolTimeout"/> if the acquire timeout elapses.
+    /// </exception>
     public async Task<IBrowserLease<IBrowser>> AcquireAsync(CancellationToken cancellationToken = default)
     {
-        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (_disposed)
+            throw BrowserPoolException.Disposed();
 
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeoutCts.CancelAfter(_options.AcquireTimeout);
@@ -80,9 +85,19 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            throw new TimeoutException(
-                $"Could not acquire a browser from the pool within {_options.AcquireTimeout.TotalSeconds}s. " +
-                $"Pool size: {PoolSize}, active: {ActiveCount}");
+            throw BrowserPoolException.AcquireTimeout(_options.AcquireTimeout, PoolSize, ActiveCount);
+        }
+        catch (ObjectDisposedException)
+        {
+            // Pool was disposed while we were waiting on the semaphore.
+            throw BrowserPoolException.Disposed();
+        }
+
+        // Check disposed again — DisposeAsync may have run between WaitAsync returning and here.
+        if (_disposed)
+        {
+            _semaphore.Release();
+            throw BrowserPoolException.Disposed();
         }
 
         IBrowser browser;
@@ -186,22 +201,31 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
         var sw = Stopwatch.StartNew();
         _logger.LogInformation("Launching new Chromium instance (pool will have {Count} total)", _all.Count + 1);
 
-        var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        IBrowser browser;
+        try
         {
-            Headless = true,
-            Args =
-            [
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",   // prevents /dev/shm OOM in containers
-                "--disable-gpu",
-                "--no-first-run",
-                "--mute-audio"
-                // NOTE: --disable-background-networking and --disable-extensions are
-                // intentionally omitted — they block external resources such as
-                // Google Fonts, causing pages to render blank.
-            ]
-        });
+            browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true,
+                Args =
+                [
+                    "--no-sandbox",
+                    "--disable-setuid-sandbox",
+                    "--disable-dev-shm-usage",   // prevents /dev/shm OOM in containers
+                    "--disable-gpu",
+                    "--no-first-run",
+                    "--mute-audio"
+                    // NOTE: --disable-background-networking and --disable-extensions are
+                    // intentionally omitted — they block external resources such as
+                    // Google Fonts, causing pages to render blank.
+                ]
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Chromium failed to launch");
+            throw BrowserPoolException.LaunchFailed(ex);
+        }
 
         var pooled = new PooledBrowser(browser);
         _all[browser] = pooled;
@@ -209,7 +233,14 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
         browser.Disconnected += (_, _) =>
         {
             _logger.LogWarning("Chromium instance disconnected unexpectedly");
-            _all.TryRemove(browser, out _);
+            if (_all.TryRemove(browser, out _))
+            {
+                // Release the semaphore slot so the pool can accept new leases.
+                // The browser was either idle or active; either way the slot is now free.
+                // (When active, BrowserLease.Dispose will also call Release — but
+                //  Disconnected fires before Dispose in the crash path, so this is fine.)
+                try { _semaphore.Release(); } catch (ObjectDisposedException) { /* pool being torn down */ }
+            }
         };
 
         _logger.LogInformation("Chromium launched in {Elapsed}ms", sw.ElapsedMilliseconds);

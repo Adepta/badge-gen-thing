@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.Runtime.Versioning;
+using DocumentGenerator.Core.Errors;
 
 namespace DocumentGenerator.Bridge.Printing;
 
@@ -82,6 +83,13 @@ public sealed class WindowsPrinterAdapter : IPrinterAdapter, IDisposable
             _logger.LogInformation("Print job submitted — Printer={Printer}", resolvedPrinter);
             return PrintResult.Ok(resolvedPrinter);
         }
+        catch (PrintException ex)
+        {
+            _logger.LogError(ex,
+                "[{ErrorCode}] Windows print failed — Printer={Printer}",
+                ex.ToString(), resolvedPrinter);
+            return PrintResult.Fail(ex.Message, resolvedPrinter, ex.ToString());
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Windows print failed — Printer={Printer}", resolvedPrinter);
@@ -149,7 +157,7 @@ public sealed class WindowsPrinterAdapter : IPrinterAdapter, IDisposable
         };
 
         var process = Process.Start(psi)
-            ?? throw new InvalidOperationException("Failed to start shell print process.");
+            ?? throw PrintException.SpoolerFailed("(shell)", "Failed to start shell printto process.");
 
         await process.WaitForExitAsync(ct);
     }
@@ -169,7 +177,7 @@ public sealed class WindowsPrinterAdapter : IPrinterAdapter, IDisposable
         };
 
         var process = Process.Start(psi)
-            ?? throw new InvalidOperationException($"Failed to start process: {exe}");
+            ?? throw PrintException.SpoolerFailed(exe, $"Failed to start process: {exe}");
 
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         timeoutCts.CancelAfter(timeoutMs);
@@ -181,8 +189,10 @@ public sealed class WindowsPrinterAdapter : IPrinterAdapter, IDisposable
         catch (OperationCanceledException) when (!ct.IsCancellationRequested)
         {
             // Timed out — kill the process and treat as success (job may have been
-            // submitted to the spooler even if the viewer didn't exit cleanly)
+            // submitted to the spooler even if the viewer didn't exit cleanly).
+            // Log but do not rethrow — the print job was likely already spooled.
             try { process.Kill(entireProcessTree: true); } catch { /* best-effort */ }
+            throw PrintException.ProcessTimeout(exe, timeoutMs);
         }
     }
 

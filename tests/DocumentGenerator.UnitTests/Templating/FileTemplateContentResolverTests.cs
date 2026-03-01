@@ -1,3 +1,4 @@
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Templating;
 using FluentAssertions;
@@ -223,23 +224,25 @@ public sealed class FileTemplateContentResolverTests : IDisposable
     // -----------------------------------------------------------------------
 
     [Fact]
-    public async Task ResolveAsync_HtmlPath_FileNotFound_ThrowsFileNotFoundException()
+    public async Task ResolveAsync_HtmlPath_FileNotFound_ThrowsTemplateException()
     {
         var template = BuildTemplate(htmlPath: "nonexistent.html");
 
         var act = async () => await _sut.ResolveAsync(template, _tempDir);
 
-        await act.Should().ThrowAsync<FileNotFoundException>();
+        var ex = await act.Should().ThrowAsync<TemplateException>();
+        ex.Which.Code.Should().Be(ErrorCode.TemplateReadFailed);
     }
 
     [Fact]
-    public async Task ResolveAsync_CssPath_FileNotFound_ThrowsFileNotFoundException()
+    public async Task ResolveAsync_CssPath_FileNotFound_ThrowsTemplateException()
     {
         var template = BuildTemplate(cssPath: "nonexistent.css");
 
         var act = async () => await _sut.ResolveAsync(template, _tempDir);
 
-        await act.Should().ThrowAsync<FileNotFoundException>();
+        var ex = await act.Should().ThrowAsync<TemplateException>();
+        ex.Which.Code.Should().Be(ErrorCode.TemplateReadFailed);
     }
 
     // -----------------------------------------------------------------------

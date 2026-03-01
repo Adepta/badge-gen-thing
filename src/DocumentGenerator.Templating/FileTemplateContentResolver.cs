@@ -1,3 +1,4 @@
+using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using Microsoft.Extensions.Logging;
@@ -44,16 +45,38 @@ public sealed class FileTemplateContentResolver : ITemplateContentResolver
         {
             var fullPath = ResolvePath(content.HtmlPath, basePath);
             _logger.LogDebug("Loading HTML from {Path}", fullPath);
-            resolvedHtml = await File.ReadAllTextAsync(fullPath, cancellationToken);
-            htmlChanged  = true;
+            try
+            {
+                resolvedHtml = await File.ReadAllTextAsync(fullPath, cancellationToken);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw TemplateException.ReadFailed(template.DocumentType, fullPath, ex);
+            }
+            catch (IOException ex)
+            {
+                throw TemplateException.ReadFailed(template.DocumentType, fullPath, ex);
+            }
+            htmlChanged = true;
         }
 
         if (!string.IsNullOrWhiteSpace(content.CssPath))
         {
             var fullPath = ResolvePath(content.CssPath, basePath);
             _logger.LogDebug("Loading CSS from {Path}", fullPath);
-            resolvedCss = await File.ReadAllTextAsync(fullPath, cancellationToken);
-            cssChanged  = true;
+            try
+            {
+                resolvedCss = await File.ReadAllTextAsync(fullPath, cancellationToken);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw TemplateException.ReadFailed(template.DocumentType, fullPath, ex);
+            }
+            catch (IOException ex)
+            {
+                throw TemplateException.ReadFailed(template.DocumentType, fullPath, ex);
+            }
+            cssChanged = true;
         }
 
         if (!htmlChanged && !cssChanged)
