@@ -312,7 +312,7 @@ Kafka__SaslPassword=<api-secret>
 ## Tests
 
 ```bash
-# All tests
+# All tests (310 total)
 dotnet test DocumentGenerator.sln
 
 # Unit tests only (fast, no Docker)
@@ -323,8 +323,74 @@ dotnet test tests/DocumentGenerator.IntegrationTests
 ```
 
 **Test coverage:**
-- 196 unit tests — controllers, pipeline, templating engine, Kafka store/handler, messaging
-- 61 integration tests — API endpoints, Bridge endpoints, pipeline + real Handlebars
+- 245 unit tests — controllers, pipeline, templating engine, Kafka store/handler, messaging
+- 65 integration tests — API endpoints, Bridge endpoints, pipeline + real Handlebars
+
+---
+
+## Local smoke test (PowerShell)
+
+These scripts let you render real badges against the running stack and open the output files.
+All output is written to `Generated/` in the repo root.
+
+### Prerequisites
+
+All three services must be running (see [Quick start](#quick-start--local-development-both-paths)).
+Kafka must be up: `docker compose -f docker-compose.kafka.yml up -d`
+
+### Scripts
+
+| Script | What it does |
+|---|---|
+| `check-health.ps1` | Confirms Api (:7071) and Bridge (:5100) are responding |
+| `render-both.ps1` | Renders every badge template as both PDF and PNG, opens them all |
+
+### Run the smoke test
+
+```powershell
+# 1. Confirm services are healthy
+powershell -ExecutionPolicy Bypass -File check-health.ps1
+
+# 2. Render all templates (A6 + 3x credit card) as PDF and PNG, opens them automatically
+powershell -ExecutionPolicy Bypass -File render-both.ps1
+```
+
+Output files written to `Generated/`:
+
+| File | Size | Format |
+|---|---|---|
+| `ada-badge-pulse-a6.png` | 794×1120 px (2× retina) | A6 portrait badge |
+| `ada-badge-pulse-a6.pdf` | ~61 KB | A6 portrait badge |
+| `ada-badge-pulse-cc.png` | 648×410 px (2× retina) | Credit card badge |
+| `ada-badge-pulse-cc.pdf` | ~37 KB | Credit card badge |
+| `ada-badge-executive-cc.png` | 648×410 px (2× retina) | Credit card badge |
+| `ada-badge-executive-cc.pdf` | ~34 KB | Credit card badge |
+| `ada-badge-carbon-cc.png` | 648×410 px (2× retina) | Credit card badge |
+| `ada-badge-carbon-cc.pdf` | ~21 KB | Credit card badge |
+
+PNG dimensions are badge-exact — the Chromium viewport is sized to the rendered document
+using `getBoundingClientRect()` before screenshotting, so you get the badge and nothing else.
+`DeviceScaleFactor=2` gives retina-quality output without changing CSS layout.
+
+### Render a single badge via curl / Postman
+
+Direct to Bridge `/render` endpoint (returns JSON with `documentBase64`):
+
+```bash
+curl -s -X POST http://localhost:5100/render \
+  -H "Content-Type: application/json" \
+  -H "X-Api-Key: dev-api-key-insecure" \
+  -d '{
+    "templateName": "badge-pulse-cc",
+    "format": "Png",
+    "variables": {
+      "firstName":  "Ada",
+      "lastName":   "Lovelace",
+      "jobTitle":   "Mathematician",
+      "company":    "Analytical Engine Co"
+    }
+  }' | jq -r .documentBase64 | base64 -d > badge.png
+```
 
 ---
 
