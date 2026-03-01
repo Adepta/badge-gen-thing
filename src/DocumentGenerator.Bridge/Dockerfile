@@ -19,7 +19,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 COPY --from=build /publish .
 
-RUN adduser --disabled-password --gecos "" appuser && chown -R appuser /app
+RUN useradd -r -s /bin/false appuser && chown -R appuser /app
 USER appuser
 
 EXPOSE 5100

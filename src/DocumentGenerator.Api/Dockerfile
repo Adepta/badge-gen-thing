@@ -17,43 +17,38 @@ RUN dotnet publish src/DocumentGenerator.Api/DocumentGenerator.Api.csproj \
     --no-restore -c Release -o /publish
 
 # ── Runtime stage ──────────────────────────────────────────────────────────────
+# aspnet:10.0 is Ubuntu Noble. Noble ships Chromium as a snap-only stub that
+# does not work in containers. Install Google Chrome Stable from Google's apt
+# repo instead — it provides a real binary at /usr/bin/google-chrome-stable.
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
-# Install Chromium and its dependencies for PuppeteerSharp (inline render mode).
-# Chromium is only used when Kafka:Enabled=false (inline path).
-# In Kafka mode the Console owns the pool — Chromium is NOT launched by the API.
+# Chromium is only used when Kafka:Enabled=false (inline render path).
+# In Kafka mode the Console owns Chrome — this install is a safety net.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    chromium \
+    wget gnupg ca-certificates \
+    && wget -q -O- https://dl-ssl.google.com/linux/linux_signing_key.pub \
+       | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] \
+       http://dl.google.com/linux/chrome/deb/ stable main" \
+       > /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    google-chrome-stable \
     fonts-liberation \
-    libnss3 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libcups2 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxfixes3 \
-    libxrandr2 \
-    libgbm1 \
-    libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
-# Tell PuppeteerSharp to use the system Chromium instead of downloading its own.
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 WORKDIR /app
 COPY --from=build /publish .
 
-# Non-root user for security
-RUN adduser --disabled-password --gecos "" appuser && chown -R appuser /app
+RUN useradd -r -m -s /bin/false appuser && chown -R appuser /app /home/appuser
 USER appuser
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=5 \
     CMD curl -f http://localhost:8080/health || exit 1
 
 ENTRYPOINT ["dotnet", "DocumentGenerator.Api.dll"]

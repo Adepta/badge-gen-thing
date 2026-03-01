@@ -15,38 +15,32 @@ RUN dotnet publish src/DocumentGenerator.Console/DocumentGenerator.Console.cspro
     --no-restore -c Release -o /publish
 
 # ── Runtime stage ──────────────────────────────────────────────────────────────
+# aspnet:10.0 is Ubuntu Noble. Noble ships Chromium as a snap-only stub that
+# does not work in containers. Install Google Chrome Stable from Google's apt
+# repo instead — it provides a real binary at /usr/bin/google-chrome-stable.
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
-# Chromium is required by PuppeteerSharp for PDF rendering.
-# --no-sandbox is used at runtime because Docker containers lack the kernel
-# namespace isolation that Chromium's sandbox requires.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    chromium \
+    wget gnupg ca-certificates \
+    && wget -q -O- https://dl-ssl.google.com/linux/linux_signing_key.pub \
+       | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] \
+       http://dl.google.com/linux/chrome/deb/ stable main" \
+       > /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    google-chrome-stable \
     fonts-liberation \
-    libnss3 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libcups2 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxfixes3 \
-    libxrandr2 \
-    libgbm1 \
-    libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 WORKDIR /app
 COPY --from=build /publish .
 
-RUN adduser --disabled-password --gecos "" appuser \
-    && chown -R appuser /app \
+RUN useradd -r -m -s /bin/false appuser \
     && mkdir -p /app/output /app/logs \
-    && chown -R appuser /app/output /app/logs
+    && chown -R appuser /app /app/output /app/logs /home/appuser
 USER appuser
 
 ENTRYPOINT ["dotnet", "DocumentGenerator.Console.dll"]

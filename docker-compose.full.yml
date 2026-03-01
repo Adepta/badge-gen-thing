@@ -204,7 +204,7 @@ services:
       loki:  { condition: service_healthy }
       tempo: { condition: service_healthy }
     healthcheck:
-      test:         ["CMD", "wget", "--spider", "-q", "http://localhost:13133"]
+      test:         ["CMD", "curl", "-f", "http://localhost:13133"]
       interval:     10s
       timeout:      5s
       retries:      5
@@ -252,6 +252,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT:           Production
       ASPNETCORE_URLS:                  http://+:8080
+      Urls:                             http://+:8080
       ApiAuth__ApiKey:                  "${API_KEY:-dev-api-key-insecure}"
       Cors__AllowedOrigins:             "${CORS_ALLOWED_ORIGINS:-*}"
       Kafka__Enabled:                   "true"
@@ -267,15 +268,15 @@ services:
       OpenTelemetry__OtlpEndpoint:      http://otel-collector:4317
     healthcheck:
       test:         ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval:     30s
+      interval:     15s
       timeout:      5s
-      retries:      3
-      start_period: 20s
+      retries:      10
+      start_period: 60s
     depends_on:
       kafka-init:
         condition: service_completed_successfully
       otel-collector:
-        condition: service_healthy
+        condition: service_started
 
   console:
     build:
@@ -307,7 +308,7 @@ services:
       kafka-init:
         condition: service_completed_successfully
       otel-collector:
-        condition: service_healthy
+        condition: service_started
 
   bridge:
     build:
@@ -338,7 +339,7 @@ services:
       start_period: 10s
     depends_on:
       api:
-        condition: service_healthy
+        condition: service_started
 
 # =============================================================================
 # Volumes
