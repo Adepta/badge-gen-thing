@@ -107,23 +107,13 @@ Generated/                         Dev/test PDF output (LocalFileAdapter writes 
 
 Run everything — Kafka, OTel, Grafana, and all three services — with a single command.
 
-### 1. Copy and configure `.env`
+### 1. Create your `.env`
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and set `API_KEY` to any random string (it is required — the stack won't start without it):
-
-```bash
-# Linux / macOS
-API_KEY=$(openssl rand -hex 32)
-sed -i "s/CHANGE-ME-IN-PRODUCTION/$API_KEY/" .env
-
-# Windows PowerShell
-$key = -join ((48..57+65..90+97..122) | Get-Random -Count 32 | % {[char]$_})
-(Get-Content .env) -replace 'CHANGE-ME-IN-PRODUCTION', $key | Set-Content .env
-```
+The defaults in `.env.example` work out of the box for local dev — API key is pre-set to `dev-api-key-insecure`. No further edits needed to just run it.
 
 ### 2. Start the full stack
 
@@ -149,7 +139,7 @@ Subsequent starts are fast (images are cached).
 ```bash
 curl -s -X POST http://localhost:5100/render \
   -H "Content-Type: application/json" \
-  -H "X-Api-Key: <your API_KEY from .env>" \
+  -H "X-Api-Key: dev-api-key-insecure" \
   -d '{
     "templateName": "badge-pulse-a6",
     "format": "Png",
