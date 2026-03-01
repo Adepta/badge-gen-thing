@@ -103,6 +103,98 @@ Generated/                         Dev/test PDF output (LocalFileAdapter writes 
 
 ---
 
+## Quick start — full stack in Docker
+
+Run everything — Kafka, OTel, Grafana, and all three services — with a single command.
+
+### 1. Copy and configure `.env`
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set `API_KEY` to any random string (it is required — the stack won't start without it):
+
+```bash
+# Linux / macOS
+API_KEY=$(openssl rand -hex 32)
+sed -i "s/CHANGE-ME-IN-PRODUCTION/$API_KEY/" .env
+
+# Windows PowerShell
+$key = -join ((48..57+65..90+97..122) | Get-Random -Count 32 | % {[char]$_})
+(Get-Content .env) -replace 'CHANGE-ME-IN-PRODUCTION', $key | Set-Content .env
+```
+
+### 2. Start the full stack
+
+```bash
+docker compose -f docker-compose.full.yml up --build
+```
+
+First run takes a few minutes — Docker builds three .NET images and Kafka waits for Zookeeper.
+Subsequent starts are fast (images are cached).
+
+### 3. Verify everything is up
+
+| Service | URL | Notes |
+|---|---|---|
+| **Api** | http://localhost:8080/health | Should return `{"status":"Healthy"}` |
+| **Bridge** | http://localhost:5100/health | Should return `{"status":"Healthy"}` |
+| **Kafka UI** | http://localhost:8090 | Browse topics, consumer groups, messages |
+| **Grafana** | http://localhost:3000 | Traces, logs, metrics — login: admin / admin |
+| **Prometheus** | http://localhost:9090 | Raw metrics |
+
+### 4. Render a badge
+
+```bash
+curl -s -X POST http://localhost:5100/render \
+  -H "Content-Type: application/json" \
+  -H "X-Api-Key: <your API_KEY from .env>" \
+  -d '{
+    "templateName": "badge-pulse-a6",
+    "format": "Png",
+    "variables": {
+      "firstName": "Ada",
+      "lastName":  "Lovelace",
+      "jobTitle":  "Mathematician",
+      "company":   "Analytical Engine Co"
+    }
+  }' | jq -r .documentBase64 | base64 -d > badge.png
+```
+
+### 5. Stop and clean up
+
+```bash
+# Stop all containers but keep volumes (Kafka state, Grafana dashboards)
+docker compose -f docker-compose.full.yml down
+
+# Stop and wipe all volumes (full reset)
+docker compose -f docker-compose.full.yml down -v
+```
+
+### Startup order
+
+Docker Compose enforces this dependency chain automatically:
+
+```
+Zookeeper → Kafka (healthy) → kafka-init (topics created)
+                                          ↓
+                             otel-collector (healthy)
+                                     ↓             ↓
+                                   Api           Console
+                                     ↓
+                                  Bridge
+```
+
+### Scale the render worker
+
+```bash
+# Run 3 Console render workers in parallel
+docker compose -f docker-compose.full.yml up --scale console=3
+```
+
+---
+
 ## Quick start — local development (both paths)
 
 ### 1. Start Kafka
