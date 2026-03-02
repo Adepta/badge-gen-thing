@@ -16,6 +16,9 @@ RUN dotnet publish src/DocumentGenerator.Bridge/DocumentGenerator.Bridge.csproj 
 # Bridge is lightweight — no Chromium needed (all rendering is done by the cloud API).
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
+RUN apt-get update && apt-get install -y --no-install-recommends wget \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY --from=build /publish .
 
@@ -26,6 +29,6 @@ EXPOSE 5100
 ENV ASPNETCORE_URLS=http://+:5100
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:5100/health || exit 1
+    CMD wget --spider -q http://localhost:5100/health || exit 1
 
 ENTRYPOINT ["dotnet", "DocumentGenerator.Bridge.dll"]
