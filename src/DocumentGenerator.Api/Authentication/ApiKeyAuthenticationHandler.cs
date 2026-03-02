@@ -39,10 +39,16 @@ public sealed class ApiKeyAuthenticationHandler : AuthenticationHandler<Authenti
     /// <summary>
     /// Validates the <c>X-Api-Key</c> header against the configured key.
     /// Returns <see cref="AuthenticateResult.Success"/> on a match,
+    /// <see cref="AuthenticateResult.NoResult"/> for anonymous endpoints (e.g. <c>/health</c>),
     /// or <c>AuthenticateResult.Fail</c> otherwise.
     /// </summary>
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
+        // Skip auth silently for anonymous endpoints — avoids noisy log entries
+        // for health probes that legitimately carry no key.
+        if (Request.Path.StartsWithSegments("/health", StringComparison.OrdinalIgnoreCase))
+            return Task.FromResult(AuthenticateResult.NoResult());
+
         if (!Request.Headers.TryGetValue(HeaderName, out var providedKey))
             return Task.FromResult(AuthenticateResult.Fail($"Missing {HeaderName} header."));
 
