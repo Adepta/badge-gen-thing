@@ -483,7 +483,16 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-/docs/_site
-/generated
+# DocFX generated site
+/docs/_site/
 
+# Dev render output
+/Generated/
+
+# Root-level dev log files (from dotnet run redirection)
+/api.log
+/bridge.log
+/console.log
+
+# Windows NUL device artefact
 nul
