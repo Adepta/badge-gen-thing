@@ -15,14 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ── Configuration binding ──────────────────────────────────────────────────────
 builder.Services.Configure<BridgeOptions>(
-    builder.Configuration.GetSection(BridgeOptions.Section));
+    builder.Configuration.GetSection(BridgeOptions.SectionName));
 builder.Services.Configure<CloudOptions>(
-    builder.Configuration.GetSection(CloudOptions.Section));
+    builder.Configuration.GetSection(CloudOptions.SectionName));
 builder.Services.Configure<PrinterOptions>(
-    builder.Configuration.GetSection(PrinterOptions.Section));
+    builder.Configuration.GetSection(PrinterOptions.SectionName));
 
 // ── HTTP server port ───────────────────────────────────────────────────────────
-var port = builder.Configuration.GetValue<int>($"{BridgeOptions.Section}:Port", 5100);
+var port = builder.Configuration.GetValue<int>($"{BridgeOptions.SectionName}:Port", 5100);
 builder.WebHost.UseUrls($"http://+:{port}");
 
 // ── Graceful shutdown ─────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 using DocumentGenerator.Bridge.Configuration;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Bridge;
@@ -15,19 +15,19 @@ public sealed class BridgeConfigurationTests
     [Fact]
     public void BridgeOptions_SectionName_IsBridge()
     {
-        BridgeOptions.Section.Should().Be("Bridge");
+        BridgeOptions.SectionName.ShouldBe("Bridge");
     }
 
     [Fact]
     public void BridgeOptions_DefaultPort_Is5100()
     {
-        new BridgeOptions().Port.Should().Be(5100);
+        new BridgeOptions().Port.ShouldBe(5100);
     }
 
     [Fact]
     public void BridgeOptions_DefaultIsConfigured_IsFalse()
     {
-        new BridgeOptions().IsConfigured.Should().BeFalse();
+        new BridgeOptions().IsConfigured.ShouldBeFalse();
     }
 
     // ── CloudOptions ──────────────────────────────────────────────────────────
@@ -35,25 +35,25 @@ public sealed class BridgeConfigurationTests
     [Fact]
     public void CloudOptions_SectionName_IsCloud()
     {
-        CloudOptions.Section.Should().Be("Cloud");
+        CloudOptions.SectionName.ShouldBe("Cloud");
     }
 
     [Fact]
     public void CloudOptions_DefaultBaseUrl_IsEmpty()
     {
-        new CloudOptions().BaseUrl.Should().BeEmpty();
+        new CloudOptions().BaseUrl.ShouldBeEmpty();
     }
 
     [Fact]
     public void CloudOptions_DefaultApiKey_IsEmpty()
     {
-        new CloudOptions().ApiKey.Should().BeEmpty();
+        new CloudOptions().ApiKey.ShouldBeEmpty();
     }
 
     [Fact]
     public void CloudOptions_DefaultTimeout_Is30Seconds()
     {
-        new CloudOptions().Timeout.Should().Be(TimeSpan.FromSeconds(30));
+        new CloudOptions().Timeout.ShouldBe(TimeSpan.FromSeconds(30));
     }
 
     // ── PrinterOptions ────────────────────────────────────────────────────────
@@ -61,18 +61,18 @@ public sealed class BridgeConfigurationTests
     [Fact]
     public void PrinterOptions_SectionName_IsPrinter()
     {
-        PrinterOptions.Section.Should().Be("Printer");
+        PrinterOptions.SectionName.ShouldBe("Printer");
     }
 
     [Fact]
     public void PrinterOptions_DefaultPrinterName_IsNull()
     {
-        new PrinterOptions().DefaultPrinterName.Should().BeNull();
+        new PrinterOptions().DefaultPrinterName.ShouldBeNull();
     }
 
     [Fact]
     public void PrinterOptions_DefaultFormat_IsPdf()
     {
-        new PrinterOptions().Format.Should().Be("Pdf");
+        new PrinterOptions().Format.ShouldBe("Pdf");
     }
 }

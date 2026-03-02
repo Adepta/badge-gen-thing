@@ -7,7 +7,7 @@ namespace DocumentGenerator.Bridge.Configuration;
 public sealed class BridgeOptions
 {
     /// <summary>Configuration section name used when binding from <c>appsettings.json</c>.</summary>
-    public const string Section = "Bridge";
+    public const string SectionName = "Bridge";
 
     /// <summary>
     /// Port the bridge HTTP server listens on.
@@ -46,7 +46,7 @@ public sealed class BridgeOptions
 public sealed class CloudOptions
 {
     /// <summary>Configuration section name.</summary>
-    public const string Section = "Cloud";
+    public const string SectionName = "Cloud";
 
     /// <summary>
     /// Base URL of the hosted <c>DocumentGenerator.Api</c> instance,
@@ -81,7 +81,7 @@ public sealed class CloudOptions
 public sealed class PrinterOptions
 {
     /// <summary>Configuration section name.</summary>
-    public const string Section = "Printer";
+    public const string SectionName = "Printer";
 
     /// <summary>
     /// Name of the default local printer to send badges to.

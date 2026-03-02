@@ -8,25 +8,14 @@ namespace DocumentGenerator.Pdf.Pool;
 /// unless <see cref="Invalidate"/> has been called, in which case the browser
 /// is closed and discarded.
 /// </summary>
-internal sealed class BrowserLease : IBrowserLease<IBrowser>
+internal sealed class BrowserLease(IBrowser browser, ChromiumBrowserPool pool) : IBrowserLease<IBrowser>
 {
-    private readonly ChromiumBrowserPool _pool;
+    private readonly ChromiumBrowserPool _pool = pool;
     private bool _invalidated;
     private bool _disposed;
 
     /// <summary>The leased Puppeteer browser instance.</summary>
-    public IBrowser Browser { get; }
-
-    /// <summary>
-    /// Initialises a new lease wrapping <paramref name="browser"/>.
-    /// </summary>
-    /// <param name="browser">The Chromium browser instance obtained from the pool.</param>
-    /// <param name="pool">The pool that owns <paramref name="browser"/> and must be notified on disposal.</param>
-    internal BrowserLease(IBrowser browser, ChromiumBrowserPool pool)
-    {
-        Browser = browser;
-        _pool = pool;
-    }
+    public IBrowser Browser { get; } = browser;
 
     /// <inheritdoc/>
     public void Invalidate() => _invalidated = true;
@@ -39,11 +28,11 @@ internal sealed class BrowserLease : IBrowserLease<IBrowser>
 
         if (_invalidated)
         {
-            await _pool.DiscardAsync(Browser);
+            await _pool.DiscardAsync(Browser).ConfigureAwait(false);
         }
         else
         {
-            await _pool.ReturnAsync(Browser);
+            await _pool.ReturnAsync(Browser).ConfigureAwait(false);
         }
     }
 }

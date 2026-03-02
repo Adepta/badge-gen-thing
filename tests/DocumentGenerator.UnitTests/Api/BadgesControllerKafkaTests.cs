@@ -4,7 +4,6 @@ using DocumentGenerator.Api.Messaging;
 using DocumentGenerator.Api.Models;
 using DocumentGenerator.Api.Services;
 using DocumentGenerator.Messaging.Messages;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using Rebus.Bus;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -95,8 +95,8 @@ public sealed class BadgesControllerKafkaTests : IDisposable
         ArrangeKafkaResult(success: true);
         var result = await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
 
-        result.Should().BeOfType<OkObjectResult>()
-            .Which.StatusCode.Should().Be(200);
+        var ok = result.ShouldBeOfType<OkObjectResult>();
+        ok.StatusCode.ShouldBe(200);
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public sealed class BadgesControllerKafkaTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.Success.Should().BeTrue();
+        body.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -116,7 +116,7 @@ public sealed class BadgesControllerKafkaTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.DocumentBase64.Should().Be(Convert.ToBase64String(FakePdfBytes));
+        body.DocumentBase64.ShouldBe(Convert.ToBase64String(FakePdfBytes));
     }
 
     [Fact]
@@ -129,7 +129,7 @@ public sealed class BadgesControllerKafkaTests : IDisposable
             BuildRequest(correlationId: correlationId), CancellationToken.None);
         var body = (BadgeRenderResponse)result.Value!;
 
-        body.CorrelationId.Should().Be(correlationId);
+        body.CorrelationId.ShouldBe(correlationId);
     }
 
     // ── Render failure from Console ───────────────────────────────────────────
@@ -140,8 +140,8 @@ public sealed class BadgesControllerKafkaTests : IDisposable
         ArrangeKafkaResult(success: false);
         var result = await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
 
-        result.Should().BeOfType<ObjectResult>()
-            .Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        var obj = result.ShouldBeOfType<ObjectResult>();
+        obj.StatusCode.ShouldBe(StatusCodes.Status500InternalServerError);
     }
 
     [Fact]
@@ -151,8 +151,8 @@ public sealed class BadgesControllerKafkaTests : IDisposable
         var result = (ObjectResult)await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.Success.Should().BeFalse();
-        body.Error.Should().NotBeNullOrEmpty();
+        body.Success.ShouldBeFalse();
+        body.Error.ShouldNotBeNullOrEmpty();
     }
 
     // ── Timeout ───────────────────────────────────────────────────────────────
@@ -183,8 +183,8 @@ public sealed class BadgesControllerKafkaTests : IDisposable
 
         var result = await sut.RenderAsync(BuildRequest(), CancellationToken.None);
 
-        result.Should().BeOfType<ObjectResult>()
-            .Which.StatusCode.Should().Be(StatusCodes.Status504GatewayTimeout);
+        var obj = result.ShouldBeOfType<ObjectResult>();
+        obj.StatusCode.ShouldBe(StatusCodes.Status504GatewayTimeout);
     }
 
     // ── Unknown template — same as inline path ────────────────────────────────
@@ -195,8 +195,8 @@ public sealed class BadgesControllerKafkaTests : IDisposable
         var result = await _sut.RenderAsync(
             BuildRequest(templateName: "does-not-exist"), CancellationToken.None);
 
-        result.Should().BeOfType<BadRequestObjectResult>()
-            .Which.StatusCode.Should().Be(400);
+        var bad = result.ShouldBeOfType<BadRequestObjectResult>();
+        bad.StatusCode.ShouldBe(400);
 
         // Bus should never be called if template resolution fails
         _busMock.Verify(b => b.Send(
@@ -215,8 +215,8 @@ public sealed class BadgesControllerKafkaTests : IDisposable
 
         var result = await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
 
-        result.Should().BeOfType<ObjectResult>()
-            .Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        var obj = result.ShouldBeOfType<ObjectResult>();
+        obj.StatusCode.ShouldBe(StatusCodes.Status500InternalServerError);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

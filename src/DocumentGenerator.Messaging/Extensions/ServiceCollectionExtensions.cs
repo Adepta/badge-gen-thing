@@ -78,7 +78,7 @@ internal sealed class RebusSubscriptionService(IBus bus, ILogger<RebusSubscripti
         logger.LogInformation(
             "Subscribing to Kafka topic for {MessageType}", nameof(DocumentRenderRequest));
 
-        await bus.Subscribe<DocumentRenderRequest>();
+        await bus.Subscribe<DocumentRenderRequest>().ConfigureAwait(false);
 
         logger.LogInformation(
             "Rebus subscription active — listening for {MessageType}", nameof(DocumentRenderRequest));

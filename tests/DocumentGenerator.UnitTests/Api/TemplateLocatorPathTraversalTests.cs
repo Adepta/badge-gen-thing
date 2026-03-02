@@ -1,8 +1,8 @@
 using DocumentGenerator.Api.Services;
 using DocumentGenerator.Core.Errors;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -48,8 +48,8 @@ public sealed class TemplateLocatorPathTraversalTests : IDisposable
         // "../etc/passwd" should be detected as escaping the templates directory
         var act = () => _sut.Resolve("../etc/passwd", []);
 
-        act.Should().Throw<TemplateException>()
-            .Which.Code.Should().Be(ErrorCode.TemplateNameInvalid);
+        var ex = Should.Throw<TemplateException>(() => act());
+        ex.Code.ShouldBe(ErrorCode.TemplateNameInvalid);
     }
 
     [Fact]
@@ -57,8 +57,8 @@ public sealed class TemplateLocatorPathTraversalTests : IDisposable
     {
         var act = () => _sut.Resolve("../../secret", []);
 
-        act.Should().Throw<TemplateException>()
-            .Which.Code.Should().Be(ErrorCode.TemplateNameInvalid);
+        var ex = Should.Throw<TemplateException>(() => act());
+        ex.Code.ShouldBe(ErrorCode.TemplateNameInvalid);
     }
 
     // ── Absolute path injection ───────────────────────────────────────────────
@@ -69,8 +69,8 @@ public sealed class TemplateLocatorPathTraversalTests : IDisposable
         // On Windows, Path.Combine with an absolute path replaces the base — the guard catches it.
         var act = () => _sut.Resolve("C:\\Windows\\System32\\drivers\\etc\\hosts", []);
 
-        act.Should().Throw<TemplateException>()
-            .Which.Code.Should().Be(ErrorCode.TemplateNameInvalid);
+        var ex = Should.Throw<TemplateException>(() => act());
+        ex.Code.ShouldBe(ErrorCode.TemplateNameInvalid);
     }
 
     [Fact]
@@ -79,8 +79,8 @@ public sealed class TemplateLocatorPathTraversalTests : IDisposable
         // /etc/passwd as template name
         var act = () => _sut.Resolve("/etc/passwd", []);
 
-        act.Should().Throw<TemplateException>()
-            .Which.Code.Should().Be(ErrorCode.TemplateNameInvalid);
+        var ex = Should.Throw<TemplateException>(() => act());
+        ex.Code.ShouldBe(ErrorCode.TemplateNameInvalid);
     }
 
     // ── Directory name prefix bypass ──────────────────────────────────────────
@@ -92,8 +92,8 @@ public sealed class TemplateLocatorPathTraversalTests : IDisposable
         // match the prefix check.  The trailing separator on safeRoot prevents this.
         var act = () => _sut.Resolve($"../tpl_bypass/secret", []);
 
-        act.Should().Throw<TemplateException>()
-            .Which.Code.Should().Be(ErrorCode.TemplateNameInvalid);
+        var ex = Should.Throw<TemplateException>(() => act());
+        ex.Code.ShouldBe(ErrorCode.TemplateNameInvalid);
     }
 
     // ── Legitimate template name ───────────────────────────────────────────────
@@ -103,9 +103,6 @@ public sealed class TemplateLocatorPathTraversalTests : IDisposable
     {
         // badge-ok.html exists — should throw TemplateNotFound at worst, never TemplateNameInvalid
         // (This also documents that a normal name is accepted by the guard.)
-        var act = () => _sut.Resolve("badge-ok", []);
-
-        // Should succeed (returns a template), not throw TemplateNameInvalid.
-        act.Should().NotThrow<TemplateException>();
+        Should.NotThrow(() => _sut.Resolve("badge-ok", []));
     }
 }

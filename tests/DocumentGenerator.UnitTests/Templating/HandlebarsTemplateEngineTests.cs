@@ -1,7 +1,8 @@
+using System.Text.RegularExpressions;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Templating;
-using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Templating;
@@ -30,7 +31,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("<p>Hello world</p>");
+        result.ShouldBe("<p>Hello world</p>");
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("<p>Alice</p>");
+        result.ShouldBe("<p>Alice</p>");
     }
 
     [Fact]
@@ -54,7 +55,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("<h1>Acme Corp</h1>");
+        result.ShouldBe("<h1>Acme Corp</h1>");
     }
 
     [Fact]
@@ -67,7 +68,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("invoice|2.0");
+        result.ShouldBe("invoice|2.0");
     }
 
     [Fact]
@@ -78,9 +79,9 @@ public sealed class HandlebarsTemplateEngineTests
         var template = BuildTemplate("{{meta.generatedAt}}");
         var result   = await _sut.RenderAsync(template);
 
-        DateTimeOffset.TryParse(result, out var parsed).Should().BeTrue();
-        parsed.Should().BeAfter(before);
-        parsed.Should().BeBefore(DateTimeOffset.UtcNow.AddSeconds(5));
+        DateTimeOffset.TryParse(result, out var parsed).ShouldBeTrue();
+        parsed.ShouldBeGreaterThan(before);
+        parsed.ShouldBeLessThan(DateTimeOffset.UtcNow.AddSeconds(5));
     }
 
     // -----------------------------------------------------------------------
@@ -96,7 +97,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Contain("<style>body { color: red; }</style></head>");
+        result.ShouldContain("<style>body { color: red; }</style></head>");
     }
 
     [Fact]
@@ -108,7 +109,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().StartWith("<style>p { margin: 0; }</style>");
+        result.ShouldStartWith("<style>p { margin: 0; }</style>");
     }
 
     [Fact]
@@ -119,8 +120,8 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be(html);
-        result.Should().NotContain("<style>");
+        result.ShouldBe(html);
+        result.ShouldNotContain("<style>");
     }
 
     [Fact]
@@ -133,7 +134,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Contain("color: #FF0000;");
+        result.ShouldContain("color: #FF0000;");
     }
 
     [Fact]
@@ -146,7 +147,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         // Must not throw
         var act = async () => await _sut.RenderAsync(template);
-        await act.Should().NotThrowAsync();
+        await Should.NotThrowAsync(act);
     }
 
     // -----------------------------------------------------------------------
@@ -165,7 +166,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [Theory]
@@ -180,7 +181,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [Fact]
@@ -192,7 +193,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("15 Mar 2026");
+        result.ShouldBe("15 Mar 2026");
     }
 
     [Fact]
@@ -204,7 +205,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be(string.Empty);
+        result.ShouldBe(string.Empty);
     }
 
     [Fact]
@@ -217,7 +218,7 @@ public sealed class HandlebarsTemplateEngineTests
         var result = await _sut.RenderAsync(template);
 
         // £9.99 in en-GB
-        result.Should().Be("£9.99");
+        result.ShouldBe("£9.99");
     }
 
     [Fact]
@@ -229,7 +230,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("YES");
+        result.ShouldBe("YES");
     }
 
     [Fact]
@@ -241,7 +242,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("NO");
+        result.ShouldBe("NO");
     }
 
     // -----------------------------------------------------------------------
@@ -263,7 +264,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("<p>Hello from partial</p>");
+        result.ShouldBe("<p>Hello from partial</p>");
     }
 
     // -----------------------------------------------------------------------
@@ -282,7 +283,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Be("<span>#FF5A5F</span>");
+        result.ShouldBe("<span>#FF5A5F</span>");
     }
 
     // -----------------------------------------------------------------------
@@ -297,8 +298,8 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Contain("<svg");
-        result.Should().Contain("</svg>");
+        result.ShouldContain("<svg");
+        result.ShouldContain("</svg>");
     }
 
     [Fact]
@@ -309,7 +310,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().NotContain("<svg");
+        result.ShouldNotContain("<svg");
     }
 
     [Fact]
@@ -320,7 +321,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().NotContain("<svg");
+        result.ShouldNotContain("<svg");
     }
 
     [Fact]
@@ -332,7 +333,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Contain("#D4AF37");
+        result.ShouldContain("#D4AF37");
     }
 
     [Fact]
@@ -345,8 +346,8 @@ public sealed class HandlebarsTemplateEngineTests
         var result = await _sut.RenderAsync(template);
 
         // Background rect should be transparent (none), not white
-        result.Should().NotMatchRegex("fill=\"#ffffff\"", "white fill should have been replaced");
-        result.Should().NotMatchRegex("fill=\"white\"",   "white fill should have been replaced");
+        Regex.IsMatch(result, "fill=\"#ffffff\"").ShouldBeFalse();
+        Regex.IsMatch(result, "fill=\"white\"").ShouldBeFalse();
     }
 
     // -----------------------------------------------------------------------
@@ -361,8 +362,8 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Contain("<svg");
-        result.Should().Contain("</svg>");
+        result.ShouldContain("<svg");
+        result.ShouldContain("</svg>");
     }
 
     [Fact]
@@ -373,7 +374,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().NotContain("<svg");
+        result.ShouldNotContain("<svg");
     }
 
     [Fact]
@@ -384,7 +385,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().NotContain("<svg");
+        result.ShouldNotContain("<svg");
     }
 
     [Fact]
@@ -396,8 +397,8 @@ public sealed class HandlebarsTemplateEngineTests
 
         var result = await _sut.RenderAsync(template);
 
-        result.Should().Contain("<svg");
-        result.Should().Contain("#A3E635");
+        result.ShouldContain("<svg");
+        result.ShouldContain("#A3E635");
     }
 
     [Fact]
@@ -411,9 +412,9 @@ public sealed class HandlebarsTemplateEngineTests
         var barResult = await _sut.RenderAsync(barTemplate);
 
         // Both produce SVG but the content must differ (different symbologies)
-        qrResult.Should().Contain("<svg");
-        barResult.Should().Contain("<svg");
-        qrResult.Should().NotBe(barResult);
+        qrResult.ShouldContain("<svg");
+        barResult.ShouldContain("<svg");
+        qrResult.ShouldNotBe(barResult);
     }
 
     // -----------------------------------------------------------------------
@@ -430,7 +431,7 @@ public sealed class HandlebarsTemplateEngineTests
 
         var act = async () => await _sut.RenderAsync(template, cts.Token);
 
-        await act.Should().ThrowAsync<OperationCanceledException>();
+        await Should.ThrowAsync<OperationCanceledException>(act);
     }
 
     // -----------------------------------------------------------------------

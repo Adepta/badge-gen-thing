@@ -1,11 +1,11 @@
 using DocumentGenerator.Api.HealthChecks;
 using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Moq;
 using PuppeteerSharp;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -27,8 +27,8 @@ public sealed class ChromiumPoolHealthCheckTests
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Status.Should().Be(HealthStatus.Healthy);
-        result.Description.Should().Contain("skipped");
+        result.Status.ShouldBe(HealthStatus.Healthy);
+        result.Description!.ShouldContain("skipped");
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public sealed class ChromiumPoolHealthCheckTests
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Status.Should().Be(HealthStatus.Healthy);
+        result.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public sealed class ChromiumPoolHealthCheckTests
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Status.Should().Be(HealthStatus.Unhealthy);
+        result.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public sealed class ChromiumPoolHealthCheckTests
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Description.Should().Contain("unhealthy");
+        result.Description!.ShouldContain("unhealthy");
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

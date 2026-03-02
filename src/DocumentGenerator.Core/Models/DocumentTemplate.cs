@@ -3,7 +3,7 @@ namespace DocumentGenerator.Core.Models;
 /// <summary>
 /// The top-level template definition loaded from a JSON file or queue payload.
 /// </summary>
-public sealed class DocumentTemplate
+public sealed record DocumentTemplate
 {
     /// <summary>
     /// Logical document type identifier, e.g. "invoice", "report", "certificate".

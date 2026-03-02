@@ -32,18 +32,9 @@ namespace DocumentGenerator.Bridge.Printing;
 /// <para>PNG files always use the shell <c>printto</c> verb (mspaint handles them silently).</para>
 /// </remarks>
 [SupportedOSPlatform("windows")]
-public sealed class WindowsPrinterAdapter : IPrinterAdapter, IDisposable
+public sealed class WindowsPrinterAdapter(ILogger<WindowsPrinterAdapter> logger) : IPrinterAdapter, IDisposable
 {
-    private readonly ILogger<WindowsPrinterAdapter> _logger;
-
-    /// <summary>
-    /// Initialises a new <see cref="WindowsPrinterAdapter"/>.
-    /// </summary>
-    /// <param name="logger">Logger for print job diagnostics.</param>
-    public WindowsPrinterAdapter(ILogger<WindowsPrinterAdapter> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<WindowsPrinterAdapter> _logger = logger;
 
     /// <inheritdoc />
     public IEnumerable<string> GetAvailablePrinters()

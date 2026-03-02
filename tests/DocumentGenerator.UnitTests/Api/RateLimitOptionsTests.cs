@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using DocumentGenerator.Api.Configuration;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -18,7 +18,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions();
 
-        Validate(opts).Should().BeEmpty();
+        Validate(opts).ShouldBeEmpty();
     }
 
     // ── PermitLimit ───────────────────────────────────────────────────────────
@@ -28,7 +28,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { PermitLimit = 0 };
 
-        Validate(opts).Should().NotBeEmpty();
+        Validate(opts).ShouldNotBeEmpty();
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { PermitLimit = -1 };
 
-        Validate(opts).Should().NotBeEmpty();
+        Validate(opts).ShouldNotBeEmpty();
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { PermitLimit = 1 };
 
-        Validate(opts).Should().BeEmpty();
+        Validate(opts).ShouldBeEmpty();
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { PermitLimit = 10_000 };
 
-        Validate(opts).Should().BeEmpty();
+        Validate(opts).ShouldBeEmpty();
     }
 
     // ── Window ────────────────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { Window = TimeSpan.Zero };
 
-        Validate(opts).Should().NotBeEmpty();
+        Validate(opts).ShouldNotBeEmpty();
     }
 
     [Fact]
@@ -70,7 +70,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { Window = TimeSpan.FromSeconds(1) };
 
-        Validate(opts).Should().BeEmpty();
+        Validate(opts).ShouldBeEmpty();
     }
 
     // ── SegmentsPerWindow ─────────────────────────────────────────────────────
@@ -80,7 +80,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { SegmentsPerWindow = 0 };
 
-        Validate(opts).Should().NotBeEmpty();
+        Validate(opts).ShouldNotBeEmpty();
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { SegmentsPerWindow = 1 };
 
-        Validate(opts).Should().BeEmpty();
+        Validate(opts).ShouldBeEmpty();
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { SegmentsPerWindow = 100 };
 
-        Validate(opts).Should().BeEmpty();
+        Validate(opts).ShouldBeEmpty();
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public sealed class RateLimitOptionsTests
     {
         var opts = new RateLimitOptions { SegmentsPerWindow = 101 };
 
-        Validate(opts).Should().NotBeEmpty();
+        Validate(opts).ShouldNotBeEmpty();
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

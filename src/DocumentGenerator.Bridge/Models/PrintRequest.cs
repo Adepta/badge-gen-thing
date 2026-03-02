@@ -6,7 +6,7 @@ namespace DocumentGenerator.Bridge.Models;
 /// Request body accepted by the bridge <c>POST /print</c> and <c>POST /render</c> endpoints.
 /// Sent by the iPad over the local network.
 /// </summary>
-public sealed class PrintRequest
+public sealed record PrintRequest
 {
     /// <summary>
     /// Badge template to render, e.g. <c>"badge-pulse-a6"</c>.
@@ -53,7 +53,7 @@ public sealed class PrintRequest
 /// <summary>
 /// Optional branding overrides sent from the iPad.
 /// </summary>
-public sealed class BrandingRequest
+public sealed record BrandingRequest
 {
     /// <summary>Company name displayed on the badge.</summary>
     public string? CompanyName { get; init; }

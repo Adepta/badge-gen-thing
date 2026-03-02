@@ -10,19 +10,12 @@ namespace DocumentGenerator.Bridge.HealthChecks;
 /// Returns <see cref="HealthStatus.Degraded"/> rather than <see cref="HealthStatus.Unhealthy"/>
 /// because the bridge can still serve cached/queued requests even if the cloud is temporarily down.
 /// </summary>
-public sealed class CloudConnectivityHealthCheck : IHealthCheck
+public sealed class CloudConnectivityHealthCheck(
+    IHttpClientFactory httpClientFactory,
+    IOptionsMonitor<CloudOptions> cloudOptions) : IHealthCheck
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IOptionsMonitor<CloudOptions> _cloudOptions;
-
-    /// <summary>Initialises the check.</summary>
-    public CloudConnectivityHealthCheck(
-        IHttpClientFactory httpClientFactory,
-        IOptionsMonitor<CloudOptions> cloudOptions)
-    {
-        _httpClientFactory = httpClientFactory;
-        _cloudOptions      = cloudOptions;
-    }
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    private readonly IOptionsMonitor<CloudOptions> _cloudOptions = cloudOptions;
 
     /// <inheritdoc/>
     public async Task<HealthCheckResult> CheckHealthAsync(

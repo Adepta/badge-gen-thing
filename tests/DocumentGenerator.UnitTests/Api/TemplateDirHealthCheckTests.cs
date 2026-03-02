@@ -1,7 +1,7 @@
 using DocumentGenerator.Api.HealthChecks;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -35,7 +35,7 @@ public sealed class TemplateDirHealthCheckTests : IDisposable
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Status.Should().Be(HealthStatus.Healthy);
+        result.Status.ShouldBe(HealthStatus.Healthy);
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public sealed class TemplateDirHealthCheckTests : IDisposable
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Description.Should().Contain("1");
+        result.Description!.ShouldContain("1");
     }
 
     // ── Degraded ──────────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ public sealed class TemplateDirHealthCheckTests : IDisposable
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Status.Should().Be(HealthStatus.Degraded);
+        result.Status.ShouldBe(HealthStatus.Degraded);
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public sealed class TemplateDirHealthCheckTests : IDisposable
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Description.Should().ContainAny("empty", "no .html");
+        (result.Description!.Contains("empty") || result.Description.Contains("no .html")).ShouldBeTrue();
     }
 
     // ── Unhealthy ─────────────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ public sealed class TemplateDirHealthCheckTests : IDisposable
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Status.Should().Be(HealthStatus.Unhealthy);
+        result.Status.ShouldBe(HealthStatus.Unhealthy);
     }
 
     [Fact]
@@ -91,7 +91,7 @@ public sealed class TemplateDirHealthCheckTests : IDisposable
 
         var result = await sut.CheckHealthAsync(MakeContext());
 
-        result.Description.Should().Contain("does not exist");
+        result.Description!.ShouldContain("does not exist");
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

@@ -85,8 +85,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
             : CoreOutputFormat.Pdf;
 
         _logger.LogInformation(
-            "Handling render request — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, " +
-            "DocumentType: {DocumentType}, ReturnPdfInline: {ReturnPdfInline}, OutputFormat: {OutputFormat}",
+            "Handling render request — CorrelationId: {CorrelationId}, DeviceId: {DeviceId}, DocumentType: {DocumentType}, ReturnPdfInline: {ReturnPdfInline}, OutputFormat: {OutputFormat}",
             message.CorrelationId, message.DeviceId,
             message.Template.DocumentType, message.ReturnPdfInline, outputFormat);
 
@@ -101,7 +100,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
 
         try
         {
-            var renderResult = await _pipeline.ExecuteAsync(renderJob);
+            var renderResult = await _pipeline.ExecuteAsync(renderJob).ConfigureAwait(false);
 
             string? pdfPath = null;
 
@@ -110,7 +109,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
                 pdfPath = await SavePdfAsync(
                     renderResult.PdfBytes,
                     message.Template.DocumentType,
-                    message.CorrelationId);
+                    message.CorrelationId).ConfigureAwait(false);
             }
 
             var mimeType = outputFormat == CoreOutputFormat.Png ? "image/png" : "application/pdf";
@@ -126,8 +125,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
             _metrics.RecordSuccess();
 
             _logger.LogInformation(
-                "Render succeeded — CorrelationId: {CorrelationId}, Bytes: {Bytes}, " +
-                "ElapsedMs: {ElapsedMs}, PdfPath: {PdfPath}",
+                "Render succeeded — CorrelationId: {CorrelationId}, Bytes: {Bytes}, ElapsedMs: {ElapsedMs}, PdfPath: {PdfPath}",
                 message.CorrelationId, renderResult.PdfBytes.Length,
                 (int)renderResult.ElapsedTime.TotalMilliseconds,
                 pdfPath ?? "(inline)");
@@ -173,7 +171,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
         }
 
         // Reply routes the result back to the sender's return address automatically
-        await _bus.Reply(result);
+        await _bus.Reply(result).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -188,7 +186,7 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
         var fileName   = $"{documentType}_{correlationId:N}.pdf";
         var outputPath = Path.Combine(outputDir, fileName);
 
-        await File.WriteAllBytesAsync(outputPath, pdfBytes);
+        await File.WriteAllBytesAsync(outputPath, pdfBytes).ConfigureAwait(false);
 
         _logger.LogDebug("PDF saved to {Path}", outputPath);
 

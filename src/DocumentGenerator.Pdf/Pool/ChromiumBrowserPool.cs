@@ -81,7 +81,7 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
 
         try
         {
-            await _semaphore.WaitAsync(timeoutCts.Token);
+            await _semaphore.WaitAsync(timeoutCts.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
@@ -103,7 +103,7 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
         IBrowser browser;
         try
         {
-            browser = await GetOrCreateBrowserAsync(cancellationToken);
+            browser = await GetOrCreateBrowserAsync(cancellationToken).ConfigureAwait(false);
         }
         catch
         {
@@ -131,7 +131,7 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
         if (!_all.TryGetValue(browser, out var pooled))
         {
             // Unknown browser — just close it
-            await SafeCloseAsync(browser);
+            await SafeCloseAsync(browser).ConfigureAwait(false);
             _semaphore.Release();
             Interlocked.Decrement(ref _activeCount);
             return;
@@ -149,7 +149,7 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
             _logger.LogInformation(
                 "Recycling browser after {RenderCount} renders (limit: {Max})",
                 pooled.RenderCount, _options.MaxRendersPerInstance);
-            await DiscardInternalAsync(browser);
+            await DiscardInternalAsync(browser).ConfigureAwait(false);
         }
         else
         {
@@ -167,7 +167,7 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
     /// <param name="browser">The invalidated browser instance to discard.</param>
     internal async Task DiscardAsync(IBrowser browser)
     {
-        await DiscardInternalAsync(browser);
+        await DiscardInternalAsync(browser).ConfigureAwait(false);
         Interlocked.Decrement(ref _activeCount);
         _semaphore.Release();
         _logger.LogDebug("Invalidated browser discarded — pool: {PoolSize}, active: {Active}", PoolSize, ActiveCount);
@@ -189,11 +189,11 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
 
             // Disconnected — discard silently and try next
             _logger.LogWarning("Stale browser found in idle queue, discarding");
-            await DiscardInternalAsync(pooled.Browser);
+            await DiscardInternalAsync(pooled.Browser).ConfigureAwait(false);
         }
 
         // No idle browser — launch a new one
-        return await LaunchBrowserAsync(ct);
+        return await LaunchBrowserAsync(ct).ConfigureAwait(false);
     }
 
     private async Task<IBrowser> LaunchBrowserAsync(CancellationToken ct)
@@ -219,7 +219,7 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
                     // intentionally omitted — they block external resources such as
                     // Google Fonts, causing pages to render blank.
                 ]
-            });
+            }).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -250,12 +250,12 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
     private async Task DiscardInternalAsync(IBrowser browser)
     {
         _all.TryRemove(browser, out _);
-        await SafeCloseAsync(browser);
+        await SafeCloseAsync(browser).ConfigureAwait(false);
     }
 
     private static async Task SafeCloseAsync(IBrowser browser)
     {
-        try { await browser.CloseAsync(); }
+        try { await browser.CloseAsync().ConfigureAwait(false); }
         catch { /* best-effort */ }
     }
 
@@ -273,8 +273,8 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
         {
             try
             {
-                await Task.Delay(interval, ct);
-                await ReapIdleBrowsersAsync();
+                await Task.Delay(interval, ct).ConfigureAwait(false);
+                await ReapIdleBrowsersAsync().ConfigureAwait(false);
             }
             catch (OperationCanceledException) { break; }
             catch (Exception ex)
@@ -308,7 +308,7 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
 
             if (isOld && canReap)
             {
-                await DiscardInternalAsync(pooled.Browser);
+                await DiscardInternalAsync(pooled.Browser).ConfigureAwait(false);
                 reaped++;
             }
             else
@@ -333,12 +333,12 @@ public sealed class ChromiumBrowserPool : IBrowserPool<IBrowser>
 
         _logger.LogInformation("Shutting down Chromium pool — closing {Count} instances", _all.Count);
 
-        await _reaperCts.CancelAsync();
-        try { await _reaperTask; } catch { /* ignore */ }
+        await _reaperCts.CancelAsync().ConfigureAwait(false);
+        try { await _reaperTask.ConfigureAwait(false); } catch { /* ignore */ }
 
         foreach (var (browser, _) in _all)
         {
-            await SafeCloseAsync(browser);
+            await SafeCloseAsync(browser).ConfigureAwait(false);
         }
 
         _all.Clear();

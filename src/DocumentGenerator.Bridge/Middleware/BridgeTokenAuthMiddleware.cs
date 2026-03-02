@@ -24,8 +24,7 @@ public sealed class BridgeTokenAuthMiddleware
     /// <summary>Name of the HTTP request header carrying the access token.</summary>
     public const string TokenHeader = "X-Bridge-Token";
 
-    public BridgeTokenAuthMiddleware(RequestDelegate next)
-        => _next = next;
+    public BridgeTokenAuthMiddleware(RequestDelegate next) => _next = next;
 
     /// <inheritdoc cref="IMiddleware.InvokeAsync"/>
     public async Task InvokeAsync(

@@ -48,7 +48,7 @@ public interface IPrinterAdapter
 /// <summary>
 /// The outcome of a print job submission.
 /// </summary>
-public sealed class PrintResult
+public sealed record PrintResult
 {
     /// <summary><c>true</c> when the job was accepted by the print spooler.</summary>
     public bool Success { get; init; }

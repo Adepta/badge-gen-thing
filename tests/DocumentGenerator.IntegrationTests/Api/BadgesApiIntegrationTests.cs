@@ -4,8 +4,8 @@ using System.Text.Json;
 using DocumentGenerator.Api.Models;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
-using FluentAssertions;
 using Moq;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.IntegrationTests.Api;
@@ -37,7 +37,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     public async Task Health_Get_Returns200()
     {
         var response = await _client.GetAsync("/health");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         var response = await _client.GetAsync("/health");
         var body     = await response.Content.ReadAsStringAsync();
-        body.Should().Contain("healthy");
+        body.ShouldContain("healthy");
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         using var anonClient = _factory.CreateClient();
         var response         = await anonClient.GetAsync("/health");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     // ── /api/badges/templates ────────────────────────────────────────────────
@@ -62,7 +62,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     public async Task Templates_Get_Returns200()
     {
         var response = await _client.GetAsync("/api/badges/templates");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -70,7 +70,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         var response  = await _client.GetAsync("/api/badges/templates");
         var templates = await response.Content.ReadFromJsonAsync<IEnumerable<string>>(JsonOpts);
-        templates.Should().Contain("badge-pulse-a6");
+        templates!.ShouldContain("badge-pulse-a6");
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         using var anonClient = _factory.CreateClient();
         var response         = await anonClient.GetAsync("/api/badges/templates");
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
         using var badClient = _factory.CreateClient();
         badClient.DefaultRequestHeaders.Add("X-Api-Key", "wrong-key");
         var response = await badClient.GetAsync("/api/badges/templates");
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     // ── POST /api/badges/render — success ─────────────────────────────────────
@@ -96,7 +96,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     public async Task Render_ValidRequest_Returns200()
     {
         var response = await _client.PostAsJsonAsync("/api/badges/render", BuildRenderRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         var response = await _client.PostAsJsonAsync("/api/badges/render", BuildRenderRequest());
         var body     = await response.Content.ReadFromJsonAsync<BadgeRenderResponse>(JsonOpts);
-        body!.Success.Should().BeTrue();
+        body!.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         var response = await _client.PostAsJsonAsync("/api/badges/render", BuildRenderRequest());
         var body     = await response.Content.ReadFromJsonAsync<BadgeRenderResponse>(JsonOpts);
-        body!.DocumentBase64.Should().Be(Convert.ToBase64String(ApiWebApplicationFactory.FakePdfBytes));
+        body!.DocumentBase64.ShouldBe(Convert.ToBase64String(ApiWebApplicationFactory.FakePdfBytes));
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
         var correlationId = Guid.NewGuid();
         var response      = await _client.PostAsJsonAsync("/api/badges/render", BuildRenderRequest(correlationId));
         var body          = await response.Content.ReadFromJsonAsync<BadgeRenderResponse>(JsonOpts);
-        body!.CorrelationId.Should().Be(correlationId);
+        body!.CorrelationId.ShouldBe(correlationId);
     }
 
     [Fact]
@@ -129,7 +129,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         var response = await _client.PostAsJsonAsync("/api/badges/render", BuildRenderRequest());
         var body     = await response.Content.ReadFromJsonAsync<BadgeRenderResponse>(JsonOpts);
-        body!.MimeType.Should().Be("application/pdf");
+        body!.MimeType.ShouldBe("application/pdf");
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         var response = await _client.PostAsJsonAsync("/api/badges/render", BuildRenderRequest(format: "Png"));
         var body     = await response.Content.ReadFromJsonAsync<BadgeRenderResponse>(JsonOpts);
-        body!.MimeType.Should().Be("image/png");
+        body!.MimeType.ShouldBe("image/png");
     }
 
     // ── POST /api/badges/render — auth ────────────────────────────────────────
@@ -147,7 +147,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         using var anonClient = _factory.CreateClient();
         var response         = await anonClient.PostAsJsonAsync("/api/badges/render", BuildRenderRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
@@ -156,7 +156,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
         using var badClient = _factory.CreateClient();
         badClient.DefaultRequestHeaders.Add("X-Api-Key", "not-the-key");
         var response = await badClient.PostAsJsonAsync("/api/badges/render", BuildRenderRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
 
     // ── POST /api/badges/render — validation ──────────────────────────────────
@@ -166,7 +166,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
     {
         var request  = BuildRenderRequest(templateName: "does-not-exist");
         var response = await _client.PostAsJsonAsync("/api/badges/render", request);
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -175,8 +175,8 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
         var request  = BuildRenderRequest(templateName: "does-not-exist");
         var response = await _client.PostAsJsonAsync("/api/badges/render", request);
         var body     = await response.Content.ReadFromJsonAsync<BadgeRenderResponse>(JsonOpts);
-        body!.Success.Should().BeFalse();
-        body.Error.Should().NotBeNullOrEmpty();
+        body!.Success.ShouldBeFalse();
+        body.Error.ShouldNotBeNullOrEmpty();
     }
 
     // ── POST /api/badges/render — pipeline failure ────────────────────────────
@@ -189,7 +189,7 @@ public sealed class BadgesApiIntegrationTests : IClassFixture<ApiWebApplicationF
             .ThrowsAsync(new Exception("renderer exploded"));
 
         var response = await _client.PostAsJsonAsync("/api/badges/render", BuildRenderRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        response.StatusCode.ShouldBe(HttpStatusCode.InternalServerError);
 
         // Restore default behaviour for subsequent tests
         _factory.PipelineMock

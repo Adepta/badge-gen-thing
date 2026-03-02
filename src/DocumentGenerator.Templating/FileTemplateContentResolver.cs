@@ -15,18 +15,9 @@ namespace DocumentGenerator.Templating;
 /// (normally the directory that contains the JSON template file).
 /// Inline content is left untouched if the corresponding path property is absent.
 /// </summary>
-public sealed class FileTemplateContentResolver : ITemplateContentResolver
+public sealed class FileTemplateContentResolver(ILogger<FileTemplateContentResolver> logger) : ITemplateContentResolver
 {
-    private readonly ILogger<FileTemplateContentResolver> _logger;
-
-    /// <summary>
-    /// Initialises the resolver.
-    /// </summary>
-    /// <param name="logger">Logger for file-load events.</param>
-    public FileTemplateContentResolver(ILogger<FileTemplateContentResolver> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<FileTemplateContentResolver> _logger = logger;
 
     /// <inheritdoc />
     public async Task<DocumentTemplate> ResolveAsync(
@@ -47,7 +38,7 @@ public sealed class FileTemplateContentResolver : ITemplateContentResolver
             _logger.LogDebug("Loading HTML from {Path}", fullPath);
             try
             {
-                resolvedHtml = await File.ReadAllTextAsync(fullPath, cancellationToken);
+                resolvedHtml = await File.ReadAllTextAsync(fullPath, cancellationToken).ConfigureAwait(false);
             }
             catch (FileNotFoundException ex)
             {
@@ -66,7 +57,7 @@ public sealed class FileTemplateContentResolver : ITemplateContentResolver
             _logger.LogDebug("Loading CSS from {Path}", fullPath);
             try
             {
-                resolvedCss = await File.ReadAllTextAsync(fullPath, cancellationToken);
+                resolvedCss = await File.ReadAllTextAsync(fullPath, cancellationToken).ConfigureAwait(false);
             }
             catch (FileNotFoundException ex)
             {

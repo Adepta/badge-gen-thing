@@ -3,11 +3,11 @@ using DocumentGenerator.Api.Models;
 using DocumentGenerator.Api.Services;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -59,8 +59,8 @@ public sealed class BadgesControllerTests : IDisposable
 
         var result = await _sut.RenderAsync(request, CancellationToken.None);
 
-        result.Should().BeOfType<OkObjectResult>()
-            .Which.StatusCode.Should().Be(200);
+        var ok = result.ShouldBeOfType<OkObjectResult>();
+        ok.StatusCode.ShouldBe(200);
     }
 
     [Fact]
@@ -70,7 +70,7 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.Success.Should().BeTrue();
+        body.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.DocumentBase64.Should().Be(Convert.ToBase64String(FakePdfBytes));
+        body.DocumentBase64.ShouldBe(Convert.ToBase64String(FakePdfBytes));
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(request, CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.CorrelationId.Should().Be(correlationId);
+        body.CorrelationId.ShouldBe(correlationId);
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(request, CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.CorrelationId.Should().NotBe(Guid.Empty);
+        body.CorrelationId.ShouldNotBe(Guid.Empty);
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(BuildRequest(format: "Pdf"), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.MimeType.Should().Be("application/pdf");
+        body.MimeType.ShouldBe("application/pdf");
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (OkObjectResult)await _sut.RenderAsync(BuildRequest(format: "Png"), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.MimeType.Should().Be("image/png");
+        body.MimeType.ShouldBe("image/png");
     }
 
     // ── Unknown template ──────────────────────────────────────────────────────
@@ -137,8 +137,8 @@ public sealed class BadgesControllerTests : IDisposable
 
         var result = await _sut.RenderAsync(request, CancellationToken.None);
 
-        result.Should().BeOfType<BadRequestObjectResult>()
-            .Which.StatusCode.Should().Be(400);
+        var bad = result.ShouldBeOfType<BadRequestObjectResult>();
+        bad.StatusCode.ShouldBe(400);
     }
 
     [Fact]
@@ -163,8 +163,8 @@ public sealed class BadgesControllerTests : IDisposable
 
         var result = await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
 
-        result.Should().BeOfType<ObjectResult>()
-            .Which.StatusCode.Should().Be(500);
+        var obj = result.ShouldBeOfType<ObjectResult>();
+        obj.StatusCode.ShouldBe(500);
     }
 
     [Fact]
@@ -177,8 +177,8 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (ObjectResult)await _sut.RenderAsync(BuildRequest(), CancellationToken.None);
         var body   = (BadgeRenderResponse)result.Value!;
 
-        body.Success.Should().BeFalse();
-        body.Error.Should().NotBeNullOrEmpty();
+        body.Success.ShouldBeFalse();
+        body.Error.ShouldNotBeNullOrEmpty();
     }
 
     // ── ListTemplates ─────────────────────────────────────────────────────────
@@ -189,7 +189,7 @@ public sealed class BadgesControllerTests : IDisposable
         var result = (OkObjectResult)_sut.ListTemplates();
         var names  = (IEnumerable<string>)result.Value!;
 
-        names.Should().Contain("badge-pulse-a6");
+        names.ShouldContain("badge-pulse-a6");
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

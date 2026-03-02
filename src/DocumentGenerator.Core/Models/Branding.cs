@@ -5,7 +5,7 @@ namespace DocumentGenerator.Core.Models;
 /// Colours, fonts, and logo are available as Handlebars variables
 /// under the {{branding.*}} namespace.
 /// </summary>
-public sealed class Branding
+public sealed record Branding
 {
     /// <summary>Friendly name shown in headers/footers, e.g. "Acme Corp".</summary>
     public string CompanyName { get; init; } = string.Empty;

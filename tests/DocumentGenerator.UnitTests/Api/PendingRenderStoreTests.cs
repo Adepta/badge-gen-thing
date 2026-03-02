@@ -1,6 +1,6 @@
 using DocumentGenerator.Api.Messaging;
 using DocumentGenerator.Messaging.Messages;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -29,8 +29,8 @@ public sealed class PendingRenderStoreTests
         var resolved = store.TryComplete(result);
         var awaited  = await resultTask;
 
-        resolved.Should().BeTrue();
-        awaited.CorrelationId.Should().Be(correlationId);
+        resolved.ShouldBeTrue();
+        awaited.CorrelationId.ShouldBe(correlationId);
     }
 
     [Fact]
@@ -44,8 +44,8 @@ public sealed class PendingRenderStoreTests
         store.TryComplete(result);
         var awaited = await resultTask;
 
-        awaited.Success.Should().BeTrue();
-        awaited.PdfBase64.Should().NotBeNullOrEmpty();
+        awaited.Success.ShouldBeTrue();
+        awaited.PdfBase64.ShouldNotBeNullOrEmpty();
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public sealed class PendingRenderStoreTests
 
         var resolved = store.TryComplete(result);
 
-        resolved.Should().BeFalse();
+        resolved.ShouldBeFalse();
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public sealed class PendingRenderStoreTests
         var result   = MakeResult(correlationId);
         var resolved = store.TryComplete(result);
 
-        resolved.Should().BeFalse();
+        resolved.ShouldBeFalse();
     }
 
     [Fact]
@@ -86,8 +86,7 @@ public sealed class PendingRenderStoreTests
         var resultTask = store.RegisterAsync(correlationId, cts.Token);
         cts.Cancel();
 
-        await resultTask.Invoking(t => t)
-            .Should().ThrowAsync<OperationCanceledException>();
+        await Should.ThrowAsync<OperationCanceledException>(async () => await resultTask);
     }
 
     // ── PendingCount ──────────────────────────────────────────────────────────
@@ -96,7 +95,7 @@ public sealed class PendingRenderStoreTests
     public void PendingCount_StartsAtZero()
     {
         var store = new PendingRenderStore();
-        store.PendingCount.Should().Be(0);
+        store.PendingCount.ShouldBe(0);
     }
 
     [Fact]
@@ -106,7 +105,7 @@ public sealed class PendingRenderStoreTests
         _ = store.RegisterAsync(Guid.NewGuid(), CancellationToken.None);
         _ = store.RegisterAsync(Guid.NewGuid(), CancellationToken.None);
 
-        store.PendingCount.Should().Be(2);
+        store.PendingCount.ShouldBe(2);
     }
 
     [Fact]
@@ -118,7 +117,7 @@ public sealed class PendingRenderStoreTests
 
         store.TryComplete(MakeResult(correlationId));
 
-        store.PendingCount.Should().Be(0);
+        store.PendingCount.ShouldBe(0);
     }
 
     // ── CancelAll ─────────────────────────────────────────────────────────────
@@ -132,8 +131,8 @@ public sealed class PendingRenderStoreTests
 
         store.CancelAll();
 
-        await t1.Invoking(t => t).Should().ThrowAsync<OperationCanceledException>();
-        await t2.Invoking(t => t).Should().ThrowAsync<OperationCanceledException>();
+        await Should.ThrowAsync<OperationCanceledException>(async () => await t1);
+        await Should.ThrowAsync<OperationCanceledException>(async () => await t2);
     }
 
     [Fact]
@@ -145,14 +144,13 @@ public sealed class PendingRenderStoreTests
 
         store.CancelAll();
 
-        store.PendingCount.Should().Be(0);
+        store.PendingCount.ShouldBe(0);
     }
 
     [Fact]
     public void CancelAll_OnEmptyStore_DoesNotThrow()
     {
         var store = new PendingRenderStore();
-        var act   = () => store.CancelAll();
-        act.Should().NotThrow();
+        Should.NotThrow(() => store.CancelAll());
     }
 }

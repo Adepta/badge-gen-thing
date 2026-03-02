@@ -14,23 +14,12 @@ namespace DocumentGenerator.Pdf;
 /// Each render opens a new Page (tab) within the browser, which is cheap
 /// compared to launching a full browser process.
 /// </summary>
-public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
+public sealed class PuppeteerDocumentRenderer(
+    IBrowserPool<IBrowser> pool,
+    ILogger<PuppeteerDocumentRenderer> logger) : IDocumentRenderer
 {
-    private readonly IBrowserPool<IBrowser> _pool;
-    private readonly ILogger<PuppeteerDocumentRenderer> _logger;
-
-    /// <summary>
-    /// Initialises the renderer with its pool and logger.
-    /// </summary>
-    /// <param name="pool">The Chromium browser pool to lease instances from.</param>
-    /// <param name="logger">Logger for render lifecycle events.</param>
-    public PuppeteerDocumentRenderer(
-        IBrowserPool<IBrowser> pool,
-        ILogger<PuppeteerDocumentRenderer> logger)
-    {
-        _pool   = pool;
-        _logger = logger;
-    }
+    private readonly IBrowserPool<IBrowser> _pool = pool;
+    private readonly ILogger<PuppeteerDocumentRenderer> _logger = logger;
 
     /// <summary>
     /// Renders the supplied HTML string to a PDF byte array using a leased Chromium instance.
@@ -49,12 +38,12 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
         _logger.LogDebug(
             "Acquiring browser lease — HtmlLength: {HtmlLength}", html.Length);
 
-        await using var lease = await _pool.AcquireAsync(cancellationToken);
+        await using var lease = await _pool.AcquireAsync(cancellationToken).ConfigureAwait(false);
 
         IPage? page = null;
         try
         {
-            page = await lease.Browser.NewPageAsync();
+            page = await lease.Browser.NewPageAsync().ConfigureAwait(false);
 
             // Load HTML directly — avoids file I/O and works in containers
             try
@@ -66,7 +55,7 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
                     // resources (e.g. Google Fonts) are slow or unreachable, causing blank PDFs.
                     WaitUntil = [WaitUntilNavigation.Load],
                     Timeout   = 30_000
-                });
+                }).ConfigureAwait(false);
             }
             catch (PuppeteerSharp.PuppeteerException ex) when (ex.Message.Contains("Timeout"))
             {
@@ -79,12 +68,12 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
             {
                 await page.EvaluateFunctionAsync(
                     "() => document.fonts.ready",
-                    Array.Empty<object>());
+                    Array.Empty<object>()).ConfigureAwait(false);
             }
             catch { /* best-effort — proceed even if fonts API unavailable */ }
 
             var pdfOptions = MapOptions(options);
-            var pdfBytes   = await page.PdfDataAsync(pdfOptions);
+            var pdfBytes   = await page.PdfDataAsync(pdfOptions).ConfigureAwait(false);
 
             sw.Stop();
             _logger.LogInformation(
@@ -115,7 +104,7 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
         {
             if (page is not null)
             {
-                try { await page.CloseAsync(); }
+                try { await page.CloseAsync().ConfigureAwait(false); }
                 catch { /* best-effort */ }
             }
         }
@@ -129,12 +118,12 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
         var sw = Stopwatch.StartNew();
         _logger.LogDebug("Acquiring browser lease for PNG — HtmlLength: {HtmlLength}", html.Length);
 
-        await using var lease = await _pool.AcquireAsync(cancellationToken);
+        await using var lease = await _pool.AcquireAsync(cancellationToken).ConfigureAwait(false);
 
         IPage? page = null;
         try
         {
-            page = await lease.Browser.NewPageAsync();
+            page = await lease.Browser.NewPageAsync().ConfigureAwait(false);
 
             // Measure the document's natural size after rendering at a neutral viewport,
             // then resize the viewport to match exactly so the screenshot clips to the badge.
@@ -144,7 +133,7 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
                 Width             = 1200,
                 Height            = 900,
                 DeviceScaleFactor = 2
-            });
+            }).ConfigureAwait(false);
 
             try
             {
@@ -152,7 +141,7 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
                 {
                     WaitUntil = [WaitUntilNavigation.Load],
                     Timeout   = 30_000
-                });
+                }).ConfigureAwait(false);
             }
             catch (PuppeteerSharp.PuppeteerException ex) when (ex.Message.Contains("Timeout"))
             {
@@ -163,7 +152,7 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
             {
                 await page.EvaluateFunctionAsync(
                     "() => document.fonts.ready",
-                    Array.Empty<object>());
+                    Array.Empty<object>()).ConfigureAwait(false);
             }
             catch { /* best-effort */ }
 
@@ -173,7 +162,7 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
                 const el = document.body.firstElementChild || document.body;
                 const r  = el.getBoundingClientRect();
                 return [Math.ceil(r.width), Math.ceil(r.height)];
-            }");
+            }").ConfigureAwait(false);
 
             var docWidth  = dimensions?[0] ?? 0;
             var docHeight = dimensions?[1] ?? 0;
@@ -187,14 +176,14 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
                     Width             = docWidth,
                     Height            = docHeight,
                     DeviceScaleFactor = 2
-                });
+                }).ConfigureAwait(false);
             }
 
             var pngBytes = await page.ScreenshotDataAsync(new ScreenshotOptions
             {
                 FullPage = false,   // capture only the viewport = the badge
                 Type     = ScreenshotType.Png
-            });
+            }).ConfigureAwait(false);
 
             sw.Stop();
             _logger.LogInformation(
@@ -222,7 +211,7 @@ public sealed class PuppeteerDocumentRenderer : IDocumentRenderer
         {
             if (page is not null)
             {
-                try { await page.CloseAsync(); }
+                try { await page.CloseAsync().ConfigureAwait(false); }
                 catch { /* best-effort */ }
             }
         }

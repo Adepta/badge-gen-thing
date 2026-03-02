@@ -2,9 +2,9 @@ using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Pdf;
-using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Pdf;
@@ -51,7 +51,7 @@ public sealed class DocumentPipelineTests
 
         var result = await _sut.ExecuteAsync(request);
 
-        result.PdfBytes.Should().Equal(FakePdfBytes);
+        result.PdfBytes.ShouldBe(FakePdfBytes);
     }
 
     [Fact]
@@ -62,7 +62,7 @@ public sealed class DocumentPipelineTests
 
         var result = await _sut.ExecuteAsync(request);
 
-        result.JobId.Should().Be(request.JobId);
+        result.JobId.ShouldBe(request.JobId);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public sealed class DocumentPipelineTests
 
         var result = await _sut.ExecuteAsync(request);
 
-        result.DocumentType.Should().Be("invoice");
+        result.DocumentType.ShouldBe("invoice");
     }
 
     [Fact]
@@ -84,7 +84,7 @@ public sealed class DocumentPipelineTests
 
         var result = await _sut.ExecuteAsync(request);
 
-        result.ElapsedTime.Should().BeGreaterThan(TimeSpan.Zero);
+        result.ElapsedTime.ShouldBeGreaterThan(TimeSpan.Zero);
     }
 
     [Fact]
@@ -153,10 +153,10 @@ public sealed class DocumentPipelineTests
 
         var act = async () => await _sut.ExecuteAsync(request);
 
-        var ex = await act.Should().ThrowAsync<RenderException>();
-        ex.Which.Code.Should().Be(ErrorCode.PipelineFailed);
-        ex.Which.InnerException.Should().BeOfType<InvalidOperationException>()
-            .Which.Message.Should().Be("engine boom");
+        var ex = await Should.ThrowAsync<RenderException>(act);
+        ex.Code.ShouldBe(ErrorCode.PipelineFailed);
+        var inner = ex.InnerException.ShouldBeOfType<InvalidOperationException>();
+        inner.Message.ShouldBe("engine boom");
     }
 
     [Fact]
@@ -174,10 +174,10 @@ public sealed class DocumentPipelineTests
 
         var act = async () => await _sut.ExecuteAsync(request);
 
-        var ex = await act.Should().ThrowAsync<RenderException>();
-        ex.Which.Code.Should().Be(ErrorCode.PipelineFailed);
-        ex.Which.InnerException.Should().BeOfType<TimeoutException>()
-            .Which.Message.Should().Be("chromium timeout");
+        var ex = await Should.ThrowAsync<RenderException>(act);
+        ex.Code.ShouldBe(ErrorCode.PipelineFailed);
+        var inner = ex.InnerException.ShouldBeOfType<TimeoutException>();
+        inner.Message.ShouldBe("chromium timeout");
     }
 
     [Fact]

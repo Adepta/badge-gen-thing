@@ -4,7 +4,7 @@ namespace DocumentGenerator.Core.Models;
 /// Per-document PDF rendering options. All properties are optional and
 /// fall back to sensible defaults in the rendering layer.
 /// </summary>
-public sealed class PdfOptions
+public sealed record PdfOptions
 {
     /// <summary>Paper format, e.g. "A4", "Letter". Ignored when Width and Height are set.</summary>
     public string Format { get; init; } = "A4";
@@ -38,7 +38,7 @@ public sealed class PdfOptions
 /// Page margin values in CSS units (e.g. <c>"10mm"</c>, <c>"0"</c>).
 /// Any null dimension falls back to the Chromium default for that side.
 /// </summary>
-public sealed class PdfMargins
+public sealed record PdfMargins
 {
     /// <summary>Top margin, e.g. <c>"10mm"</c>.</summary>
     public string? Top { get; init; }

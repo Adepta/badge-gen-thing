@@ -3,9 +3,9 @@ using DocumentGenerator.Core.Interfaces;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Pdf;
 using DocumentGenerator.Templating;
-using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.IntegrationTests.Worker;
@@ -62,9 +62,9 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
         var json       = JsonSerializer.Serialize(original, JsonOptions);
         var restored   = JsonSerializer.Deserialize<DocumentTemplate>(json, JsonOptions);
 
-        restored.Should().NotBeNull();
-        restored!.DocumentType.Should().Be("badge");
-        restored.Template.Html.Should().Be("<p>{{variables.name}}</p>");
+        restored.ShouldNotBeNull();
+        restored!.DocumentType.ShouldBe("badge");
+        restored.Template.Html.ShouldBe("<p>{{variables.name}}</p>");
     }
 
     [Fact]
@@ -74,13 +74,13 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
         await WriteTemplateFileAsync("invoice.json", template);
 
         var files = Directory.GetFiles(_templatesDir, "*.json");
-        files.Should().HaveCount(1);
+        files.Length.ShouldBe(1);
 
         await using var stream   = File.OpenRead(files[0]);
         var deserialized = await JsonSerializer.DeserializeAsync<DocumentTemplate>(stream, JsonOptions);
 
-        deserialized!.DocumentType.Should().Be("invoice");
-        deserialized.Template.Html.Should().Be("<h1>Invoice</h1>");
+        deserialized!.DocumentType.ShouldBe("invoice");
+        deserialized.Template.Html.ShouldBe("<h1>Invoice</h1>");
     }
 
     // -----------------------------------------------------------------------
@@ -99,7 +99,7 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
         await RenderFilesAsync(files, _outputDir);
 
         var outputFiles = Directory.GetFiles(_outputDir, "*.pdf");
-        outputFiles.Should().HaveCount(1);
+        outputFiles.Length.ShouldBe(1);
     }
 
     [Fact]
@@ -113,7 +113,7 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
 
         var outputFile = Directory.GetFiles(_outputDir, "*.pdf").Single();
         var bytes      = await File.ReadAllBytesAsync(outputFile);
-        bytes.Should().Equal(FakePdfBytes);
+        bytes.ShouldBe(FakePdfBytes);
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
         await RenderFilesAsync(files, _outputDir);
 
         var outputFiles = Directory.GetFiles(_outputDir, "*.pdf");
-        outputFiles.Should().HaveCount(2);
+        outputFiles.Length.ShouldBe(2);
     }
 
     [Fact]
@@ -139,7 +139,7 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
         await RenderFilesAsync(files, _outputDir);
 
         var outputFile = Directory.GetFiles(_outputDir, "*.pdf").Single();
-        Path.GetFileName(outputFile).Should().StartWith("certificate_");
+        Path.GetFileName(outputFile).ShouldStartWith("certificate_");
     }
 
     [Fact]
@@ -150,7 +150,7 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
 
         await RenderFilesAsync(files, _outputDir);
 
-        Directory.GetFiles(_outputDir, "*.pdf").Should().BeEmpty();
+        Directory.GetFiles(_outputDir, "*.pdf").ShouldBeEmpty();
     }
 
     [Fact]
@@ -172,7 +172,7 @@ public sealed class FileModeWorkerIntegrationTests : IDisposable
         var files = Directory.GetFiles(_templatesDir, "*.json");
         await RenderFilesAsync(files, _outputDir, rendererMock);
 
-        capturedHtml.Should().Be("Bob Smith");
+        capturedHtml.ShouldBe("Bob Smith");
     }
 
     // -----------------------------------------------------------------------

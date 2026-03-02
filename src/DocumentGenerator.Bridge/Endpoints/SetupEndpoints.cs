@@ -80,7 +80,7 @@ public static class SetupEndpoints
 }
 
 /// <summary>Request body for the connection test endpoint.</summary>
-public sealed class TestConnectionRequest
+public sealed record TestConnectionRequest
 {
     /// <summary>Cloud API base URL to test.</summary>
     public string BaseUrl { get; init; } = string.Empty;
@@ -89,7 +89,7 @@ public sealed class TestConnectionRequest
 }
 
 /// <summary>Request body for saving the setup configuration.</summary>
-public sealed class SaveConfigRequest
+public sealed record SaveConfigRequest
 {
     /// <summary>Base URL of the cloud Badge Producer API.</summary>
     public string CloudBaseUrl { get; init; } = string.Empty;

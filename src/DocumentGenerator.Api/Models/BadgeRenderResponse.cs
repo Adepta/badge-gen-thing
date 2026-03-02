@@ -4,7 +4,7 @@ namespace DocumentGenerator.Api.Models;
 /// Response body returned from POST /api/badges/render.
 /// On success, <see cref="DocumentBase64"/> contains the rendered badge encoded as Base64.
 /// </summary>
-public sealed class BadgeRenderResponse
+public sealed record BadgeRenderResponse
 {
     /// <summary>
     /// Echoes the <c>CorrelationId</c> supplied in the request (or a server-generated one).

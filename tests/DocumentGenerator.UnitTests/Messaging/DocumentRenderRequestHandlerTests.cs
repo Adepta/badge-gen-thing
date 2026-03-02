@@ -3,11 +3,11 @@ using DocumentGenerator.Core.Models;
 using DocumentGenerator.Messaging.Configuration;
 using DocumentGenerator.Messaging.Handlers;
 using DocumentGenerator.Messaging.Messages;
-using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using Rebus.Bus;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Messaging;
@@ -80,8 +80,8 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured.Should().NotBeNull();
-        captured!.PdfBase64.Should().Be(Convert.ToBase64String(FakePdfBytes));
+        captured.ShouldNotBeNull();
+        captured!.PdfBase64.ShouldBe(Convert.ToBase64String(FakePdfBytes));
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.PdfPath.Should().BeNull();
+        captured!.PdfPath.ShouldBeNull();
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.CorrelationId.Should().Be(message.CorrelationId);
+        captured!.CorrelationId.ShouldBe(message.CorrelationId);
     }
 
     [Fact]
@@ -132,7 +132,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.DeviceId.Should().Be("iPad-007");
+        captured!.DeviceId.ShouldBe("iPad-007");
     }
 
     [Fact]
@@ -149,7 +149,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.SessionId.Should().Be("conference-2026");
+        captured!.SessionId.ShouldBe("conference-2026");
     }
 
     [Fact]
@@ -178,7 +178,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.JobId.Should().Be(message.CorrelationId);
+        captured!.JobId.ShouldBe(message.CorrelationId);
     }
 
     // -----------------------------------------------------------------------
@@ -199,7 +199,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.PdfBase64.Should().BeNull();
+        captured!.PdfBase64.ShouldBeNull();
     }
 
     [Fact]
@@ -216,7 +216,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.PdfPath.Should().NotBeNullOrWhiteSpace();
+        captured!.PdfPath.ShouldNotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -233,8 +233,8 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        File.Exists(captured!.PdfPath).Should().BeTrue();
-        (await File.ReadAllBytesAsync(captured.PdfPath!)).Should().Equal(FakePdfBytes);
+        File.Exists(captured!.PdfPath).ShouldBeTrue();
+        (await File.ReadAllBytesAsync(captured.PdfPath!)).ShouldBe(FakePdfBytes);
     }
 
     [Fact]
@@ -252,9 +252,9 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
         await _sut.Handle(message);
 
         var fileName = Path.GetFileName(captured!.PdfPath);
-        fileName.Should().StartWith("badge_");
-        fileName.Should().Contain(message.CorrelationId.ToString("N"));
-        fileName.Should().EndWith(".pdf");
+        fileName.ShouldStartWith("badge_");
+        fileName.ShouldContain(message.CorrelationId.ToString("N"));
+        fileName.ShouldEndWith(".pdf");
     }
 
     [Fact]
@@ -309,7 +309,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
 
         await _sut.Handle(message);
 
-        captured!.ErrorMessage.Should().Be("render failed");
+        captured!.ErrorMessage.ShouldBe("render failed");
     }
 
     [Fact]
@@ -367,7 +367,7 @@ public sealed class DocumentRenderRequestHandlerTests : IDisposable
         var act = async () => await _sut.Handle(message);
 
         // Assert
-        await act.Should().ThrowAsync<DocumentGenerator.Core.Errors.BrowserPoolException>();
+        await Should.ThrowAsync<DocumentGenerator.Core.Errors.BrowserPoolException>(act);
     }
 
     [Fact]

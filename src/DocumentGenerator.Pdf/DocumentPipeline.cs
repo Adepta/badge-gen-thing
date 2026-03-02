@@ -70,10 +70,10 @@ public sealed class DocumentPipeline : IDocumentPipeline
             // basePath is empty because TemplateLocator always stores absolute paths.
             // This is a no-op when Html is already populated inline (e.g. in unit tests).
             var resolved = await _contentResolver.ResolveAsync(
-                request.Template, basePath: string.Empty, cancellationToken);
+                request.Template, basePath: string.Empty, cancellationToken).ConfigureAwait(false);
 
             // Step 2: Resolve Handlebars template → HTML
-            var html = await _templateEngine.RenderAsync(resolved, cancellationToken);
+            var html = await _templateEngine.RenderAsync(resolved, cancellationToken).ConfigureAwait(false);
 
             _logger.LogDebug(
                 "Template rendered to HTML — JobId: {JobId}, HtmlLength: {HtmlLength}",
@@ -82,8 +82,8 @@ public sealed class DocumentPipeline : IDocumentPipeline
             // Step 3: Render HTML → PDF or PNG bytes
             activity?.SetTag("output_format", request.OutputFormat.ToString());
             var pdfBytes = request.OutputFormat == OutputFormat.Png
-                ? await _renderer.RenderPngAsync(html, cancellationToken)
-                : await _renderer.RenderPdfAsync(html, request.Template.Pdf, cancellationToken);
+                ? await _renderer.RenderPngAsync(html, cancellationToken).ConfigureAwait(false)
+                : await _renderer.RenderPdfAsync(html, request.Template.Pdf, cancellationToken).ConfigureAwait(false);
 
             if (pdfBytes.Length == 0)
                 throw RenderException.EmptyOutput(request.JobId);
@@ -103,8 +103,7 @@ public sealed class DocumentPipeline : IDocumentPipeline
             activity?.SetTag("success", true);
 
             _logger.LogInformation(
-                "Pipeline complete — JobId: {JobId}, DocumentType: {DocumentType}, " +
-                "Bytes: {Bytes}, ElapsedMs: {ElapsedMs}",
+                "Pipeline complete — JobId: {JobId}, DocumentType: {DocumentType}, Bytes: {Bytes}, ElapsedMs: {ElapsedMs}",
                 request.JobId, docType, pdfBytes.Length, sw.ElapsedMilliseconds);
 
             return RenderResult.Success(request.JobId, pdfBytes, sw.Elapsed, docType);

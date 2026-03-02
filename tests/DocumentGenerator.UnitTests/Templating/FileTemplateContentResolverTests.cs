@@ -1,8 +1,8 @@
 using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Templating;
-using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Templating;
@@ -36,7 +36,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Should().BeSameAs(template, "no paths means nothing to resolve");
+        result.ShouldBeSameAs(template, "no paths means nothing to resolve");
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Template.Html.Should().Be("<p>hello</p>");
+        result.Template.Html.ShouldBe("<p>hello</p>");
     }
 
     // -----------------------------------------------------------------------
@@ -63,7 +63,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Template.Html.Should().Be(htmlContent);
+        result.Template.Html.ShouldBe(htmlContent);
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, basePath: @"C:\some\other\dir");
 
-        result.Template.Html.Should().Be(htmlContent);
+        result.Template.Html.ShouldBe(htmlContent);
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Template.Css.Should().BeNull();
+        result.Template.Css.ShouldBeNull();
     }
 
     // -----------------------------------------------------------------------
@@ -105,7 +105,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Template.Css.Should().Be(cssContent);
+        result.Template.Css.ShouldBe(cssContent);
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
         var result = await _sut.ResolveAsync(template, _tempDir);
 
         // Html defaults to string.Empty when no htmlPath / inline html is given
-        result.Template.Html.Should().Be(string.Empty);
+        result.Template.Html.ShouldBe(string.Empty);
     }
 
     // -----------------------------------------------------------------------
@@ -137,8 +137,8 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Template.Html.Should().Be(htmlContent);
-        result.Template.Css.Should().Be(cssContent);
+        result.Template.Html.ShouldBe(htmlContent);
+        result.Template.Css.ShouldBe(cssContent);
     }
 
     [Fact]
@@ -151,8 +151,8 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Template.HtmlPath.Should().Be("a.html");
-        result.Template.CssPath.Should().Be("a.css");
+        result.Template.HtmlPath.ShouldBe("a.html");
+        result.Template.CssPath.ShouldBe("a.css");
     }
 
     [Fact]
@@ -165,7 +165,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.Should().NotBeSameAs(template, "a new instance is returned with resolved content");
+        result.ShouldNotBeSameAs(template, "a new instance is returned with resolved content");
     }
 
     // -----------------------------------------------------------------------
@@ -193,11 +193,11 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var result = await _sut.ResolveAsync(template, _tempDir);
 
-        result.DocumentType.Should().Be("badge");
-        result.Version.Should().Be("3.0");
-        result.Branding.Should().BeSameAs(branding);
-        result.Variables.Should().BeSameAs(vars);
-        result.Pdf.Should().BeSameAs(pdf);
+        result.DocumentType.ShouldBe("badge");
+        result.Version.ShouldBe("3.0");
+        result.Branding.ShouldBeSameAs(branding);
+        result.Variables.ShouldBeSameAs(vars);
+        result.Pdf.ShouldBeSameAs(pdf);
     }
 
     // -----------------------------------------------------------------------
@@ -216,7 +216,7 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var act = async () => await _sut.ResolveAsync(template, _tempDir, cts.Token);
 
-        await act.Should().ThrowAsync<OperationCanceledException>();
+        await Should.ThrowAsync<OperationCanceledException>(act);
     }
 
     // -----------------------------------------------------------------------
@@ -230,8 +230,8 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var act = async () => await _sut.ResolveAsync(template, _tempDir);
 
-        var ex = await act.Should().ThrowAsync<TemplateException>();
-        ex.Which.Code.Should().Be(ErrorCode.TemplateReadFailed);
+        var ex = await Should.ThrowAsync<TemplateException>(act);
+        ex.Code.ShouldBe(ErrorCode.TemplateReadFailed);
     }
 
     [Fact]
@@ -241,8 +241,8 @@ public sealed class FileTemplateContentResolverTests : IDisposable
 
         var act = async () => await _sut.ResolveAsync(template, _tempDir);
 
-        var ex = await act.Should().ThrowAsync<TemplateException>();
-        ex.Which.Code.Should().Be(ErrorCode.TemplateReadFailed);
+        var ex = await Should.ThrowAsync<TemplateException>(act);
+        ex.Code.ShouldBe(ErrorCode.TemplateReadFailed);
     }
 
     // -----------------------------------------------------------------------

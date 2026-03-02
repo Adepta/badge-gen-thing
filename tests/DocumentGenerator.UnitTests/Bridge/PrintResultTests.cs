@@ -1,5 +1,5 @@
 using DocumentGenerator.Bridge.Printing;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Bridge;
@@ -15,21 +15,21 @@ public sealed class PrintResultTests
     public void Ok_SetsSuccessTrue()
     {
         var r = PrintResult.Ok("HP LaserJet");
-        r.Success.Should().BeTrue();
+        r.Success.ShouldBeTrue();
     }
 
     [Fact]
     public void Ok_SetsPrinterUsed()
     {
         var r = PrintResult.Ok("Zebra ZD621");
-        r.PrinterUsed.Should().Be("Zebra ZD621");
+        r.PrinterUsed.ShouldBe("Zebra ZD621");
     }
 
     [Fact]
     public void Ok_ErrorIsNull()
     {
         var r = PrintResult.Ok("HP LaserJet");
-        r.Error.Should().BeNull();
+        r.Error.ShouldBeNull();
     }
 
     // ── Fail ──────────────────────────────────────────────────────────────────
@@ -38,27 +38,27 @@ public sealed class PrintResultTests
     public void Fail_SetsSuccessFalse()
     {
         var r = PrintResult.Fail("spooler error");
-        r.Success.Should().BeFalse();
+        r.Success.ShouldBeFalse();
     }
 
     [Fact]
     public void Fail_SetsError()
     {
         var r = PrintResult.Fail("printer offline");
-        r.Error.Should().Be("printer offline");
+        r.Error.ShouldBe("printer offline");
     }
 
     [Fact]
     public void Fail_PrinterUsedIsNullWhenNotProvided()
     {
         var r = PrintResult.Fail("err");
-        r.PrinterUsed.Should().BeNull();
+        r.PrinterUsed.ShouldBeNull();
     }
 
     [Fact]
     public void Fail_SetsPrinterUsedWhenProvided()
     {
         var r = PrintResult.Fail("err", "Brother QL-820NWB");
-        r.PrinterUsed.Should().Be("Brother QL-820NWB");
+        r.PrinterUsed.ShouldBe("Brother QL-820NWB");
     }
 }

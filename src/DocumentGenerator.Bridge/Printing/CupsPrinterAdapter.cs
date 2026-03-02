@@ -15,18 +15,9 @@ namespace DocumentGenerator.Bridge.Printing;
 /// </remarks>
 [SupportedOSPlatform("linux")]
 [SupportedOSPlatform("macos")]
-public sealed class CupsPrinterAdapter : IPrinterAdapter
+public sealed class CupsPrinterAdapter(ILogger<CupsPrinterAdapter> logger) : IPrinterAdapter
 {
-    private readonly ILogger<CupsPrinterAdapter> _logger;
-
-    /// <summary>
-    /// Initialises a new <see cref="CupsPrinterAdapter"/>.
-    /// </summary>
-    /// <param name="logger">Logger for print job diagnostics.</param>
-    public CupsPrinterAdapter(ILogger<CupsPrinterAdapter> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<CupsPrinterAdapter> _logger = logger;
 
     /// <inheritdoc />
     public IEnumerable<string> GetAvailablePrinters()

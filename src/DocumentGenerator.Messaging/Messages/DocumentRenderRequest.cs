@@ -9,7 +9,7 @@ namespace DocumentGenerator.Messaging.Messages;
 /// Topic: render.requests
 /// Key:   CorrelationId (ensures ordering per-request within a partition)
 /// </summary>
-public sealed class DocumentRenderRequest
+public sealed record DocumentRenderRequest
 {
     /// <summary>
     /// Unique ID for this render job. The iPad sets this and uses it to

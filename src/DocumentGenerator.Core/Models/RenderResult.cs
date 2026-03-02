@@ -3,7 +3,7 @@ namespace DocumentGenerator.Core.Models;
 /// <summary>
 /// The output of a completed render job.
 /// </summary>
-public sealed class RenderResult
+public sealed record RenderResult
 {
     /// <summary>Matches the originating <see cref="RenderRequest.JobId"/>.</summary>
     public Guid JobId { get; init; }

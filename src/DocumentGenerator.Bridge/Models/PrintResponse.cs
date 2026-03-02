@@ -3,7 +3,7 @@ namespace DocumentGenerator.Bridge.Models;
 /// <summary>
 /// Response returned to the iPad by both <c>POST /print</c> and <c>POST /render</c>.
 /// </summary>
-public sealed class PrintResponse
+public sealed record PrintResponse
 {
     /// <summary>
     /// Echoes the <c>CorrelationId</c> from the request (or a bridge-generated one).

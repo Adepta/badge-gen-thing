@@ -3,10 +3,10 @@ using DocumentGenerator.Core.Models;
 using DocumentGenerator.Pdf;
 using DocumentGenerator.Templating;
 using DocumentGenerator.Templating.Extensions;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Shouldly;
 using Xunit;
 
 
@@ -57,7 +57,7 @@ public sealed class RenderPipelineIntegrationTests
 
         var result = await pipeline.ExecuteAsync(request);
 
-        result.PdfBytes.Should().Equal(FakePdfBytes);
+        result.PdfBytes.ShouldBe(FakePdfBytes);
     }
 
     [Fact]
@@ -79,8 +79,8 @@ public sealed class RenderPipelineIntegrationTests
 
         await pipeline.ExecuteAsync(request);
 
-        capturedHtml.Should().Contain("Integration Test");
-        capturedHtml.Should().NotContain("{{variables.name}}");
+        capturedHtml!.ShouldContain("Integration Test");
+        capturedHtml!.ShouldNotContain("{{variables.name}}");
     }
 
     [Fact]
@@ -102,7 +102,7 @@ public sealed class RenderPipelineIntegrationTests
 
         await pipeline.ExecuteAsync(request);
 
-        capturedHtml.Should().Contain("ACME");
+        capturedHtml!.ShouldContain("ACME");
     }
 
     [Fact]
@@ -133,8 +133,8 @@ public sealed class RenderPipelineIntegrationTests
 
         await pipeline.ExecuteAsync(request);
 
-        capturedHtml.Should().Contain("<style>body { background: blue; }</style>");
-        capturedHtml.Should().Contain("</head>");
+        capturedHtml!.ShouldContain("<style>body { background: blue; }</style>");
+        capturedHtml!.ShouldContain("</head>");
     }
 
     [Fact]
@@ -156,7 +156,7 @@ public sealed class RenderPipelineIntegrationTests
 
         await pipeline.ExecuteAsync(request);
 
-        capturedHtml.Should().Be("WORLD");
+        capturedHtml.ShouldBe("WORLD");
     }
 
     [Fact]
@@ -178,7 +178,7 @@ public sealed class RenderPipelineIntegrationTests
 
         await pipeline.ExecuteAsync(request);
 
-        capturedHtml.Should().Be("Jane Doe");
+        capturedHtml.ShouldBe("Jane Doe");
     }
 
     [Fact]
@@ -189,7 +189,7 @@ public sealed class RenderPipelineIntegrationTests
 
         var result = await pipeline.ExecuteAsync(request);
 
-        result.JobId.Should().Be(request.JobId);
+        result.JobId.ShouldBe(request.JobId);
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public sealed class RenderPipelineIntegrationTests
 
         var result = await pipeline.ExecuteAsync(request);
 
-        result.DocumentType.Should().Be("certificate");
+        result.DocumentType.ShouldBe("certificate");
     }
 
     [Fact]
@@ -234,7 +234,7 @@ public sealed class RenderPipelineIntegrationTests
 
         await pipeline.ExecuteAsync(request);
 
-        capturedHtml.Should().Be("<footer>Confidential</footer>");
+        capturedHtml.ShouldBe("<footer>Confidential</footer>");
     }
 
     // -----------------------------------------------------------------------
@@ -251,7 +251,8 @@ public sealed class RenderPipelineIntegrationTests
         using var provider = services.BuildServiceProvider();
         var engine = provider.GetService<ITemplateEngine>();
 
-        engine.Should().NotBeNull().And.BeOfType<HandlebarsTemplateEngine>();
+        engine.ShouldNotBeNull();
+        engine.ShouldBeOfType<HandlebarsTemplateEngine>();
     }
 
     // -----------------------------------------------------------------------

@@ -1,6 +1,6 @@
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Messaging.Messages;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Core;
@@ -21,7 +21,7 @@ public sealed class ModelTests
         var jobId    = Guid.NewGuid();
         var result   = RenderResult.Success(jobId, [0x01], TimeSpan.FromSeconds(1), "badge");
 
-        result.JobId.Should().Be(jobId);
+        result.JobId.ShouldBe(jobId);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public sealed class ModelTests
         byte[] bytes = [0x25, 0x50, 0x44, 0x46];
         var result   = RenderResult.Success(Guid.NewGuid(), bytes, TimeSpan.Zero, "badge");
 
-        result.PdfBytes.Should().Equal(bytes);
+        result.PdfBytes.ShouldBe(bytes);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public sealed class ModelTests
         var elapsed = TimeSpan.FromMilliseconds(350);
         var result  = RenderResult.Success(Guid.NewGuid(), [0x01], elapsed, "badge");
 
-        result.ElapsedTime.Should().Be(elapsed);
+        result.ElapsedTime.ShouldBe(elapsed);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public sealed class ModelTests
     {
         var result = RenderResult.Success(Guid.NewGuid(), [0x01], TimeSpan.Zero, "invoice");
 
-        result.DocumentType.Should().Be("invoice");
+        result.DocumentType.ShouldBe("invoice");
     }
 
     // -----------------------------------------------------------------------
@@ -60,7 +60,7 @@ public sealed class ModelTests
         var result = DocumentRenderResult.Succeeded(
             Guid.NewGuid(), "device-1", null, "badge", [0x01], TimeSpan.Zero);
 
-        result.Success.Should().BeTrue();
+        result.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -70,7 +70,7 @@ public sealed class ModelTests
         var    result = DocumentRenderResult.Succeeded(
             Guid.NewGuid(), "device-1", null, "badge", bytes, TimeSpan.Zero);
 
-        result.PdfBase64.Should().Be(Convert.ToBase64String(bytes));
+        result.PdfBase64.ShouldBe(Convert.ToBase64String(bytes));
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public sealed class ModelTests
         var result = DocumentRenderResult.Succeeded(
             Guid.NewGuid(), "device-1", null, "badge", [0x01], TimeSpan.Zero);
 
-        result.ErrorMessage.Should().BeNull();
+        result.ErrorMessage.ShouldBeNull();
     }
 
     [Fact]
@@ -89,9 +89,9 @@ public sealed class ModelTests
         var result        = DocumentRenderResult.Succeeded(
             correlationId, "iPad-7", "conf-2026", "badge", [0x01], TimeSpan.Zero);
 
-        result.CorrelationId.Should().Be(correlationId);
-        result.DeviceId.Should().Be("iPad-7");
-        result.SessionId.Should().Be("conf-2026");
+        result.CorrelationId.ShouldBe(correlationId);
+        result.DeviceId.ShouldBe("iPad-7");
+        result.SessionId.ShouldBe("conf-2026");
     }
 
     // -----------------------------------------------------------------------
@@ -104,7 +104,7 @@ public sealed class ModelTests
         var result = DocumentRenderResult.Failed(
             Guid.NewGuid(), "device-1", null, "badge", "Something went wrong");
 
-        result.Success.Should().BeFalse();
+        result.Success.ShouldBeFalse();
     }
 
     [Fact]
@@ -114,7 +114,7 @@ public sealed class ModelTests
         var result = DocumentRenderResult.Failed(
             Guid.NewGuid(), "device-1", null, "badge", error);
 
-        result.ErrorMessage.Should().Be(error);
+        result.ErrorMessage.ShouldBe(error);
     }
 
     [Fact]
@@ -123,7 +123,7 @@ public sealed class ModelTests
         var result = DocumentRenderResult.Failed(
             Guid.NewGuid(), "device-1", null, "badge", "error");
 
-        result.PdfBase64.Should().BeNull();
+        result.PdfBase64.ShouldBeNull();
     }
 
     // -----------------------------------------------------------------------
@@ -136,8 +136,8 @@ public sealed class ModelTests
         var r1 = new RenderRequest { Template = new DocumentTemplate() };
         var r2 = new RenderRequest { Template = new DocumentTemplate() };
 
-        r1.JobId.Should().NotBeEmpty();
-        r1.JobId.Should().NotBe(r2.JobId);
+        r1.JobId.ShouldNotBe(Guid.Empty);
+        r1.JobId.ShouldNotBe(r2.JobId);
     }
 
     [Fact]
@@ -147,7 +147,8 @@ public sealed class ModelTests
         var request = new RenderRequest { Template = new DocumentTemplate() };
         var after   = DateTimeOffset.UtcNow.AddSeconds(1);
 
-        request.CreatedAt.Should().BeAfter(before).And.BeBefore(after);
+        request.CreatedAt.ShouldBeGreaterThan(before);
+        request.CreatedAt.ShouldBeLessThan(after);
     }
 
     // -----------------------------------------------------------------------
@@ -158,21 +159,22 @@ public sealed class ModelTests
     public void DocumentTemplate_DefaultVersion_Is1_0()
     {
         var t = new DocumentTemplate();
-        t.Version.Should().Be("1.0");
+        t.Version.ShouldBe("1.0");
     }
 
     [Fact]
     public void DocumentTemplate_DefaultVariables_IsEmptyDictionary()
     {
         var t = new DocumentTemplate();
-        t.Variables.Should().NotBeNull().And.BeEmpty();
+        t.Variables.ShouldNotBeNull();
+        t.Variables.ShouldBeEmpty();
     }
 
     [Fact]
     public void DocumentTemplate_DefaultPdf_HasA4Format()
     {
         var t = new DocumentTemplate();
-        t.Pdf.Format.Should().Be("A4");
+        t.Pdf.Format.ShouldBe("A4");
     }
 
     // -----------------------------------------------------------------------
@@ -184,13 +186,13 @@ public sealed class ModelTests
     {
         var o = new PdfOptions();
 
-        o.Format.Should().Be("A4");
-        o.Landscape.Should().BeFalse();
-        o.PrintBackground.Should().BeTrue();
-        o.Scale.Should().Be(1.0);
-        o.Width.Should().BeNull();
-        o.Height.Should().BeNull();
-        o.Margins.Should().BeNull();
+        o.Format.ShouldBe("A4");
+        o.Landscape.ShouldBeFalse();
+        o.PrintBackground.ShouldBeTrue();
+        o.Scale.ShouldBe(1.0);
+        o.Width.ShouldBeNull();
+        o.Height.ShouldBeNull();
+        o.Margins.ShouldBeNull();
     }
 
     // -----------------------------------------------------------------------
@@ -201,7 +203,8 @@ public sealed class ModelTests
     public void Branding_DefaultCustomDictionary_IsEmpty()
     {
         var b = new Branding();
-        b.Custom.Should().NotBeNull().And.BeEmpty();
+        b.Custom.ShouldNotBeNull();
+        b.Custom.ShouldBeEmpty();
     }
 
     // -----------------------------------------------------------------------
@@ -212,13 +215,14 @@ public sealed class ModelTests
     public void TemplateContent_DefaultPartials_IsEmpty()
     {
         var t = new TemplateContent();
-        t.Partials.Should().NotBeNull().And.BeEmpty();
+        t.Partials.ShouldNotBeNull();
+        t.Partials.ShouldBeEmpty();
     }
 
     [Fact]
     public void TemplateContent_DefaultCss_IsNull()
     {
         var t = new TemplateContent();
-        t.Css.Should().BeNull();
+        t.Css.ShouldBeNull();
     }
 }

@@ -9,7 +9,7 @@ namespace DocumentGenerator.Core.Models;
 /// by referencing external files (<see cref="HtmlPath"/>/<see cref="CssPath"/>).
 /// When both are present, inline content takes precedence.
 /// </summary>
-public sealed class TemplateContent
+public sealed record TemplateContent
 {
     /// <summary>
     /// Full HTML document or fragment. May reference {{branding.*}} and

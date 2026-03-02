@@ -171,7 +171,7 @@ public sealed class CloudBadgeClient
 /// <summary>
 /// Shape of the JSON response returned by <c>POST /api/badges/render</c> on the cloud API.
 /// </summary>
-public sealed class CloudRenderResponse
+public sealed record CloudRenderResponse
 {
     /// <summary>Correlation ID echoed from the request.</summary>
     public Guid CorrelationId { get; init; }

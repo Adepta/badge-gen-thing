@@ -1,9 +1,9 @@
 using DocumentGenerator.Api.Services;
 using DocumentGenerator.Core.Errors;
 using DocumentGenerator.Core.Models;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -46,35 +46,35 @@ public sealed class TemplateLocatorTests : IDisposable
     public void Resolve_KnownTemplate_ReturnsDocumentTemplate()
     {
         var result = _sut.Resolve("badge-pulse-a6", []);
-        result.Should().NotBeNull();
+        result.ShouldNotBeNull();
     }
 
     [Fact]
     public void Resolve_SetsDocumentTypeToBadge()
     {
         var result = _sut.Resolve("badge-pulse-a6", []);
-        result.DocumentType.Should().Be("badge");
+        result.DocumentType.ShouldBe("badge");
     }
 
     [Fact]
     public void Resolve_SetsHtmlPath()
     {
         var result = _sut.Resolve("badge-pulse-a6", []);
-        result.Template.HtmlPath.Should().EndWith("badge-pulse-a6.html");
+        result.Template.HtmlPath.ShouldEndWith("badge-pulse-a6.html");
     }
 
     [Fact]
     public void Resolve_SetsCssPathWhenCssFileExists()
     {
         var result = _sut.Resolve("badge-pulse-a6", []);
-        result.Template.CssPath.Should().EndWith("badge-pulse-a6.css");
+        result.Template.CssPath.ShouldEndWith("badge-pulse-a6.css");
     }
 
     [Fact]
     public void Resolve_NoCssFile_CssPathIsNull()
     {
         var result = _sut.Resolve("badge-executive-cc", []);
-        result.Template.CssPath.Should().BeNull();
+        result.Template.CssPath.ShouldBeNull();
     }
 
     [Fact]
@@ -82,8 +82,8 @@ public sealed class TemplateLocatorTests : IDisposable
     {
         var vars   = new Dictionary<string, object?> { ["firstName"] = "Jane" };
         var result = _sut.Resolve("badge-pulse-a6", vars);
-        result.Variables.Should().ContainKey("firstName");
-        result.Variables["firstName"].Should().Be("Jane");
+        result.Variables.ShouldContainKey("firstName");
+        result.Variables["firstName"].ShouldBe("Jane");
     }
 
     [Fact]
@@ -91,22 +91,21 @@ public sealed class TemplateLocatorTests : IDisposable
     {
         var branding = new Branding { CompanyName = "Acme" };
         var result   = _sut.Resolve("badge-pulse-a6", [], branding);
-        result.Branding.CompanyName.Should().Be("Acme");
+        result.Branding.CompanyName.ShouldBe("Acme");
     }
 
     [Fact]
     public void Resolve_DefaultsBrandingWhenNull()
     {
         var result = _sut.Resolve("badge-pulse-a6", [], null);
-        result.Branding.Should().NotBeNull();
+        result.Branding.ShouldNotBeNull();
     }
 
     [Fact]
     public void Resolve_UnknownTemplate_ThrowsTemplateException()
     {
-        var act = () => _sut.Resolve("does-not-exist", []);
-        act.Should().Throw<TemplateException>()
-            .Which.Code.Should().Be(ErrorCode.TemplateNotFound);
+        var ex = Should.Throw<TemplateException>(() => _sut.Resolve("does-not-exist", []));
+        ex.Code.ShouldBe(ErrorCode.TemplateNotFound);
     }
 
     // ── PDF options by suffix ─────────────────────────────────────────────────
@@ -115,33 +114,33 @@ public sealed class TemplateLocatorTests : IDisposable
     public void Resolve_A6Suffix_Sets105x148Dimensions()
     {
         var result = _sut.Resolve("badge-pulse-a6", []);
-        result.Pdf.Width.Should().Be("105mm");
-        result.Pdf.Height.Should().Be("148mm");
+        result.Pdf.Width.ShouldBe("105mm");
+        result.Pdf.Height.ShouldBe("148mm");
     }
 
     [Fact]
     public void Resolve_CcSuffix_Sets85x54Dimensions()
     {
         var result = _sut.Resolve("badge-executive-cc", []);
-        result.Pdf.Width.Should().Be("85.6mm");
-        result.Pdf.Height.Should().Be("54mm");
+        result.Pdf.Width.ShouldBe("85.6mm");
+        result.Pdf.Height.ShouldBe("54mm");
     }
 
     [Fact]
     public void Resolve_NoSuffix_SetsA4Format()
     {
         var result = _sut.Resolve("badge-plain", []);
-        result.Pdf.Format.Should().Be("A4");
-        result.Pdf.Width.Should().BeNull();
+        result.Pdf.Format.ShouldBe("A4");
+        result.Pdf.Width.ShouldBeNull();
     }
 
     [Fact]
     public void Resolve_A6Suffix_HasZeroMargins()
     {
         var result = _sut.Resolve("badge-pulse-a6", []);
-        result.Pdf.Margins.Should().NotBeNull();
-        result.Pdf.Margins!.Top.Should().Be("0mm");
-        result.Pdf.Margins.Left.Should().Be("0mm");
+        result.Pdf.Margins.ShouldNotBeNull();
+        result.Pdf.Margins!.Top.ShouldBe("0mm");
+        result.Pdf.Margins.Left.ShouldBe("0mm");
     }
 
     // ── ListTemplates ─────────────────────────────────────────────────────────
@@ -150,9 +149,9 @@ public sealed class TemplateLocatorTests : IDisposable
     public void ListTemplates_ReturnsAllHtmlFileNames()
     {
         var templates = _sut.ListTemplates().ToList();
-        templates.Should().Contain("badge-pulse-a6");
-        templates.Should().Contain("badge-executive-cc");
-        templates.Should().Contain("badge-plain");
+        templates.ShouldContain("badge-pulse-a6");
+        templates.ShouldContain("badge-executive-cc");
+        templates.ShouldContain("badge-plain");
     }
 
     [Fact]
@@ -160,7 +159,7 @@ public sealed class TemplateLocatorTests : IDisposable
     {
         File.WriteAllText(Path.Combine(_tempDir, "sample-badge.html"), "<p/>");
         var templates = _sut.ListTemplates().ToList();
-        templates.Should().NotContain("sample-badge");
+        templates.ShouldNotContain("sample-badge");
     }
 
     [Fact]
@@ -179,7 +178,7 @@ public sealed class TemplateLocatorTests : IDisposable
         var locator   = new TemplateLocator(config, NullLogger<TemplateLocator>.Instance);
         var templates = locator.ListTemplates();
 
-        templates.Should().BeEmpty();
+        templates.ShouldBeEmpty();
         Directory.Delete(emptyDir);
     }
 

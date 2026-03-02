@@ -7,7 +7,7 @@ namespace DocumentGenerator.Core.Models;
 /// services — whether it arrived from the console, an HTTP endpoint,
 /// or a queue message.
 /// </summary>
-public sealed class RenderRequest
+public sealed record RenderRequest
 {
     /// <summary>Unique identifier for this job — useful for logging and tracing.</summary>
     public Guid JobId { get; init; } = Guid.NewGuid();

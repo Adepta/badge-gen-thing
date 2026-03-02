@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using DocumentGenerator.Bridge.Models;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.IntegrationTests.Bridge;
@@ -34,7 +34,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     public async Task Health_Get_Returns200()
     {
         var response = await _client.GetAsync("/health");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.GetAsync("/health");
         var body     = await response.Content.ReadAsStringAsync();
-        body.Should().Contain("healthy");
+        body.ShouldContain("healthy");
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.GetAsync("/health");
         var json     = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-        json.RootElement.GetProperty("isConfigured").GetBoolean().Should().BeTrue();
+        json.RootElement.GetProperty("isConfigured").GetBoolean().ShouldBeTrue();
     }
 
     // ── GET /printers ─────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     public async Task Printers_Get_Returns200()
     {
         var response = await _client.GetAsync("/printers");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response  = await _client.GetAsync("/printers");
         var printers  = await response.Content.ReadFromJsonAsync<IEnumerable<string>>(JsonOpts);
-        printers.Should().Contain("TestPrinter");
+        printers!.ShouldContain("TestPrinter");
     }
 
     // ── GET /templates ────────────────────────────────────────────────────────
@@ -76,7 +76,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     public async Task Templates_Get_Returns200()
     {
         var response = await _client.GetAsync("/templates");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     // ── POST /render ──────────────────────────────────────────────────────────
@@ -85,7 +85,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     public async Task Render_ValidRequest_Returns200()
     {
         var response = await _client.PostAsJsonAsync("/render", BuildPrintRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/render", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.Success.Should().BeTrue();
+        body!.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/render", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.DocumentBase64.Should().Be(BridgeWebApplicationFactory.FakeBase64);
+        body!.DocumentBase64.ShouldBe(BridgeWebApplicationFactory.FakeBase64);
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/render", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.Printed.Should().BeNull();
+        body!.Printed.ShouldBeNull();
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
         var correlationId = Guid.NewGuid();
         var response      = await _client.PostAsJsonAsync("/render", BuildPrintRequest(correlationId));
         var body          = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.CorrelationId.Should().Be(correlationId);
+        body!.CorrelationId.ShouldBe(correlationId);
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         _factory.PrinterAdapter.PrintCalled = false; // reset
         await _client.PostAsJsonAsync("/render", BuildPrintRequest());
-        _factory.PrinterAdapter.PrintCalled.Should().BeFalse();
+        _factory.PrinterAdapter.PrintCalled.ShouldBeFalse();
     }
 
     // ── POST /print ───────────────────────────────────────────────────────────
@@ -135,7 +135,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     public async Task Print_ValidRequest_Returns200()
     {
         var response = await _client.PostAsJsonAsync("/print", BuildPrintRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/print", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.Success.Should().BeTrue();
+        body!.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -151,7 +151,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/print", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.Printed.Should().BeTrue();
+        (body!.Printed == true).ShouldBeTrue();
     }
 
     [Fact]
@@ -159,7 +159,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/print", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.DocumentBase64.Should().NotBeNullOrEmpty();
+        body!.DocumentBase64.ShouldNotBeNullOrEmpty();
     }
 
     [Fact]
@@ -167,7 +167,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/print", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
-        body!.PrinterUsed.Should().NotBeNullOrEmpty();
+        body!.PrinterUsed.ShouldNotBeNullOrEmpty();
     }
 
     [Fact]
@@ -175,7 +175,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         _factory.PrinterAdapter.PrintCalled = false;  // reset
         await _client.PostAsJsonAsync("/print", BuildPrintRequest());
-        _factory.PrinterAdapter.PrintCalled.Should().BeTrue();
+        _factory.PrinterAdapter.PrintCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -183,7 +183,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var request  = BuildPrintRequest(printerName: "OfflinePrinter");
         await _client.PostAsJsonAsync("/print", request);
-        _factory.PrinterAdapter.LastPrinterName.Should().Be("OfflinePrinter");
+        _factory.PrinterAdapter.LastPrinterName.ShouldBe("OfflinePrinter");
     }
 
     [Fact]
@@ -195,8 +195,8 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
 
         // Document is always returned, even if print fails
-        body!.DocumentBase64.Should().NotBeNullOrEmpty();
-        body.Printed.Should().BeFalse();
+        body!.DocumentBase64.ShouldNotBeNullOrEmpty();
+        (body.Printed == false).ShouldBeTrue();
 
         _factory.PrinterAdapter.ShouldSucceed = true; // restore
     }
@@ -209,7 +209,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
         var response = await _client.PostAsJsonAsync("/print", BuildPrintRequest());
         var body     = await response.Content.ReadFromJsonAsync<PrintResponse>(JsonOpts);
 
-        body!.Success.Should().BeFalse();
+        body!.Success.ShouldBeFalse();
 
         _factory.CloudHandler.ShouldSucceed = true; // restore
     }
@@ -221,7 +221,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         // Bridge is configured in test factory — /render should work, not redirect
         var response = await _client.PostAsJsonAsync("/render", BuildPrintRequest());
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     // ── GET /setup/printers ───────────────────────────────────────────────────
@@ -230,7 +230,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     public async Task SetupPrinters_Get_Returns200()
     {
         var response = await _client.GetAsync("/setup/printers");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -238,7 +238,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.GetAsync("/setup/printers");
         var printers = await response.Content.ReadFromJsonAsync<IEnumerable<string>>(JsonOpts);
-        printers.Should().NotBeEmpty();
+        printers.ShouldNotBeEmpty();
     }
 
     // ── POST /setup/test-connection ───────────────────────────────────────────
@@ -248,7 +248,7 @@ public sealed class BridgeEndpointsIntegrationTests : IClassFixture<BridgeWebApp
     {
         var response = await _client.PostAsJsonAsync("/setup/test-connection",
             new { baseUrl = "http://fake-cloud", apiKey = "test-key" });
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

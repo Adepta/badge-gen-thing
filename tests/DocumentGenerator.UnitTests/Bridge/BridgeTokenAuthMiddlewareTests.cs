@@ -1,8 +1,8 @@
 using DocumentGenerator.Bridge.Configuration;
 using DocumentGenerator.Bridge.Middleware;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Bridge;
@@ -26,7 +26,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: null));
 
-        nextCalled.Should().BeTrue();
+        nextCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ""));
 
-        nextCalled.Should().BeTrue();
+        nextCalled.ShouldBeTrue();
     }
 
     // ── Health / setup bypass — even when token is configured ─────────────────
@@ -52,8 +52,8 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        nextCalled.Should().BeTrue();
-        ctx.Response.StatusCode.Should().NotBe(StatusCodes.Status401Unauthorized);
+        nextCalled.ShouldBeTrue();
+        ctx.Response.StatusCode.ShouldNotBe(StatusCodes.Status401Unauthorized);
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        nextCalled.Should().BeTrue();
+        nextCalled.ShouldBeTrue();
     }
 
     // ── Token present and correct ─────────────────────────────────────────────
@@ -79,7 +79,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        nextCalled.Should().BeTrue();
+        nextCalled.ShouldBeTrue();
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        ctx.Response.StatusCode.Should().NotBe(StatusCodes.Status401Unauthorized);
+        ctx.Response.StatusCode.ShouldNotBe(StatusCodes.Status401Unauthorized);
     }
 
     // ── Token missing ─────────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        ctx.Response.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+        ctx.Response.StatusCode.ShouldBe(StatusCodes.Status401Unauthorized);
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        nextCalled.Should().BeFalse();
+        nextCalled.ShouldBeFalse();
     }
 
     // ── Token wrong ───────────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        ctx.Response.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+        ctx.Response.StatusCode.ShouldBe(StatusCodes.Status401Unauthorized);
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public sealed class BridgeTokenAuthMiddlewareTests
 
         await sut.InvokeAsync(ctx, Options(configuredToken: ValidToken));
 
-        nextCalled.Should().BeFalse();
+        nextCalled.ShouldBeFalse();
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

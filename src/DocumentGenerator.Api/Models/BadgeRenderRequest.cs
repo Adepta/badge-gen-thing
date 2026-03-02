@@ -6,7 +6,7 @@ namespace DocumentGenerator.Api.Models;
 /// Request body for POST /api/badges/render.
 /// The iPad (via the bridge) sends attendee data and template selection here.
 /// </summary>
-public sealed class BadgeRenderRequest
+public sealed record BadgeRenderRequest
 {
     /// <summary>
     /// The template to use, e.g. "badge-pulse-a6", "badge-executive-cc".
@@ -44,7 +44,7 @@ public sealed class BadgeRenderRequest
 /// branding values when present. All properties are nullable; <see langword="null"/>
 /// means "use template default".
 /// </summary>
-public sealed class BadgeBrandingRequest
+public sealed record BadgeBrandingRequest
 {
     /// <summary>Display name of the organising company shown on the badge.</summary>
     public string? CompanyName { get; init; }

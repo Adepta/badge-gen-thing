@@ -7,7 +7,7 @@ namespace DocumentGenerator.Messaging.Messages;
 /// Topic: render.results
 /// Key:   CorrelationId (iPad filters on this to find its own response)
 /// </summary>
-public sealed class DocumentRenderResult
+public sealed record DocumentRenderResult
 {
     /// <summary>Matches <see cref="DocumentRenderRequest.CorrelationId"/>.</summary>
     public Guid CorrelationId { get; init; }

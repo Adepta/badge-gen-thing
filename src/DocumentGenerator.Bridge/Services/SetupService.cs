@@ -61,24 +61,24 @@ public sealed class SetupService
         // plaintext if the appsettings.json file is leaked.
         var protectedApiKey = _protector.Protect(apiKey);
 
-        var raw = await File.ReadAllTextAsync(_settingsPath);
+        var raw = await File.ReadAllTextAsync(_settingsPath).ConfigureAwait(false);
         var doc = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(raw) ?? [];
 
         var updated = new Dictionary<string, object?>(
             doc.ToDictionary(k => k.Key, k => (object?)k.Value))
         {
-            [BridgeOptions.Section] = new
+            [BridgeOptions.SectionName] = new
             {
                 port,
                 isConfigured = true
             },
-            [CloudOptions.Section] = new
+            [CloudOptions.SectionName] = new
             {
                 baseUrl          = cloudBaseUrl,
                 protectedApiKey,          // stored encrypted; runtime reads via IDataProtector
                 timeout          = "00:00:30"
             },
-            [PrinterOptions.Section] = new
+            [PrinterOptions.SectionName] = new
             {
                 defaultPrinterName,
                 format
@@ -86,7 +86,7 @@ public sealed class SetupService
         };
 
         var json = JsonSerializer.Serialize(updated, WriteOptions);
-        await File.WriteAllTextAsync(_settingsPath, json);
+        await File.WriteAllTextAsync(_settingsPath, json).ConfigureAwait(false);
 
         _logger.LogInformation("Bridge configuration saved successfully (API key is protected).");
     }
@@ -104,9 +104,7 @@ public sealed class SetupService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to decrypt cloud API key. " +
-                "The key may have been protected on a different machine or with a different key ring. " +
-                "Please re-run the setup wizard.");
+            _logger.LogError(ex, "Failed to decrypt cloud API key. The key may have been protected on a different machine or with a different key ring. Please re-run the setup wizard.");
             return string.Empty;
         }
     }

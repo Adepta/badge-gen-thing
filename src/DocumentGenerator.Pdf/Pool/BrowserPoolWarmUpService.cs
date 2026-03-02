@@ -46,7 +46,7 @@ public sealed class BrowserPoolWarmUpService : IHostedService
             for (var i = 0; i < target; i++)
             {
                 // Each Acquire waits up to AcquireTimeout; use a short combined budget.
-                leases.Add(await _pool.AcquireAsync(cancellationToken));
+                leases.Add(await _pool.AcquireAsync(cancellationToken).ConfigureAwait(false));
             }
 
             _logger.LogInformation(
@@ -56,15 +56,14 @@ public sealed class BrowserPoolWarmUpService : IHostedService
         {
             // Warm-up failure is non-fatal — the pool will launch browsers on demand.
             _logger.LogWarning(ex,
-                "Browser pool pre-warm failed after {Count}/{Target} instance(s) — " +
-                "browsers will be launched on first request",
+                "Browser pool pre-warm failed after {Count}/{Target} instance(s) — browsers will be launched on first request",
                 leases.Count, target);
         }
         finally
         {
             // Return all leases so browsers go back to the idle queue.
             foreach (var lease in leases)
-                await lease.DisposeAsync();
+                await lease.DisposeAsync().ConfigureAwait(false);
         }
     }
 

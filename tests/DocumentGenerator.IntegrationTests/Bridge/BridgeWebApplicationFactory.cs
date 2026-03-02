@@ -30,12 +30,12 @@ public sealed class BridgeWebApplicationFactory : WebApplicationFactory<Document
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseSetting($"{BridgeOptions.Section}:isConfigured",        "true");
-        builder.UseSetting($"{BridgeOptions.Section}:port",                "0");
-        builder.UseSetting($"{CloudOptions.Section}:baseUrl",              "http://fake-cloud");
-        builder.UseSetting($"{CloudOptions.Section}:apiKey",               "test-key");
-        builder.UseSetting($"{PrinterOptions.Section}:defaultPrinterName", "TestPrinter");
-        builder.UseSetting($"{PrinterOptions.Section}:format",             "Pdf");
+        builder.UseSetting($"{BridgeOptions.SectionName}:isConfigured",        "true");
+        builder.UseSetting($"{BridgeOptions.SectionName}:port",                "0");
+        builder.UseSetting($"{CloudOptions.SectionName}:baseUrl",              "http://fake-cloud");
+        builder.UseSetting($"{CloudOptions.SectionName}:apiKey",               "test-key");
+        builder.UseSetting($"{PrinterOptions.SectionName}:defaultPrinterName", "TestPrinter");
+        builder.UseSetting($"{PrinterOptions.SectionName}:format",             "Pdf");
 
         builder.ConfigureServices(services =>
         {

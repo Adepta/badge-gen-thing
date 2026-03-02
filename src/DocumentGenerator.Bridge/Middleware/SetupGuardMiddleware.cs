@@ -11,21 +11,10 @@ namespace DocumentGenerator.Bridge.Middleware;
 /// Once <c>Bridge:IsConfigured</c> is <c>true</c> in <c>appsettings.json</c>,
 /// this middleware passes all requests through transparently.
 /// </remarks>
-public sealed class SetupGuardMiddleware
+public sealed class SetupGuardMiddleware(RequestDelegate next, ILogger<SetupGuardMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<SetupGuardMiddleware> _logger;
-
-    /// <summary>
-    /// Initialises a new <see cref="SetupGuardMiddleware"/>.
-    /// </summary>
-    /// <param name="next">The next middleware in the pipeline.</param>
-    /// <param name="logger">Logger for diagnostic output.</param>
-    public SetupGuardMiddleware(RequestDelegate next, ILogger<SetupGuardMiddleware> logger)
-    {
-        _next   = next;
-        _logger = logger;
-    }
+    private readonly RequestDelegate _next = next;
+    private readonly ILogger<SetupGuardMiddleware> _logger = logger;
 
     /// <summary>
     /// Intercepts requests and redirects to <c>/setup</c> when the bridge is unconfigured.

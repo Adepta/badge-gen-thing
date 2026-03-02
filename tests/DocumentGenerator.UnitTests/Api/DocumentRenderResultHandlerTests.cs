@@ -1,7 +1,7 @@
 using DocumentGenerator.Api.Messaging;
 using DocumentGenerator.Messaging.Messages;
-using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
+using Shouldly;
 using Xunit;
 
 namespace DocumentGenerator.UnitTests.Api;
@@ -31,7 +31,7 @@ public sealed class DocumentRenderResultHandlerTests
 
         await handler.Handle(MakeResult(correlationId));
 
-        resultTask.IsCompletedSuccessfully.Should().BeTrue();
+        resultTask.IsCompletedSuccessfully.ShouldBeTrue();
     }
 
     [Fact]
@@ -48,8 +48,8 @@ public sealed class DocumentRenderResultHandlerTests
         await handler.Handle(expected);
 
         var resolved = await resultTask;
-        resolved.CorrelationId.Should().Be(correlationId);
-        resolved.Success.Should().BeTrue();
+        resolved.CorrelationId.ShouldBe(correlationId);
+        resolved.Success.ShouldBeTrue();
     }
 
     // ── Handle — unknown correlation ID (different instance) ──────────────────
@@ -63,7 +63,7 @@ public sealed class DocumentRenderResultHandlerTests
 
         // No awaiter registered — should silently discard
         var act = async () => await handler.Handle(MakeResult(Guid.NewGuid()));
-        await act.Should().NotThrowAsync();
+        await Should.NotThrowAsync(act);
     }
 
     [Fact]
@@ -81,8 +81,8 @@ public sealed class DocumentRenderResultHandlerTests
         await handler.Handle(MakeResult(unknownId));
 
         // The known awaiter should still be pending
-        resultTask.IsCompleted.Should().BeFalse();
-        store.PendingCount.Should().Be(1);
+        resultTask.IsCompleted.ShouldBeFalse();
+        store.PendingCount.ShouldBe(1);
     }
 
     // ── Handle — failure result ───────────────────────────────────────────────
@@ -101,7 +101,7 @@ public sealed class DocumentRenderResultHandlerTests
         await handler.Handle(failureResult);
 
         var resolved = await resultTask;
-        resolved.Success.Should().BeFalse();
-        resolved.ErrorMessage.Should().Be("render failed");
+        resolved.Success.ShouldBeFalse();
+        resolved.ErrorMessage.ShouldBe("render failed");
     }
 }

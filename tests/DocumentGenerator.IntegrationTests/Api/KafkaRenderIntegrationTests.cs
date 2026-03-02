@@ -2,19 +2,15 @@ using DocumentGenerator.Api.Configuration;
 using DocumentGenerator.Api.Messaging;
 using DocumentGenerator.Core.Models;
 using DocumentGenerator.Messaging.Messages;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Rebus.Activation;
 using Rebus.Bus;
 using Rebus.Config;
 using Rebus.Kafka;
 using Rebus.Routing.TypeBased;
+using Shouldly;
 using Testcontainers.Kafka;
 using Xunit;
-using MSOptions = Microsoft.Extensions.Options.Options;
 
 namespace DocumentGenerator.IntegrationTests.Api;
 
@@ -165,9 +161,9 @@ public sealed class KafkaRenderIntegrationTests : IAsyncLifetime
 
         var result = await resultTask;
 
-        result.CorrelationId.Should().Be(correlationId);
-        result.Success.Should().BeTrue();
-        result.PdfBase64.Should().Be(Convert.ToBase64String(FakePdfBytes));
+        result.CorrelationId.ShouldBe(correlationId);
+        result.Success.ShouldBeTrue();
+        result.PdfBase64.ShouldBe(Convert.ToBase64String(FakePdfBytes));
     }
 
     /// <summary>
@@ -203,8 +199,8 @@ public sealed class KafkaRenderIntegrationTests : IAsyncLifetime
         foreach (var (id, task) in resultTasks)
         {
             var result = await task;
-            result.CorrelationId.Should().Be(id);
-            result.Success.Should().BeTrue();
+            result.CorrelationId.ShouldBe(id);
+            result.Success.ShouldBeTrue();
         }
     }
 
@@ -232,9 +228,9 @@ public sealed class KafkaRenderIntegrationTests : IAsyncLifetime
 
         var result = await resultTask;
 
-        result.CorrelationId.Should().Be(correlationId);
-        result.Success.Should().BeFalse();
-        result.ErrorMessage.Should().NotBeNullOrEmpty();
+        result.CorrelationId.ShouldBe(correlationId);
+        result.Success.ShouldBeFalse();
+        result.ErrorMessage.ShouldNotBeNullOrEmpty();
     }
 
     /// <summary>
@@ -250,10 +246,9 @@ public sealed class KafkaRenderIntegrationTests : IAsyncLifetime
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(200));
         var resultTask = Store.RegisterAsync(correlationId, cts.Token);
 
-        Func<Task> act = () => resultTask;
-        await act.Should().ThrowAsync<OperationCanceledException>();
+        await Should.ThrowAsync<OperationCanceledException>(async () => await resultTask);
 
-        Store.PendingCount.Should().Be(0,
+        Store.PendingCount.ShouldBe(0,
             "cancelled awaiter must be removed from the store");
     }
 
