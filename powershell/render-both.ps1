@@ -1,5 +1,5 @@
 $headers   = @{ 'X-Api-Key' = 'dev-api-key-insecure'; 'Content-Type' = 'application/json' }
-$outDir    = "E:\PoC\DocumentGenerator\Generated"
+$outDir    = Join-Path (Split-Path $PSScriptRoot -Parent) "Generated"
 $bridgeUrl = "http://localhost:5100/render"
 
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null

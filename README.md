@@ -1,65 +1,53 @@
 # DocumentGenerator — Badge Printing Platform
 
 A .NET 10 platform for rendering and printing event badges on demand.
-An iPad at an event check-in desk sends attendee data to a lightweight
-**Bridge** service running on the venue's local machine. The Bridge
-calls the cloud-hosted **API**, which either renders inline or offloads
-the work to the **Console** render service via **Kafka** for high-throughput
-events. The finished PDF is returned to the iPad and simultaneously spooled
-to the locally attached badge printer.
+An iPad at an event check-in desk sends attendee data to a lightweight **Bridge** service running on the venue's local machine. The Bridge calls the cloud-hosted **API**, which either renders inline or offloads the work to the **Console** render worker via **Kafka** for high-throughput events. The finished PDF is returned to the iPad and simultaneously spooled to the locally attached badge printer.
 
 ---
 
 ## Architecture
 
-### Recommended — Kafka mode (high throughput)
+### Kafka mode — recommended for production
 
 ```
 [iPad]
-  │  POST /print  (local network, no auth)
+  │  POST /print  (local network)
   ▼
-[Bridge]                   ← runs on venue Windows/Linux/macOS machine
+[Bridge]                   ← venue Windows / Linux / macOS machine
   │  POST /api/badges/render  (HTTPS + X-Api-Key)
   ▼
 [API]                      ← cloud-hosted ASP.NET Core Web API
-  │  publish DocumentRenderRequest → Kafka render.requests
+  │  publish DocumentRenderRequest → render.requests
   ▼
-[Kafka]                    ← managed broker (Confluent Cloud / MSK / self-hosted)
+[Kafka]
   │  consume render.requests
   ▼
 [Console]                  ← one or more render workers (Chromium pool)
-  │  Handlebars → HTML → Chromium → PDF bytes
-  │  publish DocumentRenderResult → Kafka render.results
+  │  Handlebars → HTML → Chromium → PDF/PNG bytes
+  │  publish DocumentRenderResult → render.results
   ▼
 [Kafka render.results]
   │  consumed by the API instance that published the request
   ▼
-[API]  → awaiter resolved → Base64 PDF response
+[API]  → awaiter resolved → Base64 document response
   │
   ▼
 [Bridge] → iPad (preview) + local printer (OS print spooler)
 ```
 
-Why Kafka in the middle?
-- The API returns to the Bridge immediately after publishing; no HTTP thread is held open during rendering.
-- Multiple Console instances consume from `render.requests` in a shared group → automatic horizontal scaling.
-- Each API instance subscribes with a **unique consumer group** so every result message is delivered to every instance; only the one that published the request resolves the awaiter.
+Each API instance subscribes to `render.results` with a **unique consumer group**, so every result message reaches every instance — only the one that published the original request resolves its awaiter.
 
-### Fallback — inline mode (simple / standalone)
+### Inline mode — simple / standalone
 
-When `Kafka:Enabled = false` in the API config, rendering runs in-process
-using the embedded Chromium pool. No Kafka dependency — useful for low-volume
-deployments or local development.
+When `Kafka:Enabled = false` the API renders in-process using its embedded Chromium pool. No Kafka required — ideal for low-volume deployments or local development.
 
 ```
-[iPad] → [Bridge] → [API (inline Chromium render)] → [Bridge] → [iPad + Printer]
+[iPad] → [Bridge] → [API (inline Chromium)] → [Bridge] → [iPad + Printer]
 ```
 
-### Kafka only — Console direct mode
+### Console direct mode — batch / load testing
 
-The Console can also be used standalone, without the API/Bridge. The TestProducer
-tool publishes directly to `render.requests` and receives results on `render.results`.
-Use this for batch rendering, load testing, or CI smoke tests.
+The Console and TestProducer tool can be used without the API or Bridge:
 
 ```
 [TestProducer] → Kafka render.requests → [Console] → Kafka render.results → [TestProducer]
@@ -71,26 +59,27 @@ Use this for batch rendering, load testing, or CI smoke tests.
 
 ```
 src/
-  DocumentGenerator.Core          Pure domain — interfaces, models, no I/O
-  DocumentGenerator.Templating    Handlebars engine + file-based template resolver
-  DocumentGenerator.Pdf           Chromium browser pool (PuppeteerSharp) + PDF renderer
-  DocumentGenerator.Messaging     Rebus/Kafka message handler + contracts
-  DocumentGenerator.Console       Render worker: Kafka consumer + Spectre TUI dashboard
-  DocumentGenerator.Api           Cloud-hosted REST API (Kafka or inline render)
-  DocumentGenerator.Bridge        Venue-side proxy: HTTP relay + OS print spooler
+  DocumentGenerator.Core          Domain models, interfaces, error types — no I/O
+  DocumentGenerator.Templating    Handlebars engine, QR/barcode helpers, file resolver
+  DocumentGenerator.Pdf           Chromium browser pool (PuppeteerSharp) + PDF/PNG renderer
+  DocumentGenerator.Messaging     Rebus/Kafka message contracts + render request handler
+  DocumentGenerator.Console       Render worker: Kafka consumer + Spectre.Console TUI
+  DocumentGenerator.Api           Cloud REST API — Kafka or inline render path
+  DocumentGenerator.Bridge        Venue proxy: HTTP relay + OS print spooler
 
 tools/
-  DocumentGenerator.TestProducer  Headless Kafka test client (round-trip smoke test)
+  DocumentGenerator.TestProducer  Headless Kafka smoke-test / load-test client
 
 tests/
-  DocumentGenerator.UnitTests        xUnit — no I/O, all dependencies mocked
-  DocumentGenerator.IntegrationTests xUnit — WebApplicationFactory + real pipeline
+  DocumentGenerator.UnitTests        245 tests — all dependencies mocked, no I/O
+  DocumentGenerator.IntegrationTests  65 tests — WebApplicationFactory + Testcontainers Kafka
 
-templates/                         Shared badge & invoice Handlebars templates
-docker-compose.kafka.yml           Local Kafka + Zookeeper + Kafka UI
+powershell/                        Dev and smoke-test scripts (see Scripts section)
+templates/                         Shared Handlebars badge templates
+docker-compose.full.yml            Full stack: Kafka + observability + all three services
+docker-compose.kafka.yml           Kafka + Zookeeper + Kafka UI only
 docker-compose.observability.yml   Grafana + Loki + Tempo + Prometheus + OTel Collector
-docker/                            OTel Collector and observability stack config
-Generated/                         Dev/test PDF output (LocalFileAdapter writes here)
+Generated/                         Dev/test render output
 ```
 
 ---
@@ -98,41 +87,40 @@ Generated/                         Dev/test PDF output (LocalFileAdapter writes 
 ## Prerequisites
 
 - **.NET 10 SDK**
-- **Docker Desktop** (for local Kafka and observability stack)
-- Chromium is downloaded automatically by PuppeteerSharp on first run
+- **Docker Desktop** (for the full stack and integration tests)
+- Chromium is downloaded automatically by PuppeteerSharp on first run (or `google-chrome-stable` is used inside Docker)
 
 ---
 
 ## Quick start — full stack in Docker
 
-Run everything — Kafka, OTel, Grafana, and all three services — with a single command.
-
-### 1. Create your `.env`
+### 1. Configure environment
 
 ```bash
 cp .env.example .env
 ```
 
-The defaults in `.env.example` work out of the box for local dev — API key is pre-set to `dev-api-key-insecure`. No further edits needed to just run it.
+The defaults in `.env.example` work out of the box — API key is `dev-api-key-insecure`. No further edits needed for local dev.
 
-### 2. Start the full stack
+### 2. Start everything
 
 ```bash
 docker compose -f docker-compose.full.yml up --build
 ```
 
-First run takes a few minutes — Docker builds three .NET images and Kafka waits for Zookeeper.
-Subsequent starts are fast (images are cached).
+First run takes a few minutes while Docker builds the three .NET images and Kafka starts up. Subsequent starts are fast (images cached).
 
-### 3. Verify everything is up
+### 3. Verify services
 
-| Service | URL | Notes |
+| Service | URL | Expected |
 |---|---|---|
-| **Api** | http://localhost:8080/health | Should return `{"status":"Healthy"}` |
-| **Bridge** | http://localhost:5100/health | Should return `{"status":"Healthy"}` |
-| **Kafka UI** | http://localhost:8090 | Browse topics, consumer groups, messages |
-| **Grafana** | http://localhost:3000 | Traces, logs, metrics — login: admin / admin |
-| **Prometheus** | http://localhost:9090 | Raw metrics |
+| API | http://localhost:8080/health | `{"status":"Healthy"}` |
+| Bridge | http://localhost:5100/health | `{"status":"Healthy"}` |
+| Kafka UI | http://localhost:8090 | Browse topics and consumer groups |
+| Grafana | http://localhost:3000 | Traces, logs, metrics — login: admin / admin |
+| Prometheus | http://localhost:9090 | Raw metrics |
+
+> The API and Bridge containers may show "unhealthy" in `docker ps` — this is a known false alarm because the Docker health check script uses `curl`, which is not present in the distroless runtime image. Both services respond correctly on their ports.
 
 ### 4. Render a badge
 
@@ -152,19 +140,23 @@ curl -s -X POST http://localhost:5100/render \
   }' | jq -r .documentBase64 | base64 -d > badge.png
 ```
 
-### 5. Stop and clean up
+### 5. Stop / reset
 
 ```bash
-# Stop all containers but keep volumes (Kafka state, Grafana dashboards)
+# Stop, keep volumes
 docker compose -f docker-compose.full.yml down
 
 # Stop and wipe all volumes (full reset)
 docker compose -f docker-compose.full.yml down -v
 ```
 
-### Startup order
+### Scale render workers
 
-Docker Compose enforces this dependency chain automatically:
+```bash
+docker compose -f docker-compose.full.yml up --scale console=3
+```
+
+### Startup dependency order
 
 ```
 Zookeeper → Kafka (healthy) → kafka-init (topics created)
@@ -176,141 +168,78 @@ Zookeeper → Kafka (healthy) → kafka-init (topics created)
                                   Bridge
 ```
 
-### Scale the render worker
-
-```bash
-# Run 3 Console render workers in parallel
-docker compose -f docker-compose.full.yml up --scale console=3
-```
-
 ---
 
-## Quick start — local development (both paths)
+## Local development
 
-### 1. Start Kafka
+### Path A — Kafka mode (three terminals)
 
+**Terminal 1 — Start Kafka**
 ```bash
 docker compose -f docker-compose.kafka.yml up -d
 ```
 
-Kafka UI is available at **http://localhost:8080**.
-
-### 2. Configure secrets
-
+**Terminal 2 — Console render worker**
 ```bash
-cp .env.example .env
-# Edit .env — at minimum set ApiAuth__ApiKey to a random string
+dotnet run --project src/DocumentGenerator.Console
 ```
+Wait for: `Rebus subscription active — listening for DocumentRenderRequest`
 
-For local dev the defaults in `appsettings.Development.json` work out of the box
-(`dev-api-key-insecure`). Do not use these in production.
-
----
-
-## Running — Path A: Kafka mode
-
-Open **three terminals**.
-
-**Terminal 1 — Console render worker**
+**Terminal 3 — API**
 ```bash
-cd src/DocumentGenerator.Console
-dotnet run
+dotnet run --project src/DocumentGenerator.Api --launch-profile http
 ```
-Waits for Chromium to download, then connects to Kafka and shows the Spectre TUI.
-Watch for: `Rebus subscription active — listening for DocumentRenderRequest`
+`appsettings.Development.json` sets `Kafka:Enabled = true`. Listens on **http://localhost:7071**.
 
-**Terminal 2 — API (Kafka enabled in Development)**
+**Terminal 4 — Bridge**
 ```bash
-cd src/DocumentGenerator.Api
-dotnet run --launch-profile http
-```
-`appsettings.Development.json` sets `Kafka:Enabled = true`.
-Listens on **http://localhost:7071**.
-Watch for: `Kafka consumer group api-<guid> subscribed`
-
-**Terminal 3 — Bridge**
-```bash
-cd src/DocumentGenerator.Bridge
-dotnet run --launch-profile http
+dotnet run --project src/DocumentGenerator.Bridge --launch-profile http
 ```
 Listens on **http://localhost:5100**.
-Watch for: `Application started`
 
-**Trigger a print** (Terminal 4 or Postman):
+**Trigger a render:**
 ```bash
 curl -X POST http://localhost:5100/print \
   -H "Content-Type: application/json" \
   -d '{
     "templateName": "badge-pulse-a6",
     "variables": {
-      "firstName": "Jane",
-      "lastName":  "Smith",
-      "jobTitle":  "Engineer",
-      "company":   "Acme Corp",
-      "ticketType":"Speaker",
-      "attendeeId":"TC2026-001"
+      "firstName": "Ada", "lastName": "Lovelace",
+      "jobTitle": "Mathematician", "company": "Analytical Engine Co"
     }
   }'
 ```
 
-**What to watch:**
-| Component | Log line |
-|---|---|
-| Bridge | `Cloud render request — CorrelationId=...` |
-| API | `Render request published to Kafka — CorrelationId=...` |
-| Console | `Handling render request` → `Chromium render complete` |
-| API | `Render result resolved — CorrelationId=... Success=True` |
-| Bridge | `Cloud render complete — Success=True` |
-| `Generated/` | PDF file written by LocalFileAdapter (Development mode) |
-
-Kafka message flow is visible in **Kafka UI → http://localhost:8080**.
-
----
-
-## Running — Path B: Inline mode (no Kafka)
-
-Disable Kafka in the API by setting `Kafka__Enabled=false` (or use a non-Development environment).
-
-Open **two terminals**.
+### Path B — Inline mode (no Kafka, two terminals)
 
 **Terminal 1 — API**
 ```bash
-cd src/DocumentGenerator.Api
 ASPNETCORE_ENVIRONMENT=Production \
   ApiAuth__ApiKey=my-local-key \
   Kafka__Enabled=false \
-  dotnet run
+  dotnet run --project src/DocumentGenerator.Api
 ```
 
 **Terminal 2 — Bridge**
 ```bash
-cd src/DocumentGenerator.Bridge
-ASPNETCORE_ENVIRONMENT=Development \
-  dotnet run --launch-profile http
+dotnet run --project src/DocumentGenerator.Bridge --launch-profile http
 ```
 
 Then POST to `http://localhost:5100/print` as above.
 
----
+### Path C — Console + TestProducer (Kafka direct)
 
-## Running — Path C: Console + TestProducer (Kafka direct)
-
-No API or Bridge involved. Useful for batch rendering and load testing.
+No API or Bridge required. Useful for batch rendering and load testing.
 
 **Terminal 1 — Console**
 ```bash
-cd src/DocumentGenerator.Console
-dotnet run
+dotnet run --project src/DocumentGenerator.Console
 ```
 
 **Terminal 2 — TestProducer**
 ```bash
-cd tools/DocumentGenerator.TestProducer
-dotnet run
+dotnet run --project tools/DocumentGenerator.TestProducer
 ```
-
-The producer sends one render job every 30 seconds (configurable via `Producer:ScheduleInterval`),
-waits for the result, and saves the PDF to the `Generated/` folder or logs the path.
 
 ---
 
@@ -320,23 +249,23 @@ waits for the result, and saves the PDF to the `Generated/` folder or logs the p
 
 | Key | Default | Description |
 |---|---|---|
-| `ApiAuth:ApiKey` | `CHANGE-ME-IN-PRODUCTION` | API key required in `X-Api-Key` header |
-| `Cors:AllowedOrigins` | `*` | Comma-separated origins. Use `*` for dev only |
+| `ApiAuth:ApiKey` | `CHANGE-ME-IN-PRODUCTION` | Required `X-Api-Key` header value |
+| `Cors:AllowedOrigins` | `*` | Comma-separated origins. Use explicit value in production |
 | `Kafka:Enabled` | `false` | `true` = Kafka path; `false` = inline Chromium |
-| `Kafka:BootstrapServers` | `localhost:9092` | Kafka broker(s) |
-| `Kafka:RequestTopic` | `render.requests` | Topic to publish render jobs to |
-| `Kafka:ResultTopic` | `render.results` | Topic to consume results from |
-| `Kafka:ResultTimeoutSeconds` | `25` | Max wait for render result before 504 |
-| `BrowserPool:MaxSize` | `4` | Max concurrent Chromium instances (inline mode) |
+| `Kafka:BootstrapServers` | `localhost:9092` | Kafka broker address(es) |
+| `Kafka:RequestTopic` | `render.requests` | Topic for outbound render jobs |
+| `Kafka:ResultTopic` | `render.results` | Topic for inbound render results |
+| `Kafka:ResultTimeoutSeconds` | `25` | Max wait before returning HTTP 504 |
+| `BrowserPool:MaxSize` | `4` | Max concurrent Chromium instances (inline mode only) |
 
 ### DocumentGenerator.Console
 
 | Key | Default | Description |
 |---|---|---|
 | `Kafka:Enabled` | `true` | Must be `true` to act as a render worker |
-| `Kafka:BootstrapServers` | `localhost:9092` | Kafka broker(s) |
+| `Kafka:BootstrapServers` | `localhost:9092` | Kafka broker address(es) |
 | `Kafka:ConsumerGroupId` | `document-generator` | Shared group — all Console instances share load |
-| `Kafka:MaxConcurrentRenders` | `4` | Concurrency cap (matches Chromium pool size) |
+| `Kafka:MaxConcurrentRenders` | `4` | Rebus worker thread count |
 | `BrowserPool:MaxSize` | `4` | Max concurrent Chromium instances |
 
 ### DocumentGenerator.Bridge
@@ -344,11 +273,11 @@ waits for the result, and saves the PDF to the `Generated/` folder or logs the p
 | Key | Default | Description |
 |---|---|---|
 | `Bridge:Port` | `5100` | Local HTTP listen port |
-| `Bridge:IsConfigured` | `false` | Set to `true` once Cloud URL and key are configured |
+| `Bridge:IsConfigured` | `false` | Set `true` once Cloud URL and key are saved |
 | `Cloud:BaseUrl` | _(empty)_ | URL of the cloud-hosted API |
 | `Cloud:ApiKey` | _(empty)_ | API key matching `ApiAuth:ApiKey` on the API |
 | `Cloud:Timeout` | `00:00:30` | HTTP timeout per render request |
-| `Printer:DefaultPrinterName` | `null` | OS default printer when not specified per-request |
+| `Printer:DefaultPrinterName` | `null` | Fallback printer when not specified per-request |
 
 ---
 
@@ -356,24 +285,22 @@ waits for the result, and saves the PDF to the `Generated/` folder or logs the p
 
 ### API key
 
-The `X-Api-Key` header is validated on every API request except `/health`.
-In production:
+The `X-Api-Key` header is validated on every request except `/health`.
 
-1. Generate a random key: `openssl rand -hex 32`
-2. Set it as an environment variable: `ApiAuth__ApiKey=<generated-key>`
-3. Set the same value in the Bridge: `Cloud__ApiKey=<generated-key>`
-4. **Never commit a real key to source control.** The placeholder `CHANGE-ME-IN-PRODUCTION` will cause an intentional startup warning — you will see it if you forget.
+1. Generate a key: `openssl rand -hex 32`
+2. Set on the API: `ApiAuth__ApiKey=<key>`
+3. Set on the Bridge: `Cloud__ApiKey=<key>`
+4. Never commit a real key. The placeholder `CHANGE-ME-IN-PRODUCTION` causes an intentional startup warning.
 
 ### CORS
 
-In production, replace `Cors:AllowedOrigins=*` with the explicit IP or hostname of your Bridge:
+In production, replace `*` with the explicit Bridge address:
 ```
 Cors__AllowedOrigins=http://192.168.1.100:5100
 ```
 
 ### Kafka SASL/TLS (Confluent Cloud / MSK)
 
-Set these environment variables on all services that connect to Kafka:
 ```
 Kafka__SecurityProtocol=SaslSsl
 Kafka__SaslMechanism=ScramSha256
@@ -383,100 +310,137 @@ Kafka__SaslPassword=<api-secret>
 
 ### Secret management
 
-- Copy `.env.example` to `.env` — it is already in `.gitignore`.
-- For production deployments use your platform's secret store:
-  - **Azure App Service / Container Apps**: Application Settings / Key Vault references
-  - **AWS**: Parameter Store / Secrets Manager with ECS task role
-  - **Kubernetes**: `Secret` objects referenced as environment variables
+Copy `.env.example` to `.env` — it is already in `.gitignore`.
+
+For production use your platform's secret store:
+- **Azure**: Application Settings or Key Vault references
+- **AWS**: Parameter Store / Secrets Manager with ECS task role
+- **Kubernetes**: `Secret` objects as environment variables
 
 ---
 
 ## Tests
 
 ```bash
-# All tests (310 total)
+# All 310 tests
 dotnet test DocumentGenerator.sln
 
 # Unit tests only (fast, no Docker)
 dotnet test tests/DocumentGenerator.UnitTests
 
-# Integration tests (uses WebApplicationFactory, no real Kafka needed)
+# Integration tests (WebApplicationFactory + Testcontainers Kafka)
 dotnet test tests/DocumentGenerator.IntegrationTests
 ```
 
-**Test coverage:**
-- 245 unit tests — controllers, pipeline, templating engine, Kafka store/handler, messaging
-- 65 integration tests — API endpoints, Bridge endpoints, pipeline + real Handlebars
+| Suite | Count | Notes |
+|---|---|---|
+| Unit | 245 | Controllers, pipeline, templating, Kafka store/handler, messaging — all mocked |
+| Integration | 65 | API endpoints, Bridge endpoints, pipeline with real Handlebars, Kafka round-trip via Testcontainers |
 
 ---
 
-## Local smoke test (PowerShell)
+## PowerShell scripts
 
-These scripts let you render real badges against the running stack and open the output files.
-All output is written to `Generated/` in the repo root.
-
-### Prerequisites
-
-All three services must be running (see [Quick start](#quick-start--local-development-both-paths)).
-Kafka must be up: `docker compose -f docker-compose.kafka.yml up -d`
-
-### Scripts
-
-| Script | What it does |
-|---|---|
-| `check-health.ps1` | Confirms Api (:7071) and Bridge (:5100) are responding |
-| `render-both.ps1` | Renders every badge template as both PDF and PNG, opens them all |
-
-### Run the smoke test
+All scripts live in `powershell/`. Run from the repo root:
 
 ```powershell
-# 1. Confirm services are healthy
-powershell -ExecutionPolicy Bypass -File check-health.ps1
-
-# 2. Render all templates (A6 + 3x credit card) as PDF and PNG, opens them automatically
-powershell -ExecutionPolicy Bypass -File render-both.ps1
+powershell -ExecutionPolicy Bypass -File powershell\<script>.ps1
 ```
 
-Output files written to `Generated/`:
+| Script | Purpose |
+|---|---|
+| `check-health.ps1` | Probes API (`:7071`) and Bridge (`:5100`) health endpoints |
+| `check-templates.ps1` | Lists available templates via Bridge |
+| `render-both.ps1` | Renders all 4 templates × 2 formats (PDF + PNG) via Bridge, saves to `Generated/`, opens all files |
+| `debug-api.ps1` | Hits the API directly on `:7071` — lists templates, renders PDF and PNG |
+| `debug-bridge.ps1` | End-to-end connectivity check: direct API call then via Bridge |
+| `fire-bridge.ps1` | Waits for Bridge to be ready, then renders PDF + lists templates and printers |
+| `fire-bridge-png.ps1` | Waits for Bridge to be ready, then renders PNG |
+| `fire-png-test.ps1` | One-shot PNG render direct to Bridge, prints image dimensions |
+| `wait-and-fire.ps1` | Waits for API to be ready, renders a PDF, opens it |
+| `test-render.ps1` | Minimal one-shot render test direct to API |
 
-| File | Size | Format |
+### Render all badge variants
+
+```powershell
+# Requires the full stack running (docker compose -f docker-compose.full.yml up -d)
+powershell -ExecutionPolicy Bypass -File powershell\render-both.ps1
+```
+
+Output written to `Generated/`:
+
+| File | Dimensions / Size | Template |
 |---|---|---|
-| `ada-badge-pulse-a6.png` | 794×1120 px (2× retina) | A6 portrait badge |
-| `ada-badge-pulse-a6.pdf` | ~61 KB | A6 portrait badge |
-| `ada-badge-pulse-cc.png` | 648×410 px (2× retina) | Credit card badge |
-| `ada-badge-pulse-cc.pdf` | ~37 KB | Credit card badge |
-| `ada-badge-executive-cc.png` | 648×410 px (2× retina) | Credit card badge |
-| `ada-badge-executive-cc.pdf` | ~34 KB | Credit card badge |
-| `ada-badge-carbon-cc.png` | 648×410 px (2× retina) | Credit card badge |
-| `ada-badge-carbon-cc.pdf` | ~21 KB | Credit card badge |
+| `ada-badge-pulse-a6.png` | 794×1120 px | A6 portrait — Pulse theme |
+| `ada-badge-pulse-a6.pdf` | ~19 KB | A6 portrait — Pulse theme |
+| `ada-badge-pulse-cc.png` | 648×410 px | Credit card — Pulse theme |
+| `ada-badge-pulse-cc.pdf` | ~18 KB | Credit card — Pulse theme |
+| `ada-badge-executive-cc.png` | 648×410 px | Credit card — Executive theme |
+| `ada-badge-executive-cc.pdf` | ~35 KB | Credit card — Executive theme |
+| `ada-badge-carbon-cc.png` | 648×410 px | Credit card — Carbon theme |
+| `ada-badge-carbon-cc.pdf` | ~22 KB | Credit card — Carbon theme |
 
-PNG dimensions are badge-exact — the Chromium viewport is sized to the rendered document
-using `getBoundingClientRect()` before screenshotting, so you get the badge and nothing else.
-`DeviceScaleFactor=2` gives retina-quality output without changing CSS layout.
+PNGs use `DeviceScaleFactor=2` (retina quality) and are clipped exactly to the badge boundary via `getBoundingClientRect()`.
 
-### Render a single badge via curl / Postman
+---
 
-Direct to Bridge `/render` endpoint (returns JSON with `documentBase64`):
+## Badge templates
 
-```bash
-curl -s -X POST http://localhost:5100/render \
-  -H "Content-Type: application/json" \
-  -H "X-Api-Key: dev-api-key-insecure" \
-  -d '{
-    "templateName": "badge-pulse-cc",
-    "format": "Png",
-    "variables": {
-      "firstName":  "Ada",
-      "lastName":   "Lovelace",
-      "jobTitle":   "Mathematician",
-      "company":    "Analytical Engine Co"
-    }
-  }' | jq -r .documentBase64 | base64 -d > badge.png
+| Template name | Size | Theme |
+|---|---|---|
+| `badge-pulse-a6` | A6 (105×148mm) | Vibrant purple gradient, diagonal stripe, QR code |
+| `badge-pulse-cc` | Credit card (85.6×54mm) | Pulse theme, compact |
+| `badge-executive-a6` | A6 | Dark navy, branding-driven gold accent |
+| `badge-executive-cc` | Credit card | Executive theme, compact |
+| `badge-carbon-a6` | A6 | Dark monochrome carbon aesthetic |
+| `badge-carbon-cc` | Credit card | Carbon theme, compact |
+
+List available templates at runtime:
+```
+GET /api/badges/templates   (X-Api-Key required)
+GET /templates              (via Bridge)
 ```
 
 ---
 
-## Observability (optional)
+## Render request format
+
+`POST /api/badges/render` (direct to API), `POST /render` or `POST /print` (via Bridge):
+
+```json
+{
+  "templateName": "badge-pulse-a6",
+  "correlationId": "optional-guid",
+  "format": "Pdf",
+  "variables": {
+    "firstName":   "Ada",
+    "lastName":    "Lovelace",
+    "jobTitle":    "Mathematician",
+    "company":     "Analytical Engine Co",
+    "ticketType":  "Speaker",
+    "attendeeId":  "TC2026-001",
+    "sessionName": "Hall A — Keynote",
+    "eventDate":   "12–14 March 2026",
+    "eventVenue":  "ExCeL London"
+  },
+  "branding": {
+    "companyName":     "TechConf 2026",
+    "primaryColour":   "#6C3CE1",
+    "secondaryColour": "#F3F0FF",
+    "bodyFont":        "Segoe UI, Arial, sans-serif"
+  }
+}
+```
+
+`format` accepts `Pdf` or `Png`. The response always includes `documentBase64`, `mimeType`, `success`, `correlationId`, `elapsedTime`, and `completedAt`.
+
+Sample payloads for all templates: `src/DocumentGenerator.Console/templates/sample-*.json`
+
+---
+
+## Observability
+
+All three services emit OpenTelemetry traces, metrics, and logs to the OTel Collector when `OpenTelemetry:Enabled = true`.
 
 ```bash
 docker compose -f docker-compose.observability.yml up -d
@@ -489,56 +453,14 @@ docker compose -f docker-compose.observability.yml up -d
 | Loki (logs) | via Grafana |
 | Tempo (traces) | via Grafana |
 
-All services emit OpenTelemetry traces, metrics, and logs to the OTel Collector
-on `http://localhost:4317` when `OpenTelemetry:Enabled = true`.
+Custom metrics: `documentgenerator.render.duration_ms` (histogram), `documentgenerator.render.count` (counter) — tagged by `document_type` and `success`.
 
 ---
 
-## Available badge templates
+## CI
 
-| Template name | Size | Description |
-|---|---|---|
-| `badge-pulse-a6` | A6 (105×148mm) | Modern gradient design |
-| `badge-pulse-cc` | Credit card (85.6×54mm) | Compact version |
-| `badge-executive-a6` | A6 | Clean minimal design |
-| `badge-executive-cc` | Credit card | Compact version |
-| `badge-carbon-a6` | A6 | Dark carbon theme |
-| `badge-carbon-cc` | Credit card | Compact version |
+GitHub Actions workflow (`.github/workflows/dotnet.yml`) runs on every push to `main`:
 
-List available templates at runtime:
-```
-GET /api/badges/templates  (X-Api-Key required)
-```
-
----
-
-## Render request format
-
-`POST /api/badges/render` (direct to API) or `POST /print` / `POST /render` (via Bridge):
-
-```json
-{
-  "templateName": "badge-pulse-a6",
-  "correlationId": "optional-guid",
-  "format": "Pdf",
-  "variables": {
-    "firstName":   "Jane",
-    "lastName":    "Smith",
-    "jobTitle":    "Senior Engineer",
-    "company":     "Acme Corp",
-    "ticketType":  "Speaker",
-    "attendeeId":  "TC2026-00842",
-    "sessionName": "Hall A — Keynote",
-    "eventDate":   "12–14 March 2026",
-    "eventVenue":  "ExCeL London"
-  },
-  "branding": {
-    "companyName":      "TechConf 2026",
-    "primaryColour":    "#6C3CE1",
-    "secondaryColour":  "#F3F0FF",
-    "bodyFont":         "Segoe UI, Arial, sans-serif"
-  }
-}
-```
-
-Sample payloads for all templates are in `src/DocumentGenerator.Console/templates/sample-*.json`.
+1. `dotnet restore`
+2. `dotnet build -warnaserror` — zero warnings enforced
+3. `dotnet test` — all 310 tests must pass (integration tests use Testcontainers, Docker is available on the runner)
