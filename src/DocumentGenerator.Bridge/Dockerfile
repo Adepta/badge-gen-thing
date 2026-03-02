@@ -22,7 +22,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget \
 WORKDIR /app
 COPY --from=build /publish .
 
-RUN useradd -r -s /bin/false appuser && chown -R appuser /app
+RUN useradd -r -s /bin/false appuser \
+    && mkdir -p /app/keys \
+    && chown -R appuser /app
 USER appuser
 
 EXPOSE 5100

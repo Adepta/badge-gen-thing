@@ -1,4 +1,5 @@
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
 using DocumentGenerator.Api.Authentication;
 using DocumentGenerator.Api.Configuration;
 using DocumentGenerator.Api.HealthChecks;
@@ -69,6 +70,14 @@ builder.Services
 builder.Services
     .AddOptions<ApiKafkaOptions>()
     .Bind(builder.Configuration.GetSection(ApiKafkaOptions.SectionName))
+    .Validate(o => !o.Enabled || !string.IsNullOrWhiteSpace(o.BootstrapServers),
+        "Kafka:BootstrapServers is required when Kafka:Enabled is true.")
+    .Validate(o => !o.Enabled || !string.IsNullOrWhiteSpace(o.RequestTopic),
+        "Kafka:RequestTopic is required when Kafka:Enabled is true.")
+    .Validate(o => !o.Enabled || !string.IsNullOrWhiteSpace(o.ResultTopic),
+        "Kafka:ResultTopic is required when Kafka:Enabled is true.")
+    .Validate(o => o.ResultTimeoutSeconds > 0,
+        "Kafka:ResultTimeoutSeconds must be greater than 0.")
     .ValidateOnStart();
 
 // ── Document pipeline ──────────────────────────────────────────────────────────
@@ -226,6 +235,13 @@ app.UseStatusCodePages();
 
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
+
+// Forwarded headers — must be first so that rate limiting, auth, and redirect
+// middleware all see the real client IP, not the proxy/load balancer IP.
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 // HTTPS redirect — in Docker we terminate TLS at the load balancer/ingress so
 // this only applies when TLS is bound directly (non-Docker deployments).

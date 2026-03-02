@@ -67,8 +67,12 @@ builder.Services
     });
 
 // ── Data Protection (for encrypting API key at rest) ──────────────────────────
+// Keys are persisted to /app/keys so they survive container restarts.
+// Mount this path as a named Docker volume — losing the key ring means the
+// encrypted API key stored in appsettings.json cannot be decrypted.
 builder.Services.AddDataProtection()
-    .SetApplicationName("DocumentGenerator.Bridge");
+    .SetApplicationName("DocumentGenerator.Bridge")
+    .PersistKeysToFileSystem(new DirectoryInfo("/app/keys"));
 
 builder.Services.AddSingleton<CloudBadgeClient>();
 builder.Services.AddSingleton<SetupService>();

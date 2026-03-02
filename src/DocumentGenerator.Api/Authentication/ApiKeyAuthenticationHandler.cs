@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Encodings.Web;
 using DocumentGenerator.Core.Errors;
 using Microsoft.AspNetCore.Authentication;
@@ -52,7 +54,10 @@ public sealed class ApiKeyAuthenticationHandler : AuthenticationHandler<Authenti
         if (!Request.Headers.TryGetValue(HeaderName, out var providedKey))
             return Task.FromResult(AuthenticateResult.Fail($"Missing {HeaderName} header."));
 
-        if (!string.Equals(providedKey, _expectedKey, StringComparison.Ordinal))
+        // Constant-time comparison — prevents timing oracle attacks on the key.
+        var providedBytes = Encoding.UTF8.GetBytes(providedKey.ToString());
+        var expectedBytes = Encoding.UTF8.GetBytes(_expectedKey);
+        if (!CryptographicOperations.FixedTimeEquals(providedBytes, expectedBytes))
             return Task.FromResult(AuthenticateResult.Fail("Invalid API key."));
 
         var claims = new[] { new Claim(ClaimTypes.Name, "bridge-client") };

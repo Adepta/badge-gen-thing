@@ -370,6 +370,7 @@ services:
     volumes:
       - render-output:/app/output
       - render-logs:/app/logs
+
     environment:
       DOTNET_ENVIRONMENT:               Production
       Kafka__Enabled:                   "true"
@@ -409,6 +410,8 @@ services:
       options: { max-size: "10m", max-file: "3" }
     ports:
       - "5100:5100"
+    volumes:
+      - bridge-keys:/app/keys
     environment:
       ASPNETCORE_ENVIRONMENT:           Production
       ASPNETCORE_URLS:                  http://+:5100
@@ -448,6 +451,7 @@ volumes:
   kafka-data:
   render-output:
   render-logs:
+  bridge-keys:
   loki-data:
   tempo-data:
   prometheus-data:

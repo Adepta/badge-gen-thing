@@ -132,14 +132,43 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
         }
         catch (BrowserPoolException ex)
         {
-            // Transient — re-throw so Rebus can retry with backoff and eventually dead-letter.
+            // Rebus tracks the delivery count in the rbs2-msg-id / rbs2-retries header.
+            // On the final attempt we reply with a failure result so the caller gets an
+            // immediate error instead of waiting for ResultTimeoutSeconds to expire.
+            var headers     = MessageContext.Current?.Headers ?? new Dictionary<string, string>();
+            var deliveries  = headers.TryGetValue("rbs2-retries", out var v) && int.TryParse(v, out var n) ? n : 0;
+            var isFinalAttempt = deliveries >= _kafkaOptions.MaxRetries;
+
             _logger.LogWarning(ex,
-                "[{ErrorCode}] Transient browser pool failure — CorrelationId: {CorrelationId}. " +
-                "Rebus will retry (max {MaxRetries}).",
-                ex.Code, message.CorrelationId, _kafkaOptions.MaxRetries);
+                "[{ErrorCode}] Transient browser pool failure — CorrelationId: {CorrelationId} " +
+                "(attempt {Attempt}/{MaxRetries}){Final}.",
+                ex.Code, message.CorrelationId,
+                deliveries + 1, _kafkaOptions.MaxRetries + 1,
+                isFinalAttempt ? " — final attempt, replying with failure" : ", Rebus will retry");
 
             _metrics.RecordFailure();
-            throw; // Let Rebus handle retry + dead-lettering
+
+            if (isFinalAttempt)
+            {
+                // Notify the caller rather than silently dead-lettering.
+                result = DocumentRenderResult.Failed(
+                    message.CorrelationId, message.DeviceId, message.SessionId,
+                    message.Template.DocumentType,
+                    "Render failed after all retries — browser pool exhausted.", ex.Code.ToString());
+
+                try
+                {
+                    await _bus.Reply(result).ConfigureAwait(false);
+                }
+                catch (Exception replyEx)
+                {
+                    _logger.LogError(replyEx,
+                        "Failed to send failure reply for dead-lettered message CorrelationId: {CorrelationId}",
+                        message.CorrelationId);
+                }
+            }
+
+            throw; // Let Rebus dead-letter after final attempt (or retry on earlier attempts)
         }
         catch (DocumentGeneratorException ex)
         {
@@ -170,8 +199,17 @@ public sealed class DocumentRenderRequestHandler : IHandleMessages<DocumentRende
                 message.Template.DocumentType, ex.Message, "DG9001");
         }
 
-        // Reply routes the result back to the sender's return address automatically
-        await _bus.Reply(result).ConfigureAwait(false);
+        // Reply routes the result back to the sender's return address automatically.
+        try
+        {
+            await _bus.Reply(result).ConfigureAwait(false);
+        }
+        catch (Exception replyEx)
+        {
+            _logger.LogError(replyEx,
+                "Failed to send render result reply — CorrelationId: {CorrelationId}",
+                message.CorrelationId);
+        }
     }
 
     /// <summary>
