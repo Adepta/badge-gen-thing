@@ -65,6 +65,13 @@ public sealed class TemplateLocator
         if (string.IsNullOrWhiteSpace(templateName))
             throw TemplateException.InvalidName(templateName ?? string.Empty);
 
+        // Reject names that contain any path-separator characters (both Unix '/' and Windows '\')
+        // or a Windows drive letter (e.g. "C:"). This catches absolute Windows paths like
+        // "C:\foo" on Linux where Path.IsPathRooted returns false but the name is clearly invalid.
+        if (templateName.IndexOfAny(['/', '\\']) >= 0
+            || (templateName.Length >= 2 && templateName[1] == ':'))
+            throw TemplateException.InvalidName(templateName);
+
         // Guard against path traversal: verify resolved paths stay inside the templates directory.
         // Path.Combine with an absolute segment (e.g. "/etc/passwd") replaces the base path,
         // so we must canonicalise and prefix-check after combining.
