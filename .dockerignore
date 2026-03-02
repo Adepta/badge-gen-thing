@@ -1,0 +1,16 @@
+# Exclude build output and NuGet cache — these contain Windows paths
+# that break dotnet publish inside Linux containers.
+**/bin/
+**/obj/
+
+# Exclude local dev files
+.env
+.git/
+Generated/
+**/*.user
+**/*.suo
+.vs/
+
+# Test output
+tests/**/TestResults/
+tools/**/Generated/
