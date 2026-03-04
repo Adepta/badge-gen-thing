@@ -58,6 +58,7 @@
   <!-- CodeMirror 5 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/eclipse.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
@@ -67,9 +68,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/searchcursor.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/search.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchtags.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
 
   <!-- Handlebars (for Live Preview mode) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+
+  <!-- JSZip (for template export) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <!-- Editor overrides (CodeMirror, JS-toggled states, animations) -->
   <link rel="stylesheet" href="css/editor.css">
@@ -139,6 +149,21 @@
       </svg>
       <svg class="icon-moon w-4 h-4 absolute transition-all duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+
+    <!-- Download -->
+    <button id="btnDownload" title="Download template files"
+            class="w-[30px] h-[30px] rounded-md flex items-center justify-center shrink-0 relative cursor-pointer
+                   bg-ed-surface2 dark:bg-ed-surface2-dark
+                   border border-ed-border dark:border-ed-border-dark
+                   text-ed-muted dark:text-ed-muted-dark
+                   hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                   hover:text-ed-text hover:dark:text-ed-text-dark
+                   hover:border-ed-accent hover:dark:border-ed-accent-dark
+                   transition-all duration-150">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
       </svg>
     </button>
 
@@ -223,14 +248,20 @@
                          hover:bg-[rgba(124,92,252,.25)] transition-colors duration-150"
                   id="sdAddBtn">Add</button>
         </div>
-        <button class="sd-reset text-xs underline cursor-pointer mt-0.5 p-0 bg-transparent border-none
-                       text-ed-faint dark:text-ed-faint-dark
-                       hover:text-ed-muted hover:dark:text-ed-muted-dark transition-colors duration-150"
-                id="sdResetBtn">Reset defaults</button>
+        <div class="flex items-center gap-3 mt-0.5">
+          <button class="sd-reset text-xs underline cursor-pointer p-0 bg-transparent border-none
+                         text-ed-faint dark:text-ed-faint-dark
+                         hover:text-ed-muted hover:dark:text-ed-muted-dark transition-colors duration-150"
+                  id="sdResetBtn">Reset defaults</button>
+          <button class="sd-reset text-xs underline cursor-pointer p-0 bg-transparent border-none
+                         text-ed-accent dark:text-ed-accent-dark
+                         hover:text-ed-text hover:dark:text-ed-text-dark transition-colors duration-150"
+                  id="sdSaveBtn">Save data</button>
+        </div>
       </div>
     </div>
 
-    <div class="px-2 py-2.5 border-t border-ed-border dark:border-ed-border-dark shrink-0">
+    <div class="px-2 py-2.5 border-t border-ed-border dark:border-ed-border-dark shrink-0 flex flex-col gap-1.5">
       <button class="btn btn-secondary w-full justify-center inline-flex items-center gap-1.5
                      text-sm font-semibold px-2.5 py-1.5 rounded-md cursor-pointer
                      bg-ed-surface2 dark:bg-ed-surface2-dark
@@ -244,6 +275,20 @@
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
         New Template
+      </button>
+      <button class="btn btn-secondary w-full justify-center inline-flex items-center gap-1.5
+                     text-sm font-semibold px-2.5 py-1.5 rounded-md cursor-pointer
+                     bg-ed-surface2 dark:bg-ed-surface2-dark
+                     text-ed-text dark:text-ed-text-dark
+                     border border-ed-border dark:border-ed-border-dark
+                     hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                     hover:border-ed-accent hover:dark:border-ed-accent-dark
+                     active:scale-[.97] transition-all duration-150"
+              id="btnDuplicate">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        Duplicate
       </button>
     </div>
   </div>
@@ -580,12 +625,20 @@
     </div>
     <div class="flex justify-end gap-2 pt-1 border-t border-ed-border dark:border-ed-border-dark">
       <button class="btn btn-ghost inline-flex items-center gap-1.5 text-base font-semibold
-                     px-3 py-1.5 rounded-md cursor-pointer
+                     px-3 py-1.5 rounded-md cursor-pointer mr-auto
                      bg-transparent text-ed-muted dark:text-ed-muted-dark
                      border border-ed-border dark:border-ed-border-dark
                      hover:text-ed-text hover:dark:text-ed-text-dark
                      hover:border-ed-accent hover:dark:border-ed-accent-dark
                      hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                     active:scale-[.97] transition-all duration-150"
+              id="btnConfirmCancel">Cancel</button>
+      <button class="btn btn-ghost inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-transparent text-ed-red dark:text-ed-red-dark
+                     border border-ed-red/30 dark:border-ed-red-dark/30
+                     hover:bg-ed-red/10 hover:dark:bg-ed-red-dark/10
+                     hover:border-ed-red hover:dark:border-ed-red-dark
                      active:scale-[.97] transition-all duration-150"
               id="btnConfirmDiscard">Discard</button>
       <button class="btn btn-primary inline-flex items-center gap-1.5 text-base font-semibold

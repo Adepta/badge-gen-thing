@@ -47,7 +47,7 @@ function applyTheme(dark) {
   localStorage.setItem('ed-theme', dark ? 'dark' : 'light');
 
   // Switch CodeMirror theme if editors exist
-  const cmTheme = dark ? 'dracula' : 'default';
+  const cmTheme = dark ? 'dracula' : 'eclipse';
   if (typeof htmlCM !== 'undefined') {
     htmlCM.setOption('theme', cmTheme);
     cssCM.setOption('theme', cmTheme);
@@ -95,6 +95,7 @@ const newName         = $('newName');
 const newSize         = $('newSize');
 const modalConfirm    = $('modalConfirm');
 const confirmName     = $('confirmName');
+const btnConfirmCancel  = $('btnConfirmCancel');
 const btnConfirmDiscard = $('btnConfirmDiscard');
 const btnConfirmSave    = $('btnConfirmSave');
 const toast           = $('toast');
@@ -109,10 +110,11 @@ const previewModeToggle = $('previewModeToggle');
 // CodeMirror editors
 // ─────────────────────────────────────────────────────────
 const CM_COMMON = {
-  theme: isDark() ? 'dracula' : 'default',
+  theme: isDark() ? 'dracula' : 'eclipse',
   lineNumbers: true,
   lineWrapping: false,
   autoCloseBrackets: true,
+  matchBrackets: true,
   tabSize: 2,
   indentWithTabs: false,
   extraKeys: {
@@ -122,7 +124,7 @@ const CM_COMMON = {
   },
 };
 
-const htmlCM = CodeMirror($('wrapHtml'), { ...CM_COMMON, mode: 'htmlmixed', autoCloseTags: true });
+const htmlCM = CodeMirror($('wrapHtml'), { ...CM_COMMON, mode: 'htmlmixed', autoCloseTags: true, matchTags: { bothTags: true } });
 const cssCM  = CodeMirror($('wrapCss'),  { ...CM_COMMON, mode: 'css' });
 
 htmlCM.setSize(null, '100%');
@@ -338,9 +340,10 @@ function renderPreview() {
       const tpl = Handlebars.compile(html, { noEscape: false });
       html = tpl(nestedData);
     } catch (err) {
-      // On compile error, show the raw template with an error banner
+      // On compile error, show the raw template with an error banner + toast
       html = '<div style="background:#f25c6e;color:#fff;padding:8px;font-size:12px;font-family:sans-serif">Handlebars error: ' +
              err.message.replace(/</g, '&lt;') + '</div>\n' + html;
+      showToast('Handlebars: ' + err.message, 'error');
     }
   } else {
     // Editor Preview: show raw Handlebars tokens as literal text.
@@ -492,6 +495,22 @@ sdAddBtn.addEventListener('click', () => {
 sdAddKey.addEventListener('keydown', e => { if (e.key === 'Enter') sdAddBtn.click(); });
 sdAddVal.addEventListener('keydown', e => { if (e.key === 'Enter') sdAddBtn.click(); });
 
+const sdSaveBtn = $('sdSaveBtn');
+sdSaveBtn.addEventListener('click', async () => {
+  if (!S.current) { showToast('No template loaded', 'error'); return; }
+  try {
+    const nested = flatToNested(sampleData);
+    await apiFetch('/api/templates/sample-' + S.current + '.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: JSON.stringify(nested, null, 2) }),
+    });
+    showToast('Sample data saved', 'success');
+  } catch (err) {
+    showToast('Save failed: ' + err.message, 'error');
+  }
+});
+
 sdResetBtn.addEventListener('click', () => {
   sampleData = { ...DEFAULT_SAMPLE_DATA };
   renderSampleDataRows();
@@ -572,15 +591,52 @@ async function refreshList(selectName) {
           '<div class="tpl-item-info">' +
             '<div class="tpl-item-name">' + t.name + '</div>' +
             '<div class="tpl-item-size">' + sizeLabel(t.name) + '</div>' +
-          '</div></div>';
+          '</div>' +
+          '<button class="tpl-del-btn" data-del="' + t.name + '" title="Delete ' + t.name + '">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+              '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>' +
+            '</svg>' +
+          '</button>' +
+          '</div>';
       });
     }
     templateList.innerHTML = html;
 
     // Click handlers
     templateList.querySelectorAll('.tpl-item').forEach(el => {
-      el.addEventListener('click', () => switchTemplate(el.dataset.name));
+      el.addEventListener('click', e => {
+        // Don't switch template if clicking the delete button
+        if (e.target.closest('.tpl-del-btn')) return;
+        switchTemplate(el.dataset.name);
+      });
       el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') switchTemplate(el.dataset.name); });
+    });
+
+    // Delete handlers
+    templateList.querySelectorAll('.tpl-del-btn').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        e.stopPropagation();
+        const name = btn.dataset.del;
+        if (!confirm('Delete template "' + name + '"? This cannot be undone.')) return;
+        try {
+          await apiFetch('/api/templates/' + name + '.html', { method: 'DELETE' });
+          await apiFetch('/api/templates/' + name + '.css',  { method: 'DELETE' }).catch(() => {});
+          // Also try deleting sample JSON
+          await apiFetch('/api/templates/sample-' + name + '.json', { method: 'DELETE' }).catch(() => {});
+          if (S.current === name) {
+            S.current = null;
+            crumbFile.textContent = 'No template open';
+            crumbFile.classList.add('none');
+            htmlCM.setValue(''); cssCM.setValue('');
+            setDirty(false);
+            emptyState.classList.remove('hidden');
+          }
+          await refreshList(S.current);
+          showToast('Deleted — ' + name, 'success');
+        } catch (err) {
+          showToast('Delete failed: ' + err.message, 'error');
+        }
+      });
     });
   } catch (err) {
     showToast(err.message, 'error');
@@ -670,12 +726,19 @@ function switchTemplate(name) {
   }
 }
 
+btnConfirmCancel.addEventListener('click', () => {
+  S.pendingSwitch = null;
+  modalConfirm.classList.remove('open');
+});
+
 btnConfirmDiscard.addEventListener('click', () => {
   const next = S.pendingSwitch; S.pendingSwitch = null;
   modalConfirm.classList.remove('open');
   setDirty(false);
   loadTemplate(next);
 });
+
+modalConfirm.addEventListener('click', e => { if (e.target === modalConfirm) btnConfirmCancel.click(); });
 
 btnConfirmSave.addEventListener('click', async () => {
   const next = S.pendingSwitch; S.pendingSwitch = null;
@@ -760,7 +823,7 @@ modalNew.addEventListener('click', e => { if (e.target === modalNew) modalNew.cl
 btnNewCreate.addEventListener('click', async () => {
   const n = newName.value.trim();
   if (!n || !/^[\w-]+$/.test(n)) {
-    newName.style.borderColor = 'var(--col-red)';
+    newName.style.borderColor = isDark() ? '#f25c6e' : '#dc3545';
     setTimeout(() => newName.style.borderColor = '', 1600);
     showToast('Invalid name \u2014 alphanumeric and hyphens only', 'error');
     return;
@@ -786,6 +849,59 @@ btnNewCreate.addEventListener('click', async () => {
   }
 });
 newName.addEventListener('keydown', e => { if (e.key === 'Enter') btnNewCreate.click(); });
+
+// ─────────────────────────────────────────────────────────
+// Duplicate (Save As)
+// ─────────────────────────────────────────────────────────
+$('btnDuplicate').addEventListener('click', () => {
+  if (!S.current) { showToast('No template loaded to duplicate', 'error'); return; }
+  const suggested = S.current + '-copy';
+  const newDupName = prompt('Duplicate "' + S.current + '" as:', suggested);
+  if (!newDupName || !newDupName.trim()) return;
+  const n = newDupName.trim();
+  if (!/^[\w-]+$/.test(n)) { showToast('Invalid name — alphanumeric and hyphens only', 'error'); return; }
+  (async () => {
+    try {
+      await Promise.all([
+        apiFetch('/api/templates/' + n + '.html', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: htmlCM.getValue() }) }),
+        apiFetch('/api/templates/' + n + '.css',  { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: cssCM.getValue() }) }),
+      ]);
+      await refreshList(n);
+      await loadTemplate(n);
+      showToast('Duplicated as — ' + n, 'success');
+    } catch (err) {
+      showToast('Duplicate failed: ' + err.message, 'error');
+    }
+  })();
+});
+
+// ─────────────────────────────────────────────────────────
+// Download / Export
+// ─────────────────────────────────────────────────────────
+$('btnDownload').addEventListener('click', async () => {
+  if (!S.current) { showToast('No template loaded to download', 'error'); return; }
+  try {
+    const zip = new JSZip();
+    zip.file(S.current + '.html', htmlCM.getValue());
+    zip.file(S.current + '.css', cssCM.getValue());
+
+    // Include sample data if we have any
+    if (Object.keys(sampleData).length) {
+      const nested = flatToNested(sampleData);
+      zip.file('sample-' + S.current + '.json', JSON.stringify(nested, null, 2));
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = S.current + '.zip';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    showToast('Downloaded ' + S.current + '.zip', 'success');
+  } catch (err) {
+    showToast('Download failed: ' + err.message, 'error');
+  }
+});
 
 // ─────────────────────────────────────────────────────────
 // Refresh list button

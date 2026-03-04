@@ -29,8 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 function isSafeName(filename) {
   if (!filename) return false;
   const base = path.basename(filename);
-  // Must be a .html or .css file and must not differ once basename-resolved
-  return /^[\w\-]+\.(html|css)$/i.test(base) && base === filename;
+  // Must be a .html, .css, or .json file and must not differ once basename-resolved
+  return /^[\w\-]+\.(html|css|json)$/i.test(base) && base === filename;
 }
 
 /**

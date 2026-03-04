@@ -95,6 +95,20 @@ body.dirty .dirty-pill { display: flex !important; }
 .dark .tpl-item-size { color: #7070a0; }
 .tpl-item-size { color: #5c5c7a; }
 
+.tpl-del-btn {
+  width: 22px; height: 22px; border: none; background: transparent;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; flex-shrink: 0; opacity: 0;
+  transition: opacity .15s, color .12s, background .12s;
+}
+.tpl-item:hover .tpl-del-btn { opacity: .6; }
+.tpl-del-btn:hover { opacity: 1 !important; }
+.tpl-del-btn svg { width: 13px; height: 13px; }
+.dark .tpl-del-btn { color: #7070a0; }
+.tpl-del-btn { color: #5c5c7a; }
+.dark .tpl-del-btn:hover { color: #f25c6e; background: rgba(242,92,110,.12); }
+.tpl-del-btn:hover { color: #dc3545; background: rgba(220,53,69,.08); }
+
 /* ═══════════════════════════════════════════════════════
    SAMPLE DATA PANEL (toggled via JS: .open)
 ═══════════════════════════════════════════════════════ */
@@ -227,22 +241,22 @@ body.dirty .dirty-pill { display: flex !important; }
 .dark .editor-box .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
 .dark .editor-box .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover { background: #454570; }
 
-/* Light mode — default CM theme overrides */
-.CodeMirror { background: #f5f5f8 !important; color: #1a1a2e !important; }
-.CodeMirror .CodeMirror-scroll { background: #f5f5f8; }
-.CodeMirror .CodeMirror-gutters {
+/* Light mode — Eclipse CM theme overrides */
+.CodeMirror.cm-s-eclipse { background: #f5f5f8 !important; }
+.CodeMirror.cm-s-eclipse .CodeMirror-scroll { background: #f5f5f8; }
+.CodeMirror.cm-s-eclipse .CodeMirror-gutters {
   background: #ffffff !important;
   border-right: 1px solid #d0d0dc !important;
 }
-.CodeMirror .CodeMirror-linenumber { color: #8888a4 !important; }
-.CodeMirror .CodeMirror-cursor { border-left-color: #6940e5 !important; }
-.CodeMirror-selected { background: rgba(105,64,229,.1) !important; }
-.editor-box .CodeMirror-vscrollbar::-webkit-scrollbar-track,
-.editor-box .CodeMirror-hscrollbar::-webkit-scrollbar-track { background: #ffffff; }
-.editor-box .CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
-.editor-box .CodeMirror-hscrollbar::-webkit-scrollbar-thumb { background: #e2e2ea; border-radius: 4px; border: 1px solid #ffffff; }
-.editor-box .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
-.editor-box .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover { background: #8888a4; }
+.CodeMirror.cm-s-eclipse .CodeMirror-linenumber { color: #8888a4 !important; }
+.CodeMirror.cm-s-eclipse .CodeMirror-cursor { border-left-color: #6940e5 !important; }
+:not(.dark) .CodeMirror-selected { background: rgba(105,64,229,.1) !important; }
+:not(.dark) .editor-box .CodeMirror-vscrollbar::-webkit-scrollbar-track,
+:not(.dark) .editor-box .CodeMirror-hscrollbar::-webkit-scrollbar-track { background: #ffffff; }
+:not(.dark) .editor-box .CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
+:not(.dark) .editor-box .CodeMirror-hscrollbar::-webkit-scrollbar-thumb { background: #e2e2ea; border-radius: 4px; border: 1px solid #ffffff; }
+:not(.dark) .editor-box .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
+:not(.dark) .editor-box .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover { background: #8888a4; }
 
 /* Resizer dragging state (toggled via JS) */
 .editor-resizer.dragging {
