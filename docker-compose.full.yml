@@ -5,6 +5,7 @@
 #   Zookeeper + Kafka + Kafka UI
 #   Api + Console + Bridge
 #   OTel Collector + Loki + Tempo + Prometheus + Grafana
+#   Template Editor
 #
 # Usage:
 #   cp .env.example .env          # first time only — set API_KEY at minimum
@@ -13,6 +14,7 @@
 # Ports exposed to your host:
 #   8080  Api
 #   5100  Bridge
+#   3500  Template Editor  (badge WYSIWYG editor)
 #   8090  Kafka UI         (moved off 8080 to avoid conflict with Api)
 #   9092  Kafka            (for external tools / local dotnet run)
 #   3000  Grafana          (admin / admin)
@@ -439,6 +441,40 @@ services:
           memory: 256m
         reservations:
           cpus: "0.1"
+          memory: 64m
+
+  # ── Badge template WYSIWYG editor ───────────────────────────────────────────
+  template-editor:
+    build:
+      context:    editor
+      dockerfile: Dockerfile
+    image: documentgenerator/template-editor:latest
+    container_name: docgen-template-editor
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "3" }
+    ports:
+      - "3500:3500"
+    volumes:
+      # Mount the shared templates directory so edits are visible to the API/Console
+      - ./templates:/templates
+    environment:
+      TEMPLATES_DIR: /templates
+      PORT:          3500
+    healthcheck:
+      test:         ["CMD", "wget", "-qO-", "http://localhost:3500/api/templates"]
+      interval:     15s
+      timeout:      5s
+      retries:      3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128m
+        reservations:
+          cpus: "0.05"
           memory: 64m
 
 # =============================================================================

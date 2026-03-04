@@ -7,6 +7,11 @@ version: "3.9"
 #
 # All secrets should be supplied via environment variables or a .env file.
 # See .env.example for the full list of required variables.
+#
+# Ports exposed to your host:
+#   8080  Api
+#   5100  Bridge
+#   3500  Template Editor  (badge WYSIWYG editor — http://localhost:3500)
 
 services:
 
@@ -82,6 +87,23 @@ services:
     restart: unless-stopped
     depends_on:
       - api
+
+  # ── Badge template WYSIWYG editor ─────────────────────────────────────────
+  # Open http://localhost:3500 to edit badge templates.
+  # Edits are written directly to the shared templates/ directory.
+  template-editor:
+    build:
+      context:    editor
+      dockerfile: Dockerfile
+    image: documentgenerator/template-editor:latest
+    ports:
+      - "3500:3500"
+    volumes:
+      - ./templates:/templates
+    environment:
+      TEMPLATES_DIR: /templates
+      PORT:          3500
+    restart: unless-stopped
 
 volumes:
   render-output:

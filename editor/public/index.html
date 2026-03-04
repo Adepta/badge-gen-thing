@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template Editor — DocumentGenerator</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            ed: {
+              bg:         { DEFAULT: '#f5f5f8', dark: '#0e0e14' },
+              surface:    { DEFAULT: '#ffffff', dark: '#13131c' },
+              surface2:   { DEFAULT: '#eeeef2', dark: '#1a1a28' },
+              surface3:   { DEFAULT: '#e2e2ea', dark: '#22223a' },
+              border:     { DEFAULT: '#d0d0dc', dark: '#252538' },
+              'border-s': { DEFAULT: '#dddde6', dark: '#1e1e30' },
+              accent:     { DEFAULT: '#6940e5', dark: '#7c5cfc' },
+              'accent-d': { DEFAULT: 'rgba(105,64,229,.1)', dark: 'rgba(124,92,252,.15)' },
+              'accent-g': { DEFAULT: 'rgba(105,64,229,.25)', dark: 'rgba(124,92,252,.35)' },
+              red:        { DEFAULT: '#dc3545', dark: '#f25c6e' },
+              green:      { DEFAULT: '#1a9c5e', dark: '#3ecf8e' },
+              amber:      { DEFAULT: '#c87f00', dark: '#f9a825' },
+              blue:       { DEFAULT: '#2d7fc1', dark: '#4ea8de' },
+              text:       { DEFAULT: '#1a1a2e', dark: '#ddddf0' },
+              muted:      { DEFAULT: '#5c5c7a', dark: '#7070a0' },
+              faint:      { DEFAULT: '#8888a4', dark: '#454570' },
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
+          },
+          fontSize: {
+            '2xs': ['9px',  { lineHeight: '1.2' }],
+            'xs':  ['10px', { lineHeight: '1.3' }],
+            'sm':  ['11px', { lineHeight: '1.4' }],
+            'base':['12px', { lineHeight: '1.5' }],
+            'md':  ['13px', { lineHeight: '1.5' }],
+            'lg':  ['15px', { lineHeight: '1.4' }],
+            'xl':  ['16px', { lineHeight: '1.3' }],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- CodeMirror 5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/searchcursor.min.js"></script>
+
+  <!-- Handlebars (for Live Preview mode) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+
+  <!-- Editor overrides (CodeMirror, JS-toggled states, animations) -->
+  <link rel="stylesheet" href="css/editor.css">
+</head>
+<body class="h-screen overflow-hidden font-sans text-md antialiased flex flex-col
+             bg-ed-bg dark:bg-ed-bg-dark text-ed-text dark:text-ed-text-dark">
+
+<!-- ═══════════════════════════════════════════════════════ TOPBAR -->
+<div id="topbar" class="h-[52px] shrink-0 z-30 flex items-center pr-4
+                        bg-ed-surface dark:bg-ed-surface-dark
+                        border-b border-ed-border dark:border-ed-border-dark">
+  <!-- Logo -->
+  <div class="w-[220px] shrink-0 flex items-center gap-2.5 px-4 h-full
+              border-r border-ed-border dark:border-ed-border-dark">
+    <div class="w-[30px] h-[30px] rounded-lg flex items-center justify-center shrink-0
+                bg-gradient-to-br from-ed-accent dark:from-ed-accent-dark to-purple-400
+                shadow-[0_0_12px_rgba(124,92,252,.35)]">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+        <rect x="3" y="3" width="18" height="18" rx="3"/>
+        <path d="M8 12h8M8 8h4M8 16h6"/>
+      </svg>
+    </div>
+    <div class="flex flex-col leading-tight">
+      <strong class="text-base font-bold tracking-tight text-ed-text dark:text-ed-text-dark">DocGen</strong>
+      <span class="text-xs font-medium text-ed-muted dark:text-ed-muted-dark">Template Editor</span>
+    </div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="flex-1 flex items-center gap-1.5 px-5 min-w-0">
+    <div class="crumb-file none text-md font-semibold truncate text-ed-text dark:text-ed-text-dark" id="crumbFile">No template open</div>
+    <div id="dirtyPill"
+         class="dirty-pill hidden items-center gap-1.5 rounded-full px-2 py-0.5
+                text-xs font-semibold whitespace-nowrap
+                bg-amber-500/10 dark:bg-amber-400/10
+                border border-amber-500/30 dark:border-amber-400/30
+                text-ed-amber dark:text-ed-amber-dark">
+      <span class="w-1.5 h-1.5 rounded-full bg-ed-amber dark:bg-ed-amber-dark shrink-0"></span>
+      Unsaved changes
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="topbar-actions flex items-center gap-1.5 shrink-0">
+    <div id="statusChip"
+         class="status-chip text-sm font-medium whitespace-nowrap px-2.5 py-0.5 rounded-full
+                bg-ed-surface2 dark:bg-ed-surface2-dark
+                border border-ed-border dark:border-ed-border-dark
+                text-ed-muted dark:text-ed-muted-dark transition-colors duration-200">Ready</div>
+    <div class="w-px h-5 bg-ed-border dark:bg-ed-border-dark mx-1 shrink-0"></div>
+
+    <!-- Theme toggle -->
+    <button id="btnThemeToggle" title="Toggle light / dark mode"
+            class="w-[30px] h-[30px] rounded-md flex items-center justify-center shrink-0 relative cursor-pointer
+                   bg-ed-surface2 dark:bg-ed-surface2-dark
+                   border border-ed-border dark:border-ed-border-dark
+                   text-ed-muted dark:text-ed-muted-dark
+                   hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                   hover:text-ed-text hover:dark:text-ed-text-dark
+                   hover:border-ed-accent hover:dark:border-ed-accent-dark
+                   transition-all duration-150">
+      <svg class="icon-sun w-4 h-4 absolute transition-all duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg class="icon-moon w-4 h-4 absolute transition-all duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+
+    <div class="w-px h-5 bg-ed-border dark:bg-ed-border-dark mx-1 shrink-0"></div>
+
+    <!-- Save -->
+    <button class="btn btn-primary inline-flex items-center gap-1.5 text-base font-semibold
+                   px-3 py-1.5 rounded-md cursor-pointer whitespace-nowrap tracking-wide
+                   bg-ed-accent dark:bg-ed-accent-dark text-white
+                   border border-ed-accent dark:border-ed-accent-dark
+                   shadow-[0_1px_8px] shadow-ed-accent-g dark:shadow-ed-accent-g-dark
+                   hover:brightness-110 hover:shadow-[0_2px_14px] hover:shadow-ed-accent-g hover:dark:shadow-ed-accent-g-dark
+                   active:scale-[.97] transition-all duration-150"
+            id="btnSave" title="Save current template (Ctrl+S)">
+      <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+      </svg>
+      Save
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ LAYOUT -->
+<div id="layout" class="flex-1 flex overflow-hidden">
+
+  <!-- ──────────────────────────── SIDEBAR -->
+  <div id="sidebar" class="w-[220px] shrink-0 flex flex-col overflow-hidden
+                           bg-ed-surface dark:bg-ed-surface-dark
+                           border-r border-ed-border dark:border-ed-border-dark">
+    <div class="flex items-center justify-between px-3.5 pt-3 pb-2 shrink-0">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-ed-faint dark:text-ed-faint-dark">Templates</h2>
+      <button class="w-[22px] h-[22px] rounded-[5px] flex items-center justify-center cursor-pointer
+                     bg-transparent border-none text-ed-muted dark:text-ed-muted-dark
+                     hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark hover:text-ed-text hover:dark:text-ed-text-dark
+                     transition-all duration-150"
+              id="btnRefreshList" title="Refresh list">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="templateList" class="flex-1 overflow-y-auto px-2 pb-3
+                                  scrollbar-thin scrollbar-thumb-ed-border dark:scrollbar-thumb-ed-border-dark">
+      <div class="py-5 px-3 text-center text-sm text-ed-faint dark:text-ed-faint-dark">
+        Loading templates&hellip;
+      </div>
+    </div>
+
+    <!-- ── Sample Data Panel ── -->
+    <div class="sample-data-section shrink-0 flex flex-col max-h-[50%] overflow-hidden
+                border-t border-ed-border dark:border-ed-border-dark" id="sampleDataSection">
+      <div class="flex items-center gap-1.5 px-3.5 py-2 cursor-pointer select-none
+                  hover:bg-ed-surface2 hover:dark:bg-ed-surface2-dark transition-colors duration-150"
+           id="sampleDataToggle">
+        <h2 class="flex-1 text-xs font-bold uppercase tracking-widest text-ed-faint dark:text-ed-faint-dark">Sample Data</h2>
+        <svg class="sample-data-chevron w-3.5 h-3.5 shrink-0 text-ed-faint dark:text-ed-faint-dark transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="sample-data-body hidden flex-col overflow-y-auto px-2 pb-2 gap-1
+                  scrollbar-thin scrollbar-thumb-ed-border dark:scrollbar-thumb-ed-border-dark" id="sampleDataBody">
+        <!-- rows injected by JS -->
+        <div class="sd-add-row flex items-center gap-1 mt-1">
+          <input class="sd-add-input flex-1 min-w-0 font-mono text-xs px-1.5 py-0.5 rounded-[3px] outline-none
+                        bg-ed-bg dark:bg-ed-bg-dark
+                        border border-ed-border dark:border-ed-border-dark
+                        text-ed-text dark:text-ed-text-dark
+                        focus:border-ed-accent focus:dark:border-ed-accent-dark transition-colors duration-150"
+                 id="sdAddKey" placeholder="key.path" spellcheck="false">
+          <input class="sd-add-input flex-1 min-w-0 font-mono text-xs px-1.5 py-0.5 rounded-[3px] outline-none
+                        bg-ed-bg dark:bg-ed-bg-dark
+                        border border-ed-border dark:border-ed-border-dark
+                        text-ed-text dark:text-ed-text-dark
+                        focus:border-ed-accent focus:dark:border-ed-accent-dark transition-colors duration-150"
+                 id="sdAddVal" placeholder="value" spellcheck="false">
+          <button class="text-xs font-semibold px-2 py-0.5 rounded-[3px] whitespace-nowrap cursor-pointer
+                         border border-ed-accent dark:border-ed-accent-dark
+                         bg-ed-accent-d dark:bg-ed-accent-d-dark
+                         text-ed-accent dark:text-ed-accent-dark
+                         hover:bg-[rgba(124,92,252,.25)] transition-colors duration-150"
+                  id="sdAddBtn">Add</button>
+        </div>
+        <button class="sd-reset text-xs underline cursor-pointer mt-0.5 p-0 bg-transparent border-none
+                       text-ed-faint dark:text-ed-faint-dark
+                       hover:text-ed-muted hover:dark:text-ed-muted-dark transition-colors duration-150"
+                id="sdResetBtn">Reset defaults</button>
+      </div>
+    </div>
+
+    <div class="px-2 py-2.5 border-t border-ed-border dark:border-ed-border-dark shrink-0">
+      <button class="btn btn-secondary w-full justify-center inline-flex items-center gap-1.5
+                     text-sm font-semibold px-2.5 py-1.5 rounded-md cursor-pointer
+                     bg-ed-surface2 dark:bg-ed-surface2-dark
+                     text-ed-text dark:text-ed-text-dark
+                     border border-ed-border dark:border-ed-border-dark
+                     hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                     hover:border-ed-accent hover:dark:border-ed-accent-dark
+                     active:scale-[.97] transition-all duration-150"
+              id="btnNew">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New Template
+      </button>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────── WORKSPACE -->
+  <div id="workspace" class="flex-1 grid grid-cols-2 overflow-hidden relative
+                             max-[960px]:grid-cols-1 max-[960px]:grid-rows-2">
+
+    <!-- EDITOR PANE — stacked HTML on top, CSS on bottom -->
+    <div id="editorPane" class="flex flex-col overflow-hidden
+                                border-r border-ed-border dark:border-ed-border-dark
+                                max-[960px]:border-r-0 max-[960px]:border-b max-[960px]:border-ed-border max-[960px]:dark:border-ed-border-dark">
+
+      <!-- HTML editor box -->
+      <div class="editor-box flex flex-col overflow-hidden min-h-[60px]" id="htmlEditorBox" style="flex:6">
+        <div class="editor-header h-8 shrink-0 flex items-center px-2 gap-1.5
+                    bg-ed-surface dark:bg-ed-surface-dark
+                    border-b border-ed-border dark:border-ed-border-dark">
+          <span class="text-2xs font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-[3px]
+                       bg-ed-accent dark:bg-ed-accent-dark text-white shrink-0">HTML</span>
+          <span class="flex-1"></span>
+          <button class="qp-toggle h-[22px] px-2 rounded-[3px] flex items-center gap-1 cursor-pointer whitespace-nowrap
+                         text-xs font-semibold
+                         bg-transparent border border-ed-border dark:border-ed-border-dark
+                         text-ed-muted dark:text-ed-muted-dark
+                         hover:text-ed-text hover:dark:text-ed-text-dark
+                         hover:border-ed-accent hover:dark:border-ed-accent-dark
+                         hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                         transition-all duration-150"
+                  id="btnQpToggle" title="Quick Parts — insert tokens and blocks at cursor">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            Quick Parts
+          </button>
+          <button class="editor-import-btn h-[22px] px-2 rounded-[3px] flex items-center gap-1 cursor-pointer whitespace-nowrap
+                         text-xs font-semibold
+                         bg-transparent border border-ed-border dark:border-ed-border-dark
+                         text-ed-muted dark:text-ed-muted-dark
+                         hover:text-ed-text hover:dark:text-ed-text-dark
+                         hover:border-ed-accent hover:dark:border-ed-accent-dark
+                         hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                         transition-all duration-150"
+                  id="btnImportHtml" title="Import .html file from disk">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Import
+          </button>
+        </div>
+
+        <!-- Quick Parts Drawer (inside HTML box) -->
+        <div id="qpDrawer" class="qp-drawer shrink-0 hidden flex-col max-h-[220px]
+                                  bg-ed-surface dark:bg-ed-surface-dark
+                                  border-b border-ed-border dark:border-ed-border-dark">
+          <div class="flex h-[30px] items-end px-2 shrink-0
+                      border-b border-ed-border dark:border-ed-border-dark">
+            <div class="qp-tab active h-7 px-3 text-sm font-semibold cursor-pointer select-none
+                        rounded-t-md flex items-center gap-1.5 relative bottom-[-1px]
+                        border border-transparent border-b-0
+                        text-ed-muted dark:text-ed-muted-dark
+                        hover:text-ed-text hover:dark:text-ed-text-dark
+                        transition-colors duration-150" data-qptab="tokens">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
+              Tokens
+            </div>
+            <div class="qp-tab h-7 px-3 text-sm font-semibold cursor-pointer select-none
+                        rounded-t-md flex items-center gap-1.5 relative bottom-[-1px]
+                        border border-transparent border-b-0
+                        text-ed-muted dark:text-ed-muted-dark
+                        hover:text-ed-text hover:dark:text-ed-text-dark
+                        transition-colors duration-150" data-qptab="blocks">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="7" rx="1"/><rect x="3" y="14" width="8" height="7" rx="1"/><rect x="15" y="14" width="6" height="7" rx="1"/></svg>
+              Blocks
+            </div>
+          </div>
+
+          <div class="qp-panel active hidden flex-col overflow-y-auto p-2 gap-2.5
+                      scrollbar-thin scrollbar-thumb-ed-border dark:scrollbar-thumb-ed-border-dark" id="qpPanelTokens">
+            <div>
+              <div class="text-2xs font-bold uppercase tracking-wider text-ed-faint dark:text-ed-faint-dark pl-0.5 pb-1">Attendee variables</div>
+              <div class="qp-chips flex flex-wrap gap-1.5" id="qpTokensVars"></div>
+            </div>
+            <div>
+              <div class="text-2xs font-bold uppercase tracking-wider text-ed-faint dark:text-ed-faint-dark pl-0.5 pb-1">Branding</div>
+              <div class="qp-chips flex flex-wrap gap-1.5" id="qpTokensBrand"></div>
+            </div>
+            <div>
+              <div class="text-2xs font-bold uppercase tracking-wider text-ed-faint dark:text-ed-faint-dark pl-0.5 pb-1">Helpers &amp; special</div>
+              <div class="qp-chips flex flex-wrap gap-1.5" id="qpTokensHelpers"></div>
+            </div>
+            <div>
+              <div class="text-2xs font-bold uppercase tracking-wider text-ed-faint dark:text-ed-faint-dark pl-0.5 pb-1">CSS branding values</div>
+              <div class="qp-chips flex flex-wrap gap-1.5" id="qpTokensCss"></div>
+            </div>
+          </div>
+
+          <div class="qp-panel hidden flex-col overflow-y-auto p-2 gap-1.5
+                      scrollbar-thin scrollbar-thumb-ed-border dark:scrollbar-thumb-ed-border-dark" id="qpPanelBlocks">
+            <div class="qp-chips flex flex-col gap-1.5" id="qpBlockList"></div>
+          </div>
+        </div>
+
+        <div id="wrapHtml" class="flex-1 min-h-0 overflow-hidden relative"></div>
+      </div>
+
+      <!-- Draggable resizer -->
+      <div class="editor-resizer h-[5px] shrink-0 relative z-10 cursor-row-resize
+                  bg-ed-border dark:bg-ed-border-dark
+                  hover:bg-ed-accent hover:dark:bg-ed-accent-dark
+                  transition-colors duration-150" id="editorResizer"></div>
+
+      <!-- CSS editor box -->
+      <div class="editor-box flex flex-col overflow-hidden min-h-[60px]" id="cssEditorBox" style="flex:4">
+        <div class="editor-header h-8 shrink-0 flex items-center px-2 gap-1.5
+                    bg-ed-surface dark:bg-ed-surface-dark
+                    border-b border-ed-border dark:border-ed-border-dark">
+          <span class="text-2xs font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-[3px]
+                       bg-ed-blue dark:bg-ed-blue-dark text-white shrink-0">CSS</span>
+          <span class="flex-1"></span>
+          <button class="editor-import-btn h-[22px] px-2 rounded-[3px] flex items-center gap-1 cursor-pointer whitespace-nowrap
+                         text-xs font-semibold
+                         bg-transparent border border-ed-border dark:border-ed-border-dark
+                         text-ed-muted dark:text-ed-muted-dark
+                         hover:text-ed-text hover:dark:text-ed-text-dark
+                         hover:border-ed-accent hover:dark:border-ed-accent-dark
+                         hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                         transition-all duration-150"
+                  id="btnImportCss" title="Import .css file from disk">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Import
+          </button>
+        </div>
+        <div id="wrapCss" class="flex-1 min-h-0 overflow-hidden relative"></div>
+      </div>
+
+      <!-- Hidden file inputs for per-editor imports -->
+      <input type="file" id="fileInputHtml" accept=".html" class="hidden">
+      <input type="file" id="fileInputCss" accept=".css" class="hidden">
+    </div>
+
+    <!-- PREVIEW PANE -->
+    <div id="previewPane" class="flex flex-col overflow-hidden bg-ed-bg dark:bg-ed-bg-dark">
+      <div class="preview-toolbar h-[38px] shrink-0 flex items-center px-2.5 gap-2
+                  bg-ed-surface dark:bg-ed-surface-dark
+                  border-b border-ed-border dark:border-ed-border-dark">
+        <span class="text-base font-semibold text-ed-muted dark:text-ed-muted-dark px-1 whitespace-nowrap">Preview</span>
+
+        <!-- Segmented toggle: Editor Preview / Live Preview -->
+        <div class="seg-toggle flex shrink-0 rounded-md overflow-hidden
+                    bg-ed-surface2 dark:bg-ed-surface2-dark
+                    border border-ed-border dark:border-ed-border-dark" id="previewModeToggle">
+          <button class="active text-xs font-semibold px-2.5 py-1 border-none cursor-pointer whitespace-nowrap
+                         bg-transparent text-ed-muted dark:text-ed-muted-dark
+                         hover:text-ed-text hover:dark:text-ed-text-dark transition-colors duration-150" data-mode="editor">Editor</button>
+          <button class="text-xs font-semibold px-2.5 py-1 border-none cursor-pointer whitespace-nowrap
+                         bg-transparent text-ed-muted dark:text-ed-muted-dark
+                         border-l border-ed-border dark:border-ed-border-dark
+                         hover:text-ed-text hover:dark:text-ed-text-dark transition-colors duration-150" data-mode="live">Live</button>
+        </div>
+
+        <div class="flex-1"></div>
+
+        <label class="text-xs font-semibold uppercase tracking-wider text-ed-faint dark:text-ed-faint-dark">Size</label>
+        <select class="toolbar-select text-sm font-medium px-1.5 py-0.5 rounded-md cursor-pointer outline-none
+                       bg-ed-surface2 dark:bg-ed-surface2-dark
+                       border border-ed-border dark:border-ed-border-dark
+                       text-ed-text dark:text-ed-text-dark
+                       focus:border-ed-accent focus:dark:border-ed-accent-dark
+                       hover:border-ed-accent hover:dark:border-ed-accent-dark
+                       transition-colors duration-150" id="previewSize">
+          <option value="105mm,148mm">A6 &mdash; 105x148mm</option>
+          <option value="85.6mm,54mm">Credit Card &mdash; 85.6x54mm</option>
+          <option value="210mm,297mm">A4 &mdash; 210x297mm</option>
+          <option value="custom">Custom&hellip;</option>
+        </select>
+
+        <span id="customSizeWrap" class="hidden items-center gap-1">
+          <input class="custom-dim-input w-[60px] font-mono text-sm px-1.5 py-0.5 rounded-md outline-none
+                        bg-ed-surface2 dark:bg-ed-surface2-dark
+                        border border-ed-border dark:border-ed-border-dark
+                        text-ed-text dark:text-ed-text-dark
+                        focus:border-ed-accent focus:dark:border-ed-accent-dark" id="customW" type="text" placeholder="w e.g. 100mm">
+          <span class="text-base text-ed-faint dark:text-ed-faint-dark">x</span>
+          <input class="custom-dim-input w-[60px] font-mono text-sm px-1.5 py-0.5 rounded-md outline-none
+                        bg-ed-surface2 dark:bg-ed-surface2-dark
+                        border border-ed-border dark:border-ed-border-dark
+                        text-ed-text dark:text-ed-text-dark
+                        focus:border-ed-accent focus:dark:border-ed-accent-dark" id="customH" type="text" placeholder="h e.g. 60mm">
+        </span>
+
+        <label class="text-xs font-semibold uppercase tracking-wider text-ed-faint dark:text-ed-faint-dark">Zoom</label>
+        <select class="toolbar-select text-sm font-medium px-1.5 py-0.5 rounded-md cursor-pointer outline-none
+                       bg-ed-surface2 dark:bg-ed-surface2-dark
+                       border border-ed-border dark:border-ed-border-dark
+                       text-ed-text dark:text-ed-text-dark
+                       focus:border-ed-accent focus:dark:border-ed-accent-dark
+                       hover:border-ed-accent hover:dark:border-ed-accent-dark
+                       transition-colors duration-150" id="previewScale">
+          <option value="0.4">40%</option>
+          <option value="0.5">50%</option>
+          <option value="0.65">65%</option>
+          <option value="0.75">75%</option>
+          <option value="1" selected>100%</option>
+          <option value="1.25">125%</option>
+          <option value="1.5">150%</option>
+        </select>
+
+        <button class="w-[26px] h-[26px] rounded-md flex items-center justify-center shrink-0 cursor-pointer
+                       bg-ed-surface2 dark:bg-ed-surface2-dark
+                       border border-ed-border dark:border-ed-border-dark
+                       text-ed-muted dark:text-ed-muted-dark
+                       hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                       hover:text-ed-text hover:dark:text-ed-text-dark
+                       hover:border-ed-accent hover:dark:border-ed-accent-dark
+                       transition-all duration-150"
+                id="btnRefreshPreview" title="Force re-render">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </button>
+      </div>
+
+      <div id="previewCanvas" class="flex-1 overflow-auto flex items-start justify-center p-8
+                                     bg-[length:22px_22px] bg-ed-bg dark:bg-ed-bg-dark
+                                     preview-canvas-dots">
+        <iframe id="previewFrame" class="border-none bg-white rounded-[3px] origin-top
+                                         shadow-[0_0_0_1px_rgba(255,255,255,.05),0_8px_24px_rgba(0,0,0,.5),0_24px_64px_rgba(0,0,0,.4)]
+                                         transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+    <!-- Empty state — centred over the full workspace (editor + preview) -->
+    <div id="emptyState" class="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 pointer-events-none opacity-100 transition-opacity duration-300
+                                bg-ed-bg/80 dark:bg-ed-bg-dark/80 backdrop-blur-sm">
+      <div class="w-14 h-14 rounded-2xl flex items-center justify-center
+                  bg-ed-surface2 dark:bg-ed-surface2-dark
+                  border border-ed-border dark:border-ed-border-dark">
+        <svg class="w-7 h-7 text-ed-faint dark:text-ed-faint-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="13" x2="15" y2="13"/>
+          <line x1="9" y1="17" x2="12" y2="17"/>
+        </svg>
+      </div>
+      <div class="text-lg font-bold text-ed-muted dark:text-ed-muted-dark">No template selected</div>
+      <div class="text-base text-ed-faint dark:text-ed-faint-dark text-center max-w-[240px] leading-relaxed">Pick a template from the sidebar, or create a new one to get started.</div>
+    </div>
+
+  </div><!-- /workspace -->
+</div><!-- /layout -->
+
+<!-- ═══════════════════════════════════════════════════════ NEW TEMPLATE MODAL -->
+<div class="overlay fixed inset-0 z-[200] items-center justify-center
+            bg-black/65 backdrop-blur-[4px] hidden" id="modalNew">
+  <div class="modal flex flex-col gap-5 p-7 w-[min(460px,92vw)] rounded-xl
+              bg-ed-surface dark:bg-ed-surface-dark
+              border border-ed-border dark:border-ed-border-dark
+              shadow-[0_24px_80px_rgba(0,0,0,.7)] animate-modal-in">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl font-bold text-ed-text dark:text-ed-text-dark">New Template</h2>
+      <p class="text-base text-ed-muted dark:text-ed-muted-dark leading-relaxed">Creates a new <code>.html</code> + <code>.css</code> file pair in the templates directory.</p>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-bold uppercase tracking-wider text-ed-muted dark:text-ed-muted-dark">Template Name</label>
+      <input type="text" id="newName" placeholder="e.g. badge-custom-a6" autocomplete="off" spellcheck="false"
+             class="text-md px-3 py-2 rounded-md outline-none
+                    bg-ed-bg dark:bg-ed-bg-dark
+                    border border-ed-border dark:border-ed-border-dark
+                    text-ed-text dark:text-ed-text-dark
+                    focus:border-ed-accent focus:dark:border-ed-accent-dark
+                    focus:shadow-[0_0_0_3px] focus:shadow-ed-accent-d focus:dark:shadow-ed-accent-d-dark
+                    transition-all duration-150">
+      <span class="text-sm text-ed-faint dark:text-ed-faint-dark">Alphanumeric and hyphens only. Use a suffix like <code>-a6</code> or <code>-cc</code> for auto size detection.</span>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-bold uppercase tracking-wider text-ed-muted dark:text-ed-muted-dark">Size Preset</label>
+      <select id="newSize" class="text-md px-3 py-2 rounded-md outline-none cursor-pointer
+                                  bg-ed-bg dark:bg-ed-bg-dark
+                                  border border-ed-border dark:border-ed-border-dark
+                                  text-ed-text dark:text-ed-text-dark
+                                  focus:border-ed-accent focus:dark:border-ed-accent-dark
+                                  transition-colors duration-150">
+        <option value="105mm,148mm">A6 &mdash; 105x148mm</option>
+        <option value="85.6mm,54mm">Credit Card &mdash; 85.6x54mm</option>
+        <option value="210mm,297mm">A4 &mdash; 210x297mm</option>
+        <option value="">Blank (no dimensions)</option>
+      </select>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-1 border-t border-ed-border dark:border-ed-border-dark">
+      <button class="btn btn-ghost inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-transparent text-ed-muted dark:text-ed-muted-dark
+                     border border-ed-border dark:border-ed-border-dark
+                     hover:text-ed-text hover:dark:text-ed-text-dark
+                     hover:border-ed-accent hover:dark:border-ed-accent-dark
+                     hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                     active:scale-[.97] transition-all duration-150"
+              id="btnNewCancel">Cancel</button>
+      <button class="btn btn-primary inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-ed-accent dark:bg-ed-accent-dark text-white
+                     border border-ed-accent dark:border-ed-accent-dark
+                     shadow-[0_1px_8px] shadow-ed-accent-g dark:shadow-ed-accent-g-dark
+                     hover:brightness-110 active:scale-[.97] transition-all duration-150"
+              id="btnNewCreate">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Create
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ UNSAVED CHANGES MODAL -->
+<div class="overlay fixed inset-0 z-[200] items-center justify-center
+            bg-black/65 backdrop-blur-[4px] hidden" id="modalConfirm">
+  <div class="modal flex flex-col gap-5 p-7 w-[min(460px,92vw)] rounded-xl
+              bg-ed-surface dark:bg-ed-surface-dark
+              border border-ed-border dark:border-ed-border-dark
+              shadow-[0_24px_80px_rgba(0,0,0,.7)] animate-modal-in">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl font-bold text-ed-text dark:text-ed-text-dark">Unsaved changes</h2>
+      <p class="text-base text-ed-muted dark:text-ed-muted-dark leading-relaxed">You have unsaved changes in <strong id="confirmName"></strong>. Save before switching?</p>
+    </div>
+    <div class="flex justify-end gap-2 pt-1 border-t border-ed-border dark:border-ed-border-dark">
+      <button class="btn btn-ghost inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-transparent text-ed-muted dark:text-ed-muted-dark
+                     border border-ed-border dark:border-ed-border-dark
+                     hover:text-ed-text hover:dark:text-ed-text-dark
+                     hover:border-ed-accent hover:dark:border-ed-accent-dark
+                     hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                     active:scale-[.97] transition-all duration-150"
+              id="btnConfirmDiscard">Discard</button>
+      <button class="btn btn-primary inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-ed-accent dark:bg-ed-accent-dark text-white
+                     border border-ed-accent dark:border-ed-accent-dark
+                     shadow-[0_1px_8px] shadow-ed-accent-g dark:shadow-ed-accent-g-dark
+                     hover:brightness-110 active:scale-[.97] transition-all duration-150"
+              id="btnConfirmSave">Save &amp; Switch</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TOAST -->
+<div id="toast" class="toast fixed bottom-5 right-5 z-[300] flex items-center gap-2.5
+                       px-4 py-2.5 rounded-lg max-w-[300px] pointer-events-none
+                       bg-ed-surface2 dark:bg-ed-surface2-dark
+                       border border-ed-border dark:border-ed-border-dark
+                       text-ed-text dark:text-ed-text-dark
+                       text-base font-medium
+                       shadow-[0_8px_32px_rgba(0,0,0,.5)]
+                       opacity-0 translate-y-2 transition-all duration-200">
+  <svg class="toast-icon w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" id="toastIcon"></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SCRIPT -->
+<script src="js/app.js"></script>
+</body>
+</html>
