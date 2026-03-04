@@ -105,6 +105,7 @@ const htmlEditorBox   = $('htmlEditorBox');
 const cssEditorBox    = $('cssEditorBox');
 const editorResizer   = $('editorResizer');
 const previewModeToggle = $('previewModeToggle');
+const previewSpinner    = $('previewSpinner');
 
 // ─────────────────────────────────────────────────────────
 // CodeMirror editors
@@ -121,6 +122,8 @@ const CM_COMMON = {
     'Ctrl-S': () => save(),
     'Cmd-S':  () => save(),
     'Ctrl-/': 'toggleComment',
+    'Ctrl-Q': () => $('btnQpToggle').click(),
+    'Cmd-Q':  () => $('btnQpToggle').click(),
   },
 };
 
@@ -394,12 +397,16 @@ function renderPreview() {
   const blob = new Blob([combined], { type: 'text/html' });
   const url  = URL.createObjectURL(blob);
 
+  // Show spinner while iframe loads
+  previewSpinner.classList.add('active');
+
   previewFrame.src = url;
 
   // Revoke the previous URL once the new one has loaded
   previewFrame.onload = () => {
     if (_prevBlobUrl) URL.revokeObjectURL(_prevBlobUrl);
     _prevBlobUrl = url;
+    previewSpinner.classList.remove('active');
   };
 }
 
@@ -913,9 +920,15 @@ btnRefreshList.addEventListener('click', () => refreshList(S.current));
 // ─────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); save(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'q') {
+    e.preventDefault();
+    btnQpToggle.click();
+  }
   if (e.key === 'Escape') {
     modalNew.classList.remove('open');
     modalConfirm.classList.remove('open');
+    $('modalRename').classList.remove('open');
+    $('modalUpload').classList.remove('open');
   }
 });
 
@@ -1121,6 +1134,191 @@ document.querySelectorAll('.qp-tab').forEach(function(tab) {
     tab.classList.add('active');
     document.querySelectorAll('.qp-panel').forEach(function(p) { p.classList.remove('active'); });
     $('qpPanel' + which.charAt(0).toUpperCase() + which.slice(1)).classList.add('active');
+  });
+});
+
+// ─────────────────────────────────────────────────────────
+// Rename template
+// ─────────────────────────────────────────────────────────
+const modalRename       = $('modalRename');
+const renameName        = $('renameName');
+const btnRenameCancel   = $('btnRenameCancel');
+const btnRenameConfirm  = $('btnRenameConfirm');
+
+$('btnRename').addEventListener('click', () => {
+  if (!S.current) { showToast('No template loaded to rename', 'error'); return; }
+  renameName.value = S.current;
+  modalRename.classList.add('open');
+  setTimeout(() => { renameName.focus(); renameName.select(); }, 60);
+});
+
+btnRenameCancel.addEventListener('click', () => modalRename.classList.remove('open'));
+modalRename.addEventListener('click', e => { if (e.target === modalRename) modalRename.classList.remove('open'); });
+
+btnRenameConfirm.addEventListener('click', async () => {
+  const newN = renameName.value.trim();
+  if (!newN || !/^[\w-]+$/.test(newN)) {
+    renameName.style.borderColor = isDark() ? '#f25c6e' : '#dc3545';
+    setTimeout(() => renameName.style.borderColor = '', 1600);
+    showToast('Invalid name — alphanumeric and hyphens only', 'error');
+    return;
+  }
+  if (newN === S.current) { modalRename.classList.remove('open'); return; }
+
+  const oldName = S.current;
+  modalRename.classList.remove('open');
+  setStatus('Renaming\u2026', 'saving');
+
+  try {
+    await apiFetch('/api/templates/rename', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldName, newName: newN }),
+    });
+    S.current = newN;
+    crumbFile.textContent = newN;
+    await refreshList(newN);
+    autoSize(newN);
+    setStatus('Renamed', 'ok');
+    showToast('Renamed — ' + oldName + ' \u2192 ' + newN, 'success');
+  } catch (err) {
+    setStatus('Rename failed', 'error');
+    showToast('Rename failed: ' + err.message, 'error');
+  }
+});
+
+renameName.addEventListener('keydown', e => { if (e.key === 'Enter') btnRenameConfirm.click(); });
+
+// ─────────────────────────────────────────────────────────
+// Image / asset upload
+// ─────────────────────────────────────────────────────────
+const modalUpload    = $('modalUpload');
+const uploadDropZone = $('uploadDropZone');
+const uploadFileList = $('uploadFileList');
+const fileInputAsset = $('fileInputAsset');
+let _pendingFiles = [];
+
+$('btnUploadAsset').addEventListener('click', () => {
+  _pendingFiles = [];
+  uploadFileList.innerHTML = '';
+  modalUpload.classList.add('open');
+});
+
+$('btnUploadClose').addEventListener('click', () => modalUpload.classList.remove('open'));
+modalUpload.addEventListener('click', e => { if (e.target === modalUpload) modalUpload.classList.remove('open'); });
+
+// Click on drop zone opens file picker
+uploadDropZone.addEventListener('click', () => fileInputAsset.click());
+
+// Drag-and-drop
+uploadDropZone.addEventListener('dragover', e => { e.preventDefault(); uploadDropZone.classList.add('dragover'); });
+uploadDropZone.addEventListener('dragleave', () => uploadDropZone.classList.remove('dragover'));
+uploadDropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadDropZone.classList.remove('dragover');
+  addUploadFiles(e.dataTransfer.files);
+});
+
+// File input change
+fileInputAsset.addEventListener('change', () => {
+  addUploadFiles(fileInputAsset.files);
+  fileInputAsset.value = '';
+});
+
+function addUploadFiles(fileList) {
+  for (const f of fileList) {
+    // Validate image types
+    if (!/\.(png|jpg|jpeg|gif|svg|webp)$/i.test(f.name)) {
+      showToast('Skipped "' + f.name + '" — not an image', 'error');
+      continue;
+    }
+    // Avoid duplicates
+    if (_pendingFiles.some(p => p.name === f.name)) continue;
+    _pendingFiles.push(f);
+    renderUploadFileRow(f);
+  }
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function renderUploadFileRow(file) {
+  const row = document.createElement('div');
+  row.className = 'upload-file-row';
+  row.dataset.filename = file.name;
+
+  const icon = document.createElement('span');
+  icon.textContent = file.name.match(/\.svg$/i) ? '\u25A1' : '\u25A3';
+  icon.style.fontSize = '14px';
+
+  const nameEl = document.createElement('span');
+  nameEl.textContent = file.name;
+  nameEl.style.flex = '1';
+  nameEl.style.overflow = 'hidden';
+  nameEl.style.textOverflow = 'ellipsis';
+  nameEl.style.whiteSpace = 'nowrap';
+
+  const sizeEl = document.createElement('span');
+  sizeEl.className = 'upload-file-size';
+  sizeEl.textContent = formatFileSize(file.size);
+
+  const statusEl = document.createElement('span');
+  statusEl.className = 'upload-file-status pending';
+  statusEl.textContent = 'pending';
+  statusEl.dataset.role = 'status';
+
+  const removeBtn = document.createElement('button');
+  removeBtn.innerHTML = '\u2715';
+  removeBtn.style.cssText = 'border:none;background:transparent;cursor:pointer;font-size:12px;padding:2px 4px;border-radius:3px;';
+  removeBtn.className = 'text-ed-faint dark:text-ed-faint-dark hover:text-ed-red hover:dark:text-ed-red-dark';
+  removeBtn.addEventListener('click', () => {
+    _pendingFiles = _pendingFiles.filter(f2 => f2.name !== file.name);
+    row.remove();
+  });
+
+  row.appendChild(icon);
+  row.appendChild(nameEl);
+  row.appendChild(sizeEl);
+  row.appendChild(statusEl);
+  row.appendChild(removeBtn);
+  uploadFileList.appendChild(row);
+}
+
+$('btnUploadSubmit').addEventListener('click', async () => {
+  if (!_pendingFiles.length) { showToast('No files to upload', 'error'); return; }
+
+  let successCount = 0;
+  for (const file of _pendingFiles) {
+    const statusEl = uploadFileList.querySelector('[data-filename="' + file.name + '"] [data-role="status"]');
+    if (statusEl) { statusEl.textContent = 'uploading\u2026'; statusEl.className = 'upload-file-status pending'; }
+
+    const formData = new FormData();
+    formData.append('asset', file);
+
+    try {
+      const r = await fetch('/api/assets/upload', { method: 'POST', body: formData });
+      if (!r.ok) {
+        const b = await r.json().catch(() => ({ error: r.statusText }));
+        throw new Error(b.error || r.statusText);
+      }
+      if (statusEl) { statusEl.textContent = 'done'; statusEl.className = 'upload-file-status ok'; }
+      successCount++;
+    } catch (err) {
+      if (statusEl) { statusEl.textContent = 'failed'; statusEl.className = 'upload-file-status error'; }
+      showToast('Upload failed: ' + file.name + ' — ' + err.message, 'error');
+    }
+  }
+
+  if (successCount) {
+    showToast('Uploaded ' + successCount + ' file' + (successCount > 1 ? 's' : ''), 'success');
+  }
+  _pendingFiles = _pendingFiles.filter(f => {
+    const row = uploadFileList.querySelector('[data-filename="' + f.name + '"]');
+    const st = row ? row.querySelector('[data-role="status"]') : null;
+    return st && st.textContent !== 'done';
   });
 });
 

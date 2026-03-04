@@ -3,6 +3,7 @@
 const express = require('express');
 const fs      = require('fs');
 const path    = require('path');
+const multer  = require('multer');
 
 const app  = express();
 const PORT = process.env.PORT || 3500;
@@ -13,11 +14,42 @@ const TEMPLATES_DIR = process.env.TEMPLATES_DIR
   ? path.resolve(process.env.TEMPLATES_DIR)
   : path.resolve(__dirname, '..', 'templates');
 
+// Assets directory — sits alongside templates (volume-mounted)
+const ASSETS_DIR = process.env.ASSETS_DIR
+  ? path.resolve(process.env.ASSETS_DIR)
+  : path.resolve(TEMPLATES_DIR, 'assets');
+
+// Ensure assets directory exists on startup
+fs.mkdirSync(ASSETS_DIR, { recursive: true });
+
+// Multer storage for asset uploads
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, ASSETS_DIR),
+    filename:    (_req, file, cb) => {
+      // Sanitise: only allow word chars, hyphens, dots
+      const safe = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+      cb(null, safe);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max per file
+  fileFilter: (_req, file, cb) => {
+    if (/\.(png|jpe?g|gif|svg|webp)$/i.test(file.originalname)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed (png, jpg, gif, svg, webp)'));
+    }
+  },
+});
+
 // ---------------------------------------------------------------------------
 // Middleware
 // ---------------------------------------------------------------------------
 app.use(express.json({ limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve uploaded assets at /assets/<filename>
+app.use('/assets', express.static(ASSETS_DIR));
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -186,6 +218,107 @@ app.delete('/api/templates/:filename', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// Routes — Rename a template (all related files)
+// ---------------------------------------------------------------------------
+
+/**
+ * POST /api/templates/rename
+ * Body: { oldName: "badge-old", newName: "badge-new" }
+ * Renames .html, .css, and sample-*.json files atomically.
+ */
+app.post('/api/templates/rename', (req, res) => {
+  const { oldName, newName } = req.body;
+
+  if (!oldName || !newName) {
+    return res.status(400).json({ error: 'Both oldName and newName are required' });
+  }
+  if (!/^[\w-]+$/.test(oldName) || !/^[\w-]+$/.test(newName)) {
+    return res.status(400).json({ error: 'Names must be alphanumeric with hyphens only' });
+  }
+  if (oldName === newName) {
+    return res.json({ ok: true, renamed: [] });
+  }
+
+  // Check the new name doesn't already exist
+  const newHtml = path.resolve(TEMPLATES_DIR, newName + '.html');
+  if (fs.existsSync(newHtml)) {
+    return res.status(409).json({ error: 'A template named "' + newName + '" already exists' });
+  }
+
+  const filePairs = [
+    [oldName + '.html', newName + '.html'],
+    [oldName + '.css',  newName + '.css'],
+    ['sample-' + oldName + '.json', 'sample-' + newName + '.json'],
+  ];
+
+  const renamed = [];
+  try {
+    for (const [oldFile, newFile] of filePairs) {
+      const oldPath = path.resolve(TEMPLATES_DIR, oldFile);
+      const newPath = path.resolve(TEMPLATES_DIR, newFile);
+      if (fs.existsSync(oldPath)) {
+        fs.renameSync(oldPath, newPath);
+        renamed.push(oldFile + ' -> ' + newFile);
+      }
+    }
+  } catch (err) {
+    return res.status(500).json({ error: 'Rename failed', detail: err.message });
+  }
+
+  res.json({ ok: true, renamed });
+});
+
+// ---------------------------------------------------------------------------
+// Routes — Asset upload
+// ---------------------------------------------------------------------------
+
+/**
+ * POST /api/assets/upload
+ * Multipart form with field name "asset" (single or multiple files).
+ */
+app.post('/api/assets/upload', (req, res) => {
+  upload.array('asset', 10)(req, res, (err) => {
+    if (err) {
+      const msg = err instanceof multer.MulterError
+        ? err.message
+        : err.message || 'Upload failed';
+      return res.status(400).json({ error: msg });
+    }
+
+    if (!req.files || !req.files.length) {
+      return res.status(400).json({ error: 'No files received' });
+    }
+
+    const uploaded = req.files.map(f => ({
+      filename: f.filename,
+      size: f.size,
+      url: '/assets/' + f.filename,
+    }));
+
+    res.json({ ok: true, files: uploaded });
+  });
+});
+
+/**
+ * GET /api/assets
+ * Lists all assets in the assets directory.
+ */
+app.get('/api/assets', (_req, res) => {
+  try {
+    const files = fs.readdirSync(ASSETS_DIR);
+    const assets = files
+      .filter(f => /\.(png|jpe?g|gif|svg|webp)$/i.test(f))
+      .map(f => {
+        const stat = fs.statSync(path.join(ASSETS_DIR, f));
+        return { filename: f, size: stat.size, url: '/assets/' + f };
+      });
+    res.json(assets);
+  } catch (err) {
+    res.status(500).json({ error: 'Cannot read assets directory', detail: err.message });
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Catch-all — serve the SPA for any non-API, non-static route
 // ---------------------------------------------------------------------------
 app.get('*', (_req, res) => {
@@ -198,4 +331,5 @@ app.get('*', (_req, res) => {
 app.listen(PORT, () => {
   console.log(`Template editor running on http://localhost:${PORT}`);
   console.log(`Templates directory: ${TEMPLATES_DIR}`);
+  console.log(`Assets directory:    ${ASSETS_DIR}`);
 });

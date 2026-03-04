@@ -152,6 +152,22 @@
       </svg>
     </button>
 
+    <!-- Upload asset -->
+    <button id="btnUploadAsset" title="Upload image / asset"
+            class="w-[30px] h-[30px] rounded-md flex items-center justify-center shrink-0 relative cursor-pointer
+                   bg-ed-surface2 dark:bg-ed-surface2-dark
+                   border border-ed-border dark:border-ed-border-dark
+                   text-ed-muted dark:text-ed-muted-dark
+                   hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                   hover:text-ed-text hover:dark:text-ed-text-dark
+                   hover:border-ed-accent hover:dark:border-ed-accent-dark
+                   transition-all duration-150">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+    </button>
+    <input type="file" id="fileInputAsset" accept="image/*,.svg,.png,.jpg,.jpeg,.gif,.webp" class="hidden" multiple>
+
     <!-- Download -->
     <button id="btnDownload" title="Download template files"
             class="w-[30px] h-[30px] rounded-md flex items-center justify-center shrink-0 relative cursor-pointer
@@ -276,20 +292,37 @@
         </svg>
         New Template
       </button>
-      <button class="btn btn-secondary w-full justify-center inline-flex items-center gap-1.5
-                     text-sm font-semibold px-2.5 py-1.5 rounded-md cursor-pointer
-                     bg-ed-surface2 dark:bg-ed-surface2-dark
-                     text-ed-text dark:text-ed-text-dark
-                     border border-ed-border dark:border-ed-border-dark
-                     hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
-                     hover:border-ed-accent hover:dark:border-ed-accent-dark
-                     active:scale-[.97] transition-all duration-150"
-              id="btnDuplicate">
-        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-        </svg>
-        Duplicate
-      </button>
+      <div class="flex gap-1.5">
+        <button class="btn btn-secondary flex-1 justify-center inline-flex items-center gap-1.5
+                       text-sm font-semibold px-2.5 py-1.5 rounded-md cursor-pointer
+                       bg-ed-surface2 dark:bg-ed-surface2-dark
+                       text-ed-text dark:text-ed-text-dark
+                       border border-ed-border dark:border-ed-border-dark
+                       hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                       hover:border-ed-accent hover:dark:border-ed-accent-dark
+                       active:scale-[.97] transition-all duration-150"
+                id="btnDuplicate">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          Duplicate
+        </button>
+        <button class="btn btn-secondary flex-1 justify-center inline-flex items-center gap-1.5
+                       text-sm font-semibold px-2.5 py-1.5 rounded-md cursor-pointer
+                       bg-ed-surface2 dark:bg-ed-surface2-dark
+                       text-ed-text dark:text-ed-text-dark
+                       border border-ed-border dark:border-ed-border-dark
+                       hover:bg-ed-surface3 hover:dark:bg-ed-surface3-dark
+                       hover:border-ed-accent hover:dark:border-ed-accent-dark
+                       active:scale-[.97] transition-all duration-150"
+                id="btnRename">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Rename
+        </button>
+      </div>
     </div>
   </div>
 
@@ -318,7 +351,7 @@
                          hover:border-ed-accent hover:dark:border-ed-accent-dark
                          hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
                          transition-all duration-150"
-                  id="btnQpToggle" title="Quick Parts — insert tokens and blocks at cursor">
+                  id="btnQpToggle" title="Quick Parts — insert tokens and blocks at cursor (Ctrl+Q)">
             <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
               <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
@@ -516,13 +549,17 @@
         </button>
       </div>
 
-      <div id="previewCanvas" class="flex-1 overflow-auto flex items-start justify-center p-8
-                                     bg-[length:22px_22px] bg-ed-bg dark:bg-ed-bg-dark
-                                     preview-canvas-dots">
+      <div id="previewCanvas" class="flex-1 overflow-auto flex items-start justify-center p-8 relative
+                                      bg-[length:22px_22px] bg-ed-bg dark:bg-ed-bg-dark
+                                      preview-canvas-dots">
+        <!-- Preview loading spinner overlay -->
+        <div id="previewSpinner" class="preview-spinner absolute inset-0 z-10 items-center justify-center pointer-events-none hidden">
+          <div class="w-8 h-8 rounded-full border-[3px] border-ed-border dark:border-ed-border-dark border-t-ed-accent dark:border-t-ed-accent-dark animate-spin"></div>
+        </div>
         <iframe id="previewFrame" class="border-none bg-white rounded-[3px] origin-top
-                                         shadow-[0_0_0_1px_rgba(255,255,255,.05),0_8px_24px_rgba(0,0,0,.5),0_24px_64px_rgba(0,0,0,.4)]
-                                         transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                          shadow-[0_0_0_1px_rgba(255,255,255,.05),0_8px_24px_rgba(0,0,0,.5),0_24px_64px_rgba(0,0,0,.4)]
+                                          transition-transform duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
+                 sandbox="allow-same-origin allow-scripts allow-popups allow-forms" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
 
@@ -648,6 +685,111 @@
                      shadow-[0_1px_8px] shadow-ed-accent-g dark:shadow-ed-accent-g-dark
                      hover:brightness-110 active:scale-[.97] transition-all duration-150"
               id="btnConfirmSave">Save &amp; Switch</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ RENAME MODAL -->
+<div class="overlay fixed inset-0 z-[200] items-center justify-center
+            bg-black/65 backdrop-blur-[4px] hidden" id="modalRename">
+  <div class="modal flex flex-col gap-5 p-7 w-[min(460px,92vw)] rounded-xl
+              bg-ed-surface dark:bg-ed-surface-dark
+              border border-ed-border dark:border-ed-border-dark
+              shadow-[0_24px_80px_rgba(0,0,0,.7)] animate-modal-in">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl font-bold text-ed-text dark:text-ed-text-dark">Rename Template</h2>
+      <p class="text-base text-ed-muted dark:text-ed-muted-dark leading-relaxed">Renames the <code>.html</code>, <code>.css</code> and sample data files.</p>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label class="text-sm font-bold uppercase tracking-wider text-ed-muted dark:text-ed-muted-dark">New Name</label>
+      <input type="text" id="renameName" placeholder="e.g. badge-custom-a6" autocomplete="off" spellcheck="false"
+             class="text-md px-3 py-2 rounded-md outline-none
+                    bg-ed-bg dark:bg-ed-bg-dark
+                    border border-ed-border dark:border-ed-border-dark
+                    text-ed-text dark:text-ed-text-dark
+                    focus:border-ed-accent focus:dark:border-ed-accent-dark
+                    focus:shadow-[0_0_0_3px] focus:shadow-ed-accent-d focus:dark:shadow-ed-accent-d-dark
+                    transition-all duration-150">
+      <span class="text-sm text-ed-faint dark:text-ed-faint-dark">Alphanumeric and hyphens only.</span>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-1 border-t border-ed-border dark:border-ed-border-dark">
+      <button class="btn btn-ghost inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-transparent text-ed-muted dark:text-ed-muted-dark
+                     border border-ed-border dark:border-ed-border-dark
+                     hover:text-ed-text hover:dark:text-ed-text-dark
+                     hover:border-ed-accent hover:dark:border-ed-accent-dark
+                     hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                     active:scale-[.97] transition-all duration-150"
+              id="btnRenameCancel">Cancel</button>
+      <button class="btn btn-primary inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-ed-accent dark:bg-ed-accent-dark text-white
+                     border border-ed-accent dark:border-ed-accent-dark
+                     shadow-[0_1px_8px] shadow-ed-accent-g dark:shadow-ed-accent-g-dark
+                     hover:brightness-110 active:scale-[.97] transition-all duration-150"
+              id="btnRenameConfirm">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Rename
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ UPLOAD MODAL -->
+<div class="overlay fixed inset-0 z-[200] items-center justify-center
+            bg-black/65 backdrop-blur-[4px] hidden" id="modalUpload">
+  <div class="modal flex flex-col gap-5 p-7 w-[min(520px,92vw)] rounded-xl
+              bg-ed-surface dark:bg-ed-surface-dark
+              border border-ed-border dark:border-ed-border-dark
+              shadow-[0_24px_80px_rgba(0,0,0,.7)] animate-modal-in">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl font-bold text-ed-text dark:text-ed-text-dark">Upload Assets</h2>
+      <p class="text-base text-ed-muted dark:text-ed-muted-dark leading-relaxed">Upload images to the <code>assets/</code> folder. Reference them in templates via <code>/assets/filename.png</code>.</p>
+    </div>
+
+    <div id="uploadDropZone" class="upload-drop-zone flex flex-col items-center justify-center gap-3 p-8 rounded-lg cursor-pointer
+                border-2 border-dashed border-ed-border dark:border-ed-border-dark
+                bg-ed-bg dark:bg-ed-bg-dark
+                hover:border-ed-accent hover:dark:border-ed-accent-dark
+                hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                transition-all duration-200">
+      <svg class="w-10 h-10 text-ed-faint dark:text-ed-faint-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+      </svg>
+      <div class="text-base font-semibold text-ed-muted dark:text-ed-muted-dark">Drop images here or click to browse</div>
+      <div class="text-sm text-ed-faint dark:text-ed-faint-dark">PNG, JPG, GIF, SVG, WebP</div>
+    </div>
+
+    <div id="uploadFileList" class="flex flex-col gap-1 max-h-[200px] overflow-y-auto
+                                    scrollbar-thin scrollbar-thumb-ed-border dark:scrollbar-thumb-ed-border-dark"></div>
+
+    <div class="flex justify-end gap-2 pt-1 border-t border-ed-border dark:border-ed-border-dark">
+      <button class="btn btn-ghost inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-transparent text-ed-muted dark:text-ed-muted-dark
+                     border border-ed-border dark:border-ed-border-dark
+                     hover:text-ed-text hover:dark:text-ed-text-dark
+                     hover:border-ed-accent hover:dark:border-ed-accent-dark
+                     hover:bg-ed-accent-d hover:dark:bg-ed-accent-d-dark
+                     active:scale-[.97] transition-all duration-150"
+              id="btnUploadClose">Close</button>
+      <button class="btn btn-primary inline-flex items-center gap-1.5 text-base font-semibold
+                     px-3 py-1.5 rounded-md cursor-pointer
+                     bg-ed-accent dark:bg-ed-accent-dark text-white
+                     border border-ed-accent dark:border-ed-accent-dark
+                     shadow-[0_1px_8px] shadow-ed-accent-g dark:shadow-ed-accent-g-dark
+                     hover:brightness-110 active:scale-[.97] transition-all duration-150"
+              id="btnUploadSubmit">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Upload
+      </button>
     </div>
   </div>
 </div>

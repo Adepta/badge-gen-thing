@@ -364,6 +364,35 @@ body.dirty .dirty-pill { display: flex !important; }
 .qp-block-target.css  { background: rgba(78,168,222,.12); color: #4ea8de; }
 
 /* ═══════════════════════════════════════════════════════
+   PREVIEW SPINNER (toggled via JS: .active)
+═══════════════════════════════════════════════════════ */
+#previewSpinner.active { display: flex !important; }
+
+/* ═══════════════════════════════════════════════════════
+   UPLOAD DROP ZONE
+═══════════════════════════════════════════════════════ */
+.upload-drop-zone.dragover {
+  border-color: #7c5cfc !important;
+  background: rgba(124,92,252,.12) !important;
+}
+.upload-file-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px; border-radius: 6px;
+  font-size: 12px; font-weight: 500;
+}
+.dark .upload-file-row { background: #1a1a28; color: #ddddf0; border: 1px solid #252538; }
+.upload-file-row { background: #eeeef2; color: #1a1a2e; border: 1px solid #d0d0dc; }
+.upload-file-size {
+  font-size: 10px; margin-left: auto;
+}
+.dark .upload-file-size { color: #7070a0; }
+.upload-file-size { color: #5c5c7a; }
+.upload-file-status { font-size: 10px; font-weight: 600; }
+.upload-file-status.ok { color: #3ecf8e; }
+.upload-file-status.error { color: #f25c6e; }
+.upload-file-status.pending { color: #7070a0; }
+
+/* ═══════════════════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════════════════ */
 @media (max-width: 640px) {
