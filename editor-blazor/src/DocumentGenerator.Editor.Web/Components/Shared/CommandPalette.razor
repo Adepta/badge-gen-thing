@@ -1,0 +1,356 @@
+@using DocumentGenerator.Editor.Core.Models
+
+@if (IsVisible)
+{
+    @* Backdrop *@
+    <div class="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] animate-fade-in"
+         role="dialog"
+         aria-modal="true"
+         aria-label="Command palette"
+         @onclick="HandleBackdropClick"
+         @onkeydown="HandleKeyDown"
+         @onkeydown:preventDefault="@_preventDefault">
+
+        @* Blur overlay *@
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+        @* Command palette card *@
+        <div class="relative z-10 w-full rounded-xl border border-border-default bg-bg-overlay shadow-2xl overflow-hidden
+                    animate-scale-in"
+             style="max-width: 520px;"
+             @onclick:stopPropagation="true">
+
+            @* Search input *@
+            <div class="flex items-center gap-3 px-4 py-3 border-b border-border-default">
+                @* Search icon *@
+                <svg class="w-4 h-4 text-text-tertiary flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+
+                <input @ref="_searchInput"
+                       type="text"
+                       class="flex-1 bg-transparent text-[14px] text-text-primary placeholder-text-tertiary outline-none"
+                       placeholder="Type a command or search..."
+                       @bind="_searchText"
+                       @bind:event="oninput"
+                       @bind:after="OnSearchChanged"
+                       autocomplete="off"
+                       spellcheck="false" />
+
+                @* Ctrl+K badge *@
+                <kbd class="text-[10px] font-mono text-text-tertiary bg-bg-elevated border border-border-subtle rounded px-1.5 py-0.5 flex-shrink-0">
+                    Ctrl+K
+                </kbd>
+            </div>
+
+            @* Results *@
+            <div class="max-h-[400px] overflow-y-auto" @ref="_resultsContainer">
+                @if (_filteredGroups.Count == 0)
+                {
+                    <div class="px-4 py-8 text-center text-[13px] text-text-tertiary">
+                        No results found
+                    </div>
+                }
+                else
+                {
+                    var globalIndex = 0;
+                    var isFirstGroup = true;
+
+                    @foreach (var group in _filteredGroups)
+                    {
+                        if (!isFirstGroup)
+                        {
+                            <div class="h-px bg-border-subtle"></div>
+                        }
+                        isFirstGroup = false;
+
+                        @* Group header *@
+                        <div class="text-[11px] font-medium text-text-tertiary uppercase tracking-wider px-4 py-1.5 bg-bg-surface">
+                            @group.Name
+                        </div>
+
+                        @foreach (var item in group.Items)
+                        {
+                            var idx = globalIndex;
+                            var isSelected = idx == _selectedIndex;
+
+                            <button class="@GetItemClass(isSelected)"
+                                    @onclick="@(() => ExecuteItem(item))"
+                                    @onmouseenter="@(() => { _selectedIndex = idx; StateHasChanged(); })">
+                                @* Icon *@
+                                <span class="w-4 h-4 flex items-center justify-center flex-shrink-0 text-text-tertiary">
+                                    @((MarkupString)item.Icon)
+                                </span>
+
+                                @* Label *@
+                                <span class="flex-1 text-[13px] text-text-primary truncate text-left">
+                                    @item.Label
+                                </span>
+
+                                @* Group badge *@
+                                <span class="text-[11px] text-text-tertiary flex-shrink-0">
+                                    @item.GroupBadge
+                                </span>
+                            </button>
+
+                            globalIndex++;
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private ElementReference _searchInput;
+    private ElementReference _resultsContainer;
+    private string _searchText = string.Empty;
+    private int _selectedIndex;
+    private bool _preventDefault;
+    private List<CommandGroup> _filteredGroups = new();
+    private List<CommandItem> _flatItems = new();
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    [Parameter]
+    public List<string> RecentTemplates { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<string> OnAction { get; set; }
+
+    [Parameter]
+    public bool HasTemplateOpen { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (IsVisible)
+        {
+            _searchText = string.Empty;
+            _selectedIndex = 0;
+            BuildFilteredResults();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (IsVisible)
+        {
+            try
+            {
+                await _searchInput.FocusAsync();
+            }
+            catch
+            {
+                // Element may not be rendered yet
+            }
+        }
+    }
+
+    private void OnSearchChanged()
+    {
+        _selectedIndex = 0;
+        BuildFilteredResults();
+    }
+
+    private void BuildFilteredResults()
+    {
+        var allGroups = BuildAllGroups();
+        var search = _searchText.Trim();
+
+        _filteredGroups = new List<CommandGroup>();
+        _flatItems = new List<CommandItem>();
+
+        foreach (var group in allGroups)
+        {
+            List<CommandItem> matchingItems;
+
+            if (string.IsNullOrEmpty(search))
+            {
+                matchingItems = group.Items.ToList();
+            }
+            else
+            {
+                matchingItems = group.Items
+                    .Where(i => i.Label.Contains(search, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            if (matchingItems.Count > 0)
+            {
+                _filteredGroups.Add(new CommandGroup(group.Name, matchingItems));
+                _flatItems.AddRange(matchingItems);
+            }
+        }
+    }
+
+    private List<CommandGroup> BuildAllGroups()
+    {
+        var groups = new List<CommandGroup>();
+
+        // 1. Recent Templates
+        if (RecentTemplates.Count > 0)
+        {
+            var recentItems = RecentTemplates.Select(name => new CommandItem(
+                name,
+                $"template:{name}",
+                SvgIcons.File,
+                "Recent"
+            )).ToList();
+            groups.Add(new CommandGroup("Recent Templates", recentItems));
+        }
+
+        // 2. Actions
+        var actions = new List<CommandItem>
+        {
+            new("New Template", "new", SvgIcons.Plus, "Action"),
+            new("Import", "import", SvgIcons.Upload, "Action"),
+        };
+
+        if (HasTemplateOpen)
+        {
+            actions.Insert(1, new("Save", "save", SvgIcons.Save, "Action"));
+            actions.Insert(2, new("Duplicate", "duplicate", SvgIcons.Copy, "Action"));
+            actions.Insert(3, new("Rename", "rename", SvgIcons.Edit, "Action"));
+            actions.Insert(4, new("Delete", "delete", SvgIcons.Trash, "Action"));
+            actions.Add(new("Export", "export", SvgIcons.Download, "Action"));
+        }
+
+        actions.Add(new("Upload Assets", "upload-assets", SvgIcons.Upload, "Action"));
+        actions.Add(new("Toggle Theme", "toggle-theme", SvgIcons.SunMoon, "Action"));
+        actions.Add(new("Open Settings", "settings", SvgIcons.Gear, "Action"));
+
+        groups.Add(new CommandGroup("Actions", actions));
+
+        // 3. Quick Parts (tokens only, not blocks)
+        var quickParts = QuickPart.All
+            .Where(qp => qp.Category == "Token")
+            .Select(qp => new CommandItem(
+                qp.Label,
+                $"quickpart:{qp.InsertText}",
+                SvgIcons.Code,
+                qp.Group
+            )).ToList();
+
+        if (quickParts.Count > 0)
+        {
+            groups.Add(new CommandGroup("Quick Parts", quickParts));
+        }
+
+        // 4. Settings
+        var settingsItems = new List<CommandItem>
+        {
+            new("Dark Mode", "theme-dark", SvgIcons.Moon, "Settings"),
+            new("Light Mode", "theme-light", SvgIcons.Sun, "Settings"),
+            new("System Theme", "theme-system", SvgIcons.Monitor, "Settings"),
+        };
+        groups.Add(new CommandGroup("Settings", settingsItems));
+
+        return groups;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "Escape":
+                _preventDefault = true;
+                await Close();
+                _preventDefault = false;
+                break;
+
+            case "ArrowDown":
+                _preventDefault = true;
+                _selectedIndex = (_selectedIndex + 1) % Math.Max(1, _flatItems.Count);
+                break;
+
+            case "ArrowUp":
+                _preventDefault = true;
+                _selectedIndex = (_selectedIndex - 1 + _flatItems.Count) % Math.Max(1, _flatItems.Count);
+                break;
+
+            case "Enter":
+                _preventDefault = true;
+                if (_selectedIndex >= 0 && _selectedIndex < _flatItems.Count)
+                {
+                    await ExecuteItem(_flatItems[_selectedIndex]);
+                }
+                break;
+
+            default:
+                _preventDefault = false;
+                break;
+        }
+    }
+
+    private async Task HandleBackdropClick()
+    {
+        await Close();
+    }
+
+    private async Task ExecuteItem(CommandItem item)
+    {
+        await Close();
+        if (OnAction.HasDelegate)
+        {
+            await OnAction.InvokeAsync(item.Action);
+        }
+    }
+
+    private async Task Close()
+    {
+        if (OnClose.HasDelegate)
+        {
+            await OnClose.InvokeAsync();
+        }
+    }
+
+    private string GetItemClass(bool isSelected) =>
+        isSelected
+            ? "w-full flex items-center gap-3 px-4 py-2.5 cursor-pointer bg-accent-muted border-l-2 border-accent transition-colors"
+            : "w-full flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-bg-elevated border-l-2 border-transparent transition-colors";
+
+    // -- Inner types --
+
+    private record CommandGroup(string Name, List<CommandItem> Items);
+
+    private record CommandItem(string Label, string Action, string Icon, string GroupBadge);
+
+    // -- SVG Icons --
+
+    private static class SvgIcons
+    {
+        public const string File = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>""";
+
+        public const string Plus = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>""";
+
+        public const string Save = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>""";
+
+        public const string Copy = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>""";
+
+        public const string Edit = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>""";
+
+        public const string Trash = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>""";
+
+        public const string Upload = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>""";
+
+        public const string Download = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>""";
+
+        public const string Code = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>""";
+
+        public const string Gear = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>""";
+
+        public const string SunMoon = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>""";
+
+        public const string Moon = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>""";
+
+        public const string Sun = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>""";
+
+        public const string Monitor = """<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>""";
+    }
+}

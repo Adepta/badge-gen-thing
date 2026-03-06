@@ -1,0 +1,255 @@
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Core.Interfaces
+@using DocumentGenerator.Editor.Web.Services
+@inject EditorState EditorState
+@inject ISampleDataRepository SampleDataRepository
+@inject MonacoCompletionService MonacoCompletion
+@implements IDisposable
+
+<div class="flex flex-col max-h-[45%] flex-shrink-0">
+    @* Header *@
+    <button class="flex items-center gap-2 px-3 py-2 w-full text-left hover:bg-bg-elevated transition-colors"
+            @onclick="ToggleCollapsed">
+        <svg class="w-3 h-3 text-text-tertiary transition-transform duration-200 @(_isCollapsed ? "" : "rotate-90")"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+        </svg>
+        <span class="text-[12px] font-medium text-text-secondary flex-1">Sample Data</span>
+
+        @if (!_isCollapsed)
+        {
+            <button class="px-1.5 py-0.5 rounded text-[10px] text-text-tertiary hover:text-text-primary hover:bg-bg-elevated transition-colors"
+                    title="Save sample data"
+                    @onclick="HandleSave"
+                    @onclick:stopPropagation="true">
+                Save
+            </button>
+            <button class="px-1.5 py-0.5 rounded text-[10px] text-text-tertiary hover:text-text-primary hover:bg-bg-elevated transition-colors"
+                    title="Reset to defaults"
+                    @onclick="HandleReset"
+                    @onclick:stopPropagation="true">
+                Reset
+            </button>
+        }
+    </button>
+
+    @if (!_isCollapsed)
+    {
+        @* Scrollable content *@
+        <div class="flex-1 overflow-y-auto px-3 pb-2 min-h-0">
+            @* Key-value rows *@
+            @foreach (var kvp in _editableData)
+            {
+                var key = kvp.Key;
+                <div class="flex items-center gap-1.5 py-0.5 group">
+                    <span class="text-text-tertiary font-mono text-[11px] truncate min-w-0 flex-shrink-0"
+                          style="max-width: 45%;"
+                          title="@key">@key</span>
+                    <input type="text"
+                           class="flex-1 min-w-0 bg-bg-elevated border border-border-subtle rounded px-1.5 py-0.5
+                                  text-text-primary font-mono text-[12px] outline-none
+                                  focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors"
+                           value="@kvp.Value"
+                           @onchange="@(e => HandleValueChanged(key, e.Value?.ToString() ?? string.Empty))"
+                           @onkeydown="@(e => HandleKeyDown(e, key))" />
+                    <button class="opacity-0 group-hover:opacity-100 p-0.5 rounded text-text-tertiary hover:text-error transition-all"
+                            title="Remove field"
+                            @onclick="@(() => HandleRemoveField(key))">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+            }
+
+            @* Add field form *@
+            @if (_isAddingField)
+            {
+                <div class="flex items-center gap-1.5 py-1 mt-1 border-t border-border-subtle pt-2">
+                    <input type="text"
+                           class="flex-1 min-w-0 bg-bg-elevated border border-border-subtle rounded px-1.5 py-0.5
+                                  text-text-primary font-mono text-[11px] outline-none
+                                  focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors"
+                           placeholder="key.path"
+                           @bind="_newFieldKey" />
+                    <input type="text"
+                           class="flex-1 min-w-0 bg-bg-elevated border border-border-subtle rounded px-1.5 py-0.5
+                                  text-text-primary font-mono text-[12px] outline-none
+                                  focus:border-accent focus:ring-1 focus:ring-accent/30 transition-colors"
+                           placeholder="value"
+                           @bind="_newFieldValue" />
+                    <button class="p-0.5 rounded text-success hover:bg-success/10 transition-colors"
+                            title="Add"
+                            @onclick="HandleAddField">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </button>
+                    <button class="p-0.5 rounded text-text-tertiary hover:text-text-primary transition-colors"
+                            title="Cancel"
+                            @onclick="CancelAddField">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <button class="flex items-center gap-1 mt-1 px-1 py-0.5 rounded text-[11px] text-text-tertiary hover:text-accent hover:bg-accent-muted transition-colors"
+                        @onclick="ShowAddField">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span>Add field</span>
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool _isCollapsed = false;
+    private bool _isAddingField = false;
+    private string _newFieldKey = string.Empty;
+    private string _newFieldValue = string.Empty;
+    private Dictionary<string, string> _editableData = new(StringComparer.OrdinalIgnoreCase);
+
+    protected override void OnInitialized()
+    {
+        EditorState.OnTemplateLoaded += HandleTemplateLoaded;
+        EditorState.OnSampleDataChanged += HandleSampleDataExternalChange;
+        LoadFromEditorState();
+    }
+
+    private void LoadFromEditorState()
+    {
+        if (EditorState.SampleData is not null)
+        {
+            _editableData = new Dictionary<string, string>(EditorState.SampleData.FlatData, StringComparer.OrdinalIgnoreCase);
+        }
+        else
+        {
+            _editableData = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        }
+    }
+
+    private async Task HandleTemplateLoaded()
+    {
+        LoadFromEditorState();
+        await UpdateDynamicTokensAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleSampleDataExternalChange()
+    {
+        LoadFromEditorState();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void ToggleCollapsed()
+    {
+        _isCollapsed = !_isCollapsed;
+    }
+
+    private async Task HandleValueChanged(string key, string value)
+    {
+        _editableData[key] = value;
+        await PushToEditorStateAsync();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e, string key)
+    {
+        // Enter saves the current field
+        if (e.Key == "Enter")
+        {
+            await PushToEditorStateAsync();
+        }
+    }
+
+    private async Task HandleRemoveField(string key)
+    {
+        _editableData.Remove(key);
+        await PushToEditorStateAsync();
+    }
+
+    private void ShowAddField()
+    {
+        _isAddingField = true;
+        _newFieldKey = string.Empty;
+        _newFieldValue = string.Empty;
+    }
+
+    private void CancelAddField()
+    {
+        _isAddingField = false;
+        _newFieldKey = string.Empty;
+        _newFieldValue = string.Empty;
+    }
+
+    private async Task HandleAddField()
+    {
+        if (!string.IsNullOrWhiteSpace(_newFieldKey))
+        {
+            _editableData[_newFieldKey.Trim()] = _newFieldValue;
+            _isAddingField = false;
+            _newFieldKey = string.Empty;
+            _newFieldValue = string.Empty;
+            await PushToEditorStateAsync();
+        }
+    }
+
+    private async Task HandleReset()
+    {
+        var defaults = SampleData.DefaultSampleData;
+        _editableData = new Dictionary<string, string>(defaults.FlatData, StringComparer.OrdinalIgnoreCase);
+        await PushToEditorStateAsync();
+    }
+
+    private async Task HandleSave()
+    {
+        if (string.IsNullOrEmpty(EditorState.CurrentTemplateName)) return;
+
+        try
+        {
+            var data = new SampleData { FlatData = new Dictionary<string, string>(_editableData, StringComparer.OrdinalIgnoreCase) };
+            await SampleDataRepository.SaveAsync(EditorState.CurrentTemplateName, data);
+            await EditorState.SetSaveStatusAsync("Sample data saved");
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Save failed: {ex.Message}");
+        }
+    }
+
+    private async Task PushToEditorStateAsync()
+    {
+        var data = new SampleData { FlatData = new Dictionary<string, string>(_editableData, StringComparer.OrdinalIgnoreCase) };
+        await EditorState.UpdateSampleDataAsync(data);
+        await UpdateDynamicTokensAsync();
+    }
+
+    private async Task UpdateDynamicTokensAsync()
+    {
+        try
+        {
+            var tokens = _editableData.Keys
+                .Select(k => new DynamicToken($"{{{{{k}}}}}", $"Sample: {_editableData[k]}", $"{{{{{k}}}}}"))
+                .ToList();
+            await MonacoCompletion.UpdateDynamicTokensAsync(tokens);
+        }
+        catch
+        {
+            // Monaco may not be initialized yet
+        }
+    }
+
+    public void Dispose()
+    {
+        EditorState.OnTemplateLoaded -= HandleTemplateLoaded;
+        EditorState.OnSampleDataChanged -= HandleSampleDataExternalChange;
+    }
+}

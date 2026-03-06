@@ -443,11 +443,11 @@ services:
           cpus: "0.1"
           memory: 64m
 
-  # ── Badge template WYSIWYG editor ───────────────────────────────────────────
+  # ── Badge template WYSIWYG editor (Blazor) ──────────────────────────────────
   template-editor:
     build:
-      context:    editor
-      dockerfile: Dockerfile
+      context:    editor-blazor
+      dockerfile: src/DocumentGenerator.Editor.Web/Dockerfile
     image: documentgenerator/template-editor:latest
     container_name: docgen-template-editor
     restart: unless-stopped
@@ -460,22 +460,23 @@ services:
       # Mount the shared templates directory so edits are visible to the API/Console
       - ./templates:/templates
     environment:
-      TEMPLATES_DIR: /templates
-      PORT:          3500
+      ASPNETCORE_ENVIRONMENT:           Production
+      EDITOR__TEMPLATESDIR:             /templates
+      EDITOR__ASSETSDIR:                /templates/assets
     healthcheck:
-      test:         ["CMD", "wget", "-qO-", "http://localhost:3500/api/templates"]
+      test:         ["CMD", "curl", "-f", "http://localhost:3500/"]
       interval:     15s
       timeout:      5s
       retries:      3
-      start_period: 5s
+      start_period: 10s
     deploy:
       resources:
         limits:
-          cpus: "0.25"
-          memory: 128m
+          cpus: "0.5"
+          memory: 256m
         reservations:
-          cpus: "0.05"
-          memory: 64m
+          cpus: "0.1"
+          memory: 128m
 
 # =============================================================================
 # Volumes

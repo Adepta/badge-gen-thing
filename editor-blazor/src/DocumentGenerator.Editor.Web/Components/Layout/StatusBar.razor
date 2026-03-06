@@ -1,0 +1,99 @@
+@using DocumentGenerator.Editor.Web.Services
+@inject EditorState EditorState
+@implements IDisposable
+
+<footer class="h-7 bg-bg-surface border-t border-border-default flex items-center px-3 text-[11px] font-mono text-text-tertiary select-none flex-shrink-0">
+    @* Left section: file info + dirty indicator *@
+    <div class="flex-1 flex items-center gap-2 min-w-0">
+        @if (!string.IsNullOrEmpty(EditorState.CurrentTemplateName))
+        {
+            <span class="text-text-secondary truncate max-w-[200px]" title="@EditorState.CurrentTemplateName">@EditorState.CurrentTemplateName</span>
+            @if (EditorState.IsDirty)
+            {
+                <span class="w-2 h-2 rounded-full bg-warning animate-pulse-slow flex-shrink-0"
+                      title="Unsaved changes"
+                      aria-label="Unsaved changes"></span>
+            }
+        }
+        else
+        {
+            <span>No file open</span>
+        }
+    </div>
+
+    @* Center section: cursor position *@
+    <div class="flex items-center gap-2 px-4">
+        <span class="tabular-nums">Ln @EditorState.CursorLine, Col @EditorState.CursorColumn</span>
+    </div>
+
+    @* Right section: save status + shortcuts *@
+    <div class="flex-1 flex items-center justify-end gap-2 min-w-0">
+        @* Save status *@
+        <span class="@GetSaveStatusClass() transition-colors duration-200">@EditorState.SaveStatus</span>
+
+        @if (EditorState.LastSavedAt.HasValue)
+        {
+            <span class="text-text-tertiary">@GetLastSavedText()</span>
+        }
+
+        <span class="text-border-default hidden sm:inline">|</span>
+
+        @* Keyboard shortcut hints *@
+        <span class="hidden sm:inline-flex items-center gap-1">
+            <kbd class="px-1 py-0.5 bg-bg-elevated rounded text-[10px] font-mono text-text-tertiary border border-border-subtle leading-none">Ctrl+K</kbd>
+        </span>
+
+        <span class="hidden sm:inline-flex items-center gap-1">
+            <kbd class="px-1 py-0.5 bg-bg-elevated rounded text-[10px] font-mono text-text-tertiary border border-border-subtle leading-none">Ctrl+Q</kbd>
+        </span>
+    </div>
+</footer>
+
+@code {
+    private Timer? _refreshTimer;
+
+    protected override void OnInitialized()
+    {
+        EditorState.OnStateChanged += HandleStateChanged;
+
+        // Refresh every 30s to update "last saved" text
+        _refreshTimer = new Timer(_ =>
+        {
+            InvokeAsync(StateHasChanged);
+        }, null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+    }
+
+    private async Task HandleStateChanged()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private string GetSaveStatusClass()
+    {
+        var status = EditorState.SaveStatus;
+        if (status.StartsWith("Error", StringComparison.OrdinalIgnoreCase))
+            return "text-error";
+        if (status.Equals("Saving...", StringComparison.OrdinalIgnoreCase))
+            return "text-accent";
+        if (status.Equals("Saved", StringComparison.OrdinalIgnoreCase))
+            return "text-success";
+        return "text-text-tertiary";
+    }
+
+    private string GetLastSavedText()
+    {
+        if (!EditorState.LastSavedAt.HasValue) return string.Empty;
+
+        var elapsed = DateTime.Now - EditorState.LastSavedAt.Value;
+        if (elapsed.TotalSeconds < 10) return "just now";
+        if (elapsed.TotalSeconds < 60) return $"{(int)elapsed.TotalSeconds}s ago";
+        if (elapsed.TotalMinutes < 60) return $"{(int)elapsed.TotalMinutes}m ago";
+        return $"{(int)elapsed.TotalHours}h ago";
+    }
+
+    public void Dispose()
+    {
+        EditorState.OnStateChanged -= HandleStateChanged;
+        _refreshTimer?.Dispose();
+    }
+}

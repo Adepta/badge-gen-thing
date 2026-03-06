@@ -1,0 +1,212 @@
+@using DocumentGenerator.Editor.Core.Models
+
+<div class="h-10 border-b border-border-subtle flex items-center px-3 gap-2 bg-bg-surface flex-shrink-0">
+    @* Mode toggle - segmented control *@
+    <div class="flex items-center bg-bg-elevated rounded-md border border-border-subtle overflow-hidden" role="group" aria-label="Preview mode">
+        <button class="@GetModeButtonClass("editor") focus-ring"
+                @onclick="@(() => SetPreviewMode("editor"))"
+                title="Show raw template with token placeholders"
+                aria-label="Editor preview mode"
+                aria-pressed="@(PreviewMode == "editor")">
+            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+            <span>Editor</span>
+        </button>
+        <button class="@GetModeButtonClass("live") focus-ring"
+                @onclick="@(() => SetPreviewMode("live"))"
+                title="Show fully rendered preview with sample data"
+                aria-label="Live preview mode"
+                aria-pressed="@(PreviewMode == "live")">
+            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <span>Live</span>
+        </button>
+    </div>
+
+    @* Divider *@
+    <div class="w-px h-5 bg-border-subtle mx-1"></div>
+
+    @* Size preset dropdown *@
+    <div class="relative">
+        <select class="appearance-none bg-bg-elevated text-text-secondary text-[11px] font-medium
+                       border border-border-subtle rounded-md px-2 py-1 pr-6
+                       hover:border-border-default focus:border-accent focus:outline-none
+                       cursor-pointer transition-colors"
+                value="@SizePreset"
+                @onchange="HandleSizePresetChange">
+            <option value="@SizePreset.A6">A6</option>
+            <option value="@SizePreset.CreditCard">Credit Card</option>
+            <option value="@SizePreset.A4">A4</option>
+            <option value="@SizePreset.Custom">Custom</option>
+        </select>
+        <svg class="w-3 h-3 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-text-tertiary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M19 9l-7 7-7-7" />
+        </svg>
+    </div>
+
+    @* Dimensions display or custom inputs *@
+    @if (SizePreset == SizePreset.Custom)
+    {
+        <div class="flex items-center gap-1">
+            <input type="number" step="0.1" min="10" max="500"
+                   class="w-14 bg-bg-elevated text-text-secondary text-[11px] text-center
+                          border border-border-subtle rounded px-1 py-0.5
+                          focus:border-accent focus:outline-none"
+                   value="@CustomWidth"
+                   @onchange="HandleWidthChange" />
+            <span class="text-text-tertiary text-[10px]">&times;</span>
+            <input type="number" step="0.1" min="10" max="500"
+                   class="w-14 bg-bg-elevated text-text-secondary text-[11px] text-center
+                          border border-border-subtle rounded px-1 py-0.5
+                          focus:border-accent focus:outline-none"
+                   value="@CustomHeight"
+                   @onchange="HandleHeightChange" />
+            <span class="text-text-tertiary text-[10px]">mm</span>
+        </div>
+    }
+    else
+    {
+        <span class="text-text-tertiary text-[10px] tabular-nums">@GetDimensionsText()</span>
+    }
+
+    @* Spacer *@
+    <div class="flex-1"></div>
+
+    @* Zoom control *@
+    <div class="relative">
+        <select class="appearance-none bg-bg-elevated text-text-secondary text-[11px] font-medium
+                       border border-border-subtle rounded-md px-2 py-1 pr-6
+                       hover:border-border-default focus:border-accent focus:outline-none
+                       cursor-pointer transition-colors"
+                value="@Zoom"
+                @onchange="HandleZoomChange">
+            <option value="40">40%</option>
+            <option value="50">50%</option>
+            <option value="65">65%</option>
+            <option value="75">75%</option>
+            <option value="100">100%</option>
+            <option value="125">125%</option>
+            <option value="150">150%</option>
+        </select>
+        <svg class="w-3 h-3 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-text-tertiary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M19 9l-7 7-7-7" />
+        </svg>
+    </div>
+
+    @* Rendering indicator *@
+    @if (IsRendering)
+    {
+        <svg class="w-3.5 h-3.5 text-accent loading-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Rendering preview">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+        </svg>
+    }
+
+    @* Refresh button *@
+    <button class="p-1.5 rounded-md text-text-tertiary hover:text-text-secondary hover:bg-bg-elevated
+                   transition-colors focus-ring" title="Refresh preview"
+            aria-label="Refresh preview"
+            @onclick="HandleRefresh">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public string PreviewMode { get; set; } = "editor";
+
+    [Parameter]
+    public EventCallback<string> OnPreviewModeChanged { get; set; }
+
+    [Parameter]
+    public SizePreset SizePreset { get; set; } = SizePreset.A6;
+
+    [Parameter]
+    public EventCallback<SizePreset> OnSizePresetChanged { get; set; }
+
+    [Parameter]
+    public double CustomWidth { get; set; } = 105;
+
+    [Parameter]
+    public double CustomHeight { get; set; } = 148;
+
+    [Parameter]
+    public EventCallback<(double W, double H)> OnCustomSizeChanged { get; set; }
+
+    [Parameter]
+    public int Zoom { get; set; } = 75;
+
+    [Parameter]
+    public EventCallback<int> OnZoomChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnRefresh { get; set; }
+
+    [Parameter]
+    public bool IsRendering { get; set; }
+
+    private async Task SetPreviewMode(string mode)
+    {
+        if (OnPreviewModeChanged.HasDelegate)
+            await OnPreviewModeChanged.InvokeAsync(mode);
+    }
+
+    private async Task HandleSizePresetChange(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<SizePreset>(e.Value?.ToString(), out var preset))
+        {
+            if (OnSizePresetChanged.HasDelegate)
+                await OnSizePresetChanged.InvokeAsync(preset);
+        }
+    }
+
+    private async Task HandleWidthChange(ChangeEventArgs e)
+    {
+        if (double.TryParse(e.Value?.ToString(), out var w))
+        {
+            if (OnCustomSizeChanged.HasDelegate)
+                await OnCustomSizeChanged.InvokeAsync((w, CustomHeight));
+        }
+    }
+
+    private async Task HandleHeightChange(ChangeEventArgs e)
+    {
+        if (double.TryParse(e.Value?.ToString(), out var h))
+        {
+            if (OnCustomSizeChanged.HasDelegate)
+                await OnCustomSizeChanged.InvokeAsync((CustomWidth, h));
+        }
+    }
+
+    private async Task HandleZoomChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var zoom))
+        {
+            if (OnZoomChanged.HasDelegate)
+                await OnZoomChanged.InvokeAsync(zoom);
+        }
+    }
+
+    private async Task HandleRefresh()
+    {
+        if (OnRefresh.HasDelegate)
+            await OnRefresh.InvokeAsync();
+    }
+
+    private string GetDimensionsText()
+    {
+        var dims = SizePreset.GetDimensions();
+        if (dims is not null)
+            return $"{dims.WidthMm} x {dims.HeightMm} mm";
+
+        return $"{CustomWidth} x {CustomHeight} mm";
+    }
+
+    private string GetModeButtonClass(string mode) =>
+        PreviewMode == mode
+            ? "flex items-center px-2.5 py-1 text-[11px] font-medium text-text-primary bg-accent-muted transition-colors"
+            : "flex items-center px-2.5 py-1 text-[11px] font-medium text-text-tertiary hover:text-text-secondary transition-colors";
+}

@@ -1,0 +1,85 @@
+@if (IsVisible)
+{
+    @* Backdrop *@
+    <div class="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="modal-title"
+         @onclick="HandleBackdropClick"
+         @onkeydown="HandleKeyDown">
+
+        @* Blur overlay *@
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+        @* Modal card *@
+        <div class="relative z-10 w-full rounded-xl border border-border-default bg-bg-overlay shadow-2xl
+                    animate-scale-in"
+             style="max-width: @MaxWidth;"
+             @onclick:stopPropagation="true">
+
+            @* Header *@
+            <div class="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
+                <h2 id="modal-title" class="text-[15px] font-semibold text-text-primary">@Title</h2>
+                <button class="p-1 rounded-md text-text-tertiary hover:text-text-primary hover:bg-bg-elevated transition-colors focus-ring"
+                        title="Close"
+                        aria-label="Close dialog"
+                        @onclick="Close">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            @* Body *@
+            <div class="px-5 py-4">
+                @ChildContent
+            </div>
+
+            @* Footer (optional) *@
+            @if (FooterContent is not null)
+            {
+                <div class="flex items-center justify-end gap-2 px-5 py-3 border-t border-border-subtle">
+                    @FooterContent
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string MaxWidth { get; set; } = "420px";
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? FooterContent { get; set; }
+
+    private async Task HandleBackdropClick()
+    {
+        await Close();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+            await Close();
+    }
+
+    private async Task Close()
+    {
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
+}

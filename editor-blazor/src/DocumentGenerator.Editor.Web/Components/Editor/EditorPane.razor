@@ -1,0 +1,338 @@
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Web.Services
+@inject IJSRuntime JS
+@inject MonacoInteropService MonacoInterop
+@inject EditorState EditorState
+@inject ThemeService ThemeService
+@implements IAsyncDisposable
+
+<div class="flex flex-col flex-1 min-h-0 min-w-0 relative">
+    @* Editor Toolbar *@
+    <EditorToolbar Layout="@Layout"
+                   OnLayoutChanged="@OnLayoutChangedHandler"
+                   OnQuickPartsToggle="@ToggleQuickPartsDrawer" />
+
+    @* Editor Content + Quick Parts Drawer overlay *@
+    <div class="relative flex-1 min-h-0 min-w-0 flex flex-col">
+        <div id="editor-pane-container"
+             class="@GetContainerClass()"
+             style="flex: 1 1 auto; min-height: 0; min-width: 0;">
+
+            @if (Layout == EditorLayout.Tabbed)
+            {
+                @* Tab bar *@
+                <div class="flex items-center gap-0 bg-bg-surface border-b border-border-subtle px-1 h-8 flex-shrink-0">
+                    <button class="@GetTabClass(_activeTab == "html")"
+                            @onclick="@(() => SetActiveTab("html"))">
+                        <span class="text-[11px] font-medium">HTML</span>
+                    </button>
+                    <button class="@GetTabClass(_activeTab == "css")"
+                            @onclick="@(() => SetActiveTab("css"))">
+                        <span class="text-[11px] font-medium">CSS</span>
+                    </button>
+                </div>
+
+                @* Single editor at a time *@
+                <div class="flex-1 min-h-0" style="display: @(_activeTab == "html" ? "flex" : "none"); flex-direction: column;"
+                     @onfocusin="@(() => SetLastFocusedEditor("editor-html"))">
+                    <MonacoEditor EditorId="editor-html"
+                                  Language="handlebars-html"
+                                  Value="@HtmlContent"
+                                  OnContentChanged="@OnHtmlChangedHandler"
+                                  OnCursorChanged="@OnCursorChangedHandler"
+                                  Options="@_editorOptions" />
+                </div>
+                <div class="flex-1 min-h-0" style="display: @(_activeTab == "css" ? "flex" : "none"); flex-direction: column;"
+                     @onfocusin="@(() => SetLastFocusedEditor("editor-css"))">
+                    <MonacoEditor EditorId="editor-css"
+                                  Language="handlebars-css"
+                                  Value="@CssContent"
+                                  OnContentChanged="@OnCssChangedHandler"
+                                  OnCursorChanged="@OnCursorChangedHandler"
+                                  Options="@_editorOptions" />
+                </div>
+            }
+            else
+            {
+                @* HTML Editor *@
+                <div id="editor-pane-before" class="min-h-[80px] min-w-[80px]"
+                     style="@GetBeforeStyle()"
+                     @onfocusin="@(() => SetLastFocusedEditor("editor-html"))">
+                    <div class="flex items-center px-3 h-6 bg-bg-surface border-b border-border-subtle flex-shrink-0">
+                        <span class="text-[10px] font-medium text-text-tertiary uppercase tracking-wider">HTML</span>
+                    </div>
+                    <div class="flex-1 min-h-0 flex flex-col">
+                        <MonacoEditor EditorId="editor-html"
+                                      Language="handlebars-html"
+                                      Value="@HtmlContent"
+                                      OnContentChanged="@OnHtmlChangedHandler"
+                                      OnCursorChanged="@OnCursorChangedHandler"
+                                      Options="@_editorOptions" />
+                    </div>
+                </div>
+
+                @* Splitter *@
+                <div id="editor-splitter"
+                     class="@GetSplitterClass()"
+                     style="flex-shrink: 0;">
+                    <div class="@GetSplitterHandleClass()"></div>
+                </div>
+
+                @* CSS Editor *@
+                <div id="editor-pane-after" class="min-h-[80px] min-w-[80px]"
+                     style="flex: 1 1 auto; display: flex; flex-direction: column;"
+                     @onfocusin="@(() => SetLastFocusedEditor("editor-css"))">
+                    <div class="flex items-center px-3 h-6 bg-bg-surface border-b border-border-subtle flex-shrink-0">
+                        <span class="text-[10px] font-medium text-text-tertiary uppercase tracking-wider">CSS</span>
+                    </div>
+                    <div class="flex-1 min-h-0 flex flex-col">
+                        <MonacoEditor EditorId="editor-css"
+                                      Language="handlebars-css"
+                                      Value="@CssContent"
+                                      OnContentChanged="@OnCssChangedHandler"
+                                      OnCursorChanged="@OnCursorChangedHandler"
+                                      Options="@_editorOptions" />
+                    </div>
+                </div>
+            }
+        </div>
+
+        @* Loading overlay *@
+        @if (EditorState.IsLoading)
+        {
+            <div class="absolute inset-0 z-20 flex items-center justify-center bg-bg-base/80 animate-fade-in">
+                <div class="flex flex-col items-center gap-2">
+                    <svg class="w-6 h-6 text-accent loading-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                    </svg>
+                    <span class="text-[12px] text-text-tertiary">Loading template...</span>
+                </div>
+            </div>
+        }
+
+        @* Quick Parts Drawer overlay *@
+        <QuickPartsDrawer IsVisible="@_quickPartsVisible"
+                          OnClose="@ToggleQuickPartsDrawer"
+                          LastFocusedEditorId="@_lastFocusedEditorId" />
+    </div>
+</div>
+
+@code {
+    private string _activeTab = "html";
+    private IJSObjectReference? _splitterModule;
+    private IJSObjectReference? _shortcutModule;
+    private DotNetObjectReference<EditorPane>? _dotnetRef;
+    private MonacoEditorOptions _editorOptions = new();
+    private bool _quickPartsVisible;
+    private string _lastFocusedEditorId = "editor-html";
+
+    protected override void OnInitialized()
+    {
+        // Set initial Monaco theme based on current app theme
+        var theme = ThemeService.CurrentTheme;
+        _editorOptions.Theme = ResolveMonacoTheme(theme);
+    }
+
+    private static string ResolveMonacoTheme(string theme) => theme switch
+    {
+        "light" => "editor-light",
+        "dark" => "editor-dark",
+        // For "system", default to dark; the JS syncMonacoTheme will correct it after load
+        _ => "editor-dark"
+    };
+
+    [Parameter]
+    public string HtmlContent { get; set; } = string.Empty;
+
+    [Parameter]
+    public string CssContent { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> OnHtmlChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnCssChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<(int Line, int Col)> OnCursorChanged { get; set; }
+
+    [Parameter]
+    public EditorLayout Layout { get; set; } = EditorLayout.Vertical;
+
+    [Parameter]
+    public EventCallback<EditorLayout> OnLayoutChanged { get; set; }
+
+    /// <summary>
+    /// The ID of the last focused Monaco editor.
+    /// </summary>
+    public string LastFocusedEditorId => _lastFocusedEditorId;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await InitializeSplitterAsync();
+            await InitializeKeyboardShortcutAsync();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Re-initialize splitter if layout changes between split modes
+        if (_splitterModule is not null && Layout != EditorLayout.Tabbed)
+        {
+            await InitializeSplitterAsync();
+        }
+    }
+
+    private async Task InitializeSplitterAsync()
+    {
+        if (Layout == EditorLayout.Tabbed) return;
+
+        try
+        {
+            _splitterModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/splitter-interop.js");
+
+            var direction = Layout == EditorLayout.Horizontal ? "horizontal" : "vertical";
+            var storageKey = $"editor-splitter-{direction}";
+
+            await _splitterModule.InvokeVoidAsync("initSplitter",
+                "editor-splitter", "editor-pane-before", "editor-pane-after",
+                direction, null, storageKey);
+        }
+        catch (JSException)
+        {
+            // Splitter init may fail if elements aren't rendered yet
+        }
+    }
+
+    private async Task InitializeKeyboardShortcutAsync()
+    {
+        try
+        {
+            _dotnetRef = DotNetObjectReference.Create(this);
+            _shortcutModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/quickparts-shortcut.js");
+            await _shortcutModule.InvokeVoidAsync("registerQuickPartsShortcut", _dotnetRef);
+        }
+        catch (JSException)
+        {
+            // May fail if JS is not available yet
+        }
+    }
+
+    [JSInvokable]
+    public void ToggleQuickParts()
+    {
+        _quickPartsVisible = !_quickPartsVisible;
+        StateHasChanged();
+    }
+
+    private void ToggleQuickPartsDrawer()
+    {
+        _quickPartsVisible = !_quickPartsVisible;
+    }
+
+    private void SetLastFocusedEditor(string editorId)
+    {
+        _lastFocusedEditorId = editorId;
+    }
+
+    private void SetActiveTab(string tab)
+    {
+        _activeTab = tab;
+        _lastFocusedEditorId = tab == "html" ? "editor-html" : "editor-css";
+        // Layout the newly visible editor after tab switch
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(50); // Allow render to complete
+            try { await MonacoInterop.LayoutAllAsync(); } catch { }
+        });
+    }
+
+    private async Task OnHtmlChangedHandler(string value)
+    {
+        if (OnHtmlChanged.HasDelegate)
+            await OnHtmlChanged.InvokeAsync(value);
+    }
+
+    private async Task OnCssChangedHandler(string value)
+    {
+        if (OnCssChanged.HasDelegate)
+            await OnCssChanged.InvokeAsync(value);
+    }
+
+    private async Task OnCursorChangedHandler((int Line, int Col) position)
+    {
+        if (OnCursorChanged.HasDelegate)
+            await OnCursorChanged.InvokeAsync(position);
+    }
+
+    private async Task OnLayoutChangedHandler(EditorLayout layout)
+    {
+        if (OnLayoutChanged.HasDelegate)
+            await OnLayoutChanged.InvokeAsync(layout);
+    }
+
+    private string GetContainerClass() => Layout switch
+    {
+        EditorLayout.Horizontal => "flex flex-row",
+        EditorLayout.Vertical => "flex flex-col",
+        EditorLayout.Tabbed => "flex flex-col",
+        _ => "flex flex-col"
+    };
+
+    private string GetBeforeStyle() => Layout switch
+    {
+        EditorLayout.Horizontal => "flex: 0 0 50%; display: flex; flex-direction: column;",
+        EditorLayout.Vertical => "flex: 0 0 50%; display: flex; flex-direction: column;",
+        _ => "flex: 0 0 50%; display: flex; flex-direction: column;"
+    };
+
+    private string GetSplitterClass() => Layout switch
+    {
+        EditorLayout.Horizontal => "w-1 cursor-col-resize bg-border-default hover:bg-accent transition-colors flex items-center justify-center",
+        _ => "h-1 cursor-row-resize bg-border-default hover:bg-accent transition-colors flex items-center justify-center"
+    };
+
+    private string GetSplitterHandleClass() => Layout switch
+    {
+        EditorLayout.Horizontal => "w-0.5 h-8 bg-border-subtle rounded-full",
+        _ => "h-0.5 w-8 bg-border-subtle rounded-full"
+    };
+
+    private string GetTabClass(bool isActive) =>
+        isActive
+            ? "px-3 py-1.5 text-text-primary bg-bg-elevated border-b-2 border-accent rounded-t transition-colors"
+            : "px-3 py-1.5 text-text-tertiary hover:text-text-secondary rounded-t transition-colors";
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_splitterModule is not null)
+        {
+            try
+            {
+                await _splitterModule.InvokeVoidAsync("destroySplitter", "editor-splitter");
+                await _splitterModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // Circuit disconnected
+            }
+        }
+
+        if (_shortcutModule is not null)
+        {
+            try
+            {
+                await _shortcutModule.InvokeVoidAsync("unregisterQuickPartsShortcut");
+                await _shortcutModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // Circuit disconnected
+            }
+        }
+
+        _dotnetRef?.Dispose();
+    }
+}

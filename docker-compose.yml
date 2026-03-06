@@ -88,21 +88,28 @@ services:
     depends_on:
       - api
 
-  # ── Badge template WYSIWYG editor ─────────────────────────────────────────
+  # ── Badge template WYSIWYG editor (Blazor) ─────────────────────────────────
   # Open http://localhost:3500 to edit badge templates.
   # Edits are written directly to the shared templates/ directory.
   template-editor:
     build:
-      context:    editor
-      dockerfile: Dockerfile
+      context:    editor-blazor
+      dockerfile: src/DocumentGenerator.Editor.Web/Dockerfile
     image: documentgenerator/template-editor:latest
     ports:
       - "3500:3500"
     volumes:
       - ./templates:/templates
     environment:
-      TEMPLATES_DIR: /templates
-      PORT:          3500
+      ASPNETCORE_ENVIRONMENT: Production
+      EDITOR__TEMPLATESDIR: /templates
+      EDITOR__ASSETSDIR: /templates/assets
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3500/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
 
 volumes:

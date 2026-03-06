@@ -1,0 +1,190 @@
+@using DocumentGenerator.Editor.Core.DTOs
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Infrastructure.Services
+@using DocumentGenerator.Editor.Web.Services
+@inject EditorState EditorState
+@inject TemplateService TemplateService
+@implements IDisposable
+
+<aside class="flex flex-col bg-bg-surface border-r border-border-default transition-all duration-200 ease-out overflow-hidden flex-shrink-0"
+       style="width: @(_isCollapsed ? "48px" : "280px"); min-width: @(_isCollapsed ? "48px" : "220px"); max-width: @(_isCollapsed ? "48px" : "400px");">
+
+    @* Header *@
+    <div class="flex items-center gap-2 p-3 border-b border-border-subtle flex-shrink-0">
+        @if (!_isCollapsed)
+        {
+            <svg class="w-5 h-5 text-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+            </svg>
+            <span class="text-[16px] font-semibold tracking-tight text-text-primary flex-1 truncate">Template Editor</span>
+        }
+        <button class="p-1.5 rounded-md text-text-tertiary hover:text-text-primary hover:bg-bg-elevated transition-colors flex-shrink-0 focus-ring"
+                title="@(_isCollapsed ? "Expand sidebar" : "Collapse sidebar")"
+                aria-label="@(_isCollapsed ? "Expand sidebar" : "Collapse sidebar")"
+                aria-expanded="@(!_isCollapsed)"
+                @onclick="ToggleCollapse">
+            @if (_isCollapsed)
+            {
+                @* Chevron right / expand *@
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+            }
+            else
+            {
+                @* Chevron left / collapse *@
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            }
+        </button>
+    </div>
+
+    @if (_isCollapsed)
+    {
+        @* Collapsed icon strip *@
+        <div class="flex flex-col items-center gap-1 py-2">
+            <button class="p-2 rounded-md text-text-tertiary hover:text-text-primary hover:bg-bg-elevated transition-colors focus-ring"
+                    title="Search templates"
+                    aria-label="Search templates"
+                    @onclick="ToggleCollapse">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+            </button>
+            <button class="p-2 rounded-md text-text-tertiary hover:text-text-primary hover:bg-bg-elevated transition-colors focus-ring"
+                    title="New template"
+                    aria-label="Create new template"
+                    @onclick="OnNewTemplateClicked">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+            </button>
+        </div>
+    }
+    else
+    {
+        @* Search bar *@
+        <div class="px-3 pt-3 flex-shrink-0">
+            <TemplateSearch OnSearch="HandleSearch" />
+        </div>
+
+        @* New template button *@
+        <div class="px-3 pt-2 flex-shrink-0">
+            <button class="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium
+                           bg-accent text-white hover:bg-accent-hover transition-colors"
+                    @onclick="OnNewTemplateClicked">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span>New Template</span>
+            </button>
+        </div>
+
+        @* Template card grid *@
+        <div class="flex-1 overflow-y-auto px-3 py-2 min-h-0">
+            <TemplateCardGrid Templates="@_filteredTemplates"
+                              SelectedTemplateName="@EditorState.CurrentTemplateName"
+                              OnTemplateSelected="HandleTemplateSelected"
+                              OnContextMenu="HandleContextMenu" />
+        </div>
+
+        @* Divider *@
+        <hr class="border-border-subtle mx-3" />
+
+        @* Sample Data Panel *@
+        <SampleDataPanel />
+    }
+</aside>
+
+@code {
+    private bool _isCollapsed;
+    private string _searchQuery = string.Empty;
+    private List<TemplateListItem> _allTemplates = new();
+    private IReadOnlyList<TemplateListItem> _filteredTemplates = Array.Empty<TemplateListItem>();
+
+    [Parameter]
+    public EventCallback<TemplateListItem> OnTemplateSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<(TemplateListItem Template, double X, double Y)> OnContextMenu { get; set; }
+
+    [Parameter]
+    public EventCallback OnNewTemplate { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshTemplateListAsync();
+    }
+
+    public async Task RefreshTemplateListAsync()
+    {
+        try
+        {
+            var templates = await TemplateService.ListAsync();
+            _allTemplates = templates.ToList();
+            ApplyFilter();
+            StateHasChanged();
+        }
+        catch
+        {
+            _allTemplates = new();
+            _filteredTemplates = Array.Empty<TemplateListItem>();
+        }
+    }
+
+    private void ToggleCollapse()
+    {
+        _isCollapsed = !_isCollapsed;
+    }
+
+    private void HandleSearch(string query)
+    {
+        _searchQuery = query;
+        ApplyFilter();
+        StateHasChanged();
+    }
+
+    private void ApplyFilter()
+    {
+        if (string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            _filteredTemplates = _allTemplates;
+        }
+        else
+        {
+            _filteredTemplates = _allTemplates
+                .Where(t => t.Name.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+    }
+
+    private async Task HandleTemplateSelected(TemplateListItem template)
+    {
+        if (OnTemplateSelected.HasDelegate)
+            await OnTemplateSelected.InvokeAsync(template);
+    }
+
+    private async Task HandleContextMenu((TemplateListItem Template, double X, double Y) args)
+    {
+        if (OnContextMenu.HasDelegate)
+            await OnContextMenu.InvokeAsync(args);
+    }
+
+    private async Task OnNewTemplateClicked()
+    {
+        if (OnNewTemplate.HasDelegate)
+            await OnNewTemplate.InvokeAsync();
+    }
+
+    public void Dispose()
+    {
+        // Cleanup if needed
+    }
+}

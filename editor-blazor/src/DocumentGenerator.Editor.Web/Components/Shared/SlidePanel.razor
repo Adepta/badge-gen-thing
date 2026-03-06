@@ -1,0 +1,68 @@
+@if (IsVisible)
+{
+    @* Backdrop *@
+    <div class="fixed inset-0 z-50 flex justify-end animate-fade-in"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="slide-panel-title"
+         @onkeydown="HandleKeyDown">
+
+        @* Semi-transparent overlay *@
+        <div class="absolute inset-0 bg-black/40" @onclick="Close"></div>
+
+        @* Slide panel *@
+        <div class="relative z-10 h-full flex flex-col bg-bg-overlay border-l border-border-default shadow-2xl
+                    animate-slide-in-right"
+             style="width: @Width;"
+             @onclick:stopPropagation="true">
+
+            @* Header *@
+            <div class="flex items-center justify-between px-5 py-4 border-b border-border-subtle flex-shrink-0">
+                <h2 id="slide-panel-title" class="text-[15px] font-semibold text-text-primary">@Title</h2>
+                <button class="p-1 rounded-md text-text-tertiary hover:text-text-primary hover:bg-bg-elevated transition-colors focus-ring"
+                        title="Close"
+                        aria-label="Close panel"
+                        @onclick="Close">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            @* Body *@
+            <div class="flex-1 overflow-y-auto px-5 py-4">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Width { get; set; } = "480px";
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+            await Close();
+    }
+
+    private async Task Close()
+    {
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
+}

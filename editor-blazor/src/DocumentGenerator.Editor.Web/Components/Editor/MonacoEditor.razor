@@ -1,0 +1,168 @@
+@using DocumentGenerator.Editor.Web.Services
+@inject MonacoInteropService MonacoInterop
+@inject MonacoLanguageService MonacoLanguage
+@inject MonacoCompletionService MonacoCompletion
+@inject MonacoValidationService MonacoValidation
+@implements IAsyncDisposable
+
+<div id="@_elementId" class="w-full h-full min-h-0" style="flex: 1 1 auto;"></div>
+
+@code {
+    private string _elementId = string.Empty;
+    private string? _lastSetValue;
+    private bool _editorCreated;
+    private DotNetObjectReference<MonacoEditor>? _dotnetRef;
+
+    /// <summary>
+    /// Unique ID for this editor instance.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string EditorId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Language mode for syntax highlighting.
+    /// </summary>
+    [Parameter]
+    public string Language { get; set; } = "handlebars-html";
+
+    /// <summary>
+    /// Initial content of the editor.
+    /// </summary>
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Fires when the editor content changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string> OnContentChanged { get; set; }
+
+    /// <summary>
+    /// Fires when the cursor position changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<(int Line, int Col)> OnCursorChanged { get; set; }
+
+    /// <summary>
+    /// Editor options (fontSize, minimap, wordWrap, tabSize, etc.)
+    /// </summary>
+    [Parameter]
+    public MonacoEditorOptions? Options { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _elementId = $"monaco-container-{EditorId}";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Ensure languages and themes are registered
+            await MonacoLanguage.InitializeAsync();
+            await MonacoCompletion.InitializeAsync();
+
+            // Create the editor
+            var options = new
+            {
+                theme = Options?.Theme ?? "editor-dark",
+                fontSize = Options?.FontSize ?? 13,
+                minimap = Options?.Minimap ?? false,
+                wordWrap = Options?.WordWrap ?? false,
+                tabSize = Options?.TabSize ?? 2,
+                lineNumbers = Options?.LineNumbers ?? true
+            };
+
+            var created = await MonacoInterop.CreateEditorAsync(
+                _elementId, EditorId, Language, Value ?? string.Empty, options);
+
+            if (created)
+            {
+                _editorCreated = true;
+                _lastSetValue = Value;
+                _dotnetRef = DotNetObjectReference.Create(this);
+
+                // Wire up content change callback
+                await MonacoInterop.OnDidChangeContentAsync(EditorId,
+                    DotNetObjectReference.Create<object>(this));
+
+                // Wire up cursor position callback
+                await MonacoInterop.OnDidChangeCursorPositionAsync(EditorId,
+                    DotNetObjectReference.Create<object>(this));
+
+                // Start validation for HTML editors
+                if (Language == "handlebars-html")
+                {
+                    await MonacoValidation.StartValidationAsync(EditorId);
+                }
+            }
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_editorCreated && Value != _lastSetValue)
+        {
+            _lastSetValue = Value;
+            await MonacoInterop.SetValueAndClearUndoAsync(EditorId, Value ?? string.Empty);
+        }
+    }
+
+    /// <summary>
+    /// Called from JavaScript when the editor content changes.
+    /// </summary>
+    [JSInvokable]
+    public async Task OnEditorContentChanged(string editorId)
+    {
+        if (editorId != EditorId) return;
+
+        var value = await MonacoInterop.GetValueAsync(EditorId);
+        _lastSetValue = value;
+
+        if (OnContentChanged.HasDelegate)
+        {
+            await OnContentChanged.InvokeAsync(value);
+        }
+
+        // Trigger validation
+        if (Language == "handlebars-html")
+        {
+            await MonacoValidation.ValidateNowAsync(EditorId, value);
+        }
+    }
+
+    /// <summary>
+    /// Called from JavaScript when the cursor position changes.
+    /// </summary>
+    [JSInvokable]
+    public async Task OnCursorPositionChanged(string editorId, int lineNumber, int column)
+    {
+        if (editorId != EditorId) return;
+
+        if (OnCursorChanged.HasDelegate)
+        {
+            await OnCursorChanged.InvokeAsync((lineNumber, column));
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_editorCreated)
+        {
+            try
+            {
+                if (Language == "handlebars-html")
+                {
+                    await MonacoValidation.StopValidationAsync(EditorId);
+                }
+                await MonacoInterop.DisposeEditorAsync(EditorId);
+            }
+            catch (JSDisconnectedException)
+            {
+                // Circuit disconnected, nothing to clean up on JS side
+            }
+        }
+
+        _dotnetRef?.Dispose();
+    }
+}

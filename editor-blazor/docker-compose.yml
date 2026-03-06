@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  editor:
+    build:
+      context: .
+      dockerfile: src/DocumentGenerator.Editor.Web/Dockerfile
+    ports:
+      - "3500:3500"
+    volumes:
+      - ../templates:/templates
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - EDITOR__TEMPLATESDIR=/templates
+      - EDITOR__ASSETSDIR=/templates/assets
+    restart: unless-stopped

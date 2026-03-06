@@ -1,0 +1,913 @@
+@inherits LayoutComponentBase
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Core.DTOs
+@using DocumentGenerator.Editor.Core.Interfaces
+@using DocumentGenerator.Editor.Infrastructure.Services
+@using DocumentGenerator.Editor.Web.Components.Editor
+@using DocumentGenerator.Editor.Web.Components.Sidebar
+@using DocumentGenerator.Editor.Web.Components.Shared
+@using DocumentGenerator.Editor.Web.Components.Dialogs
+@using DocumentGenerator.Editor.Web.Services
+@inject EditorState EditorState
+@inject TemplateService TemplateService
+@inject ISampleDataRepository SampleDataRepository
+@inject ThemeService ThemeService
+@inject SettingsService SettingsService
+@inject KeyboardShortcutService KeyboardShortcutService
+@inject MonacoInteropService MonacoInterop
+@inject ExportService ExportService
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<ErrorBoundary @ref="_errorBoundary">
+    <ChildContent>
+        <div class="flex flex-col h-screen w-screen overflow-hidden bg-bg-base text-text-primary">
+            @* Main workspace *@
+            <div class="flex flex-1 min-h-0 @(_windowWidth < 960 ? "flex-col" : "")">
+                @* Sidebar *@
+                <Sidebar @ref="_sidebar"
+                         OnTemplateSelected="HandleTemplateSelected"
+                         OnContextMenu="HandleContextMenu"
+                         OnNewTemplate="ShowNewTemplateDialog" />
+
+                @* Editor Pane *@
+                <main class="flex-1 min-w-0 flex flex-col bg-bg-base min-h-0">
+                    <EditorPane @ref="_editorPane"
+                                HtmlContent="@EditorState.HtmlContent"
+                                CssContent="@EditorState.CssContent"
+                                OnHtmlChanged="@OnHtmlChanged"
+                                OnCssChanged="@OnCssChanged"
+                                OnCursorChanged="@OnCursorChanged"
+                                Layout="@_editorLayout"
+                                OnLayoutChanged="@OnLayoutChanged" />
+                </main>
+
+                @* Preview Pane *@
+                @if (!_previewCollapsed)
+                {
+                    <aside class="@GetPreviewPaneClass() bg-bg-surface border-l border-border-default flex flex-col">
+                        @if (_windowWidth < 1200)
+                        {
+                            <button class="h-6 flex items-center justify-center bg-bg-surface border-b border-border-subtle text-text-tertiary hover:text-text-primary transition-colors text-[10px]"
+                                    aria-label="Collapse preview pane"
+                                    @onclick="TogglePreviewCollapsed">
+                                <svg class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6" /></svg>
+                                Hide Preview
+                            </button>
+                        }
+                        <PreviewPane />
+                    </aside>
+                }
+                else
+                {
+                    <button class="w-8 bg-bg-surface border-l border-border-default flex flex-col items-center justify-center text-text-tertiary hover:text-text-primary transition-colors flex-shrink-0"
+                            aria-label="Show preview pane"
+                            title="Show preview"
+                            @onclick="TogglePreviewCollapsed">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+                    </button>
+                }
+            </div>
+
+            @* Status Bar *@
+            <StatusBar />
+        </div>
+    </ChildContent>
+    <ErrorContent Context="ex">
+        <div class="flex flex-col items-center justify-center h-screen w-screen bg-bg-base text-text-primary p-8">
+            <div class="max-w-md w-full bg-bg-surface rounded-xl border border-border-default p-6 shadow-lg">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="15" y1="9" x2="9" y2="15" />
+                            <line x1="9" y1="9" x2="15" y2="15" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-[15px] font-semibold">Something went wrong</h2>
+                        <p class="text-[12px] text-text-secondary">An unexpected error occurred.</p>
+                    </div>
+                </div>
+                <details class="mb-4">
+                    <summary class="text-[12px] text-text-tertiary cursor-pointer hover:text-text-secondary transition-colors">
+                        Show error details
+                    </summary>
+                    <pre class="mt-2 p-3 rounded-lg bg-bg-elevated text-[11px] font-mono text-error overflow-auto max-h-[200px] thin-scrollbar">@ex.Message</pre>
+                </details>
+                <button class="w-full px-4 py-2 rounded-md text-[13px] font-medium bg-accent text-white hover:bg-accent-hover transition-colors"
+                        @onclick="RecoverFromError">
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </ErrorContent>
+</ErrorBoundary>
+
+@* NavigationLock for unsaved changes *@
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"
+               ConfirmExternalNavigation="@EditorState.IsDirty" />
+
+@* Context Menu *@
+<ContextMenu IsVisible="@_contextMenuVisible"
+             X="@_contextMenuX"
+             Y="@_contextMenuY"
+             Items="@_contextMenuItems"
+             OnClose="CloseContextMenu" />
+
+@* Dialogs *@
+<NewTemplateDialog IsVisible="@_showNewTemplate"
+                   OnClose="CloseNewTemplateDialog"
+                   OnCreated="HandleTemplateCreated" />
+
+<RenameDialog IsVisible="@_showRename"
+              CurrentName="@(_contextTarget?.Name ?? string.Empty)"
+              OnClose="CloseRenameDialog"
+              OnRenamed="HandleRenamed" />
+
+<ConfirmDialog IsVisible="@_showDeleteConfirm"
+               Title="Delete Template"
+               Message="@($"Are you sure you want to delete '{_contextTarget?.Name}'? This action cannot be undone.")"
+               ConfirmText="Delete"
+               IsDestructive="true"
+               OnConfirm="HandleDeleteConfirmed"
+               OnCancel="CloseDeleteConfirm" />
+
+<ConfirmDialog IsVisible="@_showUnsavedConfirm"
+               Title="Unsaved Changes"
+               Message="You have unsaved changes. Do you want to discard them and continue?"
+               ConfirmText="Discard"
+               CancelText="Cancel"
+               IsDestructive="true"
+               OnConfirm="HandleDiscardAndContinue"
+               OnCancel="CancelPendingNavigation" />
+
+@* Command Palette overlay *@
+<CommandPalette IsVisible="@_showCommandPalette"
+                OnClose="CloseCommandPalette"
+                RecentTemplates="@_recentTemplates"
+                HasTemplateOpen="@(!string.IsNullOrEmpty(EditorState.CurrentTemplateName))"
+                OnAction="HandleCommandPaletteAction" />
+
+@* Settings Panel overlay *@
+<SettingsPanel IsVisible="@_showSettings"
+               OnClose="CloseSettings"
+               OnSettingsChanged="HandleSettingsChanged"
+               OnLayoutChanged="OnLayoutChanged" />
+
+@* Import Dialog *@
+<ImportDialog IsVisible="@_showImport"
+              OnClose="CloseImportDialog" />
+
+@* Upload Assets Dialog *@
+<UploadAssetsDialog IsVisible="@_showUploadAssets"
+                    OnClose="CloseUploadAssetsDialog" />
+
+@code {
+    private Sidebar? _sidebar;
+    private EditorPane? _editorPane;
+    private ErrorBoundary? _errorBoundary;
+    private EditorLayout _editorLayout = EditorLayout.Vertical;
+
+    // Context menu state
+    private bool _contextMenuVisible;
+    private double _contextMenuX;
+    private double _contextMenuY;
+    private TemplateListItem? _contextTarget;
+    private List<ContextMenuItem> _contextMenuItems = new();
+
+    // Dialog visibility
+    private bool _showNewTemplate;
+    private bool _showRename;
+    private bool _showDeleteConfirm;
+    private bool _showUnsavedConfirm;
+
+    // Phase 7: Command palette & settings visibility
+    private bool _showCommandPalette;
+    private bool _showSettings;
+
+    // Phase 8: Import/Export/Upload visibility
+    private bool _showImport;
+    private bool _showUploadAssets;
+
+    // Recent templates tracking (last 5 opened)
+    private List<string> _recentTemplates = new();
+
+    // Pending template load (used when dirty and user needs to confirm discard)
+    private TemplateListItem? _pendingTemplate;
+
+    // Keyboard shortcuts initialized flag
+    private bool _keyboardShortcutsInitialized;
+
+    // Responsive state
+    private int _windowWidth = 1920;
+    private int _windowHeight = 1080;
+    private bool _previewCollapsed;
+    private IJSObjectReference? _responsiveModule;
+    private DotNetObjectReference<MainLayout>? _responsiveDotnetRef;
+
+    protected override void OnInitialized()
+    {
+        EditorState.OnStateChanged += HandleStateChanged;
+        EditorState.OnSaveRequested += HandleSaveRequested;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Initialize theme (must happen before settings so Monaco theme is correct)
+            await ThemeService.InitializeAsync();
+
+            // Initialize settings
+            var settings = await SettingsService.InitializeAsync();
+            _editorLayout = settings.EditorLayout;
+
+            // Initialize keyboard shortcuts
+            await InitializeKeyboardShortcutsAsync();
+
+            // Initialize responsive interop
+            await InitializeResponsiveAsync();
+        }
+    }
+
+    private async Task InitializeResponsiveAsync()
+    {
+        try
+        {
+            _responsiveDotnetRef = DotNetObjectReference.Create(this);
+            _responsiveModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/responsive-interop.js");
+            await _responsiveModule.InvokeVoidAsync("initialize", _responsiveDotnetRef);
+        }
+        catch
+        {
+            // JS interop may not be available yet
+        }
+    }
+
+    [JSInvokable]
+    public void OnWindowResize(int width, int height)
+    {
+        _windowWidth = width;
+        _windowHeight = height;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void TogglePreviewCollapsed()
+    {
+        _previewCollapsed = !_previewCollapsed;
+        StateHasChanged();
+    }
+
+    private string GetPreviewPaneClass()
+    {
+        if (_windowWidth < 960)
+            return "w-full min-h-[200px] max-h-[40vh]";
+        return "w-[45%] min-w-[300px]";
+    }
+
+    private void RecoverFromError()
+    {
+        _errorBoundary?.Recover();
+    }
+
+    private async Task InitializeKeyboardShortcutsAsync()
+    {
+        if (_keyboardShortcutsInitialized) return;
+
+        try
+        {
+            KeyboardShortcutService.OnSave += HandleKeyboardSave;
+            KeyboardShortcutService.OnCommandPalette += HandleKeyboardCommandPalette;
+            KeyboardShortcutService.OnQuickParts += HandleKeyboardQuickParts;
+            KeyboardShortcutService.OnEscape += HandleKeyboardEscape;
+
+            await KeyboardShortcutService.InitializeAsync();
+            _keyboardShortcutsInitialized = true;
+        }
+        catch
+        {
+            // JS interop may not be available yet
+        }
+    }
+
+    // -- Keyboard shortcut handlers --
+
+    private async Task HandleKeyboardSave()
+    {
+        await EditorState.RequestSaveAsync();
+    }
+
+    private Task HandleKeyboardCommandPalette()
+    {
+        _showCommandPalette = !_showCommandPalette;
+        InvokeAsync(StateHasChanged);
+        return Task.CompletedTask;
+    }
+
+    private Task HandleKeyboardQuickParts()
+    {
+        _editorPane?.ToggleQuickParts();
+        InvokeAsync(StateHasChanged);
+        return Task.CompletedTask;
+    }
+
+    private Task HandleKeyboardEscape()
+    {
+        var changed = false;
+
+        if (_showCommandPalette)
+        {
+            _showCommandPalette = false;
+            changed = true;
+        }
+        else if (_showSettings)
+        {
+            _showSettings = false;
+            changed = true;
+        }
+        else if (_showImport)
+        {
+            _showImport = false;
+            changed = true;
+        }
+        else if (_showUploadAssets)
+        {
+            _showUploadAssets = false;
+            changed = true;
+        }
+
+        if (changed)
+        {
+            InvokeAsync(StateHasChanged);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    // -- Command Palette --
+
+    private void ToggleCommandPalette()
+    {
+        _showCommandPalette = !_showCommandPalette;
+    }
+
+    private void CloseCommandPalette()
+    {
+        _showCommandPalette = false;
+    }
+
+    private async Task HandleCommandPaletteAction(string action)
+    {
+        _showCommandPalette = false;
+
+        if (action.StartsWith("template:"))
+        {
+            var templateName = action["template:".Length..];
+            await LoadTemplateByNameAsync(templateName);
+        }
+        else if (action.StartsWith("quickpart:"))
+        {
+            var insertText = action["quickpart:".Length..];
+            await InsertQuickPartAsync(insertText);
+        }
+        else
+        {
+            switch (action)
+            {
+                case "new":
+                    ShowNewTemplateDialog();
+                    break;
+                case "save":
+                    await EditorState.RequestSaveAsync();
+                    break;
+                case "duplicate":
+                    if (_contextTarget is null && !string.IsNullOrEmpty(EditorState.CurrentTemplateName))
+                    {
+                        await HandleDuplicateCurrent();
+                    }
+                    break;
+                case "rename":
+                    if (!string.IsNullOrEmpty(EditorState.CurrentTemplateName))
+                    {
+                        _contextTarget = new TemplateListItem(
+                            EditorState.CurrentTemplateName,
+                            TemplateFamily.Custom,
+                            SizePreset.Custom,
+                            null,
+                            false);
+                        ShowRenameDialog();
+                    }
+                    break;
+                case "delete":
+                    if (!string.IsNullOrEmpty(EditorState.CurrentTemplateName))
+                    {
+                        _contextTarget = new TemplateListItem(
+                            EditorState.CurrentTemplateName,
+                            TemplateFamily.Custom,
+                            SizePreset.Custom,
+                            null,
+                            false);
+                        ShowDeleteConfirm();
+                    }
+                    break;
+                case "import":
+                    ShowImportDialog();
+                    break;
+                case "export":
+                    await HandleExport();
+                    break;
+                case "upload-assets":
+                    ShowUploadAssetsDialog();
+                    break;
+                case "settings":
+                    OpenSettings();
+                    break;
+                case "toggle-theme":
+                    await ThemeService.ToggleThemeAsync();
+                    break;
+                case "theme-dark":
+                    await ThemeService.SetThemeAsync("dark");
+                    break;
+                case "theme-light":
+                    await ThemeService.SetThemeAsync("light");
+                    break;
+                case "theme-system":
+                    await ThemeService.SetThemeAsync("system");
+                    break;
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task LoadTemplateByNameAsync(string name)
+    {
+        try
+        {
+            var template = await TemplateService.GetAsync(name);
+            if (template is null) return;
+
+            var sampleData = await SampleDataRepository.GetAsync(name);
+            await EditorState.LoadTemplateAsync(
+                template.Name,
+                template.HtmlContent,
+                template.CssContent,
+                sampleData ?? SampleData.DefaultSampleData);
+
+            AddToRecentTemplates(name);
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task InsertQuickPartAsync(string text)
+    {
+        try
+        {
+            var editorId = _editorPane?.LastFocusedEditorId ?? "editor-html";
+            await MonacoInterop.InsertTextAsync(editorId, text);
+        }
+        catch
+        {
+            // Editor may not be ready
+        }
+    }
+
+    private async Task HandleDuplicateCurrent()
+    {
+        if (string.IsNullOrEmpty(EditorState.CurrentTemplateName)) return;
+
+        try
+        {
+            var newName = $"{EditorState.CurrentTemplateName}-copy";
+            await TemplateService.DuplicateAsync(EditorState.CurrentTemplateName, newName);
+
+            if (_sidebar is not null)
+                await _sidebar.RefreshTemplateListAsync();
+
+            await EditorState.SetSaveStatusAsync($"Duplicated as '{newName}'");
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Duplicate failed: {ex.Message}");
+        }
+    }
+
+    // -- Settings Panel --
+
+    private void OpenSettings()
+    {
+        _showSettings = true;
+    }
+
+    private void CloseSettings()
+    {
+        _showSettings = false;
+    }
+
+    private void HandleSettingsChanged(EditorSettings settings)
+    {
+        _editorLayout = settings.EditorLayout;
+        StateHasChanged();
+    }
+
+    // -- Import Dialog --
+
+    private void ShowImportDialog()
+    {
+        _showImport = true;
+        StateHasChanged();
+    }
+
+    private void CloseImportDialog()
+    {
+        _showImport = false;
+        StateHasChanged();
+    }
+
+    // -- Upload Assets Dialog --
+
+    private void ShowUploadAssetsDialog()
+    {
+        _showUploadAssets = true;
+        StateHasChanged();
+    }
+
+    private void CloseUploadAssetsDialog()
+    {
+        _showUploadAssets = false;
+        StateHasChanged();
+    }
+
+    // -- Export --
+
+    private async Task HandleExport()
+    {
+        if (string.IsNullOrEmpty(EditorState.CurrentTemplateName)) return;
+
+        try
+        {
+            await EditorState.SetSaveStatusAsync("Exporting...");
+            var templateName = EditorState.CurrentTemplateName;
+            await ExportService.DownloadFileAsync(
+                $"/api/export/{Uri.EscapeDataString(templateName)}",
+                $"{templateName}.zip");
+            await EditorState.SetSaveStatusAsync($"Downloaded {templateName}.zip");
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Export failed: {ex.Message}");
+        }
+    }
+
+    // -- Recent templates tracking --
+
+    private void AddToRecentTemplates(string name)
+    {
+        _recentTemplates.Remove(name);
+        _recentTemplates.Insert(0, name);
+
+        if (_recentTemplates.Count > 5)
+        {
+            _recentTemplates = _recentTemplates.Take(5).ToList();
+        }
+    }
+
+    // -- State change handler --
+    private async Task HandleStateChanged()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // -- Template selection flow --
+    private async Task HandleTemplateSelected(TemplateListItem template)
+    {
+        // Check if there are unsaved changes
+        if (EditorState.IsDirty)
+        {
+            _pendingTemplate = template;
+            _showUnsavedConfirm = true;
+            return;
+        }
+
+        await LoadTemplateAsync(template);
+    }
+
+    private async Task LoadTemplateAsync(TemplateListItem item)
+    {
+        await EditorState.SetLoadingAsync(true);
+
+        try
+        {
+            var template = await TemplateService.GetAsync(item.Name);
+            if (template is null)
+            {
+                await EditorState.SetSaveStatusAsync("Template not found");
+                return;
+            }
+
+            var sampleData = await SampleDataRepository.GetAsync(item.Name);
+
+            await EditorState.LoadTemplateAsync(
+                template.Name,
+                template.HtmlContent,
+                template.CssContent,
+                sampleData ?? SampleData.DefaultSampleData);
+
+            AddToRecentTemplates(item.Name);
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Error: {ex.Message}");
+        }
+        finally
+        {
+            await EditorState.SetLoadingAsync(false);
+        }
+    }
+
+    // -- Content change handlers --
+    private async Task OnHtmlChanged(string html)
+    {
+        await EditorState.UpdateHtmlAsync(html);
+    }
+
+    private async Task OnCssChanged(string css)
+    {
+        await EditorState.UpdateCssAsync(css);
+    }
+
+    private void OnCursorChanged((int Line, int Col) position)
+    {
+        EditorState.CursorLine = position.Line;
+        EditorState.CursorColumn = position.Col;
+        StateHasChanged();
+    }
+
+    private void OnLayoutChanged(EditorLayout layout)
+    {
+        _editorLayout = layout;
+        StateHasChanged();
+    }
+
+    // -- Save flow --
+    private async Task HandleSaveRequested()
+    {
+        if (string.IsNullOrEmpty(EditorState.CurrentTemplateName)) return;
+
+        await EditorState.SetSaveStatusAsync("Saving...");
+
+        try
+        {
+            var request = new TemplateSaveRequest(
+                EditorState.CurrentTemplateName,
+                EditorState.HtmlContent,
+                EditorState.CssContent,
+                EditorState.SampleData);
+
+            await TemplateService.SaveAsync(request);
+            await EditorState.MarkSavedAsync();
+
+            // Refresh sidebar
+            if (_sidebar is not null)
+                await _sidebar.RefreshTemplateListAsync();
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Error: {ex.Message}");
+        }
+    }
+
+    // -- Context menu --
+    private void HandleContextMenu((TemplateListItem Template, double X, double Y) args)
+    {
+        _contextTarget = args.Template;
+        _contextMenuX = args.X;
+        _contextMenuY = args.Y;
+
+        _contextMenuItems = new List<ContextMenuItem>
+        {
+            new() { Label = "Open", Action = () => HandleTemplateSelected(args.Template) },
+            new() { Label = "Duplicate", Action = () => HandleDuplicate(args.Template) },
+            new() { Label = "Rename", Action = () => { ShowRenameDialog(); return Task.CompletedTask; } },
+            new() { Label = "Delete", Action = () => { ShowDeleteConfirm(); return Task.CompletedTask; }, IsDestructive = true }
+        };
+
+        _contextMenuVisible = true;
+        StateHasChanged();
+    }
+
+    private void CloseContextMenu()
+    {
+        _contextMenuVisible = false;
+        StateHasChanged();
+    }
+
+    // -- New Template --
+    private void ShowNewTemplateDialog()
+    {
+        _showNewTemplate = true;
+        StateHasChanged();
+    }
+
+    private void CloseNewTemplateDialog()
+    {
+        _showNewTemplate = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleTemplateCreated(string templateName)
+    {
+        _showNewTemplate = false;
+
+        // Refresh sidebar
+        if (_sidebar is not null)
+            await _sidebar.RefreshTemplateListAsync();
+
+        // Open the newly created template
+        var template = await TemplateService.GetAsync(templateName);
+        if (template is not null)
+        {
+            var sampleData = await SampleDataRepository.GetAsync(templateName);
+            await EditorState.LoadTemplateAsync(
+                template.Name,
+                template.HtmlContent,
+                template.CssContent,
+                sampleData ?? SampleData.DefaultSampleData);
+
+            AddToRecentTemplates(templateName);
+        }
+    }
+
+    // -- Rename --
+    private void ShowRenameDialog()
+    {
+        _showRename = true;
+        StateHasChanged();
+    }
+
+    private void CloseRenameDialog()
+    {
+        _showRename = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleRenamed(string newName)
+    {
+        if (_contextTarget is null) return;
+
+        try
+        {
+            var request = new RenameRequest(_contextTarget.Name, newName);
+            await TemplateService.RenameAsync(request);
+
+            // If the renamed template is the currently open one, update state
+            if (EditorState.CurrentTemplateName == _contextTarget.Name)
+            {
+                await EditorState.LoadTemplateAsync(
+                    newName,
+                    EditorState.HtmlContent,
+                    EditorState.CssContent,
+                    EditorState.SampleData);
+            }
+
+            // Refresh sidebar
+            if (_sidebar is not null)
+                await _sidebar.RefreshTemplateListAsync();
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Rename failed: {ex.Message}");
+        }
+
+        _showRename = false;
+        StateHasChanged();
+    }
+
+    // -- Duplicate --
+    private async Task HandleDuplicate(TemplateListItem template)
+    {
+        try
+        {
+            var newName = $"{template.Name}-copy";
+            await TemplateService.DuplicateAsync(template.Name, newName);
+
+            if (_sidebar is not null)
+                await _sidebar.RefreshTemplateListAsync();
+
+            await EditorState.SetSaveStatusAsync($"Duplicated as '{newName}'");
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Duplicate failed: {ex.Message}");
+        }
+    }
+
+    // -- Delete --
+    private void ShowDeleteConfirm()
+    {
+        _showDeleteConfirm = true;
+        StateHasChanged();
+    }
+
+    private void CloseDeleteConfirm()
+    {
+        _showDeleteConfirm = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleDeleteConfirmed()
+    {
+        if (_contextTarget is null) return;
+
+        try
+        {
+            await TemplateService.DeleteAsync(_contextTarget.Name);
+
+            // If the deleted template was open, clear state
+            if (EditorState.CurrentTemplateName == _contextTarget.Name)
+            {
+                EditorState.Clear();
+            }
+
+            if (_sidebar is not null)
+                await _sidebar.RefreshTemplateListAsync();
+
+            await EditorState.SetSaveStatusAsync("Template deleted");
+        }
+        catch (Exception ex)
+        {
+            await EditorState.SetSaveStatusAsync($"Delete failed: {ex.Message}");
+        }
+
+        _showDeleteConfirm = false;
+        StateHasChanged();
+    }
+
+    // -- Unsaved changes guard --
+    private async Task HandleDiscardAndContinue()
+    {
+        _showUnsavedConfirm = false;
+
+        if (_pendingTemplate is not null)
+        {
+            await LoadTemplateAsync(_pendingTemplate);
+            _pendingTemplate = null;
+        }
+    }
+
+    private void CancelPendingNavigation()
+    {
+        _showUnsavedConfirm = false;
+        _pendingTemplate = null;
+        StateHasChanged();
+    }
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        if (EditorState.IsDirty)
+        {
+            context.PreventNavigation();
+            _showUnsavedConfirm = true;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        EditorState.OnStateChanged -= HandleStateChanged;
+        EditorState.OnSaveRequested -= HandleSaveRequested;
+
+        KeyboardShortcutService.OnSave -= HandleKeyboardSave;
+        KeyboardShortcutService.OnCommandPalette -= HandleKeyboardCommandPalette;
+        KeyboardShortcutService.OnQuickParts -= HandleKeyboardQuickParts;
+        KeyboardShortcutService.OnEscape -= HandleKeyboardEscape;
+
+        try
+        {
+            await KeyboardShortcutService.DisposeAsync();
+        }
+        catch
+        {
+            // Circuit may already be disconnected
+        }
+
+        try
+        {
+            if (_responsiveModule is not null)
+            {
+                await _responsiveModule.InvokeVoidAsync("dispose");
+                await _responsiveModule.DisposeAsync();
+            }
+        }
+        catch
+        {
+            // Circuit may already be disconnected
+        }
+
+        _responsiveDotnetRef?.Dispose();
+    }
+}

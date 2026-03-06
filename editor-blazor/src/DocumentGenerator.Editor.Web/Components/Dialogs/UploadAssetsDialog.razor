@@ -1,0 +1,395 @@
+@using DocumentGenerator.Editor.Core.Interfaces
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Infrastructure.Services
+@using DocumentGenerator.Editor.Web.Components.Shared
+@inject AssetService AssetService
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<SlidePanel IsVisible="@IsVisible" Title="Upload Assets" OnClose="HandleClose" Width="480px">
+    <div class="flex flex-col gap-5">
+
+        @* Drop zone *@
+        <div id="@_dropZoneId"
+             class="relative flex flex-col items-center justify-center gap-3
+                    min-h-[160px] p-6
+                    border-2 border-dashed border-border-default rounded-xl
+                    bg-bg-elevated cursor-pointer
+                    hover:border-accent hover:bg-accent-muted/30
+                    transition-colors
+                    [&.drag-over]:border-accent [&.drag-over]:bg-accent-muted/30">
+            @* Cloud upload icon *@
+            <svg class="w-10 h-10 text-text-tertiary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 16 12 12 8 16" />
+                <line x1="12" y1="12" x2="12" y2="21" />
+                <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+                <polyline points="16 16 12 12 8 16" />
+            </svg>
+            <div class="text-center">
+                <p class="text-[13px] text-text-secondary font-medium">Drop files here or click to browse</p>
+                <p class="text-[11px] text-text-tertiary mt-1">PNG, JPG, GIF, SVG, WebP - Max 5MB each - Up to 10 files</p>
+            </div>
+
+            @* Hidden file input layered over the drop zone *@
+            <InputFile id="@_inputFileId"
+                       OnChange="OnFilesSelected"
+                       multiple
+                       accept=".png,.jpg,.jpeg,.gif,.svg,.webp,image/png,image/jpeg,image/gif,image/svg+xml,image/webp"
+                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+        </div>
+
+        @* Validation error *@
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <p class="text-[12px] text-error bg-error/10 px-3 py-2 rounded-md">@_errorMessage</p>
+        }
+
+        @* Selected files list *@
+        @if (_uploadItems.Count > 0)
+        {
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[12px] font-medium text-text-secondary">
+                    Selected Files (@_uploadItems.Count)
+                </label>
+                <div class="flex flex-col gap-1">
+                    @foreach (var item in _uploadItems)
+                    {
+                        <div class="flex items-center gap-3 px-3 py-2 bg-bg-elevated rounded-lg border border-border-subtle">
+                            @* File type icon *@
+                            <svg class="w-4 h-4 flex-shrink-0 @GetStatusIconColor(item.Status)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <polyline points="21 15 16 10 5 21" />
+                            </svg>
+
+                            @* File name *@
+                            <span class="flex-1 text-[12px] text-text-primary truncate">@item.FileName</span>
+
+                            @* File size *@
+                            <span class="text-[10px] text-text-tertiary flex-shrink-0">@FormatFileSize(item.Size)</span>
+
+                            @* Status badge *@
+                            <span class="text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 @GetStatusBadgeClass(item.Status)">
+                                @if (item.Status == "uploading")
+                                {
+                                    <span class="animate-pulse">Uploading</span>
+                                }
+                                else
+                                {
+                                    @item.Status.ToUpperInvariant()
+                                }
+                            </span>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(item.ErrorMessage))
+                        {
+                            <p class="text-[11px] text-error ml-7">@item.ErrorMessage</p>
+                        }
+                    }
+                </div>
+            </div>
+
+            @* Upload button *@
+            @if (_uploadItems.Any(i => i.Status == "pending"))
+            {
+                <button class="w-full px-4 py-2.5 rounded-md text-[12px] font-medium
+                               bg-accent text-white hover:bg-accent-hover transition-colors
+                               disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled="@_isUploading"
+                        @onclick="UploadAllFiles">
+                    @if (_isUploading)
+                    {
+                        <span>Uploading...</span>
+                    }
+                    else
+                    {
+                        <span>Upload @_uploadItems.Count(i => i.Status == "pending") File(s)</span>
+                    }
+                </button>
+            }
+        }
+
+        @* Divider *@
+        @if (_existingAssets.Count > 0)
+        {
+            <div class="h-px bg-border-default"></div>
+        }
+
+        @* Existing assets list *@
+        @if (_existingAssets.Count > 0)
+        {
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[12px] font-medium text-text-secondary">
+                    Uploaded Assets (@_existingAssets.Count)
+                </label>
+                <div class="grid grid-cols-1 gap-1">
+                    @foreach (var asset in _existingAssets)
+                    {
+                        <div class="flex items-center gap-3 px-3 py-2 bg-bg-elevated rounded-lg border border-border-subtle group">
+                            @* Image icon *@
+                            <svg class="w-4 h-4 text-text-tertiary flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <polyline points="21 15 16 10 5 21" />
+                            </svg>
+
+                            @* File name *@
+                            <span class="flex-1 text-[12px] text-text-primary truncate">@asset.Filename</span>
+
+                            @* Size *@
+                            <span class="text-[10px] text-text-tertiary flex-shrink-0">@FormatFileSize(asset.Size)</span>
+
+                            @* Copy URL button *@
+                            <button class="p-1 rounded text-text-tertiary hover:text-accent hover:bg-accent-muted transition-colors opacity-0 group-hover:opacity-100"
+                                    title="Copy URL"
+                                    @onclick="@(() => CopyAssetUrl(asset))">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        @* Copy status *@
+        @if (!string.IsNullOrEmpty(_copyStatus))
+        {
+            <p class="text-[11px] text-success">@_copyStatus</p>
+        }
+
+        @* Close button *@
+        <div class="flex justify-end pt-2">
+            <button class="px-4 py-2 rounded-md text-[12px] font-medium
+                           text-text-secondary bg-bg-elevated border border-border-subtle
+                           hover:bg-bg-base hover:text-text-primary transition-colors"
+                    @onclick="HandleClose">
+                Close
+            </button>
+        </div>
+    </div>
+</SlidePanel>
+
+@code {
+    private readonly string _dropZoneId = $"dropzone-{Guid.NewGuid():N}";
+    private readonly string _inputFileId = $"inputfile-{Guid.NewGuid():N}";
+
+    private IJSObjectReference? _dragDropModule;
+    private List<UploadFileItem> _uploadItems = new();
+    private List<Asset> _existingAssets = new();
+    private string? _errorMessage;
+    private string? _copyStatus;
+    private bool _isUploading;
+    private bool _dropZoneInitialized;
+
+    private static readonly HashSet<string> AllowedExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"
+    };
+
+    private const long MaxFileSize = 5 * 1024 * 1024;
+    private const int MaxFiles = 10;
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (IsVisible)
+        {
+            await LoadExistingAssetsAsync();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (IsVisible && !_dropZoneInitialized)
+        {
+            try
+            {
+                _dragDropModule ??= await JS.InvokeAsync<IJSObjectReference>(
+                    "import", "./js/dragdrop-interop.js");
+                await _dragDropModule.InvokeVoidAsync("initDropZone", _dropZoneId, _inputFileId);
+                _dropZoneInitialized = true;
+            }
+            catch
+            {
+                // JS interop may not be available yet
+            }
+        }
+    }
+
+    private async Task LoadExistingAssetsAsync()
+    {
+        try
+        {
+            _existingAssets = (await AssetService.ListAsync()).ToList();
+        }
+        catch
+        {
+            _existingAssets = new List<Asset>();
+        }
+    }
+
+    private void OnFilesSelected(InputFileChangeEventArgs e)
+    {
+        _errorMessage = null;
+        _copyStatus = null;
+
+        var files = e.GetMultipleFiles(MaxFiles + 1);
+
+        if (files.Count > MaxFiles)
+        {
+            _errorMessage = $"Too many files. Maximum is {MaxFiles} files per upload.";
+            return;
+        }
+
+        _uploadItems.Clear();
+
+        foreach (var file in files)
+        {
+            var item = new UploadFileItem
+            {
+                FileName = file.Name,
+                Size = file.Size,
+                File = file,
+                Status = "pending"
+            };
+
+            // Validate extension
+            var ext = Path.GetExtension(file.Name);
+            if (!AllowedExtensions.Contains(ext))
+            {
+                item.Status = "failed";
+                item.ErrorMessage = $"File type '{ext}' is not allowed.";
+            }
+            else if (file.Size > MaxFileSize)
+            {
+                item.Status = "failed";
+                item.ErrorMessage = $"File exceeds maximum size of 5 MB.";
+            }
+
+            _uploadItems.Add(item);
+        }
+    }
+
+    private async Task UploadAllFiles()
+    {
+        _isUploading = true;
+        _errorMessage = null;
+
+        var pendingItems = _uploadItems.Where(i => i.Status == "pending").ToList();
+
+        foreach (var item in pendingItems)
+        {
+            item.Status = "uploading";
+            StateHasChanged();
+
+            try
+            {
+                using var stream = item.File.OpenReadStream(maxAllowedSize: MaxFileSize);
+                await AssetService.UploadAsync(item.FileName, stream, item.File.ContentType);
+                item.Status = "done";
+            }
+            catch (Exception ex)
+            {
+                item.Status = "failed";
+                item.ErrorMessage = ex.Message;
+            }
+
+            StateHasChanged();
+        }
+
+        _isUploading = false;
+
+        // Refresh the existing assets list
+        await LoadExistingAssetsAsync();
+        StateHasChanged();
+    }
+
+    private async Task CopyAssetUrl(Asset asset)
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", $"/{asset.Url}");
+            _copyStatus = $"Copied URL for '{asset.Filename}'";
+
+            // Clear status after 2 seconds
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                _copyStatus = null;
+                await InvokeAsync(StateHasChanged);
+            });
+        }
+        catch
+        {
+            _copyStatus = $"URL: /{asset.Url}";
+        }
+    }
+
+    private async Task HandleClose()
+    {
+        _uploadItems.Clear();
+        _errorMessage = null;
+        _copyStatus = null;
+        _dropZoneInitialized = false;
+
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_dragDropModule is not null)
+        {
+            try
+            {
+                await _dragDropModule.InvokeVoidAsync("destroyDropZone", _dropZoneId);
+                await _dragDropModule.DisposeAsync();
+            }
+            catch
+            {
+                // Circuit may already be disconnected
+            }
+        }
+    }
+
+    private static string FormatFileSize(long bytes)
+    {
+        if (bytes < 1024) return $"{bytes} B";
+        if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
+        return $"{bytes / (1024.0 * 1024.0):F1} MB";
+    }
+
+    private static string GetStatusBadgeClass(string status) => status switch
+    {
+        "pending" => "bg-bg-base text-text-tertiary border border-border-subtle",
+        "uploading" => "bg-blue-500/10 text-blue-400",
+        "done" => "bg-success/10 text-success",
+        "failed" => "bg-error/10 text-error",
+        _ => "bg-bg-base text-text-tertiary"
+    };
+
+    private static string GetStatusIconColor(string status) => status switch
+    {
+        "done" => "text-success",
+        "failed" => "text-error",
+        "uploading" => "text-blue-400",
+        _ => "text-text-tertiary"
+    };
+
+    private class UploadFileItem
+    {
+        public string FileName { get; set; } = string.Empty;
+        public long Size { get; set; }
+        public string Status { get; set; } = "pending";
+        public string? ErrorMessage { get; set; }
+        public IBrowserFile File { get; set; } = default!;
+    }
+}

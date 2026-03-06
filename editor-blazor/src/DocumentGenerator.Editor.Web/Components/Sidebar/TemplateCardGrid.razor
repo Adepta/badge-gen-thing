@@ -1,0 +1,79 @@
+@using DocumentGenerator.Editor.Core.DTOs
+
+<div>
+    @if (_isLoading)
+    {
+        @* Skeleton loading state - 6 placeholder cards *@
+        <div class="grid grid-cols-2 gap-2">
+            @for (var i = 0; i < 6; i++)
+            {
+                <div class="rounded-lg border border-border-subtle overflow-hidden" style="height: 80px;">
+                    <div class="h-[44px] w-full skeleton"></div>
+                    <div class="px-2 py-1.5 bg-bg-surface">
+                        <div class="h-3 w-3/4 rounded skeleton mb-1"></div>
+                        <div class="h-2 w-1/2 rounded skeleton"></div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else if (Templates is null || Templates.Count == 0)
+    {
+        <div class="flex flex-col items-center justify-center py-8 text-center">
+            <svg class="w-8 h-8 text-text-tertiary mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+            </svg>
+            <p class="text-[12px] text-text-tertiary">No templates found</p>
+            <p class="text-[11px] text-text-tertiary mt-1">Create a new template to get started</p>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-2 gap-2">
+            @foreach (var template in Templates)
+            {
+                <TemplateCard Template="@template"
+                              IsSelected="@(template.Name == SelectedTemplateName)"
+                              OnClick="HandleTemplateSelected"
+                              OnContextMenu="HandleContextMenu" />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool _isLoading;
+
+    [Parameter]
+    public IReadOnlyList<TemplateListItem>? Templates { get; set; }
+
+    [Parameter]
+    public string? SelectedTemplateName { get; set; }
+
+    [Parameter]
+    public EventCallback<TemplateListItem> OnTemplateSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<(TemplateListItem Template, double X, double Y)> OnContextMenu { get; set; }
+
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _isLoading = IsLoading;
+    }
+
+    private async Task HandleTemplateSelected(TemplateListItem template)
+    {
+        if (OnTemplateSelected.HasDelegate)
+            await OnTemplateSelected.InvokeAsync(template);
+    }
+
+    private async Task HandleContextMenu((TemplateListItem Template, double X, double Y) args)
+    {
+        if (OnContextMenu.HasDelegate)
+            await OnContextMenu.InvokeAsync(args);
+    }
+}

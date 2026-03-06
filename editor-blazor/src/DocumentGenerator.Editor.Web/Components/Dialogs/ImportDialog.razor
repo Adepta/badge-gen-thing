@@ -1,0 +1,257 @@
+@using DocumentGenerator.Editor.Web.Components.Shared
+@using DocumentGenerator.Editor.Web.Services
+@inject EditorState EditorState
+
+<SlidePanel IsVisible="@IsVisible" Title="Import File" OnClose="HandleClose" Width="480px">
+    <div class="flex flex-col gap-5">
+
+        @* File picker area *@
+        <div class="flex flex-col gap-1.5">
+            <label class="text-[12px] font-medium text-text-secondary">Select File</label>
+            <label class="flex flex-col items-center justify-center gap-3 p-6
+                          border-2 border-dashed border-border-default rounded-lg
+                          bg-bg-elevated cursor-pointer
+                          hover:border-accent hover:bg-accent-muted/30
+                          transition-colors">
+                @* Upload icon *@
+                <svg class="w-8 h-8 text-text-tertiary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <span class="text-[12px] text-text-tertiary">
+                    Click to select <strong class="text-text-secondary">.html</strong> or <strong class="text-text-secondary">.css</strong> file
+                </span>
+                <InputFile OnChange="OnFileSelected"
+                           accept=".html,.css"
+                           class="hidden" />
+            </label>
+        </div>
+
+        @* Selected file info *@
+        @if (_selectedFile is not null)
+        {
+            <div class="flex items-center gap-3 p-3 bg-bg-elevated rounded-lg border border-border-subtle">
+                @* File icon *@
+                <svg class="w-5 h-5 text-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+                <div class="flex-1 min-w-0">
+                    <p class="text-[13px] text-text-primary truncate">@_selectedFile.Name</p>
+                    <p class="text-[11px] text-text-tertiary">@FormatFileSize(_selectedFile.Size)</p>
+                </div>
+                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-accent-muted text-accent uppercase">
+                    @Path.GetExtension(_selectedFile.Name).TrimStart('.')
+                </span>
+            </div>
+        }
+
+        @* File too large error *@
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <p class="text-[12px] text-error bg-error/10 px-3 py-2 rounded-md">@_errorMessage</p>
+        }
+
+        @* Content preview *@
+        @if (!string.IsNullOrEmpty(_fileContent))
+        {
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[12px] font-medium text-text-secondary">Preview</label>
+                <div class="bg-bg-base border border-border-subtle rounded-lg p-3
+                            font-mono text-[11px] text-text-secondary leading-relaxed
+                            max-h-[200px] overflow-y-auto whitespace-pre-wrap break-all">@_previewContent</div>
+            </div>
+        }
+
+        @* Import status *@
+        @if (!string.IsNullOrEmpty(_statusMessage))
+        {
+            <p class="text-[12px] text-success bg-success/10 px-3 py-2 rounded-md">@_statusMessage</p>
+        }
+
+        @* Import buttons *@
+        @if (!string.IsNullOrEmpty(_fileContent))
+        {
+            <div class="flex flex-col gap-2">
+                <label class="text-[12px] font-medium text-text-secondary">Import To</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button class="px-4 py-2.5 rounded-md text-[12px] font-medium
+                                   bg-accent text-white hover:bg-accent-hover transition-colors
+                                   disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled="@_isImporting"
+                            @onclick="ImportToHtml">
+                        @if (_isImporting && _importTarget == "html")
+                        {
+                            <span>Importing...</span>
+                        }
+                        else
+                        {
+                            <span>HTML Editor</span>
+                        }
+                    </button>
+                    <button class="px-4 py-2.5 rounded-md text-[12px] font-medium
+                                   bg-accent text-white hover:bg-accent-hover transition-colors
+                                   disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled="@_isImporting"
+                            @onclick="ImportToCss">
+                        @if (_isImporting && _importTarget == "css")
+                        {
+                            <span>Importing...</span>
+                        }
+                        else
+                        {
+                            <span>CSS Editor</span>
+                        }
+                    </button>
+                </div>
+            </div>
+        }
+
+        @* Close button at bottom *@
+        <div class="flex justify-end pt-2">
+            <button class="px-4 py-2 rounded-md text-[12px] font-medium
+                           text-text-secondary bg-bg-elevated border border-border-subtle
+                           hover:bg-bg-base hover:text-text-primary transition-colors"
+                    @onclick="HandleClose">
+                Close
+            </button>
+        </div>
+    </div>
+</SlidePanel>
+
+@code {
+    private IBrowserFile? _selectedFile;
+    private string? _fileContent;
+    private string? _previewContent;
+    private string? _errorMessage;
+    private string? _statusMessage;
+    private bool _isImporting;
+    private string? _importTarget;
+
+    private const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
+    private const int PreviewLineCount = 20;
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        _errorMessage = null;
+        _statusMessage = null;
+        _fileContent = null;
+        _previewContent = null;
+        _selectedFile = null;
+
+        var file = e.File;
+
+        // Validate extension
+        var ext = Path.GetExtension(file.Name).ToLowerInvariant();
+        if (ext != ".html" && ext != ".css")
+        {
+            _errorMessage = "Only .html and .css files are supported.";
+            return;
+        }
+
+        // Validate size
+        if (file.Size > MaxFileSize)
+        {
+            _errorMessage = $"File is too large ({FormatFileSize(file.Size)}). Maximum size is 5 MB.";
+            return;
+        }
+
+        _selectedFile = file;
+
+        try
+        {
+            using var reader = new StreamReader(file.OpenReadStream(maxAllowedSize: MaxFileSize));
+            _fileContent = await reader.ReadToEndAsync();
+
+            // Generate preview (first N lines)
+            var lines = _fileContent.Split('\n');
+            var previewLines = lines.Take(PreviewLineCount);
+            _previewContent = string.Join('\n', previewLines);
+            if (lines.Length > PreviewLineCount)
+            {
+                _previewContent += $"\n\n... ({lines.Length - PreviewLineCount} more lines)";
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Failed to read file: {ex.Message}";
+            _fileContent = null;
+            _previewContent = null;
+        }
+    }
+
+    private async Task ImportToHtml()
+    {
+        if (string.IsNullOrEmpty(_fileContent)) return;
+
+        _isImporting = true;
+        _importTarget = "html";
+        _statusMessage = null;
+
+        try
+        {
+            await EditorState.UpdateHtmlAsync(_fileContent);
+            _statusMessage = $"Imported '{_selectedFile?.Name}' into HTML editor.";
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Import failed: {ex.Message}";
+        }
+        finally
+        {
+            _isImporting = false;
+            _importTarget = null;
+        }
+    }
+
+    private async Task ImportToCss()
+    {
+        if (string.IsNullOrEmpty(_fileContent)) return;
+
+        _isImporting = true;
+        _importTarget = "css";
+        _statusMessage = null;
+
+        try
+        {
+            await EditorState.UpdateCssAsync(_fileContent);
+            _statusMessage = $"Imported '{_selectedFile?.Name}' into CSS editor.";
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Import failed: {ex.Message}";
+        }
+        finally
+        {
+            _isImporting = false;
+            _importTarget = null;
+        }
+    }
+
+    private async Task HandleClose()
+    {
+        // Reset state when closing
+        _selectedFile = null;
+        _fileContent = null;
+        _previewContent = null;
+        _errorMessage = null;
+        _statusMessage = null;
+
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
+
+    private static string FormatFileSize(long bytes)
+    {
+        if (bytes < 1024) return $"{bytes} B";
+        if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
+        return $"{bytes / (1024.0 * 1024.0):F1} MB";
+    }
+}

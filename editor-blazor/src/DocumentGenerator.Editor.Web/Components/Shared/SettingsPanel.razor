@@ -1,0 +1,377 @@
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Web.Services
+@inject SettingsService SettingsService
+@inject ThemeService ThemeService
+@inject MonacoInteropService MonacoInterop
+
+<SlidePanel IsVisible="@IsVisible"
+            Title="Settings"
+            Width="360px"
+            OnClose="@OnClose">
+
+    @* ── Appearance ── *@
+    <div class="mt-0">
+        <h3 class="text-[13px] font-semibold text-text-primary mb-3">Appearance</h3>
+
+        @* Theme selector *@
+        <div class="mb-4">
+            <label class="text-[12px] text-text-secondary mb-1.5 block">Theme</label>
+            <div class="flex gap-1 bg-bg-elevated rounded-md p-0.5">
+                <button class="@GetThemeButtonClass("dark")"
+                        @onclick="@(() => SetThemeAsync("dark"))">
+                    Dark
+                </button>
+                <button class="@GetThemeButtonClass("light")"
+                        @onclick="@(() => SetThemeAsync("light"))">
+                    Light
+                </button>
+                <button class="@GetThemeButtonClass("system")"
+                        @onclick="@(() => SetThemeAsync("system"))">
+                    System
+                </button>
+            </div>
+        </div>
+
+        @* Font size *@
+        <div class="mb-4">
+            <label class="text-[12px] text-text-secondary mb-1.5 block">Font Size</label>
+            <div class="flex items-center gap-2">
+                <button class="w-7 h-7 flex items-center justify-center rounded-md bg-bg-elevated border border-border-subtle text-text-secondary hover:text-text-primary hover:bg-bg-surface transition-colors text-[13px]"
+                        @onclick="DecreaseFontSize"
+                        disabled="@(_settings.FontSize <= 11)">
+                    -
+                </button>
+                <span class="text-[12px] text-text-primary font-mono w-8 text-center">@(_settings.FontSize)px</span>
+                <button class="w-7 h-7 flex items-center justify-center rounded-md bg-bg-elevated border border-border-subtle text-text-secondary hover:text-text-primary hover:bg-bg-surface transition-colors text-[13px]"
+                        @onclick="IncreaseFontSize"
+                        disabled="@(_settings.FontSize >= 18)">
+                    +
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @* ── Editor ── *@
+    <div class="mt-5">
+        <h3 class="text-[13px] font-semibold text-text-primary mb-3">Editor</h3>
+
+        @* Layout *@
+        <div class="mb-4">
+            <label class="text-[12px] text-text-secondary mb-1.5 block">Layout</label>
+            <div class="flex gap-1 bg-bg-elevated rounded-md p-0.5">
+                <button class="@GetLayoutButtonClass(EditorLayout.Vertical)"
+                        title="Vertical split"
+                        @onclick="@(() => SetLayoutAsync(EditorLayout.Vertical))">
+                    @* Vertical split icon *@
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                    </svg>
+                </button>
+                <button class="@GetLayoutButtonClass(EditorLayout.Horizontal)"
+                        title="Horizontal split"
+                        @onclick="@(() => SetLayoutAsync(EditorLayout.Horizontal))">
+                    @* Horizontal split icon *@
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <line x1="12" y1="3" x2="12" y2="21" />
+                    </svg>
+                </button>
+                <button class="@GetLayoutButtonClass(EditorLayout.Tabbed)"
+                        title="Tabbed view"
+                        @onclick="@(() => SetLayoutAsync(EditorLayout.Tabbed))">
+                    @* Tabbed icon *@
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <line x1="3" y1="9" x2="21" y2="9" />
+                        <line x1="9" y1="3" x2="9" y2="9" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        @* Tab Size *@
+        <div class="mb-4">
+            <label class="text-[12px] text-text-secondary mb-1.5 block">Tab Size</label>
+            <select class="bg-bg-elevated border border-border-subtle rounded-md text-[12px] text-text-primary px-2.5 py-1.5 outline-none focus:border-accent transition-colors w-20"
+                    @onchange="OnTabSizeChanged">
+                <option value="2" selected="@(_settings.TabSize == 2)">2</option>
+                <option value="4" selected="@(_settings.TabSize == 4)">4</option>
+            </select>
+        </div>
+
+        @* Word Wrap *@
+        <div class="mb-4 flex items-center justify-between">
+            <label class="text-[12px] text-text-secondary">Word Wrap</label>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" checked="@_settings.WordWrap"
+                       @onchange="@(e => ToggleWordWrapAsync((bool)(e.Value ?? false)))" />
+                <div class="w-9 h-5 bg-border-default peer-checked:bg-accent rounded-full transition-colors relative">
+                    <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-text-primary rounded-full transition-transform @(_settings.WordWrap ? "translate-x-4" : "")"></div>
+                </div>
+            </label>
+        </div>
+
+        @* Minimap *@
+        <div class="mb-4 flex items-center justify-between">
+            <label class="text-[12px] text-text-secondary">Minimap</label>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" checked="@_settings.Minimap"
+                       @onchange="@(e => ToggleMinimapAsync((bool)(e.Value ?? false)))" />
+                <div class="w-9 h-5 bg-border-default peer-checked:bg-accent rounded-full transition-colors relative">
+                    <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-text-primary rounded-full transition-transform @(_settings.Minimap ? "translate-x-4" : "")"></div>
+                </div>
+            </label>
+        </div>
+
+        @* Line Numbers *@
+        <div class="mb-4 flex items-center justify-between">
+            <label class="text-[12px] text-text-secondary">Line Numbers</label>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" checked="@_settings.LineNumbers"
+                       @onchange="@(e => ToggleLineNumbersAsync((bool)(e.Value ?? false)))" />
+                <div class="w-9 h-5 bg-border-default peer-checked:bg-accent rounded-full transition-colors relative">
+                    <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-text-primary rounded-full transition-transform @(_settings.LineNumbers ? "translate-x-4" : "")"></div>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    @* ── Preview ── *@
+    <div class="mt-5">
+        <h3 class="text-[13px] font-semibold text-text-primary mb-3">Preview</h3>
+
+        @* Default Size *@
+        <div class="mb-4">
+            <label class="text-[12px] text-text-secondary mb-1.5 block">Default Size</label>
+            <select class="bg-bg-elevated border border-border-subtle rounded-md text-[12px] text-text-primary px-2.5 py-1.5 outline-none focus:border-accent transition-colors w-full"
+                    @onchange="OnDefaultSizeChanged">
+                <option value="A6" selected="@(_settings.PreviewDefaultSize == SizePreset.A6)">A6 (105 x 148mm)</option>
+                <option value="CreditCard" selected="@(_settings.PreviewDefaultSize == SizePreset.CreditCard)">Credit Card (85.6 x 54mm)</option>
+                <option value="A4" selected="@(_settings.PreviewDefaultSize == SizePreset.A4)">A4 (210 x 297mm)</option>
+                <option value="Custom" selected="@(_settings.PreviewDefaultSize == SizePreset.Custom)">Custom</option>
+            </select>
+        </div>
+
+        @* Auto Refresh *@
+        <div class="mb-4 flex items-center justify-between">
+            <label class="text-[12px] text-text-secondary">Auto Refresh</label>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" checked="@_settings.AutoRefreshPreview"
+                       @onchange="@(e => ToggleAutoRefreshAsync((bool)(e.Value ?? false)))" />
+                <div class="w-9 h-5 bg-border-default peer-checked:bg-accent rounded-full transition-colors relative">
+                    <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-text-primary rounded-full transition-transform @(_settings.AutoRefreshPreview ? "translate-x-4" : "")"></div>
+                </div>
+            </label>
+        </div>
+
+        @* Debounce Delay *@
+        <div class="mb-4">
+            <label class="text-[12px] text-text-secondary mb-1.5 block">Debounce Delay</label>
+            <div class="flex items-center gap-2">
+                <input type="range" min="100" max="1000" step="50"
+                       class="flex-1 accent-accent"
+                       value="@_settings.PreviewDebounceMs"
+                       @onchange="OnDebounceChanged" />
+                <span class="text-[11px] font-mono text-text-tertiary w-12 text-right">@(_settings.PreviewDebounceMs)ms</span>
+            </div>
+        </div>
+    </div>
+
+    @* ── Keyboard Shortcuts ── *@
+    <div class="mt-5">
+        <h3 class="text-[13px] font-semibold text-text-primary mb-3">Keyboard Shortcuts</h3>
+
+        <div class="space-y-2">
+            @foreach (var shortcut in _shortcuts)
+            {
+                <div class="flex items-center justify-between py-1">
+                    <span class="text-[12px] text-text-secondary">@shortcut.Description</span>
+                    <kbd class="font-mono text-[11px] text-text-tertiary bg-bg-elevated border border-border-subtle rounded px-1.5 py-0.5">
+                        @shortcut.Keys
+                    </kbd>
+                </div>
+            }
+        </div>
+    </div>
+
+</SlidePanel>
+
+@code {
+    private EditorSettings _settings = new();
+
+    private static readonly List<ShortcutInfo> _shortcuts = new()
+    {
+        new("Save", "Ctrl+S"),
+        new("Command Palette", "Ctrl+K"),
+        new("Quick Parts", "Ctrl+Q"),
+        new("Close dialogs", "Escape"),
+        new("Toggle comment", "Ctrl+/"),
+        new("Find", "Ctrl+F"),
+    };
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback<EditorSettings> OnSettingsChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<EditorLayout> OnLayoutChanged { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (IsVisible)
+        {
+            _settings = SettingsService.GetSettings();
+        }
+    }
+
+    private async Task SaveAndNotifyAsync()
+    {
+        await SettingsService.SaveAsync(_settings);
+        if (OnSettingsChanged.HasDelegate)
+        {
+            await OnSettingsChanged.InvokeAsync(_settings);
+        }
+    }
+
+    // -- Appearance --
+
+    private async Task SetThemeAsync(string theme)
+    {
+        _settings.Theme = theme;
+        await ThemeService.SetThemeAsync(theme);
+        await SaveAndNotifyAsync();
+    }
+
+    private async Task DecreaseFontSize()
+    {
+        if (_settings.FontSize > 11)
+        {
+            _settings.FontSize--;
+            await ApplyEditorOptionsAsync();
+            await SaveAndNotifyAsync();
+        }
+    }
+
+    private async Task IncreaseFontSize()
+    {
+        if (_settings.FontSize < 18)
+        {
+            _settings.FontSize++;
+            await ApplyEditorOptionsAsync();
+            await SaveAndNotifyAsync();
+        }
+    }
+
+    // -- Editor --
+
+    private async Task SetLayoutAsync(EditorLayout layout)
+    {
+        _settings.EditorLayout = layout;
+        if (OnLayoutChanged.HasDelegate)
+        {
+            await OnLayoutChanged.InvokeAsync(layout);
+        }
+        await SaveAndNotifyAsync();
+    }
+
+    private async Task OnTabSizeChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var size))
+        {
+            _settings.TabSize = size;
+            await ApplyEditorOptionsAsync();
+            await SaveAndNotifyAsync();
+        }
+    }
+
+    private async Task ToggleWordWrapAsync(bool value)
+    {
+        _settings.WordWrap = value;
+        await ApplyEditorOptionsAsync();
+        await SaveAndNotifyAsync();
+    }
+
+    private async Task ToggleMinimapAsync(bool value)
+    {
+        _settings.Minimap = value;
+        await ApplyEditorOptionsAsync();
+        await SaveAndNotifyAsync();
+    }
+
+    private async Task ToggleLineNumbersAsync(bool value)
+    {
+        _settings.LineNumbers = value;
+        await ApplyEditorOptionsAsync();
+        await SaveAndNotifyAsync();
+    }
+
+    // -- Preview --
+
+    private async Task OnDefaultSizeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<SizePreset>(e.Value?.ToString(), out var preset))
+        {
+            _settings.PreviewDefaultSize = preset;
+            await SaveAndNotifyAsync();
+        }
+    }
+
+    private async Task ToggleAutoRefreshAsync(bool value)
+    {
+        _settings.AutoRefreshPreview = value;
+        await SaveAndNotifyAsync();
+    }
+
+    private async Task OnDebounceChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var ms))
+        {
+            _settings.PreviewDebounceMs = Math.Clamp(ms, 100, 1000);
+            await SaveAndNotifyAsync();
+        }
+    }
+
+    // -- Apply editor options to both Monaco instances --
+
+    private async Task ApplyEditorOptionsAsync()
+    {
+        try
+        {
+            var options = new
+            {
+                fontSize = _settings.FontSize,
+                minimap = new { enabled = _settings.Minimap },
+                wordWrap = _settings.WordWrap ? "on" : "off",
+                tabSize = _settings.TabSize,
+                lineNumbers = _settings.LineNumbers ? "on" : "off"
+            };
+
+            await MonacoInterop.UpdateOptionsAsync("editor-html", options);
+            await MonacoInterop.UpdateOptionsAsync("editor-css", options);
+        }
+        catch
+        {
+            // Editors may not be initialized yet
+        }
+    }
+
+    // -- Helpers --
+
+    private string GetThemeButtonClass(string theme) =>
+        _settings.Theme == theme
+            ? "flex-1 text-[11px] font-medium text-text-primary bg-bg-surface rounded px-2.5 py-1.5 shadow-sm transition-all"
+            : "flex-1 text-[11px] font-medium text-text-tertiary hover:text-text-secondary rounded px-2.5 py-1.5 transition-all";
+
+    private string GetLayoutButtonClass(EditorLayout layout) =>
+        _settings.EditorLayout == layout
+            ? "flex-1 flex items-center justify-center py-1.5 text-text-primary bg-bg-surface rounded shadow-sm transition-all"
+            : "flex-1 flex items-center justify-center py-1.5 text-text-tertiary hover:text-text-secondary rounded transition-all";
+
+    private record ShortcutInfo(string Description, string Keys);
+}

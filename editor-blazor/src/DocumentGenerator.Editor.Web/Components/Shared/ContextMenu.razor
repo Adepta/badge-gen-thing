@@ -1,0 +1,56 @@
+@using DocumentGenerator.Editor.Web.Components.Shared
+
+@if (IsVisible)
+{
+    @* Invisible backdrop to capture click-away *@
+    <div class="fixed inset-0 z-40" @onclick="Close"></div>
+
+    @* Context menu *@
+    <div class="fixed z-50 min-w-[160px] py-1 rounded-lg border border-border-default bg-bg-overlay shadow-lg context-menu-enter"
+         role="menu"
+         style="left: @(X)px; top: @(Y)px;">
+        @foreach (var item in Items)
+        {
+            <button class="w-full flex items-center gap-2 px-3 py-1.5 text-[12px] text-left transition-default
+                           @(item.IsDestructive ? "text-error hover:bg-error/10" : "text-text-primary hover:bg-bg-elevated")"
+                    role="menuitem"
+                    @onclick="@(() => HandleItemClick(item))">
+                @if (item.Icon is not null)
+                {
+                    @item.Icon
+                }
+                <span>@item.Label</span>
+            </button>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public double X { get; set; }
+
+    [Parameter]
+    public double Y { get; set; }
+
+    [Parameter]
+    public IReadOnlyList<ContextMenuItem> Items { get; set; } = Array.Empty<ContextMenuItem>();
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private async Task HandleItemClick(ContextMenuItem item)
+    {
+        await Close();
+        if (item.Action is not null)
+            await item.Action.Invoke();
+    }
+
+    private async Task Close()
+    {
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
+}

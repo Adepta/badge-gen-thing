@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="css/themes.css" />
+    <link rel="stylesheet" href="css/app.min.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet @rendermode="InteractiveServer" />
+</head>
+<body>
+    <Routes @rendermode="InteractiveServer" />
+    <script src="_framework/blazor.web.js"></script>
+    <script src="lib/handlebars/handlebars.min.js"></script>
+    <script src="lib/monaco-editor/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { vs: 'lib/monaco-editor/vs' } });
+        window.monacoReady = new Promise(resolve => {
+            require(['vs/editor/editor.main'], function () {
+                resolve();
+            });
+        });
+        // Blazor-callable wrapper to wait for Monaco (avoids eval + await issue)
+        window.waitForMonaco = function () {
+            return window.monacoReady;
+        };
+    </script>
+</body>
+</html>

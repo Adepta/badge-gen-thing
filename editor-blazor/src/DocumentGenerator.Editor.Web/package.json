@@ -1,0 +1,22 @@
+{
+  "name": "document-generator-editor",
+  "private": true,
+  "scripts": {
+    "css:build": "npx @tailwindcss/cli -i ./wwwroot/css/app.css -o ./wwwroot/css/app.min.css --minify",
+    "css:watch": "npx @tailwindcss/cli -i ./wwwroot/css/app.css -o ./wwwroot/css/app.min.css --watch",
+    "monaco:copy": "node scripts/copy-monaco.js",
+    "build": "npm run css:build && npm run monaco:copy"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.52.0",
+    "emmet-monaco-es": "^5.6.0",
+    "@fontsource/geist-sans": "^5.0.0",
+    "@fontsource/geist-mono": "^5.0.0",
+    "handlebars": "^4.7.8",
+    "js-beautify": "^1.15.1"
+  }
+}

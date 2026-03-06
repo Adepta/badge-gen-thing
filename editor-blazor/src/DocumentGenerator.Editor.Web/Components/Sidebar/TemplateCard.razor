@@ -1,0 +1,88 @@
+@using DocumentGenerator.Editor.Core.DTOs
+@using DocumentGenerator.Editor.Core.Models
+
+<div class="group relative rounded-lg border cursor-pointer transition-default overflow-hidden focus-ring
+            @(IsSelected ? "border-accent ring-1 ring-accent/40" : "border-border-subtle hover:border-border-default")
+            hover:scale-[1.02] hover:shadow-lg"
+     style="height: 80px;"
+     tabindex="0"
+     role="button"
+     aria-label="@($"Template: {Template.Name}")"
+     aria-selected="@IsSelected"
+     @onclick="HandleClick"
+     @onkeydown="HandleKeyDown"
+     @oncontextmenu="HandleContextMenu"
+     @oncontextmenu:preventDefault="true">
+
+    @* Top gradient area *@
+    <div class="h-[44px] w-full relative overflow-hidden" style="@GetGradientStyle()">
+        @* Size badge *@
+        <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-medium bg-black/30 text-white/90 backdrop-blur-sm">
+            @GetSizeLabel()
+        </span>
+    </div>
+
+    @* Bottom info area *@
+    <div class="px-2 py-1.5 bg-bg-surface">
+        <p class="text-[11px] font-medium text-text-primary truncate leading-tight"
+           title="@Template.Name">
+            @Template.Name
+        </p>
+        <p class="text-[9px] text-text-tertiary truncate">
+            @Template.Family.ToString()
+        </p>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public TemplateListItem Template { get; set; } = default!;
+
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<TemplateListItem> OnClick { get; set; }
+
+    [Parameter]
+    public EventCallback<(TemplateListItem Template, double X, double Y)> OnContextMenu { get; set; }
+
+    private async Task HandleClick()
+    {
+        if (OnClick.HasDelegate)
+            await OnClick.InvokeAsync(Template);
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" || e.Key == " ")
+        {
+            await HandleClick();
+        }
+    }
+
+    private async Task HandleContextMenu(MouseEventArgs e)
+    {
+        if (OnContextMenu.HasDelegate)
+            await OnContextMenu.InvokeAsync((Template, e.ClientX, e.ClientY));
+    }
+
+    private string GetGradientStyle() => Template.Family switch
+    {
+        TemplateFamily.Pulse => "background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);",
+        TemplateFamily.Executive => "background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);",
+        TemplateFamily.Carbon => "background: linear-gradient(135deg, #334155 0%, #475569 50%, #64748b 100%);",
+        TemplateFamily.Invoice => "background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);",
+        TemplateFamily.Custom => "background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);",
+        _ => "background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);"
+    };
+
+    private string GetSizeLabel() => Template.SizePreset switch
+    {
+        SizePreset.A6 => "A6",
+        SizePreset.CreditCard => "CC",
+        SizePreset.A4 => "A4",
+        SizePreset.Custom => "Custom",
+        _ => "?"
+    };
+}

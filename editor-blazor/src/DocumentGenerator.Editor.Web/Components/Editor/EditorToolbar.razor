@@ -1,0 +1,99 @@
+@using DocumentGenerator.Editor.Core.Models
+
+<div class="h-10 bg-bg-surface border-b border-border-subtle flex items-center px-3 gap-2 flex-shrink-0">
+    @* Layout toggle buttons *@
+    <div class="flex items-center gap-0.5 bg-bg-base rounded-md p-0.5 border border-border-subtle" role="group" aria-label="Editor layout">
+        @* Vertical split (HTML top, CSS bottom) *@
+        <button class="@GetLayoutButtonClass(EditorLayout.Vertical) focus-ring"
+                title="Vertical split"
+                aria-label="Vertical split layout"
+                aria-pressed="@(Layout == EditorLayout.Vertical)"
+                @onclick="@(() => SetLayout(EditorLayout.Vertical))">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="12" height="12" rx="1.5" />
+                <line x1="2" y1="8" x2="14" y2="8" />
+            </svg>
+        </button>
+
+        @* Horizontal split (HTML left, CSS right) *@
+        <button class="@GetLayoutButtonClass(EditorLayout.Horizontal) focus-ring"
+                title="Horizontal split"
+                aria-label="Horizontal split layout"
+                aria-pressed="@(Layout == EditorLayout.Horizontal)"
+                @onclick="@(() => SetLayout(EditorLayout.Horizontal))">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="12" height="12" rx="1.5" />
+                <line x1="8" y1="2" x2="8" y2="14" />
+            </svg>
+        </button>
+
+        @* Tabbed *@
+        <button class="@GetLayoutButtonClass(EditorLayout.Tabbed) focus-ring"
+                title="Tabbed"
+                aria-label="Tabbed layout"
+                aria-pressed="@(Layout == EditorLayout.Tabbed)"
+                @onclick="@(() => SetLayout(EditorLayout.Tabbed))">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="4" width="12" height="10" rx="1.5" />
+                <path d="M2 5.5 2 3.5C2 2.67 2.67 2 3.5 2H7L8 4" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="flex-1"></div>
+
+    @* Quick Parts button *@
+    <button class="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors focus-ring"
+            title="Quick Parts (Ctrl+Q)"
+            aria-label="Open Quick Parts drawer"
+            @onclick="HandleQuickPartsToggle">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 2v12M12 2v12M2 8h12" />
+        </svg>
+        <span>Quick Parts</span>
+        <kbd class="ml-1 px-1 py-0.5 bg-bg-base rounded text-[10px] font-mono text-text-tertiary border border-border-subtle">^Q</kbd>
+    </button>
+
+    @* Save button *@
+    <button class="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors focus-ring"
+            title="Save (Ctrl+S)"
+            aria-label="Save template">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12.67 2H3.33C2.6 2 2 2.6 2 3.33v9.34C2 13.4 2.6 14 3.33 14h9.34c.73 0 1.33-.6 1.33-1.33V5.33L12.67 2z" />
+            <path d="M11.33 14V9.33H4.67V14" />
+            <path d="M4.67 2v3.33h5.33" />
+        </svg>
+        <span>Save</span>
+        <kbd class="ml-1 px-1 py-0.5 bg-bg-base rounded text-[10px] font-mono text-text-tertiary border border-border-subtle">^S</kbd>
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public EditorLayout Layout { get; set; } = EditorLayout.Vertical;
+
+    [Parameter]
+    public EventCallback<EditorLayout> OnLayoutChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnQuickPartsToggle { get; set; }
+
+    private async Task HandleQuickPartsToggle()
+    {
+        if (OnQuickPartsToggle.HasDelegate)
+            await OnQuickPartsToggle.InvokeAsync();
+    }
+
+    private async Task SetLayout(EditorLayout layout)
+    {
+        if (OnLayoutChanged.HasDelegate)
+        {
+            await OnLayoutChanged.InvokeAsync(layout);
+        }
+    }
+
+    private string GetLayoutButtonClass(EditorLayout layout) =>
+        Layout == layout
+            ? "p-1.5 rounded text-accent bg-accent-muted"
+            : "p-1.5 rounded text-text-tertiary hover:text-text-secondary hover:bg-bg-elevated transition-colors";
+}

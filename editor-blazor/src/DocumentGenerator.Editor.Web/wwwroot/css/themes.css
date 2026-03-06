@@ -1,0 +1,61 @@
+/* Default: Dark theme */
+:root {
+  --bg-base: #0a0a0b;
+  --bg-surface: #141417;
+  --bg-elevated: #1c1c21;
+  --bg-overlay: #232329;
+  --border-default: #2a2a32;
+  --border-subtle: #1e1e25;
+  --text-primary: #ededef;
+  --text-secondary: #a0a0ab;
+  --text-tertiary: #6b6b76;
+  --accent: #8b5cf6;
+  --accent-hover: #a78bfa;
+  --accent-muted: rgba(139, 92, 246, 0.12);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  color-scheme: dark;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --bg-base: #ffffff;
+  --bg-surface: #f8f8fa;
+  --bg-elevated: #f0f0f3;
+  --bg-overlay: #ffffff;
+  --border-default: #e2e2e8;
+  --border-subtle: #ededf0;
+  --text-primary: #111113;
+  --text-secondary: #65656d;
+  --text-tertiary: #a0a0a8;
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --accent-muted: rgba(124, 58, 237, 0.08);
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+  color-scheme: light;
+}
+
+/* System preference override when no data-theme is set */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg-base: #ffffff;
+    --bg-surface: #f8f8fa;
+    --bg-elevated: #f0f0f3;
+    --bg-overlay: #ffffff;
+    --border-default: #e2e2e8;
+    --border-subtle: #ededf0;
+    --text-primary: #111113;
+    --text-secondary: #65656d;
+    --text-tertiary: #a0a0a8;
+    --accent: #7c3aed;
+    --accent-hover: #6d28d9;
+    --accent-muted: rgba(124, 58, 237, 0.08);
+    --success: #16a34a;
+    --warning: #d97706;
+    --error: #dc2626;
+    color-scheme: light;
+  }
+}

@@ -1,0 +1,132 @@
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Web.Services
+@inject EditorState EditorState
+@inject PreviewService PreviewService
+@implements IDisposable
+
+<div class="flex flex-col h-full min-h-0">
+    <div class="relative">
+        <PreviewToolbar PreviewMode="@_previewMode"
+                        OnPreviewModeChanged="HandlePreviewModeChanged"
+                        SizePreset="@_sizePreset"
+                        OnSizePresetChanged="HandleSizePresetChanged"
+                        CustomWidth="@_customWidth"
+                        CustomHeight="@_customHeight"
+                        OnCustomSizeChanged="HandleCustomSizeChanged"
+                        Zoom="@_zoom"
+                        OnZoomChanged="HandleZoomChanged"
+                        OnRefresh="HandleRefresh"
+                        IsRendering="@PreviewService.IsRendering" />
+    </div>
+
+    <PreviewCanvas PreviewHtml="@_previewHtml"
+                   WidthMm="@GetCurrentWidthMm()"
+                   HeightMm="@GetCurrentHeightMm()"
+                   Zoom="@_zoom" />
+</div>
+
+@code {
+    private string _previewMode = "editor";
+    private SizePreset _sizePreset = SizePreset.A6;
+    private double _customWidth = 105;
+    private double _customHeight = 148;
+    private int _zoom = 75;
+    private string _previewHtml = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        // Subscribe to preview updates
+        PreviewService.OnPreviewUpdated += HandlePreviewUpdated;
+        EditorState.OnTemplateLoaded += HandleTemplateLoaded;
+
+        // Initial preview mode from EditorState
+        _previewMode = EditorState.PreviewMode;
+    }
+
+    private async Task HandlePreviewUpdated()
+    {
+        _previewHtml = PreviewService.PreviewHtml;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleTemplateLoaded()
+    {
+        // Auto-detect size from template name
+        if (!string.IsNullOrEmpty(EditorState.CurrentTemplateName))
+        {
+            var detected = SizePresetExtensions.FromTemplateName(EditorState.CurrentTemplateName);
+            if (detected != SizePreset.Custom)
+            {
+                _sizePreset = detected;
+                var dims = _sizePreset.GetDimensions();
+                if (dims is not null)
+                {
+                    _customWidth = dims.WidthMm;
+                    _customHeight = dims.HeightMm;
+                }
+            }
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandlePreviewModeChanged(string mode)
+    {
+        _previewMode = mode;
+        await EditorState.SetPreviewModeAsync(mode);
+    }
+
+    private void HandleSizePresetChanged(SizePreset preset)
+    {
+        _sizePreset = preset;
+        var dims = preset.GetDimensions();
+        if (dims is not null)
+        {
+            _customWidth = dims.WidthMm;
+            _customHeight = dims.HeightMm;
+        }
+        StateHasChanged();
+    }
+
+    private void HandleCustomSizeChanged((double W, double H) size)
+    {
+        _customWidth = size.W;
+        _customHeight = size.H;
+        StateHasChanged();
+    }
+
+    private void HandleZoomChanged(int zoom)
+    {
+        _zoom = zoom;
+        StateHasChanged();
+    }
+
+    private async Task HandleRefresh()
+    {
+        await PreviewService.RenderAsync();
+    }
+
+    private double GetCurrentWidthMm()
+    {
+        if (_sizePreset == SizePreset.Custom)
+            return _customWidth;
+
+        var dims = _sizePreset.GetDimensions();
+        return dims?.WidthMm ?? _customWidth;
+    }
+
+    private double GetCurrentHeightMm()
+    {
+        if (_sizePreset == SizePreset.Custom)
+            return _customHeight;
+
+        var dims = _sizePreset.GetDimensions();
+        return dims?.HeightMm ?? _customHeight;
+    }
+
+    public void Dispose()
+    {
+        PreviewService.OnPreviewUpdated -= HandlePreviewUpdated;
+        EditorState.OnTemplateLoaded -= HandleTemplateLoaded;
+    }
+}

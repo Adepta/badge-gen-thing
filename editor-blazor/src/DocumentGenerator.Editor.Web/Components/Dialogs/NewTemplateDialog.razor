@@ -1,0 +1,338 @@
+@using DocumentGenerator.Editor.Core.Models
+@using DocumentGenerator.Editor.Core.DTOs
+@using DocumentGenerator.Editor.Infrastructure.Services
+@using DocumentGenerator.Editor.Web.Components.Shared
+@inject TemplateService TemplateService
+
+<SlidePanel IsVisible="@IsVisible" Title="New Template" OnClose="HandleClose" Width="480px">
+    <div class="flex flex-col gap-5">
+        @* Template name *@
+        <div class="flex flex-col gap-1.5">
+            <label class="text-[12px] font-medium text-text-secondary">Template Name</label>
+            <input type="text"
+                   @bind="_templateName"
+                   @bind:event="oninput"
+                   @bind:after="ValidateName"
+                   placeholder="e.g. badge-pulse-a6"
+                   class="h-9 px-3 rounded-md text-[13px]
+                          bg-bg-elevated border border-border-subtle
+                          text-text-primary placeholder:text-text-tertiary
+                          focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30
+                          transition-colors" />
+            @if (!string.IsNullOrEmpty(_nameError))
+            {
+                <p class="text-[11px] text-error">@_nameError</p>
+            }
+        </div>
+
+        @* Size preset *@
+        <div class="flex flex-col gap-1.5">
+            <label class="text-[12px] font-medium text-text-secondary">Size Preset</label>
+            <div class="grid grid-cols-2 gap-2">
+                @foreach (var preset in _sizePresets)
+                {
+                    <button class="flex flex-col items-center gap-1 p-3 rounded-lg border text-[12px] transition-colors
+                                   @(_selectedSize == preset.Value
+                                       ? "border-accent bg-accent-muted text-accent"
+                                       : "border-border-subtle bg-bg-elevated text-text-secondary hover:border-border-default hover:text-text-primary")"
+                            @onclick="@(() => SelectSize(preset.Value))">
+                        <span class="font-medium">@preset.Label</span>
+                        <span class="text-[10px] text-text-tertiary">@preset.Dimensions</span>
+                    </button>
+                }
+            </div>
+        </div>
+
+        @* Custom dimensions (shown when Custom is selected) *@
+        @if (_selectedSize == SizePreset.Custom)
+        {
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[12px] font-medium text-text-secondary">Width (mm)</label>
+                    <input type="number"
+                           @bind="_customWidth"
+                           min="20"
+                           max="500"
+                           class="h-9 px-3 rounded-md text-[13px]
+                                  bg-bg-elevated border border-border-subtle
+                                  text-text-primary
+                                  focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30
+                                  transition-colors" />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[12px] font-medium text-text-secondary">Height (mm)</label>
+                    <input type="number"
+                           @bind="_customHeight"
+                           min="20"
+                           max="500"
+                           class="h-9 px-3 rounded-md text-[13px]
+                                  bg-bg-elevated border border-border-subtle
+                                  text-text-primary
+                                  focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30
+                                  transition-colors" />
+                </div>
+            </div>
+        }
+
+        @* Family *@
+        <div class="flex flex-col gap-1.5">
+            <label class="text-[12px] font-medium text-text-secondary">Design Family</label>
+            <div class="flex flex-wrap gap-2">
+                @foreach (var family in Enum.GetValues<TemplateFamily>())
+                {
+                    <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] border transition-colors
+                                   @(_selectedFamily == family
+                                       ? "border-accent bg-accent-muted text-accent"
+                                       : "border-border-subtle bg-bg-elevated text-text-secondary hover:border-border-default hover:text-text-primary")"
+                            @onclick="@(() => _selectedFamily = family)">
+                        <span class="w-2.5 h-2.5 rounded-full" style="@GetFamilyDotStyle(family)"></span>
+                        <span>@family.ToString()</span>
+                    </button>
+                }
+            </div>
+        </div>
+
+        @* Error message *@
+        @if (!string.IsNullOrEmpty(_createError))
+        {
+            <p class="text-[12px] text-error bg-error/10 px-3 py-2 rounded-md">@_createError</p>
+        }
+
+        @* Create button *@
+        <div class="flex justify-end gap-2 pt-2">
+            <button class="px-4 py-2 rounded-md text-[12px] font-medium
+                           text-text-secondary bg-bg-elevated border border-border-subtle
+                           hover:bg-bg-base hover:text-text-primary transition-colors"
+                    @onclick="HandleClose">
+                Cancel
+            </button>
+            <button class="px-4 py-2 rounded-md text-[12px] font-medium
+                           bg-accent text-white hover:bg-accent-hover transition-colors
+                           disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled="@(!IsNameValid || _isCreating)"
+                    @onclick="HandleCreate">
+                @if (_isCreating)
+                {
+                    <span>Creating...</span>
+                }
+                else
+                {
+                    <span>Create Template</span>
+                }
+            </button>
+        </div>
+    </div>
+</SlidePanel>
+
+@code {
+    private string _templateName = string.Empty;
+    private string? _nameError;
+    private string? _createError;
+    private SizePreset _selectedSize = SizePreset.A6;
+    private TemplateFamily _selectedFamily = TemplateFamily.Custom;
+    private double _customWidth = 100;
+    private double _customHeight = 100;
+    private bool _isCreating;
+
+    private bool IsNameValid => !string.IsNullOrWhiteSpace(_templateName) && string.IsNullOrEmpty(_nameError);
+
+    private static readonly List<(string Label, string Dimensions, SizePreset Value)> _sizePresets = new()
+    {
+        ("A6", "105 x 148 mm", SizePreset.A6),
+        ("Credit Card", "85.6 x 54 mm", SizePreset.CreditCard),
+        ("A4", "210 x 297 mm", SizePreset.A4),
+        ("Custom", "Set dimensions", SizePreset.Custom)
+    };
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnCreated { get; set; }
+
+    private void ValidateName()
+    {
+        _createError = null;
+
+        if (string.IsNullOrWhiteSpace(_templateName))
+        {
+            _nameError = "Name is required.";
+            return;
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(_templateName, @"^[a-zA-Z0-9\-]+$"))
+        {
+            _nameError = "Only letters, numbers, and hyphens are allowed.";
+            return;
+        }
+
+        _nameError = null;
+    }
+
+    private void SelectSize(SizePreset size)
+    {
+        _selectedSize = size;
+    }
+
+    private async Task HandleCreate()
+    {
+        ValidateName();
+        if (!IsNameValid) return;
+
+        _isCreating = true;
+        _createError = null;
+
+        try
+        {
+            // Check if template already exists
+            var existing = await TemplateService.GetAsync(_templateName);
+            if (existing is not null)
+            {
+                _createError = $"A template named '{_templateName}' already exists.";
+                return;
+            }
+
+            // Get dimensions for the boilerplate
+            var dimensions = _selectedSize.GetDimensions() ?? new Dimensions(_customWidth, _customHeight);
+
+            // Generate boilerplate HTML
+            var html = GenerateBoilerplateHtml(_templateName, _selectedFamily, dimensions);
+            var css = GenerateBoilerplateCss(_selectedFamily, dimensions);
+
+            // Save via service
+            var request = new TemplateSaveRequest(_templateName, html, css, SampleData.DefaultSampleData);
+            await TemplateService.SaveAsync(request);
+
+            // Notify parent
+            if (OnCreated.HasDelegate)
+                await OnCreated.InvokeAsync(_templateName);
+
+            // Reset form
+            _templateName = string.Empty;
+            _selectedSize = SizePreset.A6;
+            _selectedFamily = TemplateFamily.Custom;
+            _nameError = null;
+        }
+        catch (Exception ex)
+        {
+            _createError = $"Failed to create template: {ex.Message}";
+        }
+        finally
+        {
+            _isCreating = false;
+        }
+    }
+
+    private async Task HandleClose()
+    {
+        _createError = null;
+        _nameError = null;
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
+
+    private static string GenerateBoilerplateHtml(string name, TemplateFamily family, Dimensions dims)
+    {
+        return $@"<!-- {name} template -->
+<div class=""badge"">
+  <header class=""badge-header"">
+    <h1>{{{{variables.firstName}}}} {{{{variables.lastName}}}}</h1>
+    <p class=""job-title"">{{{{variables.jobTitle}}}}</p>
+  </header>
+
+  <section class=""badge-body"">
+    <p class=""company"">{{{{variables.company}}}}</p>
+    <p class=""ticket-type"">{{{{variables.ticketType}}}}</p>
+  </section>
+
+  <footer class=""badge-footer"">
+    <p class=""event"">{{{{branding.companyName}}}}</p>
+  </footer>
+</div>";
+    }
+
+    private static string GenerateBoilerplateCss(TemplateFamily family, Dimensions dims)
+    {
+        var primaryColor = family switch
+        {
+            TemplateFamily.Pulse => "#7c3aed",
+            TemplateFamily.Executive => "#2563eb",
+            TemplateFamily.Carbon => "#1e293b",
+            TemplateFamily.Invoice => "#059669",
+            _ => "#6b7280"
+        };
+
+        return $@"/* Template styles */
+.badge {{
+  width: {dims.WidthMm}mm;
+  height: {dims.HeightMm}mm;
+  font-family: '{{{{branding.bodyFont}}}}', sans-serif;
+  background: #ffffff;
+  padding: 6mm;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}}
+
+.badge-header {{
+  background: {primaryColor};
+  color: #ffffff;
+  padding: 4mm;
+  margin: -6mm -6mm 4mm -6mm;
+}}
+
+h1 {{
+  font-size: 14pt;
+  font-weight: 700;
+  margin: 0;
+}}
+
+.job-title {{
+  font-size: 10pt;
+  opacity: 0.9;
+  margin: 2mm 0 0 0;
+}}
+
+.badge-body {{
+  flex: 1;
+}}
+
+.company {{
+  font-size: 11pt;
+  font-weight: 600;
+  color: #333;
+}}
+
+.ticket-type {{
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: {primaryColor};
+  margin-top: 2mm;
+}}
+
+.badge-footer {{
+  border-top: 0.5px solid #ddd;
+  padding-top: 2mm;
+  text-align: center;
+}}
+
+.event {{
+  font-size: 8pt;
+  color: #666;
+}}";
+    }
+
+    private static string GetFamilyDotStyle(TemplateFamily family) => family switch
+    {
+        TemplateFamily.Pulse => "background: #7c3aed;",
+        TemplateFamily.Executive => "background: #2563eb;",
+        TemplateFamily.Carbon => "background: #475569;",
+        TemplateFamily.Invoice => "background: #059669;",
+        TemplateFamily.Custom => "background: #f59e0b;",
+        _ => "background: #6b7280;"
+    };
+}
